@@ -85,7 +85,7 @@ Reactable = (function() {
                     if (this.props.data.hasOwnProperty(column)) {
                         return <Td col={column} key={column}>{this.props.data[column]}</Td>;
                     }
-                }));
+                }.bind(this)));
             }
 
             return this.transferPropsTo(
