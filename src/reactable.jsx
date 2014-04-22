@@ -154,7 +154,7 @@ Reactable = (function() {
                             }.bind(this))}
                         </thead> : ''
                     }
-                    {this.props.children}
+                    {children}
                 </table>
             );
         }
