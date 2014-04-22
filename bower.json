@@ -1,0 +1,8 @@
+{
+  "name": "reactable",
+  "version": "0.0.1",
+  "main": "build/reactable.js",
+  "dependencies": {
+    "react": "0.10.x"
+  }
+}
