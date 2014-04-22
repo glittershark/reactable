@@ -1,0 +1,21 @@
+{
+  "name": "Reactable",
+  "version": "0.0.1",
+  "description": "Fast, flexible, simple data tables in React",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/glittershark/reactable.git"
+  },
+  "author": "Griffin Smith",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/glittershark/reactable/issues"
+  },
+  "homepage": "https://github.com/glittershark/reactable",
+  "dependencies": {
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-cli": "^0.1.13",
+    "grunt": "^0.4.4",
+    "grunt-react": "^0.8.2"
+  }
+}

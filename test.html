@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="http://fb.me/react-0.10.0.js"></script>
+        <script src="http://fb.me/JSXTransformer-0.10.0.js"></script>
+        <script src="build/reactable.js" type="text/javascript"></script>
+        <script type="text/jsx">
+            /** @jsx React.DOM */ 
+            var Table = Reactable.Table,
+                Thead = Reactable.Thead,
+                Th = Reactable.Th,
+                Tr = Reactable.Tr,
+                Td = Reactable.Td;
+            React.renderComponent(
+                <Table className="table" data={[
+                    {'Name': 'Griffin Smith', 'Age': '18'},
+                    {'Name': 'Lee Salminen', 'Age': '23'}
+                ]} />,
+                document.getElementById('test-div')
+            );
+        </script>
+    </head>
+    <body>
+        <div id="test-div"></div>
+    </body>
+</html>
