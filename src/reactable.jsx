@@ -84,6 +84,8 @@ Reactable = (function() {
                 children = children.concat(this.props.columns.map(function(column, i) {
                     if (this.props.data.hasOwnProperty(column)) {
                         return <Td col={column} key={column}>{this.props.data[column]}</Td>;
+                    } else {
+                        return <Td col={column} key={column} />;
                     }
                 }.bind(this)));
             }
