@@ -65,4 +65,21 @@ describe('Reactable', function() {
             expect($(tds[2])).to.have.text('Developer');
         });
     });
+
+    describe('pagination', function() {
+        before(function() {
+            React.renderComponent(
+                <Table className="table" id="table" data={[
+                    {'Name': 'Griffin Smith', 'Age': '18'},
+                    {'Age': '23', 'Name': 'Lee Salminen'},
+                    {'Age': '28', 'Position': 'Developer'}
+                ]} perPage={4}/>,
+                document.getElementsByTagName('body')[0]
+            );
+        });
+
+        after(function() {
+            React.unmountComponentAtNode(document.getElementsByTagName('body')[0]);
+        });
+    });
 });
