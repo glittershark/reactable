@@ -117,6 +117,31 @@ Reactable = (function() {
         }
     });
 
+    var Paginator = React.createClass({
+        render: function() {
+            if (typeof this.props.colspan === 'undefined') {
+                throw new TypeError('Must pass a colspan argument to Paginator');
+            }
+
+            if (typeof this.props.numPages === 'undefined' || this.props.numPages === 0) {
+                throw new TypeError('Must pass a non-zero numPages argument to Paginator');
+            }
+
+            var pageButtons = [];
+            for (var i = 0; i < this.props.numPages; i++) {
+                pageButtons.push(<a className="page-button" key={i}>{i + 1}</a>);
+            }
+
+            return (
+                <tr>
+                    <td colSpan={this.props.colspan}>
+                        {pageButtons}
+                    </td>
+                </tr>
+            );
+        }
+    });
+
     Reactable.Table = React.createClass({
         render: function() {
             // Test if the caller passed in data
@@ -147,6 +172,8 @@ Reactable = (function() {
                 }.bind(this)));
             }
 
+            var itemsPerPage = this.props.itemsPerPage || 20;
+
             return this.transferPropsTo(
                 <table>
                     {columns && columns.length > 0 ?
@@ -157,6 +184,11 @@ Reactable = (function() {
                         </thead> : ''
                     }
                     {children}
+                    {this.props.pagination === true ?
+                        <Paginator
+                            colspan={columns.length}
+                            numPages={Math.ceil(this.props.data.length / itemsPerPage)} /> : ''
+                    }
                 </table>
             );
         }

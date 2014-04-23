@@ -17,12 +17,13 @@ describe('Reactable', function() {
                     {'Age': '23', 'Name': 'Lee Salminen'},
                     {'Age': '28', 'Position': 'Developer'}
                 ]} />,
-                document.getElementsByTagName('body')[0]
+                $('body')[0]
             );
         });
 
         after(function() {
-            React.unmountComponentAtNode(document.getElementsByTagName('body')[0]);
+            React.unmountComponentAtNode($('body')[0]);
+            $('body').html('');
         });
 
         it('renders the table', function() {
@@ -72,14 +73,28 @@ describe('Reactable', function() {
                 <Table className="table" id="table" data={[
                     {'Name': 'Griffin Smith', 'Age': '18'},
                     {'Age': '23', 'Name': 'Lee Salminen'},
-                    {'Age': '28', 'Position': 'Developer'}
-                ]} perPage={4}/>,
+                    {'Age': '28', 'Position': 'Developer'},
+                    {'Name': 'Griffin Smith', 'Age': '18'},
+                    {'Age': '23', 'Name': 'Lee Salminen'},
+                    {'Age': '28', 'Position': 'Developer'},
+                    {'Name': 'Griffin Smith', 'Age': '18'},
+                    {'Age': '23', 'Name': 'Lee Salminen'},
+                    {'Age': '28', 'Position': 'Developer'},
+                ]} itemsPerPage={4} pagination={true} />,
                 document.getElementsByTagName('body')[0]
             );
         });
 
         after(function() {
             React.unmountComponentAtNode(document.getElementsByTagName('body')[0]);
+        });
+
+        it('provides buttons for each page', function() {
+            var pageButtons = $('#table a.page-button');
+            expect(pageButtons.length).to.equal(3);
+            expect($(pageButtons[0])).to.have.text('1')
+            expect($(pageButtons[1])).to.have.text('2')
+            expect($(pageButtons[2])).to.have.text('3')
         });
     });
 });
