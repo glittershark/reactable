@@ -21,6 +21,10 @@ describe('Reactable', function() {
             );
         });
 
+        after(function() {
+            React.unmountComponentAtNode(document.getElementsByTagName('body')[0]);
+        });
+
         it('renders the table', function() {
             expect($('table#table.table')).to.exist;
         });
