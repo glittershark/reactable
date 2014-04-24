@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+
         <script src="http://fb.me/react-0.10.0.js"></script>
         <script src="http://fb.me/JSXTransformer-0.10.0.js"></script>
         <script src="build/reactable.js" type="text/javascript"></script>
@@ -12,16 +14,24 @@
                 Tr = Reactable.Tr,
                 Td = Reactable.Td;
             React.renderComponent(
-                <Table className="table" data={[
+                <Table className="table table-striped" data={[
                     {'Name': 'Griffin Smith', 'Age': '18'},
                     {'Age': '23', 'Name': 'Lee Salminen'},
-                    {'Age': '28', 'Position': 'Developer'}
-                ]} />,
+                    {'Age': '28', 'Position': 'Developer'},
+                    {'Name': 'Griffin Smith', 'Age': '18'},
+                    {'Age': '23', 'Name': 'Lee Salminen'},
+                    {'Age': '28', 'Position': 'Developer'},
+                    {'Name': 'Griffin Smith', 'Age': '18'},
+                    {'Age': '23', 'Name': 'Lee Salminen'},
+                    {'Age': '28', 'Position': 'Developer'},
+                ]} pagination={true} itemsPerPage={4} />,
                 document.getElementById('test-div')
             );
         </script>
     </head>
     <body>
-        <div id="test-div"></div>
+        <div class="container">
+            <div id="test-div"></div>
+        </div>
     </body>
 </html>

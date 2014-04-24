@@ -119,8 +119,8 @@ Reactable = (function() {
 
     var Paginator = React.createClass({displayName: 'Paginator',
         render: function() {
-            if (typeof this.props.colspan === 'undefined') {
-                throw new TypeError('Must pass a colspan argument to Paginator');
+            if (typeof this.props.colSpan === 'undefined') {
+                throw new TypeError('Must pass a colSpan argument to Paginator');
             }
 
             if (typeof this.props.numPages === 'undefined' || this.props.numPages === 0) {
@@ -129,12 +129,21 @@ Reactable = (function() {
 
             var pageButtons = [];
             for (var i = 0; i < this.props.numPages; i++) {
-                pageButtons.push(React.DOM.a( {className:"page-button", key:i}, i + 1));
+                var pageNum = i;
+                pageButtons.push(
+                    React.DOM.a( {className:"page-button", key:i,
+                       // create function to get around for-loop closure issue
+                       onClick:(function(pageNum) {
+                           return function() {
+                               this.props.onPageChange(pageNum);
+                           }.bind(this)
+                       }.bind(this))(i)}, i + 1)
+                );
             }
 
             return (
-                React.DOM.tr(null, 
-                    React.DOM.td( {colSpan:this.props.colspan}, 
+                React.DOM.tr( {className:"pagination"}, 
+                    React.DOM.td( {colSpan:this.props.colSpan}, 
                         pageButtons
                     )
                 )
@@ -143,6 +152,14 @@ Reactable = (function() {
     });
 
     Reactable.Table = React.createClass({displayName: 'Table',
+        getInitialState: function() {
+            return {
+                currentPage: 0,
+            };
+        },
+        onPageChange: function(page) {
+            this.setState({ currentPage: page });
+        },
         render: function() {
             // Test if the caller passed in data
             var children = this.props.children || [];
@@ -172,23 +189,34 @@ Reactable = (function() {
                 }.bind(this)));
             }
 
-            var itemsPerPage = this.props.itemsPerPage || 20;
+            var currentChildren;
+            if (this.props.pagination === true) {
+                var itemsPerPage = this.props.itemsPerPage || 20;
+                currentChildren = children.slice(
+                        this.state.currentPage * itemsPerPage,
+                        (this.state.currentPage + 1) * itemsPerPage);
+            } else {
+                currentChildren = children;
+            }
 
             return this.transferPropsTo(
                 React.DOM.table(null, 
                     columns && columns.length > 0 ?
                         React.DOM.thead(null, 
                             columns.map(function(col) {
-                                return (React.DOM.th(null, col));
+                                return (React.DOM.th( {key:col}, col));
                             }.bind(this))
                         ) : '',
                     
-                    children,
-                    this.props.pagination === true ?
-                        Paginator(
-                            {colspan:columns.length,
-                            numPages:Math.ceil(this.props.data.length / itemsPerPage)} ) : ''
-                    
+                    React.DOM.tbody(null, 
+                        currentChildren,
+                        this.props.pagination === true ?
+                            Paginator(
+                                {colSpan:columns.length,
+                                numPages:Math.ceil(this.props.data.length / itemsPerPage),
+                                onPageChange:this.onPageChange}) : ''
+                        
+                    )
                 )
             );
         }
