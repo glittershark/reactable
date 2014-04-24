@@ -24,12 +24,7 @@ Or, you can just download the raw file
 The simplest example:
 
 ```javascript
-var Table = Reactable.Table,
-    Thead = Reactable.Thead,
-    Th = Reactable.Th,
-    Tr = Reactable.Tr,
-    Td = Reactable.Td;
-
+var Table = Reactable.Table;
 React.renderComponent(
     <Table className="table" data={[
         { Name: 'Griffin Smith', Age: '18'},
