@@ -1,6 +1,6 @@
 {
   "name": "Reactable",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Fast, flexible, simple data tables in React",
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
   "scripts": {
     "test": "./node_modules/grunt-cli/bin/grunt testOnce"
   },
-  "dependencies": {
+  "devDependencies": {
     "grunt-contrib-watch": "^0.6.1",
     "grunt-cli": "^0.1.13",
     "grunt": "^0.4.4",
