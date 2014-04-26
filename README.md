@@ -27,9 +27,9 @@ The simplest example:
 var Table = Reactable.Table;
 React.renderComponent(
     <Table className="table" data={[
-        { Name: 'Griffin Smith', Age: '18'},
-        { Age: '23',  Name: 'Lee Salminen'},
-        { Age: '28', Position: 'Developer'},
+        { Name: 'Griffin Smith', Age: '18' },
+        { Age: '23',  Name: 'Lee Salminen' },
+        { Age: '28', Position: 'Developer' },
     ]} />,
     document.getElementById('table')
 );
@@ -52,14 +52,14 @@ Example:
 ...
 
 <Table className="table" data={[
-    { Name: 'Griffin Smith', Age: '18'},
-    { Age: '23',  Name: 'Lee Salminen'},
-    { Age: '28', Position: 'Developer'},
-    { Name: 'Griffin Smith', Age: '18'},
-    { Age: '30',  Name: 'Test Person'},
-    { Name: 'Another Test', Age: '26', Position: 'Developer'},
-    { Name: 'Third Test', Age: '19', Position: 'Salesperson'},
-    { Age: '23',  Name: 'End of this Page', Position: 'CEO',
+    { Name: 'Griffin Smith', Age: '18' },
+    { Age: '23',  Name: 'Lee Salminen' },
+    { Age: '28', Position: 'Developer' },
+    { Name: 'Griffin Smith', Age: '18' },
+    { Age: '30',  Name: 'Test Person' },
+    { Name: 'Another Test', Age: '26', Position: 'Developer' },
+    { Name: 'Third Test', Age: '19', Position: 'Salesperson' },
+    { Age: '23',  Name: 'End of this Page', Position: 'CEO' },
 ]} pagination={true} itemsPerPage={4} />
 ```
 
