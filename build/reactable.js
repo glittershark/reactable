@@ -78,7 +78,7 @@ Reactable = (function() {
         }
     };
 
-    Reactable.Td = React.createClass({displayName: 'Td',
+    var Td = Reactable.Td = React.createClass({displayName: 'Td',
         render: function() {
             return this.transferPropsTo(
                 React.DOM.td(null, 
@@ -89,7 +89,7 @@ Reactable = (function() {
     });
 
 
-    Reactable.Tr = React.createClass({displayName: 'Tr',
+    var Tr = Reactable.Tr = React.createClass({displayName: 'Tr',
         mixins: [ParseChildDataMixin],
         getDefaultProps: function() {
             var defaultProps = {
@@ -122,7 +122,7 @@ Reactable = (function() {
         }
     });
 
-    Reactable.Thead = React.createClass({displayName: 'Thead',
+    var Thead = Reactable.Thead = React.createClass({displayName: 'Thead',
         getColumns: function() {
             return React.Children.map(this.props.children, function(th) {
                 if (typeof th.props.children === 'string') {
@@ -137,7 +137,7 @@ Reactable = (function() {
         }
     });
 
-    Reactable.Th = React.createClass({displayName: 'Th',
+    var Th = Reactable.Th = React.createClass({displayName: 'Th',
         render: function() {
             return this.transferPropsTo(React.DOM.th(null, this.props.children));
         }
@@ -177,7 +177,7 @@ Reactable = (function() {
         }
     });
 
-    Reactable.Table = React.createClass({displayName: 'Table',
+    var Table = Reactable.Table = React.createClass({displayName: 'Table',
         mixins: [ParseChildDataMixin],
         getDefaultProps: function() {
             var defaultProps = {
