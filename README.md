@@ -65,11 +65,8 @@ React.renderComponent(
 
 ### Pagination
 
-You can also use pagination, by specifying a `pagination={true}` argument to the
-`<Table>` component, and an optional `itemsPerPage` argument, which will default
-to 20 if not specified.
-
-Example:
+You can also use pagination, by just specifying an `itemsPerPage` argument to the
+`<Table>` component. For example:
 
 ```javascript
 ...
@@ -83,6 +80,6 @@ Example:
     { Name: 'Another Test', Age: '26', Position: 'Developer' },
     { Name: 'Third Test', Age: '19', Position: 'Salesperson' },
     { Age: '23',  Name: 'End of this Page', Position: 'CEO' },
-]} pagination={true} itemsPerPage={4} />
+]} itemsPerPage={4} />
 ```
 
