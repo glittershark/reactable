@@ -17,7 +17,7 @@ bower install [--save] reactable
 ```
 
 Or, you can just download the raw file
-[here](https://github.com/glittershark/reactable/blob/master/build/reactable.js).
+[here](https://github.com/glittershark/reactable/raw/master/build/reactable.js).
 
 ## Usage
 
