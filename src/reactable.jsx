@@ -61,6 +61,23 @@ Reactable = (function() {
 
     var Reactable = {};
 
+    var ParseChildDataMixin = {
+        parseChildData: function() {
+            var data = [];
+
+            // Transform any children back to a data array
+            if (this.props.children !== undefined) {
+                React.Children.forEach(this.props.children, function(child) {
+                    if (child.type.ConvenienceConstructor === Reactable.Tr) {
+                        data.push(child.props.data);
+                    }
+                });
+            }
+
+            return data;
+        }
+    };
+
     Reactable.Td = React.createClass({
         render: function() {
             return this.transferPropsTo(
@@ -73,6 +90,15 @@ Reactable = (function() {
 
 
     Reactable.Tr = React.createClass({
+        mixins: [ParseChildDataMixin],
+        getDefaultProps: function() {
+            var defaultProps = {
+                data: this.parseChildData(),
+                columns: []
+            }
+
+            return defaultProps;
+        },
         render: function() {
             var children = this.props.children || [];
 
@@ -152,17 +178,28 @@ Reactable = (function() {
     });
 
     Reactable.Table = React.createClass({
+        mixins: [ParseChildDataMixin],
+        getDefaultProps: function() {
+            var defaultProps = {
+                data: this.parseChildData(),
+                columns: []
+            }
+
+            return defaultProps;
+        },
         getInitialState: function() {
-            return {
+            var initialState = {
                 currentPage: 0,
-            };
+            }
+
+            return initialState;
         },
         onPageChange: function(page) {
             this.setState({ currentPage: page });
         },
         render: function() {
             // Test if the caller passed in data
-            var children = this.props.children || [];
+            var children = [];
             var columns;
             if (
                 this.props.children &&
