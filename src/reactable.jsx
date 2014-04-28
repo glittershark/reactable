@@ -62,16 +62,16 @@ Reactable = (function() {
     var Reactable = {};
 
     var ParseChildDataMixin = {
-        parseChildData: function() {
+        parseChildData: function(expectedClass) {
             var data = [];
 
             // Transform any children back to a data array
             if (this.props.children !== undefined) {
                 React.Children.forEach(this.props.children, function(child) {
-                    if (child.type.ConvenienceConstructor === Reactable.Tr) {
+                    if (child.type.ConvenienceConstructor === this.type.ConvenienceConstructor.childNode) {
                         data.push(child.props.data);
                     }
-                });
+                }.bind(this));
             }
 
             return data;
@@ -90,9 +90,15 @@ Reactable = (function() {
 
 
     Reactable.Tr = React.createClass({
-        mixins: [ParseChildDataMixin],
+        statics: {
+            childNode: Reactable.Td
+        },
+        mixins: [
+            ParseChildDataMixin
+        ],
         getDefaultProps: function() {
             var defaultProps = {
+                childNode: Reactable.Td,
                 data: this.parseChildData(),
                 columns: []
             }
@@ -133,7 +139,7 @@ Reactable = (function() {
             });
         },
         render: function() {
-            return this.transferPropsTo(<th>{this.props.children}</th>);
+            return this.transferPropsTo(<Th>{this.props.children}</Th>);
         }
     });
 
@@ -157,7 +163,7 @@ Reactable = (function() {
             for (var i = 0; i < this.props.numPages; i++) {
                 var pageNum = i;
                 pageButtons.push(
-                    <a className="page-button" key={i}
+                    <a className="reactable-page-button" key={i}
                        // create function to get around for-loop closure issue
                        onClick={(function(pageNum) {
                            return function() {
@@ -168,21 +174,29 @@ Reactable = (function() {
             }
 
             return (
-                <tr className="pagination">
-                    <td colSpan={this.props.colSpan}>
-                        {pageButtons}
-                    </td>
-                </tr>
+                <tbody className="reactable-pagination">
+                    <tr>
+                        <td colSpan={this.props.colSpan}>
+                            {pageButtons}
+                        </td>
+                    </tr>
+                </tbody>
             );
         }
     });
 
     Reactable.Table = React.createClass({
-        mixins: [ParseChildDataMixin],
+        statics: {
+            childNode: Reactable.Tr
+        },
+        mixins: [
+            ParseChildDataMixin
+        ],
         getDefaultProps: function() {
             var defaultProps = {
                 data: this.parseChildData(),
-                columns: []
+                columns: [],
+                itemsPerPage: 0
             }
 
             return defaultProps;
@@ -227,8 +241,12 @@ Reactable = (function() {
             }
 
             var currentChildren;
-            if (this.props.pagination === true) {
-                var itemsPerPage = this.props.itemsPerPage || 20;
+            var itemsPerPage = 0;
+            var pagination = false;
+
+            if (this.props.itemsPerPage > 0) {
+                itemsPerPage = this.props.itemsPerPage;
+                pagination = true;
                 currentChildren = children.slice(
                         this.state.currentPage * itemsPerPage,
                         (this.state.currentPage + 1) * itemsPerPage);
@@ -240,20 +258,23 @@ Reactable = (function() {
                 <table>
                     {columns && columns.length > 0 ?
                         <thead>
-                            {columns.map(function(col) {
-                                return (<th key={col}>{col}</th>);
-                            }.bind(this))}
+                            <tr>
+                                {columns.map(function(col) {
+                                    return (<th key={col}>{col}</th>);
+                                }.bind(this))}
+                            </tr>
                         </thead> : ''
                     }
-                    <tbody>
+                    <tbody className="reactable-data">
                         {currentChildren}
-                        {this.props.pagination === true ?
-                            <Paginator
-                                colSpan={columns.length}
-                                numPages={Math.ceil(this.props.data.length / itemsPerPage)}
-                                onPageChange={this.onPageChange}/> : ''
-                        }
                     </tbody>
+                    {pagination === true ?
+
+                        <Paginator
+                            colSpan={columns.length}
+                            numPages={Math.ceil(this.props.data.length / itemsPerPage)}
+                            onPageChange={this.onPageChange}/> : ''
+                    }
                 </table>
             );
         }
