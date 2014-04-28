@@ -40,6 +40,29 @@ While pretty basic, this example demonstrates a couple things:
 - Regular React DOM attributes such as className will pass-through to the
   rendered `<table>`
 
+### Further Customization
+
+You can also manually build up your rows using `Reactable.Tr` nested in a table,
+also using the `data` prop, but this time containing only one javascript object.
+This approach can be freely combined with the `data` property on the `<Table>`,
+and is useful if you want to specify per-row attributes, such a classes, like so:
+
+```javascript
+var Table = Reactable.Table,
+    Tr = Reactable.Tr;
+
+React.renderComponent(
+    <Table className="table" data={[
+        { name: 'Row one', content: 'These are regular data rows' },
+        { name: 'Row two', content: 'They work like above' },
+    ]} >
+        <Tr className="special-row"
+            data={{ name: 'Other Row' , content: 'This is a different row' }} />
+    </Table>,
+    document.getElementById('table');
+)
+```
+
 ### Pagination
 
 You can also use pagination, by specifying a `pagination={true}` argument to the
