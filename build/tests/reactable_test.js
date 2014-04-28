@@ -32,7 +32,7 @@ describe('Reactable', function() {
 
         it('renders the column headers in the table', function() {
             var headers = [];
-            $('th').each(function() {
+            $('thead th').each(function() {
                 headers.push($(this).text());
             });
 
@@ -90,7 +90,7 @@ describe('Reactable', function() {
 
         it('renders the column headers in the table', function() {
             var headers = [];
-            $('th').each(function() {
+            $('thead th').each(function() {
                 headers.push($(this).text());
             });
 
