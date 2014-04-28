@@ -32,7 +32,7 @@ describe('Reactable', function() {
 
         it('renders the column headers in the table', function() {
             var headers = [];
-            $('th').each(function() {
+            $('thead th').each(function() {
                 headers.push($(this).text());
             });
 
@@ -40,7 +40,7 @@ describe('Reactable', function() {
         });
 
         it('renders the first row with the correct data', function() {
-            var firstRow = $('#table tr')[1];
+            var firstRow = $('#table tbody tr')[0];
             var tds = $(firstRow).find('td');
 
             expect($(tds[0])).to.have.text('Griffin Smith');
@@ -49,7 +49,7 @@ describe('Reactable', function() {
         });
 
         it('renders the second row with the correct data', function() {
-            var secondRow = $('#table tr')[2];
+            var secondRow = $('#table tbody tr')[1];
             var tds = $(secondRow).find('td');
 
             expect($(tds[0])).to.have.text('Lee Salminen');
@@ -58,7 +58,7 @@ describe('Reactable', function() {
         });
 
         it('renders the third row with the correct data', function() {
-            var thirdRow = $('#table tr')[3];
+            var thirdRow = $('#table tbody tr')[2];
             var tds = $(thirdRow).find('td');
 
             expect($(tds[0])).to.have.text('');
@@ -71,8 +71,8 @@ describe('Reactable', function() {
         before(function() {
             React.renderComponent(
                 <Table className="table" id="table">
-                    <Tr data={{ Name: 'Griffin Smith', Age: '18'}}/>,
-                    <Tr data={{ Age: '23', Name: 'Lee Salminen'}}/>,
+                    <Tr data={{ Name: 'Griffin Smith', Age: '18'}}/>
+                    <Tr data={{ Age: '23', Name: 'Lee Salminen'}}/>
                     <Tr data={{ Age: '28', Position: 'Developer'}}/>
                 </Table>,
                 $('body')[0]
@@ -90,7 +90,7 @@ describe('Reactable', function() {
 
         it('renders the column headers in the table', function() {
             var headers = [];
-            $('th').each(function() {
+            $('thead th').each(function() {
                 headers.push($(this).text());
             });
 
@@ -98,7 +98,7 @@ describe('Reactable', function() {
         });
 
         it('renders the first row with the correct data', function() {
-            var firstRow = $('#table tr')[1];
+            var firstRow = $('#table tbody tr')[0];
             var tds = $(firstRow).find('td');
 
             expect($(tds[0])).to.have.text('Griffin Smith');
@@ -107,7 +107,7 @@ describe('Reactable', function() {
         });
 
         it('renders the second row with the correct data', function() {
-            var secondRow = $('#table tr')[2];
+            var secondRow = $('#table tbody tr')[1];
             var tds = $(secondRow).find('td');
 
             expect($(tds[0])).to.have.text('Lee Salminen');
@@ -116,7 +116,7 @@ describe('Reactable', function() {
         });
 
         it('renders the third row with the correct data', function() {
-            var thirdRow = $('#table tr')[3];
+            var thirdRow = $('#table tbody tr')[2];
             var tds = $(thirdRow).find('td');
 
             expect($(tds[0])).to.have.text('');
