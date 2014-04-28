@@ -62,16 +62,16 @@ Reactable = (function() {
     var Reactable = {};
 
     var ParseChildDataMixin = {
-        parseChildData: function() {
+        parseChildData: function(expectedClass) {
             var data = [];
 
             // Transform any children back to a data array
             if (this.props.children !== undefined) {
                 React.Children.forEach(this.props.children, function(child) {
-                    if (child.type.ConvenienceConstructor === Reactable.Tr) {
+                    if (child.type.ConvenienceConstructor === this.type.ConvenienceConstructor.childNode) {
                         data.push(child.props.data);
                     }
-                });
+                }.bind(this));
             }
 
             return data;
@@ -90,9 +90,15 @@ Reactable = (function() {
 
 
     var Tr = Reactable.Tr = React.createClass({displayName: 'Tr',
-        mixins: [ParseChildDataMixin],
+        statics: {
+            childNode: Td
+        },
+        mixins: [
+            ParseChildDataMixin
+        ],
         getDefaultProps: function() {
             var defaultProps = {
+                childNode: Td,
                 data: this.parseChildData(),
                 columns: []
             }
@@ -133,7 +139,7 @@ Reactable = (function() {
             });
         },
         render: function() {
-            return this.transferPropsTo(React.DOM.th(null, this.props.children));
+            return this.transferPropsTo(Th(null, this.props.children));
         }
     });
 
@@ -157,7 +163,7 @@ Reactable = (function() {
             for (var i = 0; i < this.props.numPages; i++) {
                 var pageNum = i;
                 pageButtons.push(
-                    React.DOM.a( {className:"page-button", key:i,
+                    React.DOM.a( {className:"reactable-page-button", key:i,
                        // create function to get around for-loop closure issue
                        onClick:(function(pageNum) {
                            return function() {
@@ -168,9 +174,11 @@ Reactable = (function() {
             }
 
             return (
-                React.DOM.tr( {className:"pagination"}, 
-                    React.DOM.td( {colSpan:this.props.colSpan}, 
-                        pageButtons
+                React.DOM.tbody( {className:"reactable-pagination"}, 
+                    React.DOM.tr(null, 
+                        React.DOM.td( {colSpan:this.props.colSpan}, 
+                            pageButtons
+                        )
                     )
                 )
             );
@@ -178,11 +186,17 @@ Reactable = (function() {
     });
 
     var Table = Reactable.Table = React.createClass({displayName: 'Table',
-        mixins: [ParseChildDataMixin],
+        statics: {
+            childNode: Tr
+        },
+        mixins: [
+            ParseChildDataMixin
+        ],
         getDefaultProps: function() {
             var defaultProps = {
                 data: this.parseChildData(),
-                columns: []
+                columns: [],
+                itemsPerPage: 0
             }
 
             return defaultProps;
@@ -204,7 +218,7 @@ Reactable = (function() {
             if (
                 this.props.children &&
                 this.props.children.length > 0 &&
-                this.props.children[0].type.ConvenienceConstructor === Reactable.Thead
+                this.props.children[0].type.ConvenienceConstructor === Thead
             ) {
                 columns = this.props.children[0].getColumns();
             } else {
@@ -227,8 +241,12 @@ Reactable = (function() {
             }
 
             var currentChildren;
-            if (this.props.pagination === true) {
-                var itemsPerPage = this.props.itemsPerPage || 20;
+            var itemsPerPage = 0;
+            var pagination = false;
+
+            if (this.props.itemsPerPage > 0) {
+                itemsPerPage = this.props.itemsPerPage;
+                pagination = true;
                 currentChildren = children.slice(
                         this.state.currentPage * itemsPerPage,
                         (this.state.currentPage + 1) * itemsPerPage);
@@ -240,20 +258,23 @@ Reactable = (function() {
                 React.DOM.table(null, 
                     columns && columns.length > 0 ?
                         React.DOM.thead(null, 
-                            columns.map(function(col) {
-                                return (React.DOM.th( {key:col}, col));
-                            }.bind(this))
+                            React.DOM.tr(null, 
+                                columns.map(function(col) {
+                                    return (React.DOM.th( {key:col}, col));
+                                }.bind(this))
+                            )
                         ) : '',
                     
-                    React.DOM.tbody(null, 
-                        currentChildren,
-                        this.props.pagination === true ?
-                            Paginator(
-                                {colSpan:columns.length,
-                                numPages:Math.ceil(this.props.data.length / itemsPerPage),
-                                onPageChange:this.onPageChange}) : ''
-                        
-                    )
+                    React.DOM.tbody( {className:"reactable-data"}, 
+                        currentChildren
+                    ),
+                    pagination === true ?
+
+                        Paginator(
+                            {colSpan:columns.length,
+                            numPages:Math.ceil(this.props.data.length / itemsPerPage),
+                            onPageChange:this.onPageChange}) : ''
+                    
                 )
             );
         }

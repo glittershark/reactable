@@ -12,11 +12,17 @@
                 Tr = Reactable.Tr,
                 Td = Reactable.Td;
             React.renderComponent(
-                <Table className="table" id="table">
-                    <Tr data={{ Name: 'Griffin Smith', Age: '18'}}/>
-                    <Tr data={{ Age: '23', Name: 'Lee Salminen'}}/>
-                    <Tr data={{ Age: '28', Position: 'Developer'}}/>
-                </Table>,
+                <Table className="table" id="table" data={[
+                    {'Name': 'Griffin Smith', 'Age': '18'},
+                    {'Age': '23', 'Name': 'Lee Salminen'},
+                    {'Age': '28', 'Position': 'Developer'},
+                    {'Name': 'Griffin Smith', 'Age': '18'},
+                    {'Age': '23', 'Name': 'Test Person'},
+                    {'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer'},
+                    {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
+                    {'Age': '23', 'Name': 'Lee Salminen'},
+                    {'Age': '28', 'Position': 'Developer'},
+                ]} itemsPerPage={4} />,
                 document.getElementById('test-div')
             );
         </script>
