@@ -45,7 +45,7 @@ While pretty basic, this example demonstrates a couple things:
 You can also manually build up your rows using `Reactable.Tr` nested in a table,
 also using the `data` prop, but this time containing only one javascript object.
 This approach can be freely combined with the `data` property on the `<Table>`,
-and is useful if you want to specify per-row attributes, such a classes, like so:
+and is useful if you want to specify per-row attributes such as classes, like so:
 
 ```javascript
 var Table = Reactable.Table,
