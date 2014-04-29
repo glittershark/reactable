@@ -159,6 +159,11 @@ Reactable = (function() {
                 throw new TypeError('Must pass a non-zero numPages argument to Paginator');
             }
 
+            // Don't show page numbers if there's only one page - see GitHub issue #3
+            if (this.props.numPages === 1) {
+                return <tbody className="reactable-pagination" />;
+            }
+
             var pageButtons = [];
             for (var i = 0; i < this.props.numPages; i++) {
                 var pageNum = i;
