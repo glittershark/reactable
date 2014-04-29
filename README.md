@@ -69,8 +69,6 @@ You can also use pagination, by just specifying an `itemsPerPage` argument to th
 `<Table>` component. For example:
 
 ```javascript
-...
-
 <Table className="table" data={[
     { Name: 'Griffin Smith', Age: '18' },
     { Age: '23',  Name: 'Lee Salminen' },
@@ -83,3 +81,48 @@ You can also use pagination, by just specifying an `itemsPerPage` argument to th
 ]} itemsPerPage={4} />
 ```
 
+### Sorting
+
+You can specify which columns will sort by click by specifing the `sortable` argument
+to the `<Table>` component.  This is an array of column names or column objects.
+
+You can specify a custom sort function by defining a column object with structure:
+
+```javascript
+
+{column: 'Column Name', sortFunction: function(a, b){} }
+```
+
+You can also specify a default sort by passing in either a column name by itself, or an object
+with a column and a `direction` paramenter of either `asc` or `desc`.
+If no direction is specified, the default sort will be ascending.  Example:
+
+```javascript
+
+{column: 'Column Name', direction: 'asc' }
+```
+
+Combined example:
+
+```javascript
+<Table className="table" id="table" data={[
+    { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
+    { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
+    { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
+]}
+sortable={[
+    {
+        column: 'Name',
+        sortFunction: function(a, b){
+            // Sort by last name
+            var nameA = a.split(' ');
+            var nameB = b.split(' ');
+
+            return nameA[1].localeCompare(nameB[1]);
+        }
+    },
+    'Age',
+    'Position'
+]}
+defaultSort={{column: 'Age', direction: 'desc'}}/>
+```

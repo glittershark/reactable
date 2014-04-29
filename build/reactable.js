@@ -59,6 +59,12 @@ Reactable = (function() {
           };
     }
 
+    if (!Array.isArray) {
+        Array.isArray = function (value) {
+            return Object.prototype.toString.call(value) === '[object Array]';
+        };
+    }
+
     var Reactable = {};
 
     var ParseChildDataMixin = {
@@ -139,7 +145,32 @@ Reactable = (function() {
             });
         },
         render: function() {
-            return this.transferPropsTo(Th(null, this.props.children));
+            return this.transferPropsTo(
+                React.DOM.thead(null, 
+                    React.DOM.tr(null, 
+                        this.props.columns.map(function(col, index) {
+                            var sortClass = '';
+
+                            if (this.props.sort.column === col) {
+                                sortClass = 'reactable-header-sort';
+                                if (this.props.sort.direction === 1) {
+                                    sortClass += '-asc';
+                                }
+                                else {
+                                    sortClass += '-desc';
+                                }
+                            }
+
+                            return (
+                                React.DOM.th( 
+                                    {className:sortClass,
+                                    key:index,
+                                    onClick:function(){this.props.onSort(col)}.bind(this)}, col)
+                            );
+                        }.bind(this))
+                    )
+                )
+            );
         }
     });
 
@@ -205,7 +236,36 @@ Reactable = (function() {
             var defaultProps = {
                 data: this.parseChildData(),
                 columns: [],
-                itemsPerPage: 0
+                sortable: [],
+                defaultSort: false,
+                itemsPerPage: 0,
+                _sortable: []
+            }
+
+            // Transform sortable properties into a more friendly list
+            for (var i in this.props.sortable) {
+                var column = this.props.sortable[i];
+                var columnName, sortFunction;
+
+                if (column instanceof Object) {
+                    if (column.column !== undefined) {
+                        columnName = column.column;
+                    } else {
+                        console.warn('Sortable column specified without column name');
+                        return;
+                    }
+
+                    if (column.sortFunction !== undefined && column.sortFunction instanceof Function) {
+                        sortFunction = column.sortFunction;
+                    } else {
+                        sortFunction = 'default';
+                    }                    
+                } else {
+                    columnName      = column;
+                    sortFunction    = 'default';
+                }
+
+                defaultProps._sortable[columnName] = sortFunction;
             }
 
             return defaultProps;
@@ -213,12 +273,110 @@ Reactable = (function() {
         getInitialState: function() {
             var initialState = {
                 currentPage: 0,
+                currentSort: {
+                    column: null,
+                    direction: 1
+                }
+            }
+
+            // Read in default sort to state.  This is not meant to by synced.
+            if (this.props.defaultSort !== false) {
+                var column = this.props.defaultSort;
+                var currentSort = {};
+
+                if (column instanceof Object) {
+                    var columnName, sortDirection;
+
+                    if (column.column !== undefined) {
+                        columnName = column.column;
+                    } else {
+                        console.warn('Default column specified without column name');
+                        return;
+                    }
+
+                    if (column.direction !== undefined) {
+                        if (column.direction === 1 || column.direction === 'asc') {
+                            sortDirection = 1;
+                        } else if (column.direction === -1 || column.direction === 'desc') {
+                            sortDirection = -1;
+                        } else {
+                            console.warn('Invalid default sort specified.  Defaulting to ascending');
+                            sortDirection = 1;
+                        }
+                    } else {
+                        sortFunction = 1;
+                    }
+                } else {
+                    columnName      = column;
+                    sortDirection   = 1;
+                }
+
+                initialState.currentSort = {
+                    column: columnName,
+                    direction: sortDirection
+                };
             }
 
             return initialState;
         },
+        componentWillMount: function(){
+            this.sortByCurrentSort();
+        },
         onPageChange: function(page) {
             this.setState({ currentPage: page });
+        },
+        sortByCurrentSort: function(){
+            // Apply a default sort function according to the current sort in the state.
+            // This allows us to perform a default sort even on a non sortable column.
+            var currentSort = this.state.currentSort;
+            if (currentSort.column === null) {
+                return;
+            }
+
+            this.props.data.sort(function(a, b){
+                var keyA = a[currentSort.column];
+                var keyB = b[currentSort.column];
+
+                // Default sort
+                if (this.props._sortable[currentSort.column] === 'default') {
+                    // Reverse direction if we're doing a reverse sort
+                    if (keyA < keyB) {
+                        return -1 * currentSort.direction;
+                    }
+                    if (keyA > keyB) {
+                        return 1 * currentSort.direction;
+                    }
+
+                    return 0;
+                }
+                else{
+                    // Reverse columns if we're doing a reverse sort
+                    if (currentSort.direction === 1) {
+                        return this.props._sortable[currentSort.column](keyA, keyB);
+                    } else {
+                        return this.props._sortable[currentSort.column](keyB, keyA);
+                    }
+                }
+            }.bind(this));
+        },
+        onSort: function(column){
+            // Don't perform sort on unsortable columns
+            if (this.props._sortable[column] === undefined) {
+                return;
+            }
+
+            var currentSort = this.state.currentSort;
+
+            if (currentSort.column === column) {
+                currentSort.direction *= -1;
+            } else {
+                currentSort.column = column;
+                currentSort.direction = 1;
+            }
+
+            // Set the current sort and pass it to the sort function
+            this.setState({ currentSort: currentSort });
+            this.sortByCurrentSort();
         },
         render: function() {
             // Test if the caller passed in data
@@ -234,6 +392,7 @@ Reactable = (function() {
                 columns = this.props.columns || [];
             }
 
+            // Build up table rows
             if (this.props.data && typeof this.props.data.map === 'function') {
                 // Build up the columns array
                 children = children.concat(this.props.data.map(function(data, i) {
@@ -249,6 +408,7 @@ Reactable = (function() {
                 }.bind(this)));
             }
 
+            // Determine pagination properties and which columns to display
             var currentChildren;
             var itemsPerPage = 0;
             var pagination = false;
@@ -266,13 +426,11 @@ Reactable = (function() {
             return this.transferPropsTo(
                 React.DOM.table(null, 
                     columns && columns.length > 0 ?
-                        React.DOM.thead(null, 
-                            React.DOM.tr(null, 
-                                columns.map(function(col) {
-                                    return (React.DOM.th( {key:col}, col));
-                                }.bind(this))
-                            )
-                        ) : '',
+                        Thead(
+                            {columns:columns,
+                            sort:this.state.currentSort,
+                            onSort:this.onSort} )
+                        : '',
                     
                     React.DOM.tbody( {className:"reactable-data"}, 
                         currentChildren
