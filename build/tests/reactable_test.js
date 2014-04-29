@@ -213,10 +213,9 @@ describe('Reactable', function() {
                 expect($('#table tbody.reactable-data tr').length).to.equal(9);
             });
 
-            it('provides buttons for 1 page', function() {
+            it('hides pagination buttons if there is only one page', function() {
                 var pageButtons = $('#table tbody.reactable-pagination a.reactable-page-button');
-                expect(pageButtons.length).to.equal(1);
-                expect($(pageButtons[0])).to.have.text('1')
+                expect(pageButtons.length).to.equal(0);
             });
         });
 
