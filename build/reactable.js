@@ -159,11 +159,20 @@ Reactable = (function() {
                 throw new TypeError('Must pass a non-zero numPages argument to Paginator');
             }
 
+            if (typeof this.props.currentPage === 'undefined') {
+                throw new TypeError('Must pass a currentPage argument to Paginator');
+            }
+
             var pageButtons = [];
             for (var i = 0; i < this.props.numPages; i++) {
                 var pageNum = i;
+                var className = "reactable-page-button";
+                if (this.props.currentPage === i) {
+                    className += " reactable-current-page";
+                }
+
                 pageButtons.push(
-                    React.DOM.a( {className:"reactable-page-button", key:i,
+                    React.DOM.a( {className:className, key:i,
                        // create function to get around for-loop closure issue
                        onClick:(function(pageNum) {
                            return function() {
@@ -269,10 +278,10 @@ Reactable = (function() {
                         currentChildren
                     ),
                     pagination === true ?
-
                         Paginator(
                             {colSpan:columns.length,
                             numPages:Math.ceil(this.props.data.length / itemsPerPage),
+                            currentPage:this.state.currentPage,
                             onPageChange:this.onPageChange}) : ''
                     
                 )

@@ -161,16 +161,30 @@ describe('Reactable', function() {
                 expect($('#table tbody.reactable-data tr').length).to.equal(4);
             });
 
+            it('specifies a class on the currently active page', function() {
+                var activePage = $('#table tbody.reactable-pagination a.reactable-page-button.reactable-current-page');
+                expect(activePage.length).to.equal(1);
+                expect(activePage).to.have.text('1');
+            });
+
             describe('clicking page buttons', function() {
-                it('loads the next n rows', function() {
+                beforeEach(function() {
                     var page2 = $('#table tbody.reactable-pagination a.reactable-page-button')[1];
                     ReactTestUtils.Simulate.click(page2);
+                });
 
+                it('loads the next n rows', function() {
                     var rows = $('#table tbody.reactable-data tr');
                     expect($($(rows[0]).find('td')[0])).to.have.text('Test Person');
                     expect($($(rows[1]).find('td')[0])).to.have.text('Ian Zhang');
                     expect($($(rows[2]).find('td')[0])).to.have.text('Griffin Smith');
                     expect($($(rows[3]).find('td')[0])).to.have.text('Lee Salminen');
+                });
+
+                it('puts an active class on the new active page', function() {
+                    var activePage = $('#table tbody.reactable-pagination a.reactable-page-button.reactable-current-page');
+                    expect(activePage.length).to.equal(1);
+                    expect(activePage).to.have.text('2');
                 });
 
                 it('can go back to the original page', function() {
