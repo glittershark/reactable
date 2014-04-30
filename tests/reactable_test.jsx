@@ -38,9 +38,7 @@ describe('Reactable', function() {
             );
         });
 
-        after(function() {
-            ReactableTestUtils.resetTestEnvironment();
-        });
+        after(ReactableTestUtils.resetTestEnvironment);
 
         it('renders the table', function() {
             expect($('table#table.table')).to.exist;
@@ -80,9 +78,7 @@ describe('Reactable', function() {
             );
         });
 
-        after(function() {
-            ReactableTestUtils.resetTestEnvironment();
-        });
+        after(ReactableTestUtils.resetTestEnvironment);
 
         it('renders the table', function() {
             expect($('table#table.table')).to.exist;
@@ -129,9 +125,7 @@ describe('Reactable', function() {
                 );
             });
 
-            after(function() {
-                ReactableTestUtils.resetTestEnvironment();
-            });
+            after(ReactableTestUtils.resetTestEnvironment);
 
             it('provides buttons for each page', function() {
                 var pageButtons = $('#table tbody.reactable-pagination a.reactable-page-button');
@@ -202,9 +196,7 @@ describe('Reactable', function() {
                 );
             });
 
-            after(function() {
-                ReactableTestUtils.resetTestEnvironment();
-            });
+            after(ReactableTestUtils.resetTestEnvironment);
 
             it('renders all rows', function(){
                 expect($('#table tbody.reactable-data tr').length).to.equal(9);
@@ -235,9 +227,7 @@ describe('Reactable', function() {
                 );
             });
 
-            after(function() {
-                ReactableTestUtils.resetTestEnvironment();
-            });
+            after(ReactableTestUtils.resetTestEnvironment);
 
             it('renders all rows', function(){
                 expect($('#table tbody.reactable-data tr').length).to.equal(9);
@@ -262,9 +252,7 @@ describe('Reactable', function() {
                 );
             });
 
-            after(function() {
-                ReactableTestUtils.resetTestEnvironment();
-            });
+            after(ReactableTestUtils.resetTestEnvironment);
 
             it('renders all rows', function(){
                 expect($('#table tbody.reactable-data tr').length).to.equal(9);
@@ -299,11 +287,9 @@ describe('Reactable', function() {
                 );
             });
 
-            after(function() {
-                ReactableTestUtils.resetTestEnvironment();
-            });
+            after(ReactableTestUtils.resetTestEnvironment);
 
-            it('renders all rows with no sort', function(){            
+            it('renders all rows with no sort', function(){
                 ReactableTestUtils.expectRowText(0, ['Lee Salminen', '23', 'Programmer']);
                 ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', 'Engineer']);
                 ReactableTestUtils.expectRowText(2, ['Ian Zhang', '28', 'Developer']);
@@ -385,11 +371,9 @@ describe('Reactable', function() {
                 );
             });
 
-            after(function() {
-                ReactableTestUtils.resetTestEnvironment();
-            });
+            after(ReactableTestUtils.resetTestEnvironment);
 
-            it('renders all rows sorted by default column age descending', function(){            
+            it('renders all rows sorted by default column age descending', function(){
                 ReactableTestUtils.expectRowText(0, ['Ian Zhang', '28', 'Developer']);
                 ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', 'Programmer']);
                 ReactableTestUtils.expectRowText(2, ['Griffin Smith', '18', 'Engineer']);
@@ -423,11 +407,9 @@ describe('Reactable', function() {
                 );
             });
 
-            after(function() {
-                ReactableTestUtils.resetTestEnvironment();
-            });
+            after(ReactableTestUtils.resetTestEnvironment);
 
-            it('renders all rows sorted by default column age ascending', function(){            
+            it('renders all rows sorted by default column age ascending', function(){
                 ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', 'Engineer']);
                 ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', 'Programmer']);
                 ReactableTestUtils.expectRowText(2, ['Ian Zhang', '28', 'Developer']);
@@ -451,9 +433,7 @@ describe('Reactable', function() {
                 );
             });
 
-            after(function() {
-                ReactableTestUtils.resetTestEnvironment();
-            });
+            after(ReactableTestUtils.resetTestEnvironment);
 
             it('leaves columns unsorted', function(){
                 var nameHeader = $('#table thead th')[0];
