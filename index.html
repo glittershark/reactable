@@ -31,37 +31,135 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+        <h1>
+<a name="reactable-" class="anchor" href="#reactable-"><span class="octicon octicon-link"></span></a>Reactable <a href="https://travis-ci.org/glittershark/reactable"><img src="https://travis-ci.org/glittershark/reactable.svg?branch=master" alt="Build Status"></a>
+</h1>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>Fast, flexible, and simple data tables in React.</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<p>This is a work in progress. Much of the API defined in this readme won't work
+yet. If you like the look of this, feel free to star or watch the repository. If
+you're ambitious or feel like getting your hands dirty, I welcome pull requests!
+I promise I won't bite.</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p><strong>Using Bower:</strong></p>
+
+<pre><code>bower install [--save] reactable
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p>Or, you can just download the raw file
+<a href="https://github.com/glittershark/reactable/raw/master/build/reactable.js">here</a>.</p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>The simplest example:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">Table</span> <span class="o">=</span> <span class="nx">Reactable</span><span class="p">.</span><span class="nx">Table</span><span class="p">;</span>
+<span class="nx">React</span><span class="p">.</span><span class="nx">renderComponent</span><span class="p">(</span>
+    <span class="o">&lt;</span><span class="nx">Table</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"table"</span> <span class="nx">data</span><span class="o">=</span><span class="p">{[</span>
+        <span class="p">{</span> <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Griffin Smith'</span><span class="p">,</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'18'</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'23'</span><span class="p">,</span>  <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Lee Salminen'</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'28'</span><span class="p">,</span> <span class="nx">Position</span><span class="o">:</span> <span class="s1">'Developer'</span> <span class="p">},</span>
+    <span class="p">]}</span> <span class="o">/&gt;</span><span class="p">,</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'table'</span><span class="p">)</span>
+<span class="p">);</span>
+</pre></div>
+
+<p>While pretty basic, this example demonstrates a couple things:</p>
+
+<ul>
+<li>Columns in the data array can be in any order, and you can omit any you like</li>
+<li>Regular React DOM attributes such as className will pass-through to the
+rendered <code>&lt;table&gt;</code>
+</li>
+</ul><h3>
+<a name="further-customization" class="anchor" href="#further-customization"><span class="octicon octicon-link"></span></a>Further Customization</h3>
+
+<p>You can also manually build up your rows using <code>Reactable.Tr</code> nested in a table,
+also using the <code>data</code> prop, but this time containing only one javascript object.
+This approach can be freely combined with the <code>data</code> property on the <code>&lt;Table&gt;</code>,
+and is useful if you want to specify per-row attributes such as classes, like so:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">Table</span> <span class="o">=</span> <span class="nx">Reactable</span><span class="p">.</span><span class="nx">Table</span><span class="p">,</span>
+    <span class="nx">Tr</span> <span class="o">=</span> <span class="nx">Reactable</span><span class="p">.</span><span class="nx">Tr</span><span class="p">;</span>
+
+<span class="nx">React</span><span class="p">.</span><span class="nx">renderComponent</span><span class="p">(</span>
+    <span class="o">&lt;</span><span class="nx">Table</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"table"</span> <span class="nx">data</span><span class="o">=</span><span class="p">{[</span>
+        <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">'Row one'</span><span class="p">,</span> <span class="nx">content</span><span class="o">:</span> <span class="s1">'These are regular data rows'</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">'Row two'</span><span class="p">,</span> <span class="nx">content</span><span class="o">:</span> <span class="s1">'They work like above'</span> <span class="p">},</span>
+    <span class="p">]}</span> <span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">Tr</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"special-row"</span>
+            <span class="nx">data</span><span class="o">=</span><span class="p">{{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">'Other Row'</span> <span class="p">,</span> <span class="nx">content</span><span class="o">:</span> <span class="s1">'This is a different row'</span> <span class="p">}}</span> <span class="o">/&gt;</span>
+    <span class="o">&lt;</span><span class="err">/Table&gt;,</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'table'</span><span class="p">);</span>
+<span class="p">)</span>
+</pre></div>
 
 <h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<a name="pagination" class="anchor" href="#pagination"><span class="octicon octicon-link"></span></a>Pagination</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>You can also use pagination, by just specifying an <code>itemsPerPage</code> argument to the
+<code>&lt;Table&gt;</code> component. For example:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="o">&lt;</span><span class="nx">Table</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"table"</span> <span class="nx">data</span><span class="o">=</span><span class="p">{[</span>
+    <span class="p">{</span> <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Griffin Smith'</span><span class="p">,</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'18'</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'23'</span><span class="p">,</span>  <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Lee Salminen'</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'28'</span><span class="p">,</span> <span class="nx">Position</span><span class="o">:</span> <span class="s1">'Developer'</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Griffin Smith'</span><span class="p">,</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'18'</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'30'</span><span class="p">,</span>  <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Test Person'</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Another Test'</span><span class="p">,</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'26'</span><span class="p">,</span> <span class="nx">Position</span><span class="o">:</span> <span class="s1">'Developer'</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Third Test'</span><span class="p">,</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'19'</span><span class="p">,</span> <span class="nx">Position</span><span class="o">:</span> <span class="s1">'Salesperson'</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'23'</span><span class="p">,</span>  <span class="nx">Name</span><span class="o">:</span> <span class="s1">'End of this Page'</span><span class="p">,</span> <span class="nx">Position</span><span class="o">:</span> <span class="s1">'CEO'</span> <span class="p">},</span>
+<span class="p">]}</span> <span class="nx">itemsPerPage</span><span class="o">=</span><span class="p">{</span><span class="mi">4</span><span class="p">}</span> <span class="o">/&gt;</span>
+</pre></div>
 
 <h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+<a name="sorting" class="anchor" href="#sorting"><span class="octicon octicon-link"></span></a>Sorting</h3>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<p>You can specify which columns will sort by click by specifing the <code>sortable</code> argument
+to the <code>&lt;Table&gt;</code> component.  This is an array of column names or column objects.</p>
 
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<p>You can specify a custom sort function by defining a column object with structure:</p>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<div class="highlight highlight-javascript"><pre>
+<span class="p">{</span><span class="nx">column</span><span class="o">:</span> <span class="s1">'Column Name'</span><span class="p">,</span> <span class="nx">sortFunction</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){}</span> <span class="p">}</span>
+</pre></div>
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<p>You can also specify a default sort by passing in either a column name by itself, or an object
+with a column and a <code>direction</code> paramenter of either <code>asc</code> or <code>desc</code>.
+If no direction is specified, the default sort will be ascending.  Example:</p>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<div class="highlight highlight-javascript"><pre>
+<span class="p">{</span><span class="nx">column</span><span class="o">:</span> <span class="s1">'Column Name'</span><span class="p">,</span> <span class="nx">direction</span><span class="o">:</span> <span class="s1">'asc'</span> <span class="p">}</span>
+</pre></div>
+
+<p>Combined example:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="o">&lt;</span><span class="nx">Table</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"table"</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"table"</span> <span class="nx">data</span><span class="o">=</span><span class="p">{[</span>
+    <span class="p">{</span> <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Lee Salminen'</span><span class="p">,</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'23'</span><span class="p">,</span> <span class="nx">Position</span><span class="o">:</span> <span class="s1">'Programmer'</span><span class="p">},</span>
+    <span class="p">{</span> <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Griffin Smith'</span><span class="p">,</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'18'</span><span class="p">,</span> <span class="nx">Position</span><span class="o">:</span> <span class="s1">'Engineer'</span><span class="p">},</span>
+    <span class="p">{</span> <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Ian Zhang'</span><span class="p">,</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'28'</span><span class="p">,</span> <span class="nx">Position</span><span class="o">:</span> <span class="s1">'Developer'</span><span class="p">}</span>
+<span class="p">]}</span>
+<span class="nx">sortable</span><span class="o">=</span><span class="p">{[</span>
+    <span class="p">{</span>
+        <span class="nx">column</span><span class="o">:</span> <span class="s1">'Name'</span><span class="p">,</span>
+        <span class="nx">sortFunction</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){</span>
+            <span class="c1">// Sort by last name</span>
+            <span class="kd">var</span> <span class="nx">nameA</span> <span class="o">=</span> <span class="nx">a</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">' '</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">nameB</span> <span class="o">=</span> <span class="nx">b</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">' '</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="nx">nameA</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">localeCompare</span><span class="p">(</span><span class="nx">nameB</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s1">'Age'</span><span class="p">,</span>
+    <span class="s1">'Position'</span>
+<span class="p">]}</span>
+<span class="nx">defaultSort</span><span class="o">=</span><span class="p">{{</span><span class="nx">column</span><span class="o">:</span> <span class="s1">'Age'</span><span class="p">,</span> <span class="nx">direction</span><span class="o">:</span> <span class="s1">'desc'</span><span class="p">}}</span><span class="o">/&gt;</span>
+</pre></div>
       </section>
     </div>
 
