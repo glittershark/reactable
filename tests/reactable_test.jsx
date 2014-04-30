@@ -9,12 +9,12 @@ var ReactTestUtils = React.addons.TestUtils;
 var expect = chai.expect;
 
 var ReactableTestUtils = {
-    resetTestEnvironment:  function(){
+    resetTestEnvironment:  function() {
         React.unmountComponentAtNode($('body')[0]);
         $('body').empty();
     },
     // Expect the columns of a the data row specified to have the values in the array as their text values
-    expectRowText: function(rowIndex, textArray){
+    expectRowText: function(rowIndex, textArray) {
         var row = $($('#table tbody.reactable-data tr')[rowIndex]).find('td');
 
         expect(row.length).to.equal(textArray.length);
@@ -309,7 +309,7 @@ describe('Reactable', function() {
                 ReactableTestUtils.expectRowText(2, ['Ian Zhang', '28', 'Developer']);
             });
 
-            it('sort by text in ascending order', function(){
+            it('sorts by text in ascending order', function(){
                 var positionHeader = $('#table thead th')[2];
                 ReactTestUtils.Simulate.click(positionHeader);
 
@@ -321,7 +321,7 @@ describe('Reactable', function() {
                 expect($(positionHeader)).to.have.class('reactable-header-sort-asc');
             });
 
-            it('sort by text in descending order', function(){
+            it('sorts by text in descending order', function(){
                 var positionHeader = $('#table thead th')[2];
                 ReactTestUtils.Simulate.click(positionHeader);
 
@@ -333,7 +333,7 @@ describe('Reactable', function() {
                 expect($(positionHeader)).to.have.class('reactable-header-sort-desc');
             });
 
-            it('sort by last name in ascending order', function(){
+            it('sorts by last name in ascending order', function(){
                 var nameHeader = $('#table thead th')[0];
                 ReactTestUtils.Simulate.click(nameHeader);
 
@@ -345,7 +345,7 @@ describe('Reactable', function() {
                 expect($(nameHeader)).to.have.class('reactable-header-sort-asc');
             });
 
-            it('sort by last name in descending order', function(){
+            it('sorts by last name in descending order', function(){
                 var nameHeader = $('#table thead th')[0];
                 ReactTestUtils.Simulate.click(nameHeader);
 
@@ -455,7 +455,7 @@ describe('Reactable', function() {
                 ReactableTestUtils.resetTestEnvironment();
             });
 
-            it('columns remain unsorted', function(){
+            it('leaves columns unsorted', function(){
                 var nameHeader = $('#table thead th')[0];
                 ReactTestUtils.Simulate.click(nameHeader);
 

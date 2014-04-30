@@ -72,7 +72,7 @@ Reactable = (function() {
             var data = [];
 
             // Transform any children back to a data array
-            if (this.props.children !== undefined) {
+            if (typeof(this.props.children) !== 'undefined') {
                 React.Children.forEach(this.props.children, function(child) {
                     if (child.type.ConvenienceConstructor === this.type.ConvenienceConstructor.childNode) {
                         data.push(child.props.data);
@@ -165,7 +165,7 @@ Reactable = (function() {
                                 React.DOM.th( 
                                     {className:sortClass,
                                     key:index,
-                                    onClick:function(){this.props.onSort(col)}.bind(this)}, col)
+                                    onClick:function(){ this.props.onSort(col) }.bind(this)}, col)
                             );
                         }.bind(this))
                     )
@@ -239,7 +239,7 @@ Reactable = (function() {
                 sortable: [],
                 defaultSort: false,
                 itemsPerPage: 0,
-                _sortable: []
+                _sortable: [],
             }
 
             // Transform sortable properties into a more friendly list
@@ -248,14 +248,14 @@ Reactable = (function() {
                 var columnName, sortFunction;
 
                 if (column instanceof Object) {
-                    if (column.column !== undefined) {
+                    if (typeof(column.column) !== 'undefined') {
                         columnName = column.column;
                     } else {
                         console.warn('Sortable column specified without column name');
                         return;
                     }
 
-                    if (column.sortFunction !== undefined && column.sortFunction instanceof Function) {
+                    if (typeof(column.sortFunction) !== 'undefined' && column.sortFunction instanceof Function) {
                         sortFunction = column.sortFunction;
                     } else {
                         sortFunction = 'default';
@@ -279,7 +279,7 @@ Reactable = (function() {
                 }
             }
 
-            // Read in default sort to state.  This is not meant to by synced.
+            // Set the state of the current sort to the default sort
             if (this.props.defaultSort !== false) {
                 var column = this.props.defaultSort;
                 var currentSort = {};
@@ -287,14 +287,14 @@ Reactable = (function() {
                 if (column instanceof Object) {
                     var columnName, sortDirection;
 
-                    if (column.column !== undefined) {
+                    if (typeof(column.column) !== 'undefined') {
                         columnName = column.column;
                     } else {
                         console.warn('Default column specified without column name');
                         return;
                     }
 
-                    if (column.direction !== undefined) {
+                    if (typeof(column.direction) !== 'undefined') {
                         if (column.direction === 1 || column.direction === 'asc') {
                             sortDirection = 1;
                         } else if (column.direction === -1 || column.direction === 'desc') {
@@ -361,7 +361,7 @@ Reactable = (function() {
         },
         onSort: function(column){
             // Don't perform sort on unsortable columns
-            if (this.props._sortable[column] === undefined) {
+            if (typeof(this.props._sortable[column]) === 'undefined') {
                 return;
             }
 
