@@ -8,6 +8,23 @@ var Table = Reactable.Table,
 var ReactTestUtils = React.addons.TestUtils;
 var expect = chai.expect;
 
+var ReactableTestUtils = {
+    resetTestEnvironment:  function() {
+        React.unmountComponentAtNode($('body')[0]);
+        $('body').empty();
+    },
+    // Expect the columns of a the data row specified to have the values in the array as their text values
+    expectRowText: function(rowIndex, textArray) {
+        var row = $($('#table tbody.reactable-data tr')[rowIndex]).find('td');
+
+        expect(row.length).to.equal(textArray.length);
+
+        for (var i = 0; i < row.length; i++) {
+            expect($(row[i])).to.have.text(textArray[i]);
+        }
+    }
+};
+
 describe('Reactable', function() {
     describe('directly passing a data array', function() {
         before(function() {
@@ -22,8 +39,7 @@ describe('Reactable', function() {
         });
 
         after(function() {
-            React.unmountComponentAtNode($('body')[0]);
-            $('body').empty();
+            ReactableTestUtils.resetTestEnvironment();
         });
 
         it('renders the table', function() {
@@ -40,30 +56,15 @@ describe('Reactable', function() {
         });
 
         it('renders the first row with the correct data', function() {
-            var firstRow = $('#table tbody tr')[0];
-            var tds = $(firstRow).find('td');
-
-            expect($(tds[0])).to.have.text('Griffin Smith');
-            expect($(tds[1])).to.have.text('18');
-            expect($(tds[2])).to.have.text('');
+            ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', '']);
         });
 
         it('renders the second row with the correct data', function() {
-            var secondRow = $('#table tbody tr')[1];
-            var tds = $(secondRow).find('td');
-
-            expect($(tds[0])).to.have.text('Lee Salminen');
-            expect($(tds[1])).to.have.text('23');
-            expect($(tds[2])).to.have.text('');
+            ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', '']);
         });
 
         it('renders the third row with the correct data', function() {
-            var thirdRow = $('#table tbody tr')[2];
-            var tds = $(thirdRow).find('td');
-
-            expect($(tds[0])).to.have.text('');
-            expect($(tds[1])).to.have.text('28');
-            expect($(tds[2])).to.have.text('Developer');
+            ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
         });
     });
 
@@ -80,8 +81,7 @@ describe('Reactable', function() {
         });
 
         after(function() {
-            React.unmountComponentAtNode($('body')[0]);
-            $('body').empty();
+            ReactableTestUtils.resetTestEnvironment();
         });
 
         it('renders the table', function() {
@@ -98,30 +98,15 @@ describe('Reactable', function() {
         });
 
         it('renders the first row with the correct data', function() {
-            var firstRow = $('#table tbody tr')[0];
-            var tds = $(firstRow).find('td');
-
-            expect($(tds[0])).to.have.text('Griffin Smith');
-            expect($(tds[1])).to.have.text('18');
-            expect($(tds[2])).to.have.text('');
+            ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', '']);
         });
 
         it('renders the second row with the correct data', function() {
-            var secondRow = $('#table tbody tr')[1];
-            var tds = $(secondRow).find('td');
-
-            expect($(tds[0])).to.have.text('Lee Salminen');
-            expect($(tds[1])).to.have.text('23');
-            expect($(tds[2])).to.have.text('');
+            ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', '']);
         });
 
         it('renders the third row with the correct data', function() {
-            var thirdRow = $('#table tbody tr')[2];
-            var tds = $(thirdRow).find('td');
-
-            expect($(tds[0])).to.have.text('');
-            expect($(tds[1])).to.have.text('28');
-            expect($(tds[2])).to.have.text('Developer');
+            ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
         });
     });
 
@@ -145,8 +130,7 @@ describe('Reactable', function() {
             });
 
             after(function() {
-                React.unmountComponentAtNode(document.getElementsByTagName('body')[0]);
-                $('body').empty();
+                ReactableTestUtils.resetTestEnvironment();
             });
 
             it('provides buttons for each page', function() {
@@ -219,8 +203,7 @@ describe('Reactable', function() {
             });
 
             after(function() {
-                React.unmountComponentAtNode(document.getElementsByTagName('body')[0]);
-                $('body').empty();
+                ReactableTestUtils.resetTestEnvironment();
             });
 
             it('renders all rows', function(){
@@ -253,8 +236,7 @@ describe('Reactable', function() {
             });
 
             after(function() {
-                React.unmountComponentAtNode(document.getElementsByTagName('body')[0]);
-                $('body').empty();
+                ReactableTestUtils.resetTestEnvironment();
             });
 
             it('renders all rows', function(){
@@ -281,12 +263,205 @@ describe('Reactable', function() {
             });
 
             after(function() {
-                React.unmountComponentAtNode(document.getElementsByTagName('body')[0]);
-                $('body').empty();
+                ReactableTestUtils.resetTestEnvironment();
             });
 
             it('renders all rows', function(){
                 expect($('#table tbody.reactable-data tr').length).to.equal(9);
+            });
+        });
+    });
+
+    describe('sorting', function(){
+        describe('no default sort', function(){
+            before(function() {
+                React.renderComponent(
+                    Table( {className:"table", id:"table", data:[
+                        { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
+                        { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
+                        { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
+                    ],
+                    sortable:[
+                        {
+                            column: 'Name',
+                            sortFunction: function(a, b){
+                                // Sort by last name
+                                var nameA = a.split(' ');
+                                var nameB = b.split(' ');
+
+                                return nameA[1].localeCompare(nameB[1]);
+                            }
+                        },
+                        'Age',
+                        'Position'
+                    ]} ),
+                    document.getElementsByTagName('body')[0]
+                );
+            });
+
+            after(function() {
+                ReactableTestUtils.resetTestEnvironment();
+            });
+
+            it('renders all rows with no sort', function(){            
+                ReactableTestUtils.expectRowText(0, ['Lee Salminen', '23', 'Programmer']);
+                ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', 'Engineer']);
+                ReactableTestUtils.expectRowText(2, ['Ian Zhang', '28', 'Developer']);
+            });
+
+            it('sorts by text in ascending order', function(){
+                var positionHeader = $('#table thead th')[2];
+                ReactTestUtils.Simulate.click(positionHeader);
+
+                ReactableTestUtils.expectRowText(0, ['Ian Zhang', '28', 'Developer']);
+                ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', 'Engineer']);
+                ReactableTestUtils.expectRowText(2, ['Lee Salminen', '23', 'Programmer']);
+
+                // Make sure the headers have the right classes
+                expect($(positionHeader)).to.have.class('reactable-header-sort-asc');
+            });
+
+            it('sorts by text in descending order', function(){
+                var positionHeader = $('#table thead th')[2];
+                ReactTestUtils.Simulate.click(positionHeader);
+
+                ReactableTestUtils.expectRowText(0, ['Lee Salminen', '23', 'Programmer']);
+                ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', 'Engineer']);
+                ReactableTestUtils.expectRowText(2, ['Ian Zhang', '28', 'Developer']);
+
+                // Make sure the headers have the right classes
+                expect($(positionHeader)).to.have.class('reactable-header-sort-desc');
+            });
+
+            it('sorts by last name in ascending order', function(){
+                var nameHeader = $('#table thead th')[0];
+                ReactTestUtils.Simulate.click(nameHeader);
+
+                ReactableTestUtils.expectRowText(0, ['Lee Salminen', '23', 'Programmer']);
+                ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', 'Engineer']);
+                ReactableTestUtils.expectRowText(2, ['Ian Zhang', '28', 'Developer']);
+
+                // Make sure the headers have the right classes
+                expect($(nameHeader)).to.have.class('reactable-header-sort-asc');
+            });
+
+            it('sorts by last name in descending order', function(){
+                var nameHeader = $('#table thead th')[0];
+                ReactTestUtils.Simulate.click(nameHeader);
+
+                ReactableTestUtils.expectRowText(0, ['Ian Zhang', '28', 'Developer']);
+                ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', 'Engineer']);
+                ReactableTestUtils.expectRowText(2, ['Lee Salminen', '23', 'Programmer']);
+
+                // Make sure the headers have the right classes
+                expect($(nameHeader)).to.have.class('reactable-header-sort-desc');
+            });
+        });
+
+        describe('default sort', function(){
+            before(function() {
+                React.renderComponent(
+                    Table( {className:"table", id:"table", data:[
+                        { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
+                        { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
+                        { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
+                    ],
+                    sortable:[
+                        {
+                            column: 'Name',
+                            sortFunction: function(a, b){
+                                // Sort by last name
+                                var nameA = a.split(' ');
+                                var nameB = b.split(' ');
+
+                                return nameA[1].localeCompare(nameB[1]);
+                            }
+                        },
+                        'Age',
+                        'Position'
+                    ],
+                    defaultSort:{column: 'Age', direction: 'desc'}}),
+                    document.getElementsByTagName('body')[0]
+                );
+            });
+
+            after(function() {
+                ReactableTestUtils.resetTestEnvironment();
+            });
+
+            it('renders all rows sorted by default column age descending', function(){            
+                ReactableTestUtils.expectRowText(0, ['Ian Zhang', '28', 'Developer']);
+                ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', 'Programmer']);
+                ReactableTestUtils.expectRowText(2, ['Griffin Smith', '18', 'Engineer']);
+            });
+        });
+
+        describe('default sort no direction specified', function(){
+            before(function() {
+                React.renderComponent(
+                    Table( {className:"table", id:"table", data:[
+                        { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
+                        { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
+                        { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
+                    ],
+                    sortable:[
+                        {
+                            column: 'Name',
+                            sortFunction: function(a, b){
+                                // Sort by last name
+                                var nameA = a.split(' ');
+                                var nameB = b.split(' ');
+
+                                return nameA[1].localeCompare(nameB[1]);
+                            }
+                        },
+                        'Age',
+                        'Position'
+                    ],
+                    defaultSort:'Age'}),
+                    document.getElementsByTagName('body')[0]
+                );
+            });
+
+            after(function() {
+                ReactableTestUtils.resetTestEnvironment();
+            });
+
+            it('renders all rows sorted by default column age ascending', function(){            
+                ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', 'Engineer']);
+                ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', 'Programmer']);
+                ReactableTestUtils.expectRowText(2, ['Ian Zhang', '28', 'Developer']);
+            });
+        });
+
+
+        describe('unsortable column', function(){
+            before(function() {
+                React.renderComponent(
+                    Table( {className:"table", id:"table", data:[
+                        { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
+                        { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
+                        { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
+                    ],
+                    sortable:[
+                        'Age',
+                        'Position'
+                    ]} ),
+                    document.getElementsByTagName('body')[0]
+                );
+            });
+
+            after(function() {
+                ReactableTestUtils.resetTestEnvironment();
+            });
+
+            it('leaves columns unsorted', function(){
+                var nameHeader = $('#table thead th')[0];
+                ReactTestUtils.Simulate.click(nameHeader);
+
+                ReactableTestUtils.expectRowText(0, ['Lee Salminen', '23', 'Programmer']);
+                ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', 'Engineer']);
+                ReactableTestUtils.expectRowText(2, ['Ian Zhang', '28', 'Developer']);
             });
         });
     });
