@@ -13,9 +13,9 @@
                 Td = Reactable.Td;
             React.renderComponent(
                 <Table className="table" id="table" data={[
-                    { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
-                        { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
-                        { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
+                    { Name: 'Lee Salminen', Age: '123', Position: 'Programmer'},
+                    { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
+                    { Name: 'Ian Zhang', Age: 'a', Position: 'Developer'}
                 ]} sortable={[
                         {
                             column: 'Name',
@@ -27,7 +27,10 @@
                                 return nameA[1].localeCompare(nameB[1]);
                             }
                         },
-                        'Age',
+                        {
+                            column: 'Age',
+                            sortFunction: Reactable.Sort.Numeric
+                        },
                         'Position'
                     ]}
                     defaultSort={{column: 'Age', direction: -1}} />,

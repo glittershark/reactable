@@ -67,6 +67,35 @@ Reactable = (function() {
 
     var Reactable = {};
 
+    Reactable.Sort = {
+        Numeric: function(a, b) {
+            var valA = parseFloat(a);
+            var valB = parseFloat(b);
+
+            // Sort non-numeric values alphabetically at the bottom of the list
+            if (isNaN(valA) && isNaN(valB)) {
+                valA = a;
+                valB = b;
+            } else {
+                if (isNaN(valA)) {
+                    return 1;
+                }
+                if (isNaN(valB)) {
+                    return -1;
+                }
+            }
+
+            if (valA < valB) {
+                return -1;
+            }
+            if (valA > valB) {
+                return 1;
+            }
+
+            return 0;
+        }   
+    };
+
     var ParseChildDataMixin = {
         parseChildData: function(expectedClass) {
             var data = [];
@@ -326,7 +355,7 @@ Reactable = (function() {
             this.setState({ currentPage: page });
         },
         sortByCurrentSort: function(){
-            // Apply a default sort function according to the current sort in the state.
+            // Apply a sort function according to the current sort in the state.
             // This allows us to perform a default sort even on a non sortable column.
             var currentSort = this.state.currentSort;
             if (currentSort.column === null) {
