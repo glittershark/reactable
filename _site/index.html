@@ -40,20 +40,12 @@
           <h1>Reported UFO Sightings</h1>
           <div id="demo-table"></div>
         
-        <p>Fast, flexible, and simple data tables in React.</p>
-
-<p>This is a work in progress. Much of the API defined in this readme won’t work
-yet. If you like the look of this, feel free to star or watch the repository. If
-you’re ambitious or feel like getting your hands dirty, I welcome pull requests!
-I promise I won’t bite.</p>
-
-<h2 id="installation">Installation</h2>
+        <h2 id="installation">Installation</h2>
 
 <p><strong>Using Bower:</strong></p>
 
-<p><code>
-bower install [--save] reactable
-</code></p>
+<pre><code>bower install [--save] reactable
+</code></pre>
 
 <p>Or, you can just download the raw file
 <a href="https://github.com/glittershark/reactable/raw/master/build/reactable.js">here</a>.</p>
@@ -62,17 +54,19 @@ bower install [--save] reactable
 
 <p>The simplest example:</p>
 
-<p><code>javascript
-var Table = Reactable.Table;
-React.renderComponent(
-    &lt;Table className="table" data={[
-        { Name: 'Griffin Smith', Age: '18' },
-        { Age: '23',  Name: 'Lee Salminen' },
-        { Age: '28', Position: 'Developer' },
-    ]} /&gt;,
-    document.getElementById('table')
-);
-</code></p>
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">var</span> Table = Reactable.Table;
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>React.renderComponent(
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>    <span style="color:#070;font-weight:bold">&lt;Table</span> <span style="color:#b48">className</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">table</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">data</span>=<span style="color:#F00;background-color:#FAA">{</span><span style="color:#F00;background-color:#FAA">[</span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>        <span style="color:#F00;background-color:#FAA">{</span> <span style="color:#700">Name:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Griffin</span> <span style="color:#b48">Smith</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#b48">Age:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">18</span><span style="color:#F00;background-color:#FAA">'</span> <span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>        <span style="color:#F00;background-color:#FAA">{</span> <span style="color:#b48">Age:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">23</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span>  <span style="color:#b48">Name:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Lee</span> <span style="color:#b48">Salminen</span><span style="color:#F00;background-color:#FAA">'</span> <span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>        <span style="color:#F00;background-color:#FAA">{</span> <span style="color:#b48">Age:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">28</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#b48">Position:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Developer</span><span style="color:#F00;background-color:#FAA">'</span> <span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>    <span style="color:#F00;background-color:#FAA">]</span><span style="color:#F00;background-color:#FAA">}</span> <span style="color:#070;font-weight:bold">/&gt;</span>,
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>    document.getElementById(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">table</span><span style="color:#710">'</span></span>)
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>);
+</pre></div>
+</div>
+</div>
 
 <p>While pretty basic, this example demonstrates a couple things:
 - Columns in the data array can be in any order, and you can omit any you like
@@ -86,39 +80,43 @@ also using the <code>data</code> prop, but this time containing only one javascr
 This approach can be freely combined with the <code>data</code> property on the <code>&lt;Table&gt;</code>,
 and is useful if you want to specify per-row attributes such as classes, like so:</p>
 
-<p>```javascript
-var Table = Reactable.Table,
-    Tr = Reactable.Tr;</p>
-
-<p>React.renderComponent(
-    &lt;Table className=”table” data={[
-        { name: ‘Row one’, content: ‘These are regular data rows’ },
-        { name: ‘Row two’, content: ‘They work like above’ },
-    ]} &gt;
-        &lt;Tr className=”special-row”
-            data= /&gt;
-    &lt;/Table&gt;,
-    document.getElementById(‘table’);
-)
-```</p>
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">var</span> Table = Reactable.Table,
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>    Tr = Reactable.Tr;
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>React.renderComponent(
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>    <span style="color:#070;font-weight:bold">&lt;Table</span> <span style="color:#b48">className</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">table</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">data</span>=<span style="color:#F00;background-color:#FAA">{</span><span style="color:#F00;background-color:#FAA">[</span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>        <span style="color:#F00;background-color:#FAA">{</span> <span style="color:#700">name:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Row</span> <span style="color:#b48">one</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#b48">content:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">These</span> <span style="color:#b48">are</span> <span style="color:#b48">regular</span> <span style="color:#b48">data</span> <span style="color:#b48">rows</span><span style="color:#F00;background-color:#FAA">'</span> <span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>        <span style="color:#F00;background-color:#FAA">{</span> <span style="color:#b48">name:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Row</span> <span style="color:#b48">two</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#b48">content:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">They</span> <span style="color:#b48">work</span> <span style="color:#b48">like</span> <span style="color:#b48">above</span><span style="color:#F00;background-color:#FAA">'</span> <span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>    <span style="color:#F00;background-color:#FAA">]</span><span style="color:#F00;background-color:#FAA">}</span> <span style="color:#070;font-weight:bold">&gt;</span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>        <span style="color:#070;font-weight:bold">&lt;Tr</span> <span style="color:#b48">className</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">special-row</span><span style="color:#710">&quot;</span></span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>            <span style="color:#b48">data</span>= <span style="color:#070;font-weight:bold">/&gt;</span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>    <span style="color:#070;font-weight:bold">&lt;/Table&gt;</span>,
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>    document.getElementById(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">table</span><span style="color:#710">'</span></span>);
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>)
+</pre></div>
+</div>
+</div>
 
 <h3 id="pagination">Pagination</h3>
 
 <p>You can also use pagination, by just specifying an <code>itemsPerPage</code> argument to the
 <code>&lt;Table&gt;</code> component. For example:</p>
 
-<p><code>javascript
-&lt;Table className="table" data={[
-    { Name: 'Griffin Smith', Age: '18' },
-    { Age: '23',  Name: 'Lee Salminen' },
-    { Age: '28', Position: 'Developer' },
-    { Name: 'Griffin Smith', Age: '18' },
-    { Age: '30',  Name: 'Test Person' },
-    { Name: 'Another Test', Age: '26', Position: 'Developer' },
-    { Name: 'Third Test', Age: '19', Position: 'Salesperson' },
-    { Age: '23',  Name: 'End of this Page', Position: 'CEO' },
-]} itemsPerPage={4} /&gt;
-</code></p>
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#070;font-weight:bold">&lt;Table</span> <span style="color:#b48">className</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">table</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">data</span>=<span style="color:#F00;background-color:#FAA">{</span><span style="color:#F00;background-color:#FAA">[</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>    <span style="color:#F00;background-color:#FAA">{</span> <span style="color:#700">Name:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Griffin</span> <span style="color:#b48">Smith</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#b48">Age:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">18</span><span style="color:#F00;background-color:#FAA">'</span> <span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>    <span style="color:#F00;background-color:#FAA">{</span> <span style="color:#b48">Age:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">23</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span>  <span style="color:#b48">Name:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Lee</span> <span style="color:#b48">Salminen</span><span style="color:#F00;background-color:#FAA">'</span> <span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>    <span style="color:#F00;background-color:#FAA">{</span> <span style="color:#b48">Age:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">28</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#b48">Position:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Developer</span><span style="color:#F00;background-color:#FAA">'</span> <span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>    <span style="color:#F00;background-color:#FAA">{</span> <span style="color:#b48">Name:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Griffin</span> <span style="color:#b48">Smith</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#b48">Age:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">18</span><span style="color:#F00;background-color:#FAA">'</span> <span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>    <span style="color:#F00;background-color:#FAA">{</span> <span style="color:#b48">Age:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">30</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span>  <span style="color:#b48">Name:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Test</span> <span style="color:#b48">Person</span><span style="color:#F00;background-color:#FAA">'</span> <span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>    <span style="color:#F00;background-color:#FAA">{</span> <span style="color:#b48">Name:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Another</span> <span style="color:#b48">Test</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#b48">Age:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">26</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#b48">Position:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Developer</span><span style="color:#F00;background-color:#FAA">'</span> <span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>    <span style="color:#F00;background-color:#FAA">{</span> <span style="color:#b48">Name:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Third</span> <span style="color:#b48">Test</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#b48">Age:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">19</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#b48">Position:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Salesperson</span><span style="color:#F00;background-color:#FAA">'</span> <span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>    <span style="color:#F00;background-color:#FAA">{</span> <span style="color:#b48">Age:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">23</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span>  <span style="color:#b48">Name:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">End</span> <span style="color:#b48">of</span> <span style="color:#b48">this</span> <span style="color:#b48">Page</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#b48">Position:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">CEO</span><span style="color:#F00;background-color:#FAA">'</span> <span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span><span style="color:#F00;background-color:#FAA">]</span><span style="color:#F00;background-color:#FAA">}</span> <span style="color:#b48">itemsPerPage</span>=<span style="color:#F00;background-color:#FAA">{</span><span style="color:#700">4</span><span style="color:#F00;background-color:#FAA">}</span> <span style="color:#070;font-weight:bold">/&gt;</span>
+</pre></div>
+</div>
+</div>
 
 <h3 id="sorting">Sorting</h3>
 
@@ -127,42 +125,50 @@ to the <code>&lt;Table&gt;</code> component.  This is an array of column names o
 
 <p>You can specify a custom sort function by defining a column object with structure:</p>
 
-<p>```javascript</p>
-
-<p>{column: ‘Column Name’, sortFunction: function(a, b){} }
-```</p>
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>{<span style="color:#606">column</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Column Name</span><span style="color:#710">'</span></span>, <span style="color:#06B;font-weight:bold">sortFunction</span>: <span style="color:#080;font-weight:bold">function</span>(a, b){} }
+</pre></div>
+</div>
+</div>
 
 <p>You can also specify a default sort by passing in either a column name by itself, or an object
 with a column and a <code>direction</code> paramenter of either <code>asc</code> or <code>desc</code>.
 If no direction is specified, the default sort will be ascending.  Example:</p>
 
-<p>```javascript</p>
-
-<p>{column: ‘Column Name’, direction: ‘asc’ }
-```</p>
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>{<span style="color:#606">column</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Column Name</span><span style="color:#710">'</span></span>, <span style="color:#606">direction</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">asc</span><span style="color:#710">'</span></span> }
+</pre></div>
+</div>
+</div>
 
 <p>Combined example:</p>
 
-<p>```javascript
-&lt;Table className=”table” id=”table” data={[
-    { Name: ‘Lee Salminen’, Age: ‘23’, Position: ‘Programmer’},
-    { Name: ‘Griffin Smith’, Age: ‘18’, Position: ‘Engineer’},
-    { Name: ‘Ian Zhang’, Age: ‘28’, Position: ‘Developer’}
-]}
-sortable={[
-    {
-        column: ‘Name’,
-        sortFunction: function(a, b){
-            // Sort by last name
-            var nameA = a.split(‘ ‘);
-            var nameB = b.split(‘ ‘);</p>
-
-<pre><code>        return nameA[1].localeCompare(nameB[1]);
-    }
-},
-'Age',
-'Position' ]} defaultSort=/&gt; ```
-</code></pre>
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>&lt;Table className=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">table</span><span style="color:#710">&quot;</span></span> id=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">table</span><span style="color:#710">&quot;</span></span> data={[
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>    { <span style="color:#606">Name</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Lee Salminen</span><span style="color:#710">'</span></span>, <span style="color:#606">Age</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">23</span><span style="color:#710">'</span></span>, <span style="color:#606">Position</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Programmer</span><span style="color:#710">'</span></span>},
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>    { <span style="color:#606">Name</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Griffin Smith</span><span style="color:#710">'</span></span>, <span style="color:#606">Age</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">18</span><span style="color:#710">'</span></span>, <span style="color:#606">Position</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Engineer</span><span style="color:#710">'</span></span>},
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>    { <span style="color:#606">Name</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Ian Zhang</span><span style="color:#710">'</span></span>, <span style="color:#606">Age</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">28</span><span style="color:#710">'</span></span>, <span style="color:#606">Position</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Developer</span><span style="color:#710">'</span></span>}
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>]}
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>sortable={[
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>    {
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>        <span style="color:#606">column</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Name</span><span style="color:#710">'</span></span>,
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>        <span style="color:#06B;font-weight:bold">sortFunction</span>: <span style="color:#080;font-weight:bold">function</span>(a, b){
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>            <span style="color:#777">// Sort by last name</span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>            <span style="color:#080;font-weight:bold">var</span> nameA = a.split(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20"> </span><span style="color:#710">'</span></span>);
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>            <span style="color:#080;font-weight:bold">var</span> nameB = b.split(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20"> </span><span style="color:#710">'</span></span>);
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>            <span style="color:#080;font-weight:bold">return</span> nameA[<span style="color:#00D">1</span>].localeCompare(nameB[<span style="color:#00D">1</span>]);
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>        }
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>    },
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span>    <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Age</span><span style="color:#710">'</span></span>,
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span>    <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Position</span><span style="color:#710">'</span></span>
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span>]}
+<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>defaultSort=<span style="background-color:hsla(300,100%,50%,0.06)"><span style="color:#404">/</span><span style="color:#808">&gt;</span></span>
+<span class="line-numbers"><a href="#n21" name="n21">21</a></span><span style="background-color:hsla(300,100%,50%,0.06)"><span style="color:#808"></span></span></pre></div>
+</div>
+</div>
 
       </section>
     </div>
