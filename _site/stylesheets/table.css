@@ -24,3 +24,25 @@
   cursor: default;
 }
 
+#demo-table th {
+  cursor: pointer;
+}
+
+#demo-table th.reactable-header-sort-desc, #demo-table th.reactable-header-sort-asc {
+  background-color: #474747;
+}
+
+#demo-table th.reactable-header-sort-desc:after {
+  content: '\25B2';
+  font-size: 10px;
+  padding-left: 10px;
+  padding-bottom: 5px;
+}
+
+#demo-table th.reactable-header-sort-asc:after {
+  content: '\25BC';
+  font-size: 10px;
+  padding-left: 10px;
+  padding-bottom: 5px;
+}
+
