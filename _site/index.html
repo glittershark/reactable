@@ -42,107 +42,128 @@
         
         <p>Fast, flexible, and simple data tables in React.</p>
 
-<p>This is a work in progress. Much of the API defined in this readme won’t work yet. If you like the look of this, feel free to star or watch the repository. If you’re ambitious or feel like getting your hands dirty, I welcome pull requests! I promise I won’t bite.</p>
+<p>This is a work in progress. Much of the API defined in this readme won’t work
+yet. If you like the look of this, feel free to star or watch the repository. If
+you’re ambitious or feel like getting your hands dirty, I welcome pull requests!
+I promise I won’t bite.</p>
 
 <h2 id="installation">Installation</h2>
 
 <p><strong>Using Bower:</strong></p>
 
-<pre><code>bower install [--save] reactable</code></pre>
+<p><code>
+bower install [--save] reactable
+</code></p>
 
-<p>Or, you can just download the raw file <a href="https://github.com/glittershark/reactable/raw/master/build/reactable.js">here</a>.</p>
+<p>Or, you can just download the raw file
+<a href="https://github.com/glittershark/reactable/raw/master/build/reactable.js">here</a>.</p>
 
 <h2 id="usage">Usage</h2>
 
 <p>The simplest example:</p>
 
-<pre class="javascript"><code class="javascript">var Table = Reactable.Table;
+<p><code>javascript
+var Table = Reactable.Table;
 React.renderComponent(
-    &lt;Table className=&quot;table&quot; data={[
-        { Name: &#39;Griffin Smith&#39;, Age: &#39;18&#39; },
-        { Age: &#39;23&#39;,  Name: &#39;Lee Salminen&#39; },
-        { Age: &#39;28&#39;, Position: &#39;Developer&#39; },
+    &lt;Table className="table" data={[
+        { Name: 'Griffin Smith', Age: '18' },
+        { Age: '23',  Name: 'Lee Salminen' },
+        { Age: '28', Position: 'Developer' },
     ]} /&gt;,
-    document.getElementById(&#39;table&#39;)
-);</code></pre>
+    document.getElementById('table')
+);
+</code></p>
 
-<p>While pretty basic, this example demonstrates a couple things:</p>
+<p>While pretty basic, this example demonstrates a couple things:
+- Columns in the data array can be in any order, and you can omit any you like
+- Regular React DOM attributes such as className will pass-through to the
+  rendered <code>&lt;table&gt;</code></p>
 
-<ul>
-<li>Columns in the data array can be in any order, and you can omit any you like</li>
+<h3 id="further-customization">Further Customization</h3>
 
-<li>Regular React DOM attributes such as className will pass-through to the rendered <code>&lt;table&gt;</code></li>
-</ul>
+<p>You can also manually build up your rows using <code>Reactable.Tr</code> nested in a table,
+also using the <code>data</code> prop, but this time containing only one javascript object.
+This approach can be freely combined with the <code>data</code> property on the <code>&lt;Table&gt;</code>,
+and is useful if you want to specify per-row attributes such as classes, like so:</p>
 
-<h3 id="further_customization">Further Customization</h3>
+<p>```javascript
+var Table = Reactable.Table,
+    Tr = Reactable.Tr;</p>
 
-<p>You can also manually build up your rows using <code>Reactable.Tr</code> nested in a table, also using the <code>data</code> prop, but this time containing only one javascript object. This approach can be freely combined with the <code>data</code> property on the <code>&lt;Table&gt;</code>, and is useful if you want to specify per-row attributes such as classes, like so:</p>
-
-<pre class="javascript"><code class="javascript">var Table = Reactable.Table,
-    Tr = Reactable.Tr;
-
-React.renderComponent(
-    &lt;Table className=&quot;table&quot; data={[
-        { name: &#39;Row one&#39;, content: &#39;These are regular data rows&#39; },
-        { name: &#39;Row two&#39;, content: &#39;They work like above&#39; },
+<p>React.renderComponent(
+    &lt;Table className=”table” data={[
+        { name: ‘Row one’, content: ‘These are regular data rows’ },
+        { name: ‘Row two’, content: ‘They work like above’ },
     ]} &gt;
-        &lt;Tr className=&quot;special-row&quot;
+        &lt;Tr className=”special-row”
             data= /&gt;
     &lt;/Table&gt;,
-    document.getElementById(&#39;table&#39;);
-)</code></pre>
+    document.getElementById(‘table’);
+)
+```</p>
 
 <h3 id="pagination">Pagination</h3>
 
-<p>You can also use pagination, by just specifying an <code>itemsPerPage</code> argument to the <code>&lt;Table&gt;</code> component. For example:</p>
+<p>You can also use pagination, by just specifying an <code>itemsPerPage</code> argument to the
+<code>&lt;Table&gt;</code> component. For example:</p>
 
-<pre class="javascript"><code class="javascript">&lt;Table className=&quot;table&quot; data={[
-    { Name: &#39;Griffin Smith&#39;, Age: &#39;18&#39; },
-    { Age: &#39;23&#39;,  Name: &#39;Lee Salminen&#39; },
-    { Age: &#39;28&#39;, Position: &#39;Developer&#39; },
-    { Name: &#39;Griffin Smith&#39;, Age: &#39;18&#39; },
-    { Age: &#39;30&#39;,  Name: &#39;Test Person&#39; },
-    { Name: &#39;Another Test&#39;, Age: &#39;26&#39;, Position: &#39;Developer&#39; },
-    { Name: &#39;Third Test&#39;, Age: &#39;19&#39;, Position: &#39;Salesperson&#39; },
-    { Age: &#39;23&#39;,  Name: &#39;End of this Page&#39;, Position: &#39;CEO&#39; },
-]} itemsPerPage={4} /&gt;</code></pre>
+<p><code>javascript
+&lt;Table className="table" data={[
+    { Name: 'Griffin Smith', Age: '18' },
+    { Age: '23',  Name: 'Lee Salminen' },
+    { Age: '28', Position: 'Developer' },
+    { Name: 'Griffin Smith', Age: '18' },
+    { Age: '30',  Name: 'Test Person' },
+    { Name: 'Another Test', Age: '26', Position: 'Developer' },
+    { Name: 'Third Test', Age: '19', Position: 'Salesperson' },
+    { Age: '23',  Name: 'End of this Page', Position: 'CEO' },
+]} itemsPerPage={4} /&gt;
+</code></p>
 
 <h3 id="sorting">Sorting</h3>
 
-<p>You can specify which columns will sort by click by specifing the <code>sortable</code> argument to the <code>&lt;Table&gt;</code> component. This is an array of column names or column objects.</p>
+<p>You can specify which columns will sort by click by specifing the <code>sortable</code> argument
+to the <code>&lt;Table&gt;</code> component.  This is an array of column names or column objects.</p>
 
 <p>You can specify a custom sort function by defining a column object with structure:</p>
 
-<pre class="javascript"><code class="javascript">
-{column: &#39;Column Name&#39;, sortFunction: function(a, b){} }</code></pre>
+<p>```javascript</p>
 
-<p>You can also specify a default sort by passing in either a column name by itself, or an object with a column and a <code>direction</code> paramenter of either <code>asc</code> or <code>desc</code>. If no direction is specified, the default sort will be ascending. Example:</p>
+<p>{column: ‘Column Name’, sortFunction: function(a, b){} }
+```</p>
 
-<pre class="javascript"><code class="javascript">
-{column: &#39;Column Name&#39;, direction: &#39;asc&#39; }</code></pre>
+<p>You can also specify a default sort by passing in either a column name by itself, or an object
+with a column and a <code>direction</code> paramenter of either <code>asc</code> or <code>desc</code>.
+If no direction is specified, the default sort will be ascending.  Example:</p>
+
+<p>```javascript</p>
+
+<p>{column: ‘Column Name’, direction: ‘asc’ }
+```</p>
 
 <p>Combined example:</p>
 
-<pre class="javascript"><code class="javascript">&lt;Table className=&quot;table&quot; id=&quot;table&quot; data={[
-    { Name: &#39;Lee Salminen&#39;, Age: &#39;23&#39;, Position: &#39;Programmer&#39;},
-    { Name: &#39;Griffin Smith&#39;, Age: &#39;18&#39;, Position: &#39;Engineer&#39;},
-    { Name: &#39;Ian Zhang&#39;, Age: &#39;28&#39;, Position: &#39;Developer&#39;}
+<p>```javascript
+&lt;Table className=”table” id=”table” data={[
+    { Name: ‘Lee Salminen’, Age: ‘23’, Position: ‘Programmer’},
+    { Name: ‘Griffin Smith’, Age: ‘18’, Position: ‘Engineer’},
+    { Name: ‘Ian Zhang’, Age: ‘28’, Position: ‘Developer’}
 ]}
 sortable={[
     {
-        column: &#39;Name&#39;,
+        column: ‘Name’,
         sortFunction: function(a, b){
             // Sort by last name
-            var nameA = a.split(&#39; &#39;);
-            var nameB = b.split(&#39; &#39;);
+            var nameA = a.split(‘ ‘);
+            var nameB = b.split(‘ ‘);</p>
 
-            return nameA[1].localeCompare(nameB[1]);
-        }
-    },
-    &#39;Age&#39;,
-    &#39;Position&#39;
-]}
-defaultSort=/&gt;</code></pre>
+<pre><code>        return nameA[1].localeCompare(nameB[1]);
+    }
+},
+'Age',
+'Position' ]} defaultSort=/&gt; ```
+</code></pre>
+
       </section>
     </div>
 
