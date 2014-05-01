@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Reactable : Fast, flexible, and simple data tables in React" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/table.css">
+
+    <title>Reactable</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/glittershark/reactable">View on GitHub</a>
+
+          <h1 id="project_title">Reactable</h1>
+          <h2 id="project_tagline">Fast, flexible, and simple data tables in React</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/glittershark/reactable/zipball/master">
+                Download this project as a .zip file
+              </a>
+              <a class="tar_download_link" href="https://github.com/glittershark/reactable/tarball/master">
+                Download this project as a tar.gz file
+              </a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        
+          <h1>Reported UFO Sightings</h1>
+          <div id="demo-table"></div>
+        
+        <h1>
+  <a name="reactable-" class="anchor" href="#reactable-"><span class="octicon octicon-link"></span></a>Reactable <a href="https://travis-ci.org/glittershark/reactable"><img src="https://travis-ci.org/glittershark/reactable.svg?branch=master" alt="Build Status"></a>
+</h1>
+
+<p>Fast, flexible, and simple data tables in React.</p>
+
+<p>This is a work in progress. Much of the API defined in this readme won't work
+yet. If you like the look of this, feel free to star or watch the repository. If
+you're ambitious or feel like getting your hands dirty, I welcome pull requests!
+I promise I won't bite.</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p><strong>Using Bower:</strong></p>
+
+<pre><code>bower install [--save] reactable
+</code></pre>
+
+<p>Or, you can just download the raw file
+<a href="https://github.com/glittershark/reactable/raw/master/build/reactable.js">here</a>.</p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>The simplest example:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">Table</span> <span class="o">=</span> <span class="nx">Reactable</span><span class="p">.</span><span class="nx">Table</span><span class="p">;</span>
+<span class="nx">React</span><span class="p">.</span><span class="nx">renderComponent</span><span class="p">(</span>
+    <span class="o">&lt;</span><span class="nx">Table</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"table"</span> <span class="nx">data</span><span class="o">=</span><span class="p">{[</span>
+        <span class="p">{</span> <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Griffin Smith'</span><span class="p">,</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'18'</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'23'</span><span class="p">,</span>  <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Lee Salminen'</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'28'</span><span class="p">,</span> <span class="nx">Position</span><span class="o">:</span> <span class="s1">'Developer'</span> <span class="p">},</span>
+    <span class="p">]}</span> <span class="o">/&gt;</span><span class="p">,</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'table'</span><span class="p">)</span>
+<span class="p">);</span>
+</pre></div>
+
+<p>While pretty basic, this example demonstrates a couple things:</p>
+
+<ul>
+<li>Columns in the data array can be in any order, and you can omit any you like</li>
+<li>Regular React DOM attributes such as className will pass-through to the
+rendered <code>&lt;table&gt;</code>
+</li>
+</ul><h3>
+<a name="further-customization" class="anchor" href="#further-customization"><span class="octicon octicon-link"></span></a>Further Customization</h3>
+
+<p>You can also manually build up your rows using <code>Reactable.Tr</code> nested in a table,
+also using the <code>data</code> prop, but this time containing only one javascript object.
+This approach can be freely combined with the <code>data</code> property on the <code>&lt;Table&gt;</code>,
+and is useful if you want to specify per-row attributes such as classes, like so:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">Table</span> <span class="o">=</span> <span class="nx">Reactable</span><span class="p">.</span><span class="nx">Table</span><span class="p">,</span>
+    <span class="nx">Tr</span> <span class="o">=</span> <span class="nx">Reactable</span><span class="p">.</span><span class="nx">Tr</span><span class="p">;</span>
+
+<span class="nx">React</span><span class="p">.</span><span class="nx">renderComponent</span><span class="p">(</span>
+    <span class="o">&lt;</span><span class="nx">Table</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"table"</span> <span class="nx">data</span><span class="o">=</span><span class="p">{[</span>
+        <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">'Row one'</span><span class="p">,</span> <span class="nx">content</span><span class="o">:</span> <span class="s1">'These are regular data rows'</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">'Row two'</span><span class="p">,</span> <span class="nx">content</span><span class="o">:</span> <span class="s1">'They work like above'</span> <span class="p">},</span>
+    <span class="p">]}</span> <span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">Tr</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"special-row"</span>
+            <span class="nx">data</span><span class="o">=</span><span class="p"></span> <span class="o">/&gt;</span>
+    <span class="o">&lt;</span><span class="err">/Table&gt;,</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'table'</span><span class="p">);</span>
+<span class="p">)</span>
+</pre></div>
+
+<h3>
+<a name="pagination" class="anchor" href="#pagination"><span class="octicon octicon-link"></span></a>Pagination</h3>
+
+<p>You can also use pagination, by just specifying an <code>itemsPerPage</code> argument to the
+<code>&lt;Table&gt;</code> component. For example:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="o">&lt;</span><span class="nx">Table</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"table"</span> <span class="nx">data</span><span class="o">=</span><span class="p">{[</span>
+    <span class="p">{</span> <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Griffin Smith'</span><span class="p">,</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'18'</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'23'</span><span class="p">,</span>  <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Lee Salminen'</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'28'</span><span class="p">,</span> <span class="nx">Position</span><span class="o">:</span> <span class="s1">'Developer'</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Griffin Smith'</span><span class="p">,</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'18'</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'30'</span><span class="p">,</span>  <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Test Person'</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Another Test'</span><span class="p">,</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'26'</span><span class="p">,</span> <span class="nx">Position</span><span class="o">:</span> <span class="s1">'Developer'</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Third Test'</span><span class="p">,</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'19'</span><span class="p">,</span> <span class="nx">Position</span><span class="o">:</span> <span class="s1">'Salesperson'</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'23'</span><span class="p">,</span>  <span class="nx">Name</span><span class="o">:</span> <span class="s1">'End of this Page'</span><span class="p">,</span> <span class="nx">Position</span><span class="o">:</span> <span class="s1">'CEO'</span> <span class="p">},</span>
+<span class="p">]}</span> <span class="nx">itemsPerPage</span><span class="o">=</span><span class="p">{</span><span class="mi">4</span><span class="p">}</span> <span class="o">/&gt;</span>
+</pre></div>
+
+<h3>
+<a name="sorting" class="anchor" href="#sorting"><span class="octicon octicon-link"></span></a>Sorting</h3>
+
+<p>You can specify which columns will sort by click by specifing the <code>sortable</code> argument
+to the <code>&lt;Table&gt;</code> component.  This is an array of column names or column objects.</p>
+
+<p>You can specify a custom sort function by defining a column object with structure:</p>
+
+<div class="highlight highlight-javascript"><pre>
+<span class="p">{</span><span class="nx">column</span><span class="o">:</span> <span class="s1">'Column Name'</span><span class="p">,</span> <span class="nx">sortFunction</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){}</span> <span class="p">}</span>
+</pre></div>
+
+<p>You can also specify a default sort by passing in either a column name by itself, or an object
+with a column and a <code>direction</code> paramenter of either <code>asc</code> or <code>desc</code>.
+If no direction is specified, the default sort will be ascending.  Example:</p>
+
+<div class="highlight highlight-javascript"><pre>
+<span class="p">{</span><span class="nx">column</span><span class="o">:</span> <span class="s1">'Column Name'</span><span class="p">,</span> <span class="nx">direction</span><span class="o">:</span> <span class="s1">'asc'</span> <span class="p">}</span>
+</pre></div>
+
+<p>Combined example:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="o">&lt;</span><span class="nx">Table</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"table"</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"table"</span> <span class="nx">data</span><span class="o">=</span><span class="p">{[</span>
+    <span class="p">{</span> <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Lee Salminen'</span><span class="p">,</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'23'</span><span class="p">,</span> <span class="nx">Position</span><span class="o">:</span> <span class="s1">'Programmer'</span><span class="p">},</span>
+    <span class="p">{</span> <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Griffin Smith'</span><span class="p">,</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'18'</span><span class="p">,</span> <span class="nx">Position</span><span class="o">:</span> <span class="s1">'Engineer'</span><span class="p">},</span>
+    <span class="p">{</span> <span class="nx">Name</span><span class="o">:</span> <span class="s1">'Ian Zhang'</span><span class="p">,</span> <span class="nx">Age</span><span class="o">:</span> <span class="s1">'28'</span><span class="p">,</span> <span class="nx">Position</span><span class="o">:</span> <span class="s1">'Developer'</span><span class="p">}</span>
+<span class="p">]}</span>
+<span class="nx">sortable</span><span class="o">=</span><span class="p">{[</span>
+    <span class="p">{</span>
+        <span class="nx">column</span><span class="o">:</span> <span class="s1">'Name'</span><span class="p">,</span>
+        <span class="nx">sortFunction</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){</span>
+            <span class="c1">// Sort by last name</span>
+            <span class="kd">var</span> <span class="nx">nameA</span> <span class="o">=</span> <span class="nx">a</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">' '</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">nameB</span> <span class="o">=</span> <span class="nx">b</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">' '</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="nx">nameA</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">localeCompare</span><span class="p">(</span><span class="nx">nameB</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s1">'Age'</span><span class="p">,</span>
+    <span class="s1">'Position'</span>
+<span class="p">]}</span>
+<span class="nx">defaultSort</span><span class="o">=</span><span class="p"></span><span class="o">/&gt;</span>
+</pre></div>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Reactable maintained by <a href="https://github.com/glittershark">glittershark</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/react/react-with-addons.min.js"></script>
+    <script type="text/javascript" src="bower_components/reactable/build/reactable.js"></script>
+    <script type="text/javascript" src="data.json"></script>
+    <script type="text/javascript" src="javascripts/demo-table.js"></script>
+  </body>
+</html>

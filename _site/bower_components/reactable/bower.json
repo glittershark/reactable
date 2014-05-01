@@ -1,0 +1,13 @@
+{
+  "name": "Reactable",
+  "version": "0.2.0",
+  "main": "build/reactable.js",
+  "dependencies": {
+    "react": "~0.10.0"
+  },
+  "devDependencies": {
+    "chai-jquery": "~1.2.1",
+    "jquery": "~2.1.0",
+    "chai": "~1.9.1"
+  }
+}

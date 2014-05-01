@@ -1,0 +1,22 @@
+{
+  "name": "reactable-pages",
+  "version": "0.2.0",
+  "homepage": "glittershark.github.io/reactable/",
+  "authors": [
+    "Griffin Smith <smith@visionlink.org>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "reactable": "~0.2.0",
+    "react": "~0.10.0",
+    "jquery": "~2.1.0"
+  }
+}

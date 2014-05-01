@@ -1,0 +1,26 @@
+.reactable-page-button {
+  margin-left: 5px;
+  margin-right: 2px;
+  margin-bottom: 6px;
+  padding: 3px;
+  width: 30px;
+  float: left;
+  cursor: pointer;
+  color: #000;
+  border: 1px solid #AAA;
+  background-color: #EEE;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.reactable-page-button:hover {
+  text-decoration: none;
+  color: #333;
+  background-color: #DDD;
+}
+
+.reactable-current-page {
+  background-color: #DDD;
+  cursor: default;
+}
+

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="http://fb.me/react-0.10.0.js"></script>
+        <script src="http://fb.me/JSXTransformer-0.10.0.js"></script>
+        <script src="build/reactable.js" type="text/javascript"></script>
+        <script type="text/jsx">
+            /** @jsx React.DOM */ 
+            var Table = Reactable.Table,
+                Thead = Reactable.Thead,
+                Th = Reactable.Th,
+                Tr = Reactable.Tr,
+                Td = Reactable.Td;
+            React.renderComponent(
+                <Table className="table" id="table" data={[
+                    { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
+                        { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
+                        { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
+                ]} sortable={[
+                        {
+                            column: 'Name',
+                            sortFunction: function(a, b){
+                                // Sort by last name
+                                var nameA = a.split(' ');
+                                var nameB = b.split(' ');
+
+                                return nameA[1].localeCompare(nameB[1]);
+                            }
+                        },
+                        'Age',
+                        'Position'
+                    ]}
+                    defaultSort={{column: 'Age', direction: -1}} />,
+                document.getElementById('test-div')
+            );
+        </script>
+    </head>
+    <body>
+        <div id="test-div"></div>
+    </body>
+</html>
