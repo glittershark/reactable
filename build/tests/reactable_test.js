@@ -344,6 +344,95 @@ describe('Reactable', function() {
             });
         });
 
+        describe('passing `true` to sortable', function() {
+            before(function() {
+                React.renderComponent(
+                    Table( {className:"table", id:"table", data:[
+                        { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
+                        { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
+                        { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
+                    ],
+                    sortable:true} ),
+                    document.getElementsByTagName('body')[0]
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('sorts by the first column in ascending order', function(){
+                var nameHeader = $('#table thead th')[0];
+                ReactTestUtils.Simulate.click(nameHeader);
+
+                ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', 'Engineer']);
+                ReactableTestUtils.expectRowText(1, ['Ian Zhang', '28', 'Developer']);
+                ReactableTestUtils.expectRowText(2, ['Lee Salminen', '23', 'Programmer']);
+
+                // Make sure the headers have the right classes
+                expect($(nameHeader)).to.have.class('reactable-header-sort-asc');
+            });
+
+            it('sorts by the first column in descending order', function(){
+                var nameHeader = $('#table thead th')[0];
+                ReactTestUtils.Simulate.click(nameHeader);
+
+                ReactableTestUtils.expectRowText(0, ['Lee Salminen', '23', 'Programmer']);
+                ReactableTestUtils.expectRowText(1, ['Ian Zhang', '28', 'Developer']);
+                ReactableTestUtils.expectRowText(2, ['Griffin Smith', '18', 'Engineer']);
+
+                // Make sure the headers have the right classes
+                expect($(nameHeader)).to.have.class('reactable-header-sort-desc');
+            });
+
+            it('sorts by the second column in ascending order', function(){
+                var nameHeader = $('#table thead th')[1];
+                ReactTestUtils.Simulate.click(nameHeader);
+
+                ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', 'Engineer']);
+                ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', 'Programmer']);
+                ReactableTestUtils.expectRowText(2, ['Ian Zhang', '28', 'Developer']);
+
+                // Make sure the headers have the right classes
+                expect($(nameHeader)).to.have.class('reactable-header-sort-asc');
+            });
+
+            it('sorts by the second column in descending order', function(){
+                var nameHeader = $('#table thead th')[1];
+                ReactTestUtils.Simulate.click(nameHeader);
+
+                ReactableTestUtils.expectRowText(0, ['Ian Zhang', '28', 'Developer']);
+                ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', 'Programmer']);
+                ReactableTestUtils.expectRowText(2, ['Griffin Smith', '18', 'Engineer']);
+
+                // Make sure the headers have the right classes
+                expect($(nameHeader)).to.have.class('reactable-header-sort-desc');
+            });
+
+
+            it('sorts by the third column in ascending order', function(){
+                var positionHeader = $('#table thead th')[2];
+                ReactTestUtils.Simulate.click(positionHeader);
+
+                ReactableTestUtils.expectRowText(0, ['Ian Zhang', '28', 'Developer']);
+                ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', 'Engineer']);
+                ReactableTestUtils.expectRowText(2, ['Lee Salminen', '23', 'Programmer']);
+
+                // Make sure the headers have the right classes
+                expect($(positionHeader)).to.have.class('reactable-header-sort-asc');
+            });
+
+            it('sorts by the third column in descending order', function(){
+                var positionHeader = $('#table thead th')[2];
+                ReactTestUtils.Simulate.click(positionHeader);
+
+                ReactableTestUtils.expectRowText(0, ['Lee Salminen', '23', 'Programmer']);
+                ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', 'Engineer']);
+                ReactableTestUtils.expectRowText(2, ['Ian Zhang', '28', 'Developer']);
+
+                // Make sure the headers have the right classes
+                expect($(positionHeader)).to.have.class('reactable-header-sort-desc');
+            });
+        });
+
         describe('default sort', function(){
             before(function() {
                 React.renderComponent(
