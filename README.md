@@ -83,10 +83,12 @@ You can also use pagination, by just specifying an `itemsPerPage` argument to th
 
 ### Sorting
 
-You can specify which columns will sort by click by specifing the `sortable` argument
-to the `<Table>` component.  This is an array of column names or column objects.
+To enable sorting on all columns, just specify `sortable={true}` on the `<Table>`
+component. For further customization, ie disabling sort or using a custom sort function
+on a per-column basis, you can pass an array to `sortable`, which contains either string
+column names or column objects.
 
-You can specify a custom sort function by defining a column object with structure:
+To specify a custom sort function, use the following structure for the column object:
 
 ```javascript
 
