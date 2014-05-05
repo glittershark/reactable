@@ -484,5 +484,93 @@ describe('Reactable', function() {
                 ReactableTestUtils.expectRowText(6, ['z']);
             });
         });
+
+        describe('currency sort', function(){
+            before(function() {
+                React.renderComponent(
+                    Table( {className:"table", id:"table", data:[
+                        { Price: '1.25'},
+                        { Price: '$1.01'},
+                        { Price: '1'},
+                        { Price: '$10,000'},
+                        { Price: '$10,500'},
+                        { Price: '$10'},
+                        { Price: 'a'},
+                        { Price: 'z'},
+                        { Price: '$2'},
+                        { Price: '$.5'},
+                        { Price: '$0.60'},
+                        { Price: '.1'},
+                    ],
+                    sortable:[
+                        {
+                            column:         'Price',
+                            sortFunction:   Reactable.Sort.Currency
+                        }
+                    ]} ),
+                    document.getElementsByTagName('body')[0]
+                );
+            });
+
+            after(function() {
+                ReactableTestUtils.resetTestEnvironment();
+            });
+
+            it('sorts columns numerically. parsing out currency symbols', function(){
+                var sortHeader = $('#table thead th')[0];
+                ReactTestUtils.Simulate.click(sortHeader);
+
+                ReactableTestUtils.expectRowText(0, ['.1']);
+                ReactableTestUtils.expectRowText(1, ['$.5']);
+                ReactableTestUtils.expectRowText(2, ['$0.60']);
+                ReactableTestUtils.expectRowText(3, ['1']);
+                ReactableTestUtils.expectRowText(4, ['$1.01']);
+                ReactableTestUtils.expectRowText(5, ['1.25']);
+                ReactableTestUtils.expectRowText(6, ['$2']);
+                ReactableTestUtils.expectRowText(7, ['$10']);
+                ReactableTestUtils.expectRowText(8, ['$10,000']);
+                ReactableTestUtils.expectRowText(9, ['$10,500']);
+                ReactableTestUtils.expectRowText(10, ['a']);
+                ReactableTestUtils.expectRowText(11, ['z']);
+            });
+        });
+
+        describe('date sort', function(){
+            before(function() {
+                React.renderComponent(
+                    Table( {className:"table", id:"table", data:[
+                        { 'Date': '1/1/2014 11:00 AM'},
+                        { 'Date': '1/1/2013 11:00 AM'},
+                        { 'Date': '1/1/2014 4:30 PM'},
+                        { 'Date': '4/3/2013'},
+                        { 'Date': 'a'},
+                        { 'Date': 'z'},
+                    ],
+                    sortable:[
+                        {
+                            column:         'Date',
+                            sortFunction:   Reactable.Sort.Date
+                        }
+                    ]} ),
+                    document.getElementsByTagName('body')[0]
+                );
+            });
+
+            after(function() {
+                ReactableTestUtils.resetTestEnvironment();
+            });
+
+            it('sorts columns by date', function(){
+                var sortHeader = $('#table thead th')[0];
+                ReactTestUtils.Simulate.click(sortHeader);
+
+                ReactableTestUtils.expectRowText(0, ['1/1/2013 11:00 AM']);
+                ReactableTestUtils.expectRowText(1, ['4/3/2013']);
+                ReactableTestUtils.expectRowText(2, ['1/1/2014 11:00 AM']);
+                ReactableTestUtils.expectRowText(3, ['1/1/2014 4:30 PM']);
+                ReactableTestUtils.expectRowText(4, ['a']);
+                ReactableTestUtils.expectRowText(5, ['z']);
+            });
+        });
     });
 });
