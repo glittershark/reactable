@@ -120,7 +120,7 @@ Reactable = (function() {
             // Sort non-numeric values alphabetically at the bottom of the list
             if (isNaN(valA) || isNaN(valB)) {
                 return Reactable.Sort.Numeric(a, b);
-            } 
+            }
 
             if (valA > valB) {
                 return 1;
@@ -130,7 +130,7 @@ Reactable = (function() {
             }
 
             return 0;
-        }
+        },
     };
 
     var ParseChildDataMixin = {
@@ -228,7 +228,7 @@ Reactable = (function() {
                             }
 
                             return (
-                                React.DOM.th( 
+                                React.DOM.th(
                                     {className:sortClass,
                                     key:index,
                                     onClick:function(){ this.props.onSort(col) }.bind(this)}, col)
@@ -325,7 +325,7 @@ Reactable = (function() {
                         sortFunction = column.sortFunction;
                     } else {
                         sortFunction = 'default';
-                    }                    
+                    }
                 } else {
                     columnName      = column;
                     sortFunction    = 'default';
@@ -472,6 +472,12 @@ Reactable = (function() {
                     }
                     return Tr( {columns:columns, data:data, key:i} );
                 }.bind(this)));
+            }
+
+            if (this.props.sortable === true) {
+                for (var i = 0; i < columns.length; i++) {
+                    this.props._sortable[columns[i]] = 'default';
+                }
             }
 
             // Determine pagination properties and which columns to display
