@@ -69,8 +69,8 @@ Reactable = (function() {
 
     Reactable.Sort = {
         Numeric: function(a, b) {
-            var valA = parseFloat(a);
-            var valB = parseFloat(b);
+            var valA = parseFloat(a.replace(',', ''));
+            var valB = parseFloat(b.replace(',', ''));
 
             // Sort non-numeric values alphabetically at the bottom of the list
             if (isNaN(valA) && isNaN(valB)) {
@@ -93,7 +93,44 @@ Reactable = (function() {
             }
 
             return 0;
-        }   
+        },
+
+        Currency: function(a, b) {
+            // Parse out dollar signs, then do a regular numeric sort
+            // TODO: handle non-American currency
+
+            if (a[0] === '$') {
+                a = a.substring(1);
+            }
+            if (b[0] === '$') {
+                b = b.substring(1);
+            }
+
+            return Reactable.Sort.Numeric(a, b);
+        },
+
+        Date: function(a, b) {
+            // Note: this function tries to do a standard javascript string -> date conversion
+            // If you need more control over the date string format, consider using a different
+            // date library and writing your own function
+            var valA = Date.parse(a);
+            var valB = Date.parse(b);
+
+            // Handle non-date values with numeric sort
+            // Sort non-numeric values alphabetically at the bottom of the list
+            if (isNaN(valA) || isNaN(valB)) {
+                return Reactable.Sort.Numeric(a, b);
+            } 
+
+            if (valA > valB) {
+                return 1;
+            }
+            if (valB > valA) {
+                return -1;
+            }
+
+            return 0;
+        },
     };
 
     var ParseChildDataMixin = {
