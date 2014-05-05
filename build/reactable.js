@@ -145,7 +145,7 @@ Reactable = (function() {
             }
 
             return 0;
-        }
+        },
     };
 
     var ParseChildDataMixin = {
