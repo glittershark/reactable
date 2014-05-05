@@ -90,13 +90,10 @@ column names or column objects.
 
 We've pre-built some sort functions for you.
 
-`CaseInsensitive` will sort strings alphabetically regardless of capitalization (e.g. Joe Smith === joe smith)
-
-`Date` will sort dates using JavaScript's native Date parser (e.g. 4/20/2014 12:05 PM)
-
-`Currency` will sort USD format (e.g. $1,000.00)
-
-`Numeric` will parse integer-like strings as integers (e.g. "1")
+- `CaseInsensitive` will sort strings alphabetically regardless of capitalization (e.g. Joe Smith === joe smith)
+- `Date` will sort dates using JavaScript's native Date parser (e.g. 4/20/2014 12:05 PM)
+- `Currency` will sort USD format (e.g. $1,000.00)
+- `Numeric` will parse integer-like strings as integers (e.g. "1")
 
 To specify a custom sort function, use the following structure for the column object:
 
