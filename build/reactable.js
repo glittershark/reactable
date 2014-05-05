@@ -131,6 +131,21 @@ Reactable = (function() {
 
             return 0;
         },
+
+        CaseInsensitive: function(a, b) {
+            var valA = a.toLowerCase();
+            var valB = b.toLowerCase();
+
+            if(valA > valB) {
+                return 1;
+            }
+
+            if(valB > valA) {
+                return -1;
+            }
+
+            return 0;
+        },
     };
 
     var ParseChildDataMixin = {
@@ -153,7 +168,7 @@ Reactable = (function() {
     var Td = Reactable.Td = React.createClass({displayName: 'Td',
         render: function() {
             return this.transferPropsTo(
-                React.DOM.td(null, 
+                React.DOM.td(null,
                     this.props.children
                 )
             );
@@ -212,8 +227,8 @@ Reactable = (function() {
         },
         render: function() {
             return this.transferPropsTo(
-                React.DOM.thead(null, 
-                    React.DOM.tr(null, 
+                React.DOM.thead(null,
+                    React.DOM.tr(null,
                         this.props.columns.map(function(col, index) {
                             var sortClass = '';
 
@@ -280,9 +295,9 @@ Reactable = (function() {
             }
 
             return (
-                React.DOM.tbody( {className:"reactable-pagination"}, 
-                    React.DOM.tr(null, 
-                        React.DOM.td( {colSpan:this.props.colSpan}, 
+                React.DOM.tbody( {className:"reactable-pagination"},
+                    React.DOM.tr(null,
+                        React.DOM.td( {colSpan:this.props.colSpan},
                             pageButtons
                         )
                     )
@@ -496,15 +511,15 @@ Reactable = (function() {
             }
 
             return this.transferPropsTo(
-                React.DOM.table(null, 
+                React.DOM.table(null,
                     columns && columns.length > 0 ?
                         Thead(
                             {columns:columns,
                             sort:this.state.currentSort,
                             onSort:this.onSort} )
                         : '',
-                    
-                    React.DOM.tbody( {className:"reactable-data"}, 
+
+                    React.DOM.tbody( {className:"reactable-data"},
                         currentChildren
                     ),
                     pagination === true ?
@@ -513,7 +528,7 @@ Reactable = (function() {
                             numPages:Math.ceil(this.props.data.length / itemsPerPage),
                             currentPage:this.state.currentPage,
                             onPageChange:this.onPageChange}) : ''
-                    
+
                 )
             );
         }

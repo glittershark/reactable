@@ -131,6 +131,21 @@ Reactable = (function() {
 
             return 0;
         },
+
+        CaseInsensitive: function(a, b) {
+            var valA = a.toLowerCase();
+            var valB = b.toLowerCase();
+
+            if(valA > valB) {
+                return 1;
+            }
+
+            if(valB > valA) {
+                return -1;
+            }
+
+            return 0;
+        },
     };
 
     var ParseChildDataMixin = {

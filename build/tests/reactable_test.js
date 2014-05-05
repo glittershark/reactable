@@ -661,5 +661,43 @@ describe('Reactable', function() {
                 ReactableTestUtils.expectRowText(5, ['z']);
             });
         });
+
+        describe('case insensitive sorting', function(){
+            before(function() {
+                React.renderComponent(
+                    Table( {className:"table", id:"table", data:[
+                        { 'Name': 'Lee Salminen'},
+                        { 'Name': 'Griffin Smith'},
+                        { 'Name': 'Ian Zhang'},
+                        { 'Name': 'lee Salminen'},
+                        { 'Name': 'griffin smith'},
+                        { 'Name': 'Ian zhang'},
+                    ],
+                    sortable:[
+                        {
+                            column:         'Name',
+                            sortFunction:   Reactable.Sort.CaseInsensitive
+                        }
+                    ]} ),
+                    document.getElementsByTagName('body')[0]
+                );
+            });
+
+            after(function() {
+                ReactableTestUtils.resetTestEnvironment();
+            });
+
+            it('sorts columns by value - case insensitive', function(){
+                var sortHeader = $('#table thead th')[0];
+                ReactTestUtils.Simulate.click(sortHeader);
+
+                ReactableTestUtils.expectRowText(0, ['Griffin Smith']);
+                ReactableTestUtils.expectRowText(1, ['griffin smith']);
+                ReactableTestUtils.expectRowText(2, ['Ian Zhang']);
+                ReactableTestUtils.expectRowText(3, ['Ian zhang']);
+                ReactableTestUtils.expectRowText(4, ['Lee Salminen']);
+                ReactableTestUtils.expectRowText(5, ['lee Salminen']);
+            });
+        });
     });
 });
