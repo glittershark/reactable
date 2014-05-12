@@ -296,7 +296,7 @@ describe('Reactable', function() {
             });
 
             it('sorts by text in ascending order', function(){
-                var positionHeader = $('#table thead th')[2];
+                var positionHeader = $('#table thead tr.reactable-column-header th')[2];
                 ReactTestUtils.Simulate.click(positionHeader);
 
                 ReactableTestUtils.expectRowText(0, ['Ian Zhang', '28', 'Developer']);
@@ -308,7 +308,7 @@ describe('Reactable', function() {
             });
 
             it('sorts by text in descending order', function(){
-                var positionHeader = $('#table thead th')[2];
+                var positionHeader = $('#table thead tr.reactable-column-header th')[2];
                 ReactTestUtils.Simulate.click(positionHeader);
 
                 ReactableTestUtils.expectRowText(0, ['Lee Salminen', '23', 'Programmer']);
@@ -320,7 +320,7 @@ describe('Reactable', function() {
             });
 
             it('sorts by last name in ascending order', function(){
-                var nameHeader = $('#table thead th')[0];
+                var nameHeader = $('#table thead tr.reactable-column-header th')[0];
                 ReactTestUtils.Simulate.click(nameHeader);
 
                 ReactableTestUtils.expectRowText(0, ['Lee Salminen', '23', 'Programmer']);
@@ -332,7 +332,7 @@ describe('Reactable', function() {
             });
 
             it('sorts by last name in descending order', function(){
-                var nameHeader = $('#table thead th')[0];
+                var nameHeader = $('#table thead tr.reactable-column-header th')[0];
                 ReactTestUtils.Simulate.click(nameHeader);
 
                 ReactableTestUtils.expectRowText(0, ['Ian Zhang', '28', 'Developer']);
@@ -360,7 +360,7 @@ describe('Reactable', function() {
             after(ReactableTestUtils.resetTestEnvironment);
 
             it('sorts by the first column in ascending order', function(){
-                var nameHeader = $('#table thead th')[0];
+                var nameHeader = $('#table thead tr.reactable-column-header th')[0];
                 ReactTestUtils.Simulate.click(nameHeader);
 
                 ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', 'Engineer']);
@@ -372,7 +372,7 @@ describe('Reactable', function() {
             });
 
             it('sorts by the first column in descending order', function(){
-                var nameHeader = $('#table thead th')[0];
+                var nameHeader = $('#table thead tr.reactable-column-header th')[0];
                 ReactTestUtils.Simulate.click(nameHeader);
 
                 ReactableTestUtils.expectRowText(0, ['Lee Salminen', '23', 'Programmer']);
@@ -384,7 +384,7 @@ describe('Reactable', function() {
             });
 
             it('sorts by the second column in ascending order', function(){
-                var nameHeader = $('#table thead th')[1];
+                var nameHeader = $('#table thead tr.reactable-column-header th')[1];
                 ReactTestUtils.Simulate.click(nameHeader);
 
                 ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', 'Engineer']);
@@ -396,7 +396,7 @@ describe('Reactable', function() {
             });
 
             it('sorts by the second column in descending order', function(){
-                var nameHeader = $('#table thead th')[1];
+                var nameHeader = $('#table thead tr.reactable-column-header th')[1];
                 ReactTestUtils.Simulate.click(nameHeader);
 
                 ReactableTestUtils.expectRowText(0, ['Ian Zhang', '28', 'Developer']);
@@ -409,7 +409,7 @@ describe('Reactable', function() {
 
 
             it('sorts by the third column in ascending order', function(){
-                var positionHeader = $('#table thead th')[2];
+                var positionHeader = $('#table thead tr.reactable-column-header th')[2];
                 ReactTestUtils.Simulate.click(positionHeader);
 
                 ReactableTestUtils.expectRowText(0, ['Ian Zhang', '28', 'Developer']);
@@ -421,7 +421,7 @@ describe('Reactable', function() {
             });
 
             it('sorts by the third column in descending order', function(){
-                var positionHeader = $('#table thead th')[2];
+                var positionHeader = $('#table thead tr.reactable-column-header th')[2];
                 ReactTestUtils.Simulate.click(positionHeader);
 
                 ReactableTestUtils.expectRowText(0, ['Lee Salminen', '23', 'Programmer']);
@@ -525,7 +525,7 @@ describe('Reactable', function() {
             after(ReactableTestUtils.resetTestEnvironment);
 
             it('leaves columns unsorted', function(){
-                var nameHeader = $('#table thead th')[0];
+                var nameHeader = $('#table thead tr.reactable-column-header th')[0];
                 ReactTestUtils.Simulate.click(nameHeader);
 
                 ReactableTestUtils.expectRowText(0, ['Lee Salminen', '23', 'Programmer']);
@@ -561,7 +561,7 @@ describe('Reactable', function() {
             });
 
             it('sorts columns numerically', function(){
-                var sortHeader = $('#table thead th')[0];
+                var sortHeader = $('#table thead tr.reactable-column-header th')[0];
                 ReactTestUtils.Simulate.click(sortHeader);
 
                 ReactableTestUtils.expectRowText(0, ['1.23']);
@@ -606,7 +606,7 @@ describe('Reactable', function() {
             });
 
             it('sorts columns numerically. parsing out currency symbols', function(){
-                var sortHeader = $('#table thead th')[0];
+                var sortHeader = $('#table thead tr.reactable-column-header th')[0];
                 ReactTestUtils.Simulate.click(sortHeader);
 
                 ReactableTestUtils.expectRowText(0, ['.1']);
@@ -650,7 +650,7 @@ describe('Reactable', function() {
             });
 
             it('sorts columns by date', function(){
-                var sortHeader = $('#table thead th')[0];
+                var sortHeader = $('#table thead tr.reactable-column-header th')[0];
                 ReactTestUtils.Simulate.click(sortHeader);
 
                 ReactableTestUtils.expectRowText(0, ['1/1/2013 11:00 AM']);
@@ -688,7 +688,7 @@ describe('Reactable', function() {
             });
 
             it('sorts columns by value - case insensitive', function(){
-                var sortHeader = $('#table thead th')[0];
+                var sortHeader = $('#table thead tr.reactable-column-header th')[0];
                 ReactTestUtils.Simulate.click(sortHeader);
 
                 ReactableTestUtils.expectRowText(0, ['Griffin Smith']);
@@ -697,6 +697,36 @@ describe('Reactable', function() {
                 ReactableTestUtils.expectRowText(3, ['Ian zhang']);
                 ReactableTestUtils.expectRowText(4, ['Lee Salminen']);
                 ReactableTestUtils.expectRowText(5, ['lee Salminen']);
+            });
+        });
+    });
+
+    describe('filtering', function() {
+        describe('filtering', function(){
+            before(function() {
+                React.renderComponent(
+                    Table( {className:"table", id:"table", data:[
+                        {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
+                        {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
+                        {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter', 'Tag': 'old'},
+                        {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
+                    ], filterable:['State', 'Tag']} ),
+                    document.getElementsByTagName('body')[0]
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('filters case insensitive on specified columns', function() {
+                var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
+
+                $filter.val('new');
+                React.addons.TestUtils.Simulate.keyUp($filter[0]);
+
+                var rows = $('#table tbody.reactable-data tr');
+                expect($($(rows[0]).find('td')[0])).to.have.text('New York');
+                expect($($(rows[1]).find('td')[0])).to.have.text('New Mexico');
+                expect($($(rows[2]).find('td')[0])).to.have.text('Alaska');
             });
         });
     });

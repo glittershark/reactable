@@ -135,3 +135,19 @@ sortable={[
 ]}
 defaultSort={{column: 'Age', direction: 'desc'}}/>
 ```
+### Filtering
+
+You can do simple case-insensitive filtering by specifying a filterable property on the table.  This
+property should contain a list of columns which the filter is performed on.  If the filterable property
+is provided, then an input box with class reactable-filter-input will be prepended to the thead of the table.
+
+Example:
+
+```javascript
+<Table className="table" id="table" data={[
+    {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
+    {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
+    {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter', 'Tag': 'old'},
+    {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
+]} filterable={['State', 'Tag']} />
+```

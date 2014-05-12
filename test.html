@@ -13,8 +13,8 @@
                 Td = Reactable.Td;
             React.renderComponent(
                 <Table className="table" id="table" data={[
-                    { Name: 'Lee Salminen', Age: '123', Position: 'Programmer'},
-                    { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
+                    { Name: 'Lee Salminen', Age: 123, Position: 'Programmer'},
+                    { Name: 'Griffin Smith', Age: 19, Position: 'Engineer'},
                     { Name: 'Ian Zhang', Age: 'a', Position: 'Developer'}
                 ]} sortable={[
                         {
@@ -32,7 +32,7 @@
                             sortFunction: Reactable.Sort.Numeric
                         },
                         'Position'
-                    ]}
+                    ]} filterable={['Name', 'Age', 'Position']}
                     defaultSort={{column: 'Age', direction: -1}} />,
                 document.getElementById('test-div')
             );
