@@ -69,8 +69,8 @@ Reactable = (function() {
 
     Reactable.Sort = {
         Numeric: function(a, b) {
-            var valA = parseFloat(a.replace(',', ''));
-            var valB = parseFloat(b.replace(',', ''));
+            var valA = parseFloat(a.toString().replace(',', ''));
+            var valB = parseFloat(b.toString().replace(',', ''));
 
             // Sort non-numeric values alphabetically at the bottom of the list
             if (isNaN(valA) && isNaN(valB)) {
@@ -454,7 +454,7 @@ Reactable = (function() {
                 for (var j = 0; j < this.props.filterable.length; j++) {
                     var filterColumn = this.props.filterable[j];
 
-                    if (data[filterColumn].toLowerCase().indexOf(filter) > -1) {
+                    if (data[filterColumn].toString().toLowerCase().indexOf(filter) > -1) {
                         matchedChildren.push(children[i]);
                         break;
                     }
