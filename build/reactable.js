@@ -280,7 +280,7 @@ Reactable = (function() {
     var Filterer = React.createClass({displayName: 'Filterer',
         render: function() {
             if (typeof this.props.colSpan === 'undefined') {
-                throw new TypeError('Must pass a colSpan argument to Paginator');
+                throw new TypeError('Must pass a colSpan argument to Filterer');
             }
 
             return (

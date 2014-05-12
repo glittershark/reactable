@@ -137,8 +137,9 @@ defaultSort={{column: 'Age', direction: 'desc'}}/>
 ```
 ### Filtering
 
-You can filter columns to do a simple case insensitive text filter on by passing in a filterable property
-which contains an array of columns to filter on
+You can do simple case-insensitive filtering by specifying a filterable property on the table.  This
+property should contain a list of columns which the filter is performed on.  If the filterable property
+is provided, then an input box with class reactable-filter-input will be prepended to the thead of the table.
 
 Example:
 
