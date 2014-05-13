@@ -15,8 +15,11 @@
     "tests"
   ],
   "dependencies": {
-    "reactable": "~0.2.0",
+    "reactable": "0.3.0",
     "react": "~0.10.0",
     "jquery": "~2.1.0"
+  },
+  "resolutions": {
+    "reactable": "0.3.0"
   }
 }

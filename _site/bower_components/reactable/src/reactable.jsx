@@ -67,6 +67,87 @@ Reactable = (function() {
 
     var Reactable = {};
 
+    Reactable.Sort = {
+        Numeric: function(a, b) {
+            var valA = parseFloat(a.toString().replace(',', ''));
+            var valB = parseFloat(b.toString().replace(',', ''));
+
+            // Sort non-numeric values alphabetically at the bottom of the list
+            if (isNaN(valA) && isNaN(valB)) {
+                valA = a;
+                valB = b;
+            } else {
+                if (isNaN(valA)) {
+                    return 1;
+                }
+                if (isNaN(valB)) {
+                    return -1;
+                }
+            }
+
+            if (valA < valB) {
+                return -1;
+            }
+            if (valA > valB) {
+                return 1;
+            }
+
+            return 0;
+        },
+
+        Currency: function(a, b) {
+            // Parse out dollar signs, then do a regular numeric sort
+            // TODO: handle non-American currency
+
+            if (a[0] === '$') {
+                a = a.substring(1);
+            }
+            if (b[0] === '$') {
+                b = b.substring(1);
+            }
+
+            return Reactable.Sort.Numeric(a, b);
+        },
+
+        Date: function(a, b) {
+            // Note: this function tries to do a standard javascript string -> date conversion
+            // If you need more control over the date string format, consider using a different
+            // date library and writing your own function
+            var valA = Date.parse(a);
+            var valB = Date.parse(b);
+
+            // Handle non-date values with numeric sort
+            // Sort non-numeric values alphabetically at the bottom of the list
+            if (isNaN(valA) || isNaN(valB)) {
+                return Reactable.Sort.Numeric(a, b);
+            }
+
+            if (valA > valB) {
+                return 1;
+            }
+            if (valB > valA) {
+                return -1;
+            }
+
+            return 0;
+        },
+
+        CaseInsensitive: function(a, b) {
+            var valA = a.toLowerCase();
+            var valB = b.toLowerCase();
+
+            if(valA > valB) {
+                return 1;
+            }
+
+            if(valB > valA) {
+                return -1;
+            }
+
+            return 0;
+        },
+    };
+
     var ParseChildDataMixin = {
         parseChildData: function(expectedClass) {
             var data = [];
@@ -147,7 +228,12 @@ Reactable = (function() {
         render: function() {
             return this.transferPropsTo(
                 <thead>
-                    <tr>
+                    {this.props.filtering === true ?
+                        <Filterer
+                            colSpan={this.props.columns.length}
+                            onFilter={this.props.onFilter}/> : ''
+                    }
+                    <tr className="reactable-column-header">
                         {this.props.columns.map(function(col, index) {
                             var sortClass = '';
 
@@ -162,7 +248,7 @@ Reactable = (function() {
                             }
 
                             return (
-                                <th 
+                                <th
                                     className={sortClass}
                                     key={index}
                                     onClick={function(){ this.props.onSort(col) }.bind(this)}>{col}</th>
@@ -178,6 +264,33 @@ Reactable = (function() {
         render: function() {
             return this.transferPropsTo(<th>{this.props.children}</th>);
         }
+    });
+
+    var FiltererInput = React.createClass({
+        render: function() {
+            return (
+                <input type="text" className="reactable-filter-input" 
+                    onKeyUp={function(){
+                        this.props.onFilter(this.getDOMNode().value);
+                    }.bind(this)} />
+            );
+        },
+    });
+
+    var Filterer = React.createClass({
+        render: function() {
+            if (typeof this.props.colSpan === 'undefined') {
+                throw new TypeError('Must pass a colSpan argument to Filterer');
+            }
+
+            return (
+                <tr className="reactable-filterer">
+                    <td colSpan={this.props.colSpan}>
+                        <FiltererInput onFilter={this.props.onFilter}/>
+                    </td>
+                </tr>
+            );
+        },
     });
 
     var Paginator = React.createClass({
@@ -237,6 +350,7 @@ Reactable = (function() {
                 data: this.parseChildData(),
                 columns: [],
                 sortable: [],
+                filterable: [],
                 defaultSort: false,
                 itemsPerPage: 0,
                 _sortable: [],
@@ -259,7 +373,7 @@ Reactable = (function() {
                         sortFunction = column.sortFunction;
                     } else {
                         sortFunction = 'default';
-                    }                    
+                    }
                 } else {
                     columnName      = column;
                     sortFunction    = 'default';
@@ -275,8 +389,9 @@ Reactable = (function() {
                 currentPage: 0,
                 currentSort: {
                     column: null,
-                    direction: 1
-                }
+                    direction: 1,
+                },
+                filter: '',
             }
 
             // Set the state of the current sort to the default sort
@@ -325,8 +440,31 @@ Reactable = (function() {
         onPageChange: function(page) {
             this.setState({ currentPage: page });
         },
+        onFilter: function(filter) {
+            this.setState({ filter: filter });
+        },
+        applyFilter: function(filter, children) {
+            // Helper function to apply filter text to a list of table rows
+            var filter = filter.toLowerCase();
+            var matchedChildren = [];
+
+            for (var i = 0; i < children.length; i++) {
+                var data = children[i].props.data;
+
+                for (var j = 0; j < this.props.filterable.length; j++) {
+                    var filterColumn = this.props.filterable[j];
+
+                    if (data[filterColumn].toString().toLowerCase().indexOf(filter) > -1) {
+                        matchedChildren.push(children[i]);
+                        break;
+                    }
+                }
+            }
+
+            return matchedChildren;
+        },
         sortByCurrentSort: function(){
-            // Apply a default sort function according to the current sort in the state.
+            // Apply a sort function according to the current sort in the state.
             // This allows us to perform a default sort even on a non sortable column.
             var currentSort = this.state.currentSort;
             if (currentSort.column === null) {
@@ -408,19 +546,34 @@ Reactable = (function() {
                 }.bind(this)));
             }
 
+            if (this.props.sortable === true) {
+                for (var i = 0; i < columns.length; i++) {
+                    this.props._sortable[columns[i]] = 'default';
+                }
+            }
+
+            // Determine if we render the filter box
+            var filtering = false;
+            if (this.props.filterable && Array.isArray(this.props.filterable) && this.props.filterable.length > 0) {
+                filtering = true;
+            }
+
+            // Apply filters
+            var currentChildren = children;
+            if (this.state.filter !== '') {
+                currentChildren = this.applyFilter(this.state.filter, currentChildren);
+            }
+
             // Determine pagination properties and which columns to display
-            var currentChildren;
             var itemsPerPage = 0;
             var pagination = false;
 
             if (this.props.itemsPerPage > 0) {
                 itemsPerPage = this.props.itemsPerPage;
                 pagination = true;
-                currentChildren = children.slice(
+                currentChildren = currentChildren.slice(
                         this.state.currentPage * itemsPerPage,
                         (this.state.currentPage + 1) * itemsPerPage);
-            } else {
-                currentChildren = children;
             }
 
             return this.transferPropsTo(
@@ -428,6 +581,8 @@ Reactable = (function() {
                     {columns && columns.length > 0 ?
                         <Thead
                             columns={columns}
+                            filtering={filtering}
+                            onFilter={this.onFilter}
                             sort={this.state.currentSort}
                             onSort={this.onSort} />
                         : ''

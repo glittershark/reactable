@@ -1,6 +1,6 @@
 {
   "name": "Reactable",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "build/reactable.js",
   "dependencies": {
     "react": "~0.10.0"
@@ -11,14 +11,14 @@
     "chai": "~1.9.1"
   },
   "homepage": "https://github.com/glittershark/reactable",
-  "_release": "0.2.0",
+  "_release": "0.3.0",
   "_resolution": {
     "type": "version",
-    "tag": "0.2.0",
-    "commit": "fd25178c1cd27fd69bc99fdf6db077014bec23ad"
+    "tag": "0.3.0",
+    "commit": "565bf0ebc36b8c428c38f0a8b9bc9262f29675c0"
   },
   "_source": "git://github.com/glittershark/reactable.git",
-  "_target": "~0.2.0",
+  "_target": "0.3.0",
   "_originalSource": "reactable",
   "_direct": true
 }

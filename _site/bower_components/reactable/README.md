@@ -83,10 +83,19 @@ You can also use pagination, by just specifying an `itemsPerPage` argument to th
 
 ### Sorting
 
-You can specify which columns will sort by click by specifing the `sortable` argument
-to the `<Table>` component.  This is an array of column names or column objects.
+To enable sorting on all columns, just specify `sortable={true}` on the `<Table>`
+component. For further customization, ie disabling sort or using a custom sort function
+on a per-column basis, you can pass an array to `sortable`, which contains either string
+column names or column objects.
 
-You can specify a custom sort function by defining a column object with structure:
+We've pre-built some sort functions for you.
+
+- `CaseInsensitive` will sort strings alphabetically regardless of capitalization (e.g. Joe Smith === joe smith)
+- `Date` will sort dates using JavaScript's native Date parser (e.g. 4/20/2014 12:05 PM)
+- `Currency` will sort USD format (e.g. $1,000.00)
+- `Numeric` will parse integer-like strings as integers (e.g. "1")
+
+To specify a custom sort function, use the following structure for the column object:
 
 ```javascript
 
@@ -125,4 +134,20 @@ sortable={[
     'Position'
 ]}
 defaultSort={{column: 'Age', direction: 'desc'}}/>
+```
+### Filtering
+
+You can do simple case-insensitive filtering by specifying a filterable property on the table.  This
+property should contain a list of columns which the filter is performed on.  If the filterable property
+is provided, then an input box with class reactable-filter-input will be prepended to the thead of the table.
+
+Example:
+
+```javascript
+<Table className="table" id="table" data={[
+    {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
+    {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
+    {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter', 'Tag': 'old'},
+    {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
+]} filterable={['State', 'Tag']} />
 ```

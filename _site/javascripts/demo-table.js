@@ -5,7 +5,8 @@ $(function() {
       Reactable.Table({
         data: data,
         itemsPerPage: 5,
-        sortable: ['datetime', 'city', 'state', 'shape', 'duration', 'summary']
+        sortable: ['datetime', 'city', 'state', 'shape', 'duration', 'summary'],
+        filterable: ['city', 'state', 'shape', 'duration', 'summary']
       }),
       demo_table[0]
     );
