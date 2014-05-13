@@ -702,7 +702,7 @@ describe('Reactable', function() {
     });
 
     describe('filtering', function() {
-        describe('filtering', function(){
+        describe('basic case-insensitive filtering', function(){
             before(function() {
                 React.renderComponent(
                     Table( {className:"table", id:"table", data:[
@@ -727,6 +727,33 @@ describe('Reactable', function() {
                 expect($($(rows[0]).find('td')[0])).to.have.text('New York');
                 expect($($(rows[1]).find('td')[0])).to.have.text('New Mexico');
                 expect($($(rows[2]).find('td')[0])).to.have.text('Alaska');
+            });
+        });
+
+        describe('filtering and pagination together', function(){
+            before(function() {
+                React.renderComponent(
+                    Table( {className:"table", id:"table", data:[
+                        {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
+                        {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
+                        {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter', 'Tag': 'old'},
+                        {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
+                    ], filterable:['State', 'Tag'], itemsPerPage:2} ),
+                    document.getElementsByTagName('body')[0]
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('updates the pagination links', function() {
+                var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
+
+                $filter.val('colorado');
+                React.addons.TestUtils.Simulate.keyUp($filter[0]);
+
+                var pageButtons = $('#table tbody.reactable-pagination a.reactable-page-button');
+                expect(pageButtons.length).to.equal(1);
+                expect($(pageButtons[0])).to.have.text('1');
             });
         });
     });

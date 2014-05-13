@@ -269,7 +269,7 @@ Reactable = (function() {
     var FiltererInput = React.createClass({
         render: function() {
             return (
-                <input type="text" className="reactable-filter-input" 
+                <input type="text" className="reactable-filter-input"
                     onKeyUp={function(){
                         this.props.onFilter(this.getDOMNode().value);
                     }.bind(this)} />
@@ -559,19 +559,20 @@ Reactable = (function() {
             }
 
             // Apply filters
-            var currentChildren = children;
+            var filteredChildren = children;
             if (this.state.filter !== '') {
-                currentChildren = this.applyFilter(this.state.filter, currentChildren);
+                filteredChildren = this.applyFilter(this.state.filter, filteredChildren);
             }
 
             // Determine pagination properties and which columns to display
             var itemsPerPage = 0;
             var pagination = false;
 
+            var currentChildren = filteredChildren;
             if (this.props.itemsPerPage > 0) {
                 itemsPerPage = this.props.itemsPerPage;
                 pagination = true;
-                currentChildren = currentChildren.slice(
+                currentChildren = filteredChildren.slice(
                         this.state.currentPage * itemsPerPage,
                         (this.state.currentPage + 1) * itemsPerPage);
             }
@@ -593,7 +594,7 @@ Reactable = (function() {
                     {pagination === true ?
                         <Paginator
                             colSpan={columns.length}
-                            numPages={Math.ceil(this.props.data.length / itemsPerPage)}
+                            numPages={Math.ceil(filteredChildren.length / itemsPerPage)}
                             currentPage={this.state.currentPage}
                             onPageChange={this.onPageChange}/> : ''
                     }
