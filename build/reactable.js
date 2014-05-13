@@ -269,7 +269,7 @@ Reactable = (function() {
     var FiltererInput = React.createClass({displayName: 'FiltererInput',
         render: function() {
             return (
-                React.DOM.input( {type:"text", className:"reactable-filter-input", 
+                React.DOM.input( {type:"text", className:"reactable-filter-input",
                     onKeyUp:function(){
                         this.props.onFilter(this.getDOMNode().value);
                     }.bind(this)} )
@@ -593,7 +593,7 @@ Reactable = (function() {
                     pagination === true ?
                         Paginator(
                             {colSpan:columns.length,
-                            numPages:Math.ceil(this.props.data.length / itemsPerPage),
+                            numPages:Math.ceil(currentChildren.length / itemsPerPage),
                             currentPage:this.state.currentPage,
                             onPageChange:this.onPageChange}) : ''
                     
