@@ -148,24 +148,17 @@ Reactable = (function() {
         },
     };
 
-    var ParseChildDataMixin = {
-        parseChildData: function(expectedClass) {
-            var data = [];
-
-            // Transform any children back to a data array
-            if (typeof(this.props.children) !== 'undefined') {
-                React.Children.forEach(this.props.children, function(child) {
-                    if (child.type.ConvenienceConstructor === this.type.ConvenienceConstructor.childNode) {
-                        data.push(child.props.data);
-                    }
-                }.bind(this));
-            }
-
-            return data;
-        }
-    };
-
     var Td = Reactable.Td = React.createClass({displayName: 'Td',
+        getDefaultProps: function() {
+            var props = this.props;
+            if (
+                typeof(props.data) === 'undefined' &&
+                typeof(this.props.children) === 'string'
+            ) {
+                props.data = this.props.children;
+            }
+            return props;
+        },
         render: function() {
             return this.transferPropsTo(
                 React.DOM.td(null, 
@@ -178,16 +171,14 @@ Reactable = (function() {
 
     var Tr = Reactable.Tr = React.createClass({displayName: 'Tr',
         statics: {
-            childNode: Td
+            childNode: Td,
+            dataType: 'object'
         },
-        mixins: [
-            ParseChildDataMixin
-        ],
         getDefaultProps: function() {
             var defaultProps = {
                 childNode: Td,
-                data: this.parseChildData(),
-                columns: []
+                columns: [],
+                data: {}
             }
 
             return defaultProps;
@@ -202,9 +193,9 @@ Reactable = (function() {
             ) {
                 children = children.concat(this.props.columns.map(function(column, i) {
                     if (this.props.data.hasOwnProperty(column)) {
-                        return Td( {col:column, key:column}, this.props.data[column]);
+                        return Td( {column:column, key:column}, this.props.data[column]);
                     } else {
-                        return Td( {col:column, key:column} );
+                        return Td( {column:column, key:column} );
                     }
                 }.bind(this)));
             }
@@ -339,15 +330,62 @@ Reactable = (function() {
     });
 
     var Table = Reactable.Table = React.createClass({displayName: 'Table',
-        statics: {
-            childNode: Tr
+        parseChildData: function() {
+            var data = [];
+
+            // Transform any children back to a data array
+            if (typeof(this.props.children) !== 'undefined') {
+                React.Children.forEach(this.props.children, function(child) {
+                    if (child.type.ConvenienceConstructor !== Tr) {
+                        return; // (continue)
+                    }
+
+                    var childData = child.props.data || {};
+
+                    // Given our modification of Array.prototype, this is the
+                    // best way to check if child.props.children is an array
+                    if (
+                        typeof(child.props.children) !== 'undefined' &&
+                        typeof(child.props.children.map) === 'function'
+                    ) {
+
+                        var childChildren = child.props.children;
+                        for (var i = 0; i < childChildren.length; i++) {
+                            var descendant = childChildren[i];
+                            if (descendant.type.ConvenienceConstructor === Td) {
+                                if (typeof(descendant.props.column) !== 'undefined') {
+                                    if (typeof(descendant.props.data) !== 'undefined') {
+
+                                        childData[descendant.props.column] =
+                                            descendant.props.data;
+                                    } else if (
+                                        typeof(descendant.props.children) === 'string'
+                                    ) {
+                                        childData[descendant.props.column] =
+                                            descendant.props.children;
+                                    } else {
+                                        console.warn('Reactable.Td specified without ' +
+                                                'a `data` property or children, ' +
+                                                'ignoring');
+                                    }
+                                } else {
+                                    console.warn('Reactable.Td specified without a ' +
+                                            '`column` property, ignoring');
+                                }
+                            }
+                        }
+                    }
+
+                    data.push(childData);
+                }.bind(this));
+            }
+
+            return data;
         },
-        mixins: [
-            ParseChildDataMixin
-        ],
         getDefaultProps: function() {
+            var data = this.props.data || [];
             var defaultProps = {
-                data: this.parseChildData(),
+                data: data.concat(this.parseChildData()),
                 columns: [],
                 sortable: [],
                 filterable: [],
@@ -542,7 +580,18 @@ Reactable = (function() {
                             }
                         }
                     }
-                    return Tr( {columns:columns, data:data, key:i} );
+
+                    // TODO refactor this into one loop
+                    var tds = [];
+                    for (var k in data) {
+                        if (data.hasOwnProperty(k)) {
+                            tds.push(Td( {column:k, key:k}, data[k]));
+                        }
+                    }
+
+                    return (
+                        Tr( {columns:columns, key:i, data:data} )
+                    );
                 }.bind(this)));
             }
 

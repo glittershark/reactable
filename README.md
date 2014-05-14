@@ -63,6 +63,34 @@ React.renderComponent(
 )
 ```
 
+### Even More Customization
+
+If you want to customize the rendering of individual columns, you can go a level deeper by
+embedding a `Reactable.Td` inside your `Reactable.Tr`. These have the required `column`
+property, and an optional `data` property if you want to customize the data that's used
+for sorting and filtering - if the latter isn't specified, the data used will default to
+the `Td`'s children.
+
+Example:
+```
+<Table className="table" id="table">
+    <Tr>
+        <Td column="Name" data="Griffin Smith">
+            <b>Griffin Smith</b>
+        </Td>
+        <Td column="Age">18</Td>
+    </Tr>
+    <Tr>
+        <Td column="Name">Lee Salminen</Td>
+        <Td column="Age">23</Td>
+    </Tr>
+    <Tr>
+        <Td column="Position">Developer</Td>
+        <Td column="Age">28</Td>
+    </Tr>
+</Table>
+```
+
 ### Pagination
 
 You can also use pagination, by just specifying an `itemsPerPage` argument to the
