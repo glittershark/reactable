@@ -106,6 +106,55 @@ describe('Reactable', function() {
         });
     });
 
+    describe('adding <Td>s to the <Tr>s', function() {
+        before(function() {
+            React.renderComponent(
+                Table( {className:"table", id:"table"}, 
+                    Tr(null, 
+                        Td( {column:"Name"}, "Griffin Smith"),
+                        Td( {column:"Age"}, "18")
+                    ),
+                    Tr(null, 
+                        Td( {column:"Name"}, "Lee Salminen"),
+                        Td( {column:"Age"}, "23")
+                    ),
+                    Tr(null, 
+                        Td( {column:"Position"}, "Developer"),
+                        Td( {column:"Age"}, "28")
+                    )
+                ),
+                $('body')[0]
+            );
+        });
+
+        after(ReactableTestUtils.resetTestEnvironment);
+
+        it('renders the table', function() {
+            expect($('table#table.table')).to.exist;
+        });
+
+        it('renders the column headers in the table', function() {
+            var headers = [];
+            $('thead th').each(function() {
+                headers.push($(this).text());
+            });
+
+            expect(headers).to.eql([ 'Name', 'Age', 'Position' ]);
+        });
+
+        it('renders the first row with the correct data', function() {
+            ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', '']);
+        });
+
+        it('renders the second row with the correct data', function() {
+            ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', '']);
+        });
+
+        it('renders the third row with the correct data', function() {
+            ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
+        });
+    })
+
     describe('pagination', function() {
         describe('specifying itemsPerPage', function(){
             before(function() {
