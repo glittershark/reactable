@@ -72,7 +72,7 @@ for sorting and filtering - if the latter isn't specified, the data used will de
 the `Td`'s children.
 
 Example:
-```
+```javascript
 <Table className="table" id="table">
     <Tr>
         <Td column="Name" data="Griffin Smith">
