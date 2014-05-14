@@ -59,8 +59,8 @@ React.renderComponent(
         <Tr className="special-row"
             data={{ name: 'Other Row' , content: 'This is a different row' }} />
     </Table>,
-    document.getElementById('table');
-)
+    document.getElementById('table')
+);
 ```
 
 ### Even More Customization
@@ -72,23 +72,30 @@ for sorting and filtering - if the latter isn't specified, the data used will de
 the `Td`'s children.
 
 Example:
+
 ```javascript
-<Table className="table" id="table">
-    <Tr>
-        <Td column="Name" data="Griffin Smith">
-            <b>Griffin Smith</b>
-        </Td>
-        <Td column="Age">18</Td>
-    </Tr>
-    <Tr>
-        <Td column="Name">Lee Salminen</Td>
-        <Td column="Age">23</Td>
-    </Tr>
-    <Tr>
-        <Td column="Position">Developer</Td>
-        <Td column="Age">28</Td>
-    </Tr>
-</Table>
+var Table = Reactable.Table,
+    Tr = Reactable.Tr;
+
+React.renderComponent(
+    <Table className="table" id="table">
+        <Tr>
+            <Td column="Name" data="Griffin Smith">
+                <b>Griffin Smith</b>
+            </Td>
+            <Td column="Age">18</Td>
+        </Tr>
+        <Tr>
+            <Td column="Name">Lee Salminen</Td>
+            <Td column="Age">23</Td>
+        </Tr>
+        <Tr>
+            <Td column="Position">Developer</Td>
+            <Td column="Age">28</Td>
+        </Tr>
+    </Table>,
+    document.getElementById('table')
+);
 ```
 
 ### Pagination
