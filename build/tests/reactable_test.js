@@ -108,6 +108,7 @@ describe('Reactable', function() {
 
     describe('adding <Td>s to the <Tr>s', function() {
         before(function() {
+            window.tr_test = true;
             React.renderComponent(
                 Table( {className:"table", id:"table"}, 
                     Tr(null, 
@@ -125,6 +126,7 @@ describe('Reactable', function() {
                 ),
                 $('body')[0]
             );
+            window.tr_test = false;
         });
 
         after(ReactableTestUtils.resetTestEnvironment);
