@@ -98,6 +98,30 @@ React.renderComponent(
 );
 ```
 
+### Preventing escaping of HTML
+
+If you don't want to go all the way down the JSX rabbit hole to render individual cells as
+HTML, and you know your source data is safe, you can wrap strings in `Reactable.unsafe` to
+prevent their content from being escaped, like so:
+```javascript
+var Table = Reactable.Table,
+    unsafe = Reactable.unsafe;
+
+React.renderComponent(
+    <Table className="table" id="table" data={[
+        {
+            'Name': unsafe('<b>Griffin Smith</b>'),
+            'Github': unsafe('<a href="https://github.com/glittershark"><img src="https://d2k1ftgv7pobq7.cloudfront.net/images/services/8cab38550d1f23032facde191031d024/github.png"></a>')
+        },
+        {
+            'Name': unsafe('<b>Ian Zhang</b>'),
+            'Github': unsafe('<a href="https://github.com/lofiinterstate"><img src="https://d2k1ftgv7pobq7.cloudfront.net/images/services/8cab38550d1f23032facde191031d024/github.png"></a>')
+        },
+    ]}/>,
+    document.getElementById('table')
+);
+```
+
 ### Pagination
 
 You can also use pagination, by just specifying an `itemsPerPage` argument to the
