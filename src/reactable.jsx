@@ -67,6 +67,18 @@ Reactable = (function() {
 
     var Reactable = {};
 
+    function Unsafe(content) {
+        this.content = content;
+    }
+
+    Unsafe.prototype.toString = function() {
+        return this.content;
+    }
+
+    Reactable.unsafe = function(str) {
+        return new Unsafe(str);
+    }
+
     Reactable.Sort = {
         Numeric: function(a, b) {
             var valA = parseFloat(a.toString().replace(',', ''));
@@ -160,11 +172,23 @@ Reactable = (function() {
             return props;
         },
         render: function() {
-            return this.transferPropsTo(
-                <td>
-                    {this.props.children}
-                </td>
-            );
+            if (typeof(this.props.children) !== 'undefined') {
+                if (this.props.children instanceof Unsafe) {
+                    return this.transferPropsTo(
+                        <td dangerouslySetInnerHTML={
+                            { __html: this.props.children.toString() }
+                        } />
+                    );
+                } else {
+                    return this.transferPropsTo(
+                        <td>
+                            {this.props.children}
+                        </td>
+                    );
+                }
+            } else {
+                return this.transferPropsTo(<td/>);
+            }
         }
     });
 
@@ -359,7 +383,7 @@ Reactable = (function() {
                                         childData[descendant.props.column] =
                                             descendant.props.data;
                                     } else if (
-                                        typeof(descendant.props.children) === 'string'
+                                        typeof(descendant.props.children) !== 'undefined'
                                     ) {
                                         childData[descendant.props.column] =
                                             descendant.props.children;

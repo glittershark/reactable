@@ -3,7 +3,8 @@ var Table = Reactable.Table,
     Thead = Reactable.Thead,
     Th = Reactable.Th,
     Tr = Reactable.Tr,
-    Td = Reactable.Td;
+    Td = Reactable.Td,
+    unsafe = Reactable.unsafe;
 
 var ReactTestUtils = React.addons.TestUtils;
 var expect = chai.expect;
@@ -155,7 +156,105 @@ describe('Reactable', function() {
         it('renders the third row with the correct data', function() {
             ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
         });
-    })
+    });
+
+    describe('unsafe() strings', function() {
+        describe('in the <Table> directly', function() {
+            before(function() {
+                React.renderComponent(
+                    Table( {className:"table", id:"table", data:[
+                        { Name: unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
+                        { Age: '23', Name: unsafe('<span id="lees-name">Lee Salminen</span>')},
+                        { Age: '28', Position: unsafe('<span id="who-knows-job">Developer</span>')},
+                    ]} ),
+                    $('body')[0]
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('renders the HTML in the table cells', function() {
+                var griffins_name = $('span#griffins-name');
+                expect(griffins_name.length).to.equal(1);
+                expect(griffins_name).to.have.text('Griffin Smith');
+
+                var lees_name = $('span#lees-name');
+                expect(lees_name.length).to.equal(1);
+                expect(lees_name).to.have.text('Lee Salminen');
+
+                var who_knows_job = $('span#who-knows-job');
+                expect(who_knows_job.length).to.equal(1);
+                expect(who_knows_job).to.have.text('Developer');
+            });
+        });
+
+        describe('in the <Tr>s', function() {
+            before(function() {
+                React.renderComponent(
+                    Table( {className:"table", id:"table"}, 
+                        Tr( {data:{ Name: unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'}} ),",",
+                        Tr( {data:{ Age: '23', Name: unsafe('<span id="lees-name">Lee Salminen</span>')}} ),",",
+                        Tr( {data:{ Age: '28', Position: unsafe('<span id="who-knows-job">Developer</span>')}} ),","
+                    ),
+                    $('body')[0]
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('renders the HTML in the table cells', function() {
+                var griffins_name = $('span#griffins-name');
+                expect(griffins_name.length).to.equal(1);
+                expect(griffins_name).to.have.text('Griffin Smith');
+
+                var lees_name = $('span#lees-name');
+                expect(lees_name.length).to.equal(1);
+                expect(lees_name).to.have.text('Lee Salminen');
+
+                var who_knows_job = $('span#who-knows-job');
+                expect(who_knows_job.length).to.equal(1);
+                expect(who_knows_job).to.have.text('Developer');
+            });
+        });
+
+        describe('in the <Td>s', function() {
+            before(function() {
+                React.renderComponent(
+                    Table( {className:"table", id:"table"}, 
+                        Tr(null, 
+                            Td( {column:"Name"}, unsafe('<span id="griffins-name">Griffin Smith</span>')),
+                            Td( {column:"Age"}, "18")
+                        ),
+                        Tr(null, 
+                            Td( {column:"Name"}, unsafe('<span id="lees-name">Lee Salminen</span>')),
+                            Td( {column:"Age"}, "23")
+                        ),
+                        Tr(null, 
+                            Td( {column:"Position"}, unsafe('<span id="who-knows-job">Developer</span>')),
+                            Td( {column:"Age"}, "28")
+                        )
+                    ),
+                    $('body')[0]
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('renders the HTML in the table cells', function() {
+                var griffins_name = $('span#griffins-name');
+                expect(griffins_name.length).to.equal(1);
+                expect(griffins_name).to.have.text('Griffin Smith');
+
+                var lees_name = $('span#lees-name');
+                expect(lees_name.length).to.equal(1);
+                expect(lees_name).to.have.text('Lee Salminen');
+
+                var who_knows_job = $('span#who-knows-job');
+                expect(who_knows_job.length).to.equal(1);
+                expect(who_knows_job).to.have.text('Developer');
+            });
+        });
+    });
 
     describe('pagination', function() {
         describe('specifying itemsPerPage', function(){
