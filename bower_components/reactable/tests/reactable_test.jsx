@@ -106,6 +106,57 @@ describe('Reactable', function() {
         });
     });
 
+    describe('adding <Td>s to the <Tr>s', function() {
+        before(function() {
+            window.tr_test = true;
+            React.renderComponent(
+                <Table className="table" id="table">
+                    <Tr>
+                        <Td column="Name">Griffin Smith</Td>
+                        <Td column="Age">18</Td>
+                    </Tr>
+                    <Tr>
+                        <Td column="Name">Lee Salminen</Td>
+                        <Td column="Age">23</Td>
+                    </Tr>
+                    <Tr>
+                        <Td column="Position">Developer</Td>
+                        <Td column="Age">28</Td>
+                    </Tr>
+                </Table>,
+                $('body')[0]
+            );
+            window.tr_test = false;
+        });
+
+        after(ReactableTestUtils.resetTestEnvironment);
+
+        it('renders the table', function() {
+            expect($('table#table.table')).to.exist;
+        });
+
+        it('renders the column headers in the table', function() {
+            var headers = [];
+            $('thead th').each(function() {
+                headers.push($(this).text());
+            });
+
+            expect(headers).to.eql([ 'Name', 'Age', 'Position' ]);
+        });
+
+        it('renders the first row with the correct data', function() {
+            ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', '']);
+        });
+
+        it('renders the second row with the correct data', function() {
+            ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', '']);
+        });
+
+        it('renders the third row with the correct data', function() {
+            ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
+        });
+    })
+
     describe('pagination', function() {
         describe('specifying itemsPerPage', function(){
             before(function() {
@@ -702,7 +753,7 @@ describe('Reactable', function() {
     });
 
     describe('filtering', function() {
-        describe('filtering', function(){
+        describe('basic case-insensitive filtering', function(){
             before(function() {
                 React.renderComponent(
                     <Table className="table" id="table" data={[
@@ -727,6 +778,33 @@ describe('Reactable', function() {
                 expect($($(rows[0]).find('td')[0])).to.have.text('New York');
                 expect($($(rows[1]).find('td')[0])).to.have.text('New Mexico');
                 expect($($(rows[2]).find('td')[0])).to.have.text('Alaska');
+            });
+        });
+
+        describe('filtering and pagination together', function(){
+            before(function() {
+                React.renderComponent(
+                    <Table className="table" id="table" data={[
+                        {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
+                        {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
+                        {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter', 'Tag': 'old'},
+                        {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
+                    ]} filterable={['State', 'Tag']} itemsPerPage={2} />,
+                    document.getElementsByTagName('body')[0]
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('updates the pagination links', function() {
+                var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
+
+                $filter.val('colorado');
+                React.addons.TestUtils.Simulate.keyUp($filter[0]);
+
+                var pageButtons = $('#table tbody.reactable-pagination a.reactable-page-button');
+                expect(pageButtons.length).to.equal(1);
+                expect($(pageButtons[0])).to.have.text('1');
             });
         });
     });
