@@ -192,6 +192,11 @@ Reactable = (function() {
     };
 
     var Td = Reactable.Td = React.createClass({
+        handleClick: function(e){
+            if (typeof this.props.handleClick !== 'undefined') {
+                return this.props.handleClick(e, this);
+            }
+        },
         getDefaultProps: function() {
             var props = this.props;
             if (
@@ -200,19 +205,33 @@ Reactable = (function() {
             ) {
                 props.data = this.props.children;
             }
+
+            // Attach any properties on the column to this Td object to allow things like custom event handlers
+            for (var key in this.props.column) {
+                if (key !== 'key' && key !== 'name') {
+                    props[key] = this.props.column[key];
+                }
+            }
+
             return props;
         },
         render: function() {
             if (typeof(this.props.children) !== 'undefined') {
                 if (this.props.children instanceof Unsafe) {
                     return this.transferPropsTo(
-                        <td dangerouslySetInnerHTML={
-                            { __html: this.props.children.toString() }
+                        <td
+                            data-column={this.props.column.key}
+                            className={this.props.className}
+                            onClick={this.handleClick}
+                            dangerouslySetInnerHTML={{ __html: this.props.children.toString() }
                         } />
                     );
                 } else {
                     return this.transferPropsTo(
-                        <td>
+                        <td
+                            data-column={this.props.column.key}
+                            className={this.props.className}
+                            onClick={this.handleClick}>
                             {this.props.children}
                         </td>
                     );
@@ -248,9 +267,9 @@ Reactable = (function() {
             ) {
                 children = children.concat(this.props.columns.map(function(column, i) {
                     if (this.props.data.hasOwnProperty(column.key)) {
-                        return <Td column={column.key} key={column.key}>{this.props.data[column.key]}</Td>;
+                        return <Td column={column} key={column.key}>{this.props.data[column.key]}</Td>;
                     } else {
-                        return <Td column={column.key} key={column.key} />;
+                        return <Td column={column} key={column.key} />;
                     }
                 }.bind(this)));
             }
