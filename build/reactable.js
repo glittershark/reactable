@@ -582,6 +582,8 @@ Reactable = (function() {
             // Test if the caller passed in data
             var children = [];
             var columns;
+            var userColumnsSpecified = false;
+
             if (
                 this.props.children &&
                 this.props.children.length > 0 &&
@@ -592,15 +594,21 @@ Reactable = (function() {
                 columns = this.props.columns || [];
             }
 
+            if (columns.length > 0) {
+                userColumnsSpecified = true;
+            }
+
             // Build up table rows
             if (this.props.data && typeof this.props.data.map === 'function') {
                 // Build up the columns array
                 children = children.concat(this.props.data.map(function(data, i) {
-                    // Update the columns array with the data's keys
-                    for (var k in data) {
-                        if (data.hasOwnProperty(k)) {
-                            if (columns.indexOf(k) < 0) {
-                                columns.push(k);
+                    // Update the columns array with the data's keys if columns were not already specified
+                    if (userColumnsSpecified === false) {
+                        for (var k in data) {
+                            if (data.hasOwnProperty(k)) {
+                                if (columns.indexOf(k) < 0) {
+                                    columns.push(k);
+                                }
                             }
                         }
                     }
