@@ -364,7 +364,7 @@ Reactable = (function() {
                 throw new TypeError('Must pass a colSpan argument to Paginator');
             }
 
-            if (typeof this.props.numPages === 'undefined' || this.props.numPages === 0) {
+            if (typeof this.props.numPages === 'undefined') {
                 throw new TypeError('Must pass a non-zero numPages argument to Paginator');
             }
 
