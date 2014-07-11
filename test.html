@@ -14,9 +14,11 @@
                 unsafe = Reactable.unsafe;
             React.renderComponent(
                 <Table className="table" id="table" data={[
-                    {'Name': unsafe('<b>Griffin Smith</b>'), 'Github': unsafe('<a href="https://github.com/glittershark"><img src="https://d2k1ftgv7pobq7.cloudfront.net/images/services/8cab38550d1f23032facde191031d024/github.png"></a>')},
-                    {'Name': unsafe('<b>Ian Zhang</b>'), 'Github': unsafe('<a href="https://github.com/lofiinterstate"><img src="https://d2k1ftgv7pobq7.cloudfront.net/images/services/8cab38550d1f23032facde191031d024/github.png"></a>')},
-                ]}/>,
+                        {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
+                        {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
+                        {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter', 'Tag': 'old'},
+                        {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
+                    ]} filterable={['State', 'Tag']} itemsPerPage={2} sortable={true} />,
                 document.getElementById('test-div')
             );
         </script>
