@@ -376,7 +376,7 @@ describe("jQuery assertions", function(){
     it("fails when the HTML doesn't match", function(){
       (function(){
         subject.should.have.html("<span>div</span>");
-      }).should.fail("expected " + inspect(subject) + " to have HTML '<span>div</span>'");
+      }).should.fail("expected " + inspect(subject) + " to have HTML '<span>div</span>', but the HTML was '<span>span</span>'");
     });
 
     it("fails negated when the HTML matches", function(){
@@ -400,7 +400,7 @@ describe("jQuery assertions", function(){
     it("fails when the text doesn't match", function(){
       (function(){
         subject.should.have.text("bar");
-      }).should.fail("expected " + inspect(subject) + " to have text 'bar'");
+      }).should.fail("expected " + inspect(subject) + " to have text 'bar', but the text was 'foo'");
     });
 
     it("fails negated when the text matches", function(){
@@ -424,7 +424,7 @@ describe("jQuery assertions", function(){
     it("fails when the value doesn't match", function(){
       (function(){
         subject.should.have.value("bar");
-      }).should.fail("expected " + inspect(subject) + " to have value 'bar'");
+      }).should.fail("expected " + inspect(subject) + " to have value 'bar', but the value was 'foo'");
     });
 
     it("fails negated when the value matches", function(){
