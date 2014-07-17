@@ -158,6 +158,59 @@ describe('Reactable', function() {
         });
     });
 
+    describe('specifying an array of columns', function() {
+        describe('as strings', function() {
+            before(function() {
+                React.renderComponent(
+                    <Table className="table" id="table" data={[
+                        { Name: 'Griffin Smith', Age: '18', HideThis: 'one'},
+                        { Age: '23', Name: 'Lee Salminen', HideThis: 'two'},
+                        { Age: '28', Position: 'Developer'},
+                    ]} columns={['Name', 'Age']}/>,
+                    $('body')[0]
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('omits columns not in the list', function() {
+                var columns = $('tr.reactable-column-header th');
+                expect(columns.length).to.equal(2);
+                expect($(columns[0])).to.have.text('Name');
+                expect($(columns[1])).to.have.text('Age');
+            });
+        });
+
+        describe('as objects', function() {
+            before(function() {
+                React.renderComponent(
+                    <Table className="table" id="table" data={[
+                        { name: 'Griffin Smith', age: '18', HideThis: 'one'},
+                        { age: '23', name: 'Lee Salminen', HideThis: 'two'},
+                        { age: '28', Position: 'Developer'},
+                    ]} columns={[
+                        { key: 'name', label: 'Name' },
+                        { key: 'age', label: 'Age' }
+                    ]}/>,
+                    $('body')[0]
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('omits columns not in the list', function() {
+                var columns = $('tr.reactable-column-header th');
+                expect(columns.length).to.equal(2);
+            });
+
+            it('allows changing the labels of the columns', function() {
+                var columns = $('tr.reactable-column-header th');
+                expect($(columns[0])).to.have.text('Name');
+                expect($(columns[1])).to.have.text('Age');
+            });
+        });
+    });
+
     describe('unsafe() strings', function() {
         describe('in the <Table> directly', function() {
             before(function() {

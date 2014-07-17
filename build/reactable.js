@@ -405,7 +405,7 @@ Reactable = (function() {
 
     var Table = Reactable.Table = React.createClass({displayName: 'Table',
         // Translate a user defined column array to hold column objects if strings are specified
-        // (e.g. ['column1'] => [{name: 'column1'}])
+        // (e.g. ['column1'] => [{key: 'column1', label: 'column1'}])
         translateColumnsArray: function(columns) {
             return columns.map(function(column, i) {
                 if (typeof(column) === 'string') {
