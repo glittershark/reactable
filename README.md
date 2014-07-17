@@ -98,6 +98,18 @@ React.renderComponent(
 );
 ```
 
+### Manually specifying columns
+
+To override the automatic grabbing of the column list from the attributes of the passed
+`data` objects, you can pass a `columns` property to the `<Table>` component. This can be
+either:
+
+- An array of strings, in which case only the given properties will be included as columns
+  in the rendered table.
+- An array of objects, each of which must have a `key` and `label` property. The `key`
+  property is the attribute of the row object from which to retrieve value, and the
+  `label` is the text to render in the column header row.
+
 ### Preventing escaping of HTML
 
 If you don't want to go all the way down the JSX rabbit hole to render individual cells as
