@@ -1,11 +1,4 @@
 /** @jsx React.DOM */
-var Table = Reactable.Table,
-    Thead = Reactable.Thead,
-    Th = Reactable.Th,
-    Tr = Reactable.Tr,
-    Td = Reactable.Td,
-    unsafe = Reactable.unsafe;
-
 var ReactTestUtils = React.addons.TestUtils;
 var expect = chai.expect;
 
@@ -30,7 +23,7 @@ describe('Reactable', function() {
     describe('directly passing a data array', function() {
         before(function() {
             React.renderComponent(
-                <Table className="table" id="table" data={[
+                <Reactable.Table className="table" id="table" data={[
                     { Name: 'Griffin Smith', Age: '18'},
                     { Age: '23', Name: 'Lee Salminen'},
                     { Age: '28', Position: 'Developer'}
@@ -67,14 +60,14 @@ describe('Reactable', function() {
         });
     });
 
-    describe('adding <Tr>s to the <Table>', function() {
+    describe('adding <Reactable.Trs to the <Reactable.Table>', function() {
         before(function() {
             React.renderComponent(
-                <Table className="table" id="table">
-                    <Tr data={{ Name: 'Griffin Smith', Age: '18'}}/>
-                    <Tr data={{ Age: '23', Name: 'Lee Salminen'}}/>
-                    <Tr data={{ Age: '28', Position: 'Developer'}}/>
-                </Table>,
+                <Reactable.Table className="table" id="table">
+                    <Reactable.Tr data={{ Name: 'Griffin Smith', Age: '18'}}/>
+                    <Reactable.Tr data={{ Age: '23', Name: 'Lee Salminen'}}/>
+                    <Reactable.Tr data={{ Age: '28', Position: 'Developer'}}/>
+                </Reactable.Table>,
                 $('body')[0]
             );
         });
@@ -107,24 +100,24 @@ describe('Reactable', function() {
         });
     });
 
-    describe('adding <Td>s to the <Tr>s', function() {
+    describe('adding <Reactable.Reactable.Td>s to the <Reactable.Trs', function() {
         before(function() {
             window.tr_test = true;
             React.renderComponent(
-                <Table className="table" id="table">
-                    <Tr>
-                        <Td column="Name">Griffin Smith</Td>
-                        <Td column="Age">18</Td>
-                    </Tr>
-                    <Tr>
-                        <Td column="Name">Lee Salminen</Td>
-                        <Td column="Age">23</Td>
-                    </Tr>
-                    <Tr>
-                        <Td column="Position">Developer</Td>
-                        <Td column="Age">28</Td>
-                    </Tr>
-                </Table>,
+                <Reactable.Table className="table" id="table">
+                    <Reactable.Tr>
+                        <Reactable.Td column="Name">Griffin Smith</Reactable.Td>
+                        <Reactable.Td column="Age">18</Reactable.Td>
+                    </Reactable.Tr>
+                    <Reactable.Tr>
+                        <Reactable.Td column="Name">Lee Salminen</Reactable.Td>
+                        <Reactable.Td column="Age">23</Reactable.Td>
+                    </Reactable.Tr>
+                    <Reactable.Tr>
+                        <Reactable.Td column="Position">Developer</Reactable.Td>
+                        <Reactable.Td column="Age">28</Reactable.Td>
+                    </Reactable.Tr>
+                </Reactable.Table>,
                 $('body')[0]
             );
             window.tr_test = false;
@@ -162,7 +155,7 @@ describe('Reactable', function() {
         describe('as strings', function() {
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table" data={[
+                    <Reactable.Table className="table" id="table" data={[
                         { Name: 'Griffin Smith', Age: '18', HideThis: 'one'},
                         { Age: '23', Name: 'Lee Salminen', HideThis: 'two'},
                         { Age: '28', Position: 'Developer'},
@@ -184,7 +177,7 @@ describe('Reactable', function() {
         describe('as objects', function() {
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table" data={[
+                    <Reactable.Table className="table" id="table" data={[
                         { name: 'Griffin Smith', age: '18', HideThis: 'one'},
                         { age: '23', name: 'Lee Salminen', HideThis: 'two'},
                         { age: '28', Position: 'Developer'},
@@ -212,10 +205,10 @@ describe('Reactable', function() {
     });
 
     describe('unsafe() strings', function() {
-        describe('in the <Table> directly', function() {
+        describe('in the <Reactable.Table> directly', function() {
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table" data={[
+                    <Reactable.Table className="table" id="table" data={[
                         { Name: unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
                         { Age: '23', Name: unsafe('<span id="lees-name">Lee Salminen</span>')},
                         { Age: '28', Position: unsafe('<span id="who-knows-job">Developer</span>')},
@@ -241,14 +234,14 @@ describe('Reactable', function() {
             });
         });
 
-        describe('in the <Tr>s', function() {
+        describe('in the <Reactable.Trs', function() {
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table">
-                        <Tr data={{ Name: unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'}} />,
-                        <Tr data={{ Age: '23', Name: unsafe('<span id="lees-name">Lee Salminen</span>')}} />,
-                        <Tr data={{ Age: '28', Position: unsafe('<span id="who-knows-job">Developer</span>')}} />,
-                    </Table>,
+                    <Reactable.Table className="table" id="table">
+                        <Reactable.Tr data={{ Name: unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'}} />,
+                        <Reactable.Tr data={{ Age: '23', Name: unsafe('<span id="lees-name">Lee Salminen</span>')}} />,
+                        <Reactable.Tr data={{ Age: '28', Position: unsafe('<span id="who-knows-job">Developer</span>')}} />,
+                    </Reactable.Table>,
                     $('body')[0]
                 );
             });
@@ -270,23 +263,23 @@ describe('Reactable', function() {
             });
         });
 
-        describe('in the <Td>s', function() {
+        describe('in the <Reactable.Reactable.Td>s', function() {
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table">
-                        <Tr>
-                            <Td column="Name">{unsafe('<span id="griffins-name">Griffin Smith</span>')}</Td>
-                            <Td column="Age">18</Td>
-                        </Tr>
-                        <Tr>
-                            <Td column="Name">{unsafe('<span id="lees-name">Lee Salminen</span>')}</Td>
-                            <Td column="Age">23</Td>
-                        </Tr>
-                        <Tr>
-                            <Td column="Position">{unsafe('<span id="who-knows-job">Developer</span>')}</Td>
-                            <Td column="Age">28</Td>
-                        </Tr>
-                    </Table>,
+                    <Reactable.Table className="table" id="table">
+                        <Reactable.Tr>
+                            <Reactable.Td column="Name">{unsafe('<span id="griffins-name">Griffin Smith</span>')}</Reactable.Td>
+                            <Reactable.Td column="Age">18</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column="Name">{unsafe('<span id="lees-name">Lee Salminen</span>')}</Reactable.Td>
+                            <Reactable.Td column="Age">23</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column="Position">{unsafe('<span id="who-knows-job">Developer</span>')}</Reactable.Td>
+                            <Reactable.Td column="Age">28</Reactable.Td>
+                        </Reactable.Tr>
+                    </Reactable.Table>,
                     $('body')[0]
                 );
             });
@@ -313,7 +306,7 @@ describe('Reactable', function() {
         describe('specifying itemsPerPage', function(){
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table" data={[
+                    <Reactable.Table className="table" id="table" data={[
                         {'Name': 'Griffin Smith', 'Age': '18'},
                         {'Age': '23', 'Name': 'Lee Salminen'},
                         {'Age': '28', 'Position': 'Developer'},
@@ -384,7 +377,7 @@ describe('Reactable', function() {
         describe('specifying more itemsPerPage than items', function(){
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table" data={[
+                    <Reactable.Table className="table" id="table" data={[
                         {'Name': 'Griffin Smith', 'Age': '18'},
                         {'Age': '23', 'Name': 'Lee Salminen'},
                         {'Age': '28', 'Position': 'Developer'},
@@ -415,7 +408,7 @@ describe('Reactable', function() {
         describe('not specifying itemsPerPage', function(){
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table" data={[
+                    <Reactable.Table className="table" id="table" data={[
                         {'Name': 'Griffin Smith', 'Age': '18'},
                         {'Age': '23', 'Name': 'Lee Salminen'},
                         {'Age': '28', 'Position': 'Developer'},
@@ -440,7 +433,7 @@ describe('Reactable', function() {
         describe('specifying 0 itemsPerPage', function(){
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table" data={[
+                    <Reactable.Table className="table" id="table" data={[
                         {'Name': 'Griffin Smith', 'Age': '18'},
                         {'Age': '23', 'Name': 'Lee Salminen'},
                         {'Age': '28', 'Position': 'Developer'},
@@ -467,7 +460,7 @@ describe('Reactable', function() {
         describe('no default sort', function(){
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table" data={[
+                    <Reactable.Table className="table" id="table" data={[
                         { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
                         { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
                         { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
@@ -550,7 +543,7 @@ describe('Reactable', function() {
         describe('passing `true` to sortable', function() {
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table" data={[
+                    <Reactable.Table className="table" id="table" data={[
                         { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
                         { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
                         { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
@@ -639,7 +632,7 @@ describe('Reactable', function() {
         describe('default sort', function(){
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table" data={[
+                    <Reactable.Table className="table" id="table" data={[
                         { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
                         { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
                         { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
@@ -675,7 +668,7 @@ describe('Reactable', function() {
         describe('default sort no direction specified', function(){
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table" data={[
+                    <Reactable.Table className="table" id="table" data={[
                         { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
                         { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
                         { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
@@ -712,7 +705,7 @@ describe('Reactable', function() {
         describe('unsortable column', function(){
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table" data={[
+                    <Reactable.Table className="table" id="table" data={[
                         { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
                         { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
                         { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
@@ -740,7 +733,7 @@ describe('Reactable', function() {
         describe('numeric sort', function(){
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table" data={[
+                    <Reactable.Table className="table" id="table" data={[
                         { Count: '23'},
                         { Count: '18'},
                         { Count: '28'},
@@ -780,7 +773,7 @@ describe('Reactable', function() {
         describe('currency sort', function(){
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table" data={[
+                    <Reactable.Table className="table" id="table" data={[
                         { Price: '1.25'},
                         { Price: '$1.01'},
                         { Price: '1'},
@@ -830,7 +823,7 @@ describe('Reactable', function() {
         describe('date sort', function(){
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table" data={[
+                    <Reactable.Table className="table" id="table" data={[
                         { 'Date': '1/1/2014 11:00 AM'},
                         { 'Date': '1/1/2013 11:00 AM'},
                         { 'Date': '1/1/2014 4:30 PM'},
@@ -868,7 +861,7 @@ describe('Reactable', function() {
         describe('case insensitive sorting', function(){
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table" data={[
+                    <Reactable.Table className="table" id="table" data={[
                         { 'Name': 'Lee Salminen'},
                         { 'Name': 'Griffin Smith'},
                         { 'Name': 'Ian Zhang'},
@@ -908,7 +901,7 @@ describe('Reactable', function() {
         describe('basic case-insensitive filtering', function(){
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table" data={[
+                    <Reactable.Table className="table" id="table" data={[
                         {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
                         {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
                         {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter', 'Tag': 'old'},
@@ -936,7 +929,7 @@ describe('Reactable', function() {
         describe('filtering and pagination together', function(){
             before(function() {
                 React.renderComponent(
-                    <Table className="table" id="table" data={[
+                    <Reactable.Table className="table" id="table" data={[
                         {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
                         {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
                         {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter', 'Tag': 'old'},
