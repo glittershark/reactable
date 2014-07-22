@@ -192,34 +192,52 @@ Reactable = (function() {
     };
 
     var Td = Reactable.Td = React.createClass({displayName: 'Td',
-        getDefaultProps: function() {
-            var props = this.props;
+        handleClick: function(e){
+            if (typeof this.props.handleClick !== 'undefined') {
+                return this.props.handleClick(e, this);
+            }
+        },
+        initialize: function(props) {
             if (
                 typeof(props.data) === 'undefined' &&
-                typeof(this.props.children) === 'string'
+                typeof(props.children) === 'string'
             ) {
-                props.data = this.props.children;
+                props.data = props.children;
             }
-            return props;
+
+            this.setState({
+                data: props.data
+            });
+        },
+        componentDidMount: function() {
+            this.initialize(this.props);
+        },
+        componentWillReceiveProps: function(nextProps) {
+            //this.initialize(nextProps);
         },
         render: function() {
+            var tdProps = {
+                'data-column': this.props.column.key,
+                className: this.props.className,
+                onClick: this.handleClick
+            }
+
+            // Attach any properties on the column to this Td object to allow things like custom event handlers
+            for (var key in this.props.column) {
+                if (key !== 'key' && key !== 'name') {
+                    tdProps[key] = this.props.column[key];
+                }
+            }
+
             if (typeof(this.props.children) !== 'undefined') {
                 if (this.props.children instanceof Unsafe) {
-                    return this.transferPropsTo(
-                        React.DOM.td( {dangerouslySetInnerHTML:
-                            { __html: this.props.children.toString() }
-                        } )
-                    );
+                    tdProps.dangerouslySetInnerHTML= { __html: this.props.children.toString() }
                 } else {
-                    return this.transferPropsTo(
-                        React.DOM.td(null, 
-                            this.props.children
-                        )
-                    );
+                    tdProps.children = this.props.children;
                 }
-            } else {
-                return this.transferPropsTo(React.DOM.td(null));
             }
+
+            return React.DOM.td(tdProps);
         }
     });
 
@@ -248,9 +266,9 @@ Reactable = (function() {
             ) {
                 children = children.concat(this.props.columns.map(function(column, i) {
                     if (this.props.data.hasOwnProperty(column.key)) {
-                        return Td( {column:column.key, key:column.key}, this.props.data[column.key]);
+                        return Td({column: column, key: column.key}, this.props.data[column.key]);
                     } else {
-                        return Td( {column:column.key, key:column.key} );
+                        return Td({column: column, key: column.key});
                     }
                 }.bind(this)));
             }
@@ -275,11 +293,11 @@ Reactable = (function() {
             return this.transferPropsTo(
                 React.DOM.thead(null, 
                     this.props.filtering === true ?
-                        Filterer(
-                            {colSpan:this.props.columns.length,
-                            onFilter:this.props.onFilter}) : '',
+                        Filterer({
+                            colSpan: this.props.columns.length, 
+                            onFilter: this.props.onFilter}) : '', 
                     
-                    React.DOM.tr( {className:"reactable-column-header"}, 
+                    React.DOM.tr({className: "reactable-column-header"}, 
                         this.props.columns.map(function(column, index) {
                             var sortClass = '';
 
@@ -294,10 +312,10 @@ Reactable = (function() {
                             }
 
                             return (
-                                React.DOM.th(
-                                    {className:sortClass,
-                                    key:index,
-                                    onClick:function(){ this.props.onSort(column.key) }.bind(this)}, column.label)
+                                React.DOM.th({
+                                    className: sortClass, 
+                                    key: index, 
+                                    onClick: function(){ this.props.onSort(column.key) }.bind(this)}, column.label)
                             );
                         }.bind(this))
                     )
@@ -315,10 +333,10 @@ Reactable = (function() {
     var FiltererInput = React.createClass({displayName: 'FiltererInput',
         render: function() {
             return (
-                React.DOM.input( {type:"text", className:"reactable-filter-input",
-                    onKeyUp:function(){
+                React.DOM.input({type: "text", className: "reactable-filter-input", 
+                    onKeyUp: function(){
                         this.props.onFilter(this.getDOMNode().value);
-                    }.bind(this)} )
+                    }.bind(this)})
             );
         },
     });
@@ -330,9 +348,9 @@ Reactable = (function() {
             }
 
             return (
-                React.DOM.tr( {className:"reactable-filterer"}, 
-                    React.DOM.td( {colSpan:this.props.colSpan}, 
-                        FiltererInput( {onFilter:this.props.onFilter})
+                React.DOM.tr({className: "reactable-filterer"}, 
+                    React.DOM.td({colSpan: this.props.colSpan}, 
+                        FiltererInput({onFilter: this.props.onFilter})
                     )
                 )
             );
@@ -345,7 +363,7 @@ Reactable = (function() {
                 throw new TypeError('Must pass a colSpan argument to Paginator');
             }
 
-            if (typeof this.props.numPages === 'undefined' || this.props.numPages === 0) {
+            if (typeof this.props.numPages === 'undefined') {
                 throw new TypeError('Must pass a non-zero numPages argument to Paginator');
             }
 
@@ -362,9 +380,9 @@ Reactable = (function() {
                 }
 
                 pageButtons.push(
-                    React.DOM.a( {className:className, key:i,
+                    React.DOM.a({className: className, key: i, 
                        // create function to get around for-loop closure issue
-                       onClick:(function(pageNum) {
+                       onClick: (function(pageNum) {
                            return function() {
                                this.props.onPageChange(pageNum);
                            }.bind(this)
@@ -373,9 +391,9 @@ Reactable = (function() {
             }
 
             return (
-                React.DOM.tbody( {className:"reactable-pagination"}, 
+                React.DOM.tbody({className: "reactable-pagination"}, 
                     React.DOM.tr(null, 
-                        React.DOM.td( {colSpan:this.props.colSpan}, 
+                        React.DOM.td({colSpan: this.props.colSpan}, 
                             pageButtons
                         )
                     )
@@ -451,18 +469,8 @@ Reactable = (function() {
 
             return data;
         },
-        getDefaultProps: function() {
-            var data = this.props.data || [];
-            var defaultProps = {
-                data: data.concat(this.parseChildData()),
-                columns: [],
-                sortable: [],
-                filterable: [],
-                defaultSort: false,
-                itemsPerPage: 0,
-                _sortable: [],
-            }
-
+        initializeSorts: function() {
+            this._sortable = {};
             // Transform sortable properties into a more friendly list
             for (var i in this.props.sortable) {
                 var column = this.props.sortable[i];
@@ -486,9 +494,19 @@ Reactable = (function() {
                     sortFunction    = 'default';
                 }
 
-                defaultProps._sortable[columnName] = sortFunction;
+                this._sortable[columnName] = sortFunction;
             }
-
+        },
+        getDefaultProps: function() {
+            var data = this.props.data || [];
+            var defaultProps = {
+                data: data.concat(this.parseChildData()),
+                columns: [],
+                sortable: [],
+                filterable: [],
+                defaultSort: false,
+                itemsPerPage: 0,
+            }
             return defaultProps;
         },
         getInitialState: function() {
@@ -541,7 +559,12 @@ Reactable = (function() {
 
             return initialState;
         },
-        componentWillMount: function(){
+        componentWillMount: function() {
+            this.initializeSorts(this.props.sortable);
+            this.sortByCurrentSort();
+        },
+        componentWillReceiveProps: function(nextProps) {
+            this.initializeSorts(nextProps.sortable);
             this.sortByCurrentSort();
         },
         onPageChange: function(page) {
@@ -584,7 +607,7 @@ Reactable = (function() {
                 var keyB = b[currentSort.column];
 
                 // Default sort
-                if (this.props._sortable[currentSort.column] === 'default') {
+                if (this._sortable[currentSort.column] === 'default') {
                     // Reverse direction if we're doing a reverse sort
                     if (keyA < keyB) {
                         return -1 * currentSort.direction;
@@ -598,16 +621,16 @@ Reactable = (function() {
                 else{
                     // Reverse columns if we're doing a reverse sort
                     if (currentSort.direction === 1) {
-                        return this.props._sortable[currentSort.column](keyA, keyB);
+                        return this._sortable[currentSort.column](keyA, keyB);
                     } else {
-                        return this.props._sortable[currentSort.column](keyB, keyA);
+                        return this._sortable[currentSort.column](keyB, keyA);
                     }
                 }
             }.bind(this));
         },
         onSort: function(column){
             // Don't perform sort on unsortable columns
-            if (typeof(this.props._sortable[column]) === 'undefined') {
+            if (typeof(this._sortable[column]) === 'undefined') {
                 return;
             }
 
@@ -668,14 +691,14 @@ Reactable = (function() {
                     }
 
                     return (
-                        Tr( {columns:columns, key:i, data:data} )
+                        Tr({columns: columns, key: i, data: data})
                     );
                 }.bind(this)));
             }
 
             if (this.props.sortable === true) {
                 for (var i = 0; i < columns.length; i++) {
-                    this.props._sortable[columns[i].key] = 'default';
+                    this._sortable[columns[i].key] = 'default';
                 }
             }
 
@@ -707,23 +730,23 @@ Reactable = (function() {
             return this.transferPropsTo(
                 React.DOM.table(null, 
                     columns && columns.length > 0 ?
-                        Thead(
-                            {columns:columns,
-                            filtering:filtering,
-                            onFilter:this.onFilter,
-                            sort:this.state.currentSort,
-                            onSort:this.onSort} )
-                        : '',
+                        Thead({
+                            columns: columns, 
+                            filtering: filtering, 
+                            onFilter: this.onFilter, 
+                            sort: this.state.currentSort, 
+                            onSort: this.onSort})
+                        : '', 
                     
-                    React.DOM.tbody( {className:"reactable-data"}, 
+                    React.DOM.tbody({className: "reactable-data"}, 
                         currentChildren
-                    ),
+                    ), 
                     pagination === true ?
-                        Paginator(
-                            {colSpan:columns.length,
-                            numPages:Math.ceil(filteredChildren.length / itemsPerPage),
-                            currentPage:this.state.currentPage,
-                            onPageChange:this.onPageChange}) : ''
+                        Paginator({
+                            colSpan: columns.length, 
+                            numPages: Math.ceil(filteredChildren.length / itemsPerPage), 
+                            currentPage: this.state.currentPage, 
+                            onPageChange: this.onPageChange}) : ''
                     
                 )
             );

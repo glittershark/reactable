@@ -30,11 +30,11 @@ describe('Reactable', function() {
     describe('directly passing a data array', function() {
         before(function() {
             React.renderComponent(
-                Table( {className:"table", id:"table", data:[
+                Table({className: "table", id: "table", data: [
                     { Name: 'Griffin Smith', Age: '18'},
                     { Age: '23', Name: 'Lee Salminen'},
                     { Age: '28', Position: 'Developer'}
-                ]} ),
+                ]}),
                 $('body')[0]
             );
         });
@@ -70,10 +70,10 @@ describe('Reactable', function() {
     describe('adding <Tr>s to the <Table>', function() {
         before(function() {
             React.renderComponent(
-                Table( {className:"table", id:"table"}, 
-                    Tr( {data:{ Name: 'Griffin Smith', Age: '18'}}),
-                    Tr( {data:{ Age: '23', Name: 'Lee Salminen'}}),
-                    Tr( {data:{ Age: '28', Position: 'Developer'}})
+                Table({className: "table", id: "table"}, 
+                    Tr({data: { Name: 'Griffin Smith', Age: '18'}}), 
+                    Tr({data: { Age: '23', Name: 'Lee Salminen'}}), 
+                    Tr({data: { Age: '28', Position: 'Developer'}})
                 ),
                 $('body')[0]
             );
@@ -111,18 +111,18 @@ describe('Reactable', function() {
         before(function() {
             window.tr_test = true;
             React.renderComponent(
-                Table( {className:"table", id:"table"}, 
+                Table({className: "table", id: "table"}, 
                     Tr(null, 
-                        Td( {column:"Name"}, "Griffin Smith"),
-                        Td( {column:"Age"}, "18")
-                    ),
+                        Td({column: "Name"}, "Griffin Smith"), 
+                        Td({column: "Age"}, "18")
+                    ), 
                     Tr(null, 
-                        Td( {column:"Name"}, "Lee Salminen"),
-                        Td( {column:"Age"}, "23")
-                    ),
+                        Td({column: "Name"}, "Lee Salminen"), 
+                        Td({column: "Age"}, "23")
+                    ), 
                     Tr(null, 
-                        Td( {column:"Position"}, "Developer"),
-                        Td( {column:"Age"}, "28")
+                        Td({column: "Position"}, "Developer"), 
+                        Td({column: "Age"}, "28")
                     )
                 ),
                 $('body')[0]
@@ -162,11 +162,11 @@ describe('Reactable', function() {
         describe('in the <Table> directly', function() {
             before(function() {
                 React.renderComponent(
-                    Table( {className:"table", id:"table", data:[
+                    Table({className: "table", id: "table", data: [
                         { Name: unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
                         { Age: '23', Name: unsafe('<span id="lees-name">Lee Salminen</span>')},
                         { Age: '28', Position: unsafe('<span id="who-knows-job">Developer</span>')},
-                    ]} ),
+                    ]}),
                     $('body')[0]
                 );
             });
@@ -191,10 +191,10 @@ describe('Reactable', function() {
         describe('in the <Tr>s', function() {
             before(function() {
                 React.renderComponent(
-                    Table( {className:"table", id:"table"}, 
-                        Tr( {data:{ Name: unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'}} ),",",
-                        Tr( {data:{ Age: '23', Name: unsafe('<span id="lees-name">Lee Salminen</span>')}} ),",",
-                        Tr( {data:{ Age: '28', Position: unsafe('<span id="who-knows-job">Developer</span>')}} ),","
+                    Table({className: "table", id: "table"}, 
+                        Tr({data: { Name: unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'}}), ",", 
+                        Tr({data: { Age: '23', Name: unsafe('<span id="lees-name">Lee Salminen</span>')}}), ",", 
+                        Tr({data: { Age: '28', Position: unsafe('<span id="who-knows-job">Developer</span>')}}), ","
                     ),
                     $('body')[0]
                 );
@@ -220,18 +220,18 @@ describe('Reactable', function() {
         describe('in the <Td>s', function() {
             before(function() {
                 React.renderComponent(
-                    Table( {className:"table", id:"table"}, 
+                    Table({className: "table", id: "table"}, 
                         Tr(null, 
-                            Td( {column:"Name"}, unsafe('<span id="griffins-name">Griffin Smith</span>')),
-                            Td( {column:"Age"}, "18")
-                        ),
+                            Td({column: "Name"}, unsafe('<span id="griffins-name">Griffin Smith</span>')), 
+                            Td({column: "Age"}, "18")
+                        ), 
                         Tr(null, 
-                            Td( {column:"Name"}, unsafe('<span id="lees-name">Lee Salminen</span>')),
-                            Td( {column:"Age"}, "23")
-                        ),
+                            Td({column: "Name"}, unsafe('<span id="lees-name">Lee Salminen</span>')), 
+                            Td({column: "Age"}, "23")
+                        ), 
                         Tr(null, 
-                            Td( {column:"Position"}, unsafe('<span id="who-knows-job">Developer</span>')),
-                            Td( {column:"Age"}, "28")
+                            Td({column: "Position"}, unsafe('<span id="who-knows-job">Developer</span>')), 
+                            Td({column: "Age"}, "28")
                         )
                     ),
                     $('body')[0]
@@ -260,7 +260,7 @@ describe('Reactable', function() {
         describe('specifying itemsPerPage', function(){
             before(function() {
                 React.renderComponent(
-                    Table( {className:"table", id:"table", data:[
+                    Table({className: "table", id: "table", data: [
                         {'Name': 'Griffin Smith', 'Age': '18'},
                         {'Age': '23', 'Name': 'Lee Salminen'},
                         {'Age': '28', 'Position': 'Developer'},
@@ -270,7 +270,7 @@ describe('Reactable', function() {
                         {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
                         {'Age': '23', 'Name': 'Lee Salminen'},
                         {'Age': '28', 'Position': 'Developer'},
-                    ], itemsPerPage:4} ),
+                    ], itemsPerPage: 4}),
                     document.getElementsByTagName('body')[0]
                 );
             });
@@ -331,7 +331,7 @@ describe('Reactable', function() {
         describe('specifying more itemsPerPage than items', function(){
             before(function() {
                 React.renderComponent(
-                    Table( {className:"table", id:"table", data:[
+                    Table({className: "table", id: "table", data: [
                         {'Name': 'Griffin Smith', 'Age': '18'},
                         {'Age': '23', 'Name': 'Lee Salminen'},
                         {'Age': '28', 'Position': 'Developer'},
@@ -341,7 +341,7 @@ describe('Reactable', function() {
                         {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
                         {'Age': '23', 'Name': 'Lee Salminen'},
                         {'Age': '28', 'Position': 'Developer'},
-                    ], itemsPerPage:20} ),
+                    ], itemsPerPage: 20}),
                     document.getElementsByTagName('body')[0]
                 );
             });
@@ -362,7 +362,7 @@ describe('Reactable', function() {
         describe('not specifying itemsPerPage', function(){
             before(function() {
                 React.renderComponent(
-                    Table( {className:"table", id:"table", data:[
+                    Table({className: "table", id: "table", data: [
                         {'Name': 'Griffin Smith', 'Age': '18'},
                         {'Age': '23', 'Name': 'Lee Salminen'},
                         {'Age': '28', 'Position': 'Developer'},
@@ -372,7 +372,7 @@ describe('Reactable', function() {
                         {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
                         {'Age': '23', 'Name': 'Lee Salminen'},
                         {'Age': '28', 'Position': 'Developer'},
-                    ]} ),
+                    ]}),
                     document.getElementsByTagName('body')[0]
                 );
             });
@@ -387,7 +387,7 @@ describe('Reactable', function() {
         describe('specifying 0 itemsPerPage', function(){
             before(function() {
                 React.renderComponent(
-                    Table( {className:"table", id:"table", data:[
+                    Table({className: "table", id: "table", data: [
                         {'Name': 'Griffin Smith', 'Age': '18'},
                         {'Age': '23', 'Name': 'Lee Salminen'},
                         {'Age': '28', 'Position': 'Developer'},
@@ -397,7 +397,7 @@ describe('Reactable', function() {
                         {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
                         {'Age': '23', 'Name': 'Lee Salminen'},
                         {'Age': '28', 'Position': 'Developer'},
-                    ], itemsPerPage:0} ),
+                    ], itemsPerPage: 0}),
                     document.getElementsByTagName('body')[0]
                 );
             });
@@ -414,12 +414,12 @@ describe('Reactable', function() {
         describe('no default sort', function(){
             before(function() {
                 React.renderComponent(
-                    Table( {className:"table", id:"table", data:[
+                    Table({className: "table", id: "table", data: [
                         { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
                         { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
                         { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
-                    ],
-                    sortable:[
+                    ], 
+                    sortable: [
                         {
                             column: 'Name',
                             sortFunction: function(a, b){
@@ -432,7 +432,7 @@ describe('Reactable', function() {
                         },
                         'Age',
                         'Position'
-                    ]} ),
+                    ]}),
                     document.getElementsByTagName('body')[0]
                 );
             });
@@ -497,12 +497,12 @@ describe('Reactable', function() {
         describe('passing `true` to sortable', function() {
             before(function() {
                 React.renderComponent(
-                    Table( {className:"table", id:"table", data:[
+                    Table({className: "table", id: "table", data: [
                         { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
                         { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
                         { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
-                    ],
-                    sortable:true} ),
+                    ], 
+                    sortable: true}),
                     document.getElementsByTagName('body')[0]
                 );
             });
@@ -586,12 +586,12 @@ describe('Reactable', function() {
         describe('default sort', function(){
             before(function() {
                 React.renderComponent(
-                    Table( {className:"table", id:"table", data:[
+                    Table({className: "table", id: "table", data: [
                         { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
                         { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
                         { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
-                    ],
-                    sortable:[
+                    ], 
+                    sortable: [
                         {
                             column: 'Name',
                             sortFunction: function(a, b){
@@ -604,8 +604,8 @@ describe('Reactable', function() {
                         },
                         'Age',
                         'Position'
-                    ],
-                    defaultSort:{column: 'Age', direction: 'desc'}}),
+                    ], 
+                    defaultSort: {column: 'Age', direction: 'desc'}}),
                     document.getElementsByTagName('body')[0]
                 );
             });
@@ -622,12 +622,12 @@ describe('Reactable', function() {
         describe('default sort no direction specified', function(){
             before(function() {
                 React.renderComponent(
-                    Table( {className:"table", id:"table", data:[
+                    Table({className: "table", id: "table", data: [
                         { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
                         { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
                         { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
-                    ],
-                    sortable:[
+                    ], 
+                    sortable: [
                         {
                             column: 'Name',
                             sortFunction: function(a, b){
@@ -640,8 +640,8 @@ describe('Reactable', function() {
                         },
                         'Age',
                         'Position'
-                    ],
-                    defaultSort:'Age'}),
+                    ], 
+                    defaultSort: 'Age'}),
                     document.getElementsByTagName('body')[0]
                 );
             });
@@ -659,15 +659,15 @@ describe('Reactable', function() {
         describe('unsortable column', function(){
             before(function() {
                 React.renderComponent(
-                    Table( {className:"table", id:"table", data:[
+                    Table({className: "table", id: "table", data: [
                         { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
                         { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
                         { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
-                    ],
-                    sortable:[
+                    ], 
+                    sortable: [
                         'Age',
                         'Position'
-                    ]} ),
+                    ]}),
                     document.getElementsByTagName('body')[0]
                 );
             });
@@ -687,7 +687,7 @@ describe('Reactable', function() {
         describe('numeric sort', function(){
             before(function() {
                 React.renderComponent(
-                    Table( {className:"table", id:"table", data:[
+                    Table({className: "table", id: "table", data: [
                         { Count: '23'},
                         { Count: '18'},
                         { Count: '28'},
@@ -695,13 +695,13 @@ describe('Reactable', function() {
                         { Count: 'a'},
                         { Count: 'z'},
                         { Count: '123'}
-                    ],
-                    sortable:[
+                    ], 
+                    sortable: [
                         {
                             column:         'Count',
                             sortFunction:   Reactable.Sort.Numeric
                         }
-                    ]} ),
+                    ]}),
                     document.getElementsByTagName('body')[0]
                 );
             });
@@ -727,7 +727,7 @@ describe('Reactable', function() {
         describe('currency sort', function(){
             before(function() {
                 React.renderComponent(
-                    Table( {className:"table", id:"table", data:[
+                    Table({className: "table", id: "table", data: [
                         { Price: '1.25'},
                         { Price: '$1.01'},
                         { Price: '1'},
@@ -740,13 +740,13 @@ describe('Reactable', function() {
                         { Price: '$.5'},
                         { Price: '$0.60'},
                         { Price: '.1'},
-                    ],
-                    sortable:[
+                    ], 
+                    sortable: [
                         {
                             column:         'Price',
                             sortFunction:   Reactable.Sort.Currency
                         }
-                    ]} ),
+                    ]}),
                     document.getElementsByTagName('body')[0]
                 );
             });
@@ -777,20 +777,20 @@ describe('Reactable', function() {
         describe('date sort', function(){
             before(function() {
                 React.renderComponent(
-                    Table( {className:"table", id:"table", data:[
+                    Table({className: "table", id: "table", data: [
                         { 'Date': '1/1/2014 11:00 AM'},
                         { 'Date': '1/1/2013 11:00 AM'},
                         { 'Date': '1/1/2014 4:30 PM'},
                         { 'Date': '4/3/2013'},
                         { 'Date': 'a'},
                         { 'Date': 'z'},
-                    ],
-                    sortable:[
+                    ], 
+                    sortable: [
                         {
                             column:         'Date',
                             sortFunction:   Reactable.Sort.Date
                         }
-                    ]} ),
+                    ]}),
                     document.getElementsByTagName('body')[0]
                 );
             });
@@ -815,20 +815,20 @@ describe('Reactable', function() {
         describe('case insensitive sorting', function(){
             before(function() {
                 React.renderComponent(
-                    Table( {className:"table", id:"table", data:[
+                    Table({className: "table", id: "table", data: [
                         { 'Name': 'Lee Salminen'},
                         { 'Name': 'Griffin Smith'},
                         { 'Name': 'Ian Zhang'},
                         { 'Name': 'lee Salminen'},
                         { 'Name': 'griffin smith'},
                         { 'Name': 'Ian zhang'},
-                    ],
-                    sortable:[
+                    ], 
+                    sortable: [
                         {
                             column:         'Name',
                             sortFunction:   Reactable.Sort.CaseInsensitive
                         }
-                    ]} ),
+                    ]}),
                     document.getElementsByTagName('body')[0]
                 );
             });
@@ -855,12 +855,12 @@ describe('Reactable', function() {
         describe('basic case-insensitive filtering', function(){
             before(function() {
                 React.renderComponent(
-                    Table( {className:"table", id:"table", data:[
+                    Table({className: "table", id: "table", data: [
                         {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
                         {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
                         {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter', 'Tag': 'old'},
                         {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
-                    ], filterable:['State', 'Tag']} ),
+                    ], filterable: ['State', 'Tag']}),
                     document.getElementsByTagName('body')[0]
                 );
             });
@@ -883,12 +883,12 @@ describe('Reactable', function() {
         describe('filtering and pagination together', function(){
             before(function() {
                 React.renderComponent(
-                    Table( {className:"table", id:"table", data:[
+                    Table({className: "table", id: "table", data: [
                         {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
                         {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
                         {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter', 'Tag': 'old'},
                         {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
-                    ], filterable:['State', 'Tag'], itemsPerPage:2} ),
+                    ], filterable: ['State', 'Tag'], itemsPerPage: 2}),
                     document.getElementsByTagName('body')[0]
                 );
             });

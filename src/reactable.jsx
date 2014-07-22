@@ -197,48 +197,47 @@ Reactable = (function() {
                 return this.props.handleClick(e, this);
             }
         },
-        getDefaultProps: function() {
-            var props = this.props;
+        initialize: function(props) {
             if (
                 typeof(props.data) === 'undefined' &&
-                typeof(this.props.children) === 'string'
+                typeof(props.children) === 'string'
             ) {
-                props.data = this.props.children;
+                props.data = props.children;
+            }
+
+            this.setState({
+                data: props.data
+            });
+        },
+        componentDidMount: function() {
+            this.initialize(this.props);
+        },
+        componentWillReceiveProps: function(nextProps) {
+            //this.initialize(nextProps);
+        },
+        render: function() {
+            var tdProps = {
+                'data-column': this.props.column.key,
+                className: this.props.className,
+                onClick: this.handleClick
             }
 
             // Attach any properties on the column to this Td object to allow things like custom event handlers
             for (var key in this.props.column) {
                 if (key !== 'key' && key !== 'name') {
-                    props[key] = this.props.column[key];
+                    tdProps[key] = this.props.column[key];
                 }
             }
 
-            return props;
-        },
-        render: function() {
             if (typeof(this.props.children) !== 'undefined') {
                 if (this.props.children instanceof Unsafe) {
-                    return this.transferPropsTo(
-                        <td
-                            data-column={this.props.column.key}
-                            className={this.props.className}
-                            onClick={this.handleClick}
-                            dangerouslySetInnerHTML={{ __html: this.props.children.toString() }
-                        } />
-                    );
+                    tdProps.dangerouslySetInnerHTML= { __html: this.props.children.toString() }
                 } else {
-                    return this.transferPropsTo(
-                        <td
-                            data-column={this.props.column.key}
-                            className={this.props.className}
-                            onClick={this.handleClick}>
-                            {this.props.children}
-                        </td>
-                    );
+                    tdProps.children = this.props.children;
                 }
-            } else {
-                return this.transferPropsTo(<td/>);
             }
+
+            return React.DOM.td(tdProps);
         }
     });
 
@@ -470,18 +469,8 @@ Reactable = (function() {
 
             return data;
         },
-        getDefaultProps: function() {
-            var data = this.props.data || [];
-            var defaultProps = {
-                data: data.concat(this.parseChildData()),
-                columns: [],
-                sortable: [],
-                filterable: [],
-                defaultSort: false,
-                itemsPerPage: 0,
-                _sortable: [],
-            }
-
+        initializeSorts: function() {
+            this._sortable = {};
             // Transform sortable properties into a more friendly list
             for (var i in this.props.sortable) {
                 var column = this.props.sortable[i];
@@ -505,9 +494,19 @@ Reactable = (function() {
                     sortFunction    = 'default';
                 }
 
-                defaultProps._sortable[columnName] = sortFunction;
+                this._sortable[columnName] = sortFunction;
             }
-
+        },
+        getDefaultProps: function() {
+            var data = this.props.data || [];
+            var defaultProps = {
+                data: data.concat(this.parseChildData()),
+                columns: [],
+                sortable: [],
+                filterable: [],
+                defaultSort: false,
+                itemsPerPage: 0,
+            }
             return defaultProps;
         },
         getInitialState: function() {
@@ -560,7 +559,12 @@ Reactable = (function() {
 
             return initialState;
         },
-        componentWillMount: function(){
+        componentWillMount: function() {
+            this.initializeSorts(this.props.sortable);
+            this.sortByCurrentSort();
+        },
+        componentWillReceiveProps: function(nextProps) {
+            this.initializeSorts(nextProps.sortable);
             this.sortByCurrentSort();
         },
         onPageChange: function(page) {
@@ -603,7 +607,7 @@ Reactable = (function() {
                 var keyB = b[currentSort.column];
 
                 // Default sort
-                if (this.props._sortable[currentSort.column] === 'default') {
+                if (this._sortable[currentSort.column] === 'default') {
                     // Reverse direction if we're doing a reverse sort
                     if (keyA < keyB) {
                         return -1 * currentSort.direction;
@@ -617,16 +621,16 @@ Reactable = (function() {
                 else{
                     // Reverse columns if we're doing a reverse sort
                     if (currentSort.direction === 1) {
-                        return this.props._sortable[currentSort.column](keyA, keyB);
+                        return this._sortable[currentSort.column](keyA, keyB);
                     } else {
-                        return this.props._sortable[currentSort.column](keyB, keyA);
+                        return this._sortable[currentSort.column](keyB, keyA);
                     }
                 }
             }.bind(this));
         },
         onSort: function(column){
             // Don't perform sort on unsortable columns
-            if (typeof(this.props._sortable[column]) === 'undefined') {
+            if (typeof(this._sortable[column]) === 'undefined') {
                 return;
             }
 
@@ -694,7 +698,7 @@ Reactable = (function() {
 
             if (this.props.sortable === true) {
                 for (var i = 0; i < columns.length; i++) {
-                    this.props._sortable[columns[i].key] = 'default';
+                    this._sortable[columns[i].key] = 'default';
                 }
             }
 
