@@ -742,12 +742,7 @@ describe('Reactable', function() {
                         { Count: 'z'},
                         { Count: '123'}
                     ]}
-                    sortable={[
-                        {
-                            column: 'Count',
-                            sortFunction: Reactable.Sort.Numeric
-                        }
-                    ]} />,
+                    columns={[{ key: 'Count', sortable: Reactable.Sort.Numeric }]} />,
                     document.getElementsByTagName('body')[0]
                 );
             });
@@ -787,12 +782,7 @@ describe('Reactable', function() {
                         { Price: '$0.60'},
                         { Price: '.1'},
                     ]}
-                    sortable={[
-                        {
-                            column:         'Price',
-                            sortFunction:   Reactable.Sort.Currency
-                        }
-                    ]} />,
+                    columns={[{ key: 'Price', sortable: Reactable.Sort.Currency }]} />,
                     document.getElementsByTagName('body')[0]
                 );
             });
@@ -831,12 +821,7 @@ describe('Reactable', function() {
                         { 'Date': 'a'},
                         { 'Date': 'z'},
                     ]}
-                    sortable={[
-                        {
-                            column:         'Date',
-                            sortFunction:   Reactable.Sort.Date
-                        }
-                    ]} />,
+                    columns={[{ key: 'Date', sortable: Reactable.Sort.Date }]} />,
                     document.getElementsByTagName('body')[0]
                 );
             });
@@ -869,12 +854,7 @@ describe('Reactable', function() {
                         { 'Name': 'griffin smith'},
                         { 'Name': 'Ian zhang'},
                     ]}
-                    sortable={[
-                        {
-                            column:         'Name',
-                            sortFunction:   Reactable.Sort.CaseInsensitive
-                        }
-                    ]} />,
+                    columns={[{ key: 'Name', sortable: Reactable.Sort.CaseInsensitive }]} />,
                     document.getElementsByTagName('body')[0]
                 );
             });
