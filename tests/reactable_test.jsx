@@ -60,7 +60,7 @@ describe('Reactable', function() {
         });
     });
 
-    describe('adding <Reactable.Trs to the <Reactable.Table>', function() {
+    describe('adding <Tr>s to the <Table>', function() {
         before(function() {
             React.renderComponent(
                 <Reactable.Table className="table" id="table">
@@ -100,7 +100,7 @@ describe('Reactable', function() {
         });
     });
 
-    describe('adding <Reactable.Reactable.Td>s to the <Reactable.Trs', function() {
+    describe('adding <Td>s to the <Tr>s', function() {
         before(function() {
             window.tr_test = true;
             React.renderComponent(
@@ -205,7 +205,7 @@ describe('Reactable', function() {
     });
 
     describe('unsafe() strings', function() {
-        describe('in the <Reactable.Table> directly', function() {
+        describe('in the <Table> directly', function() {
             before(function() {
                 React.renderComponent(
                     <Reactable.Table className="table" id="table" data={[
@@ -234,7 +234,7 @@ describe('Reactable', function() {
             });
         });
 
-        describe('in the <Reactable.Trs', function() {
+        describe('in the <Tr>s', function() {
             before(function() {
                 React.renderComponent(
                     <Reactable.Table className="table" id="table">
@@ -263,7 +263,7 @@ describe('Reactable', function() {
             });
         });
 
-        describe('in the <Reactable.Reactable.Td>s', function() {
+        describe('in the <Td>s', function() {
             before(function() {
                 React.renderComponent(
                     <Reactable.Table className="table" id="table">
@@ -744,8 +744,8 @@ describe('Reactable', function() {
                     ]}
                     sortable={[
                         {
-                            column:         'Count',
-                            sortFunction:   Reactable.Sort.Numeric
+                            column: 'Count',
+                            sortFunction: Reactable.Sort.Numeric
                         }
                     ]} />,
                     document.getElementsByTagName('body')[0]

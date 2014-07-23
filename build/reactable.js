@@ -413,9 +413,14 @@ Reactable = (function() {
                         label: column
                     };
                 } else {
+                    if (typeof(column.sortable) !== 'undefined') {
+                        var sortFunction = column.sortable === true ? 'default' : column.sortable;
+                        this._sortable[column.key] = sortFunction;
+                    }
+
                     return column;
                 }
-            });
+            }.bind(this));
         },
         parseChildData: function(props) {
             var data = [];
@@ -620,8 +625,7 @@ Reactable = (function() {
                     }
 
                     return 0;
-                }
-                else{
+                } else {
                     // Reverse columns if we're doing a reverse sort
                     if (currentSort.direction === 1) {
                         return this._sortable[currentSort.column](keyA, keyB);
@@ -631,7 +635,7 @@ Reactable = (function() {
                 }
             }.bind(this));
         },
-        onSort: function(column){
+        onSort: function(column) {
             // Don't perform sort on unsortable columns
             if (typeof(this._sortable[column]) === 'undefined') {
                 return;
@@ -678,7 +682,8 @@ Reactable = (function() {
                     // Loop through the keys in each data row and build a td for it
                     for (var k in data) {
                         if (data.hasOwnProperty(k)) {
-                            // Update the columns array with the data's keys if columns were not already specified
+                            // Update the columns array with the data's keys if columns were not
+                            // already specified
                             if (userColumnsSpecified === false) {
                                 var column = {
                                     key:   k,
@@ -686,7 +691,11 @@ Reactable = (function() {
                                 };
 
                                 // Only add a new column if it doesn't already exist in the columns array
-                                if (columns.find(function(element){return element.key === column.key}) === undefined) {
+                                if (
+                                    columns.find(function(element) {
+                                        return element.key === column.key
+                                    }) === undefined
+                                ) {
                                     columns.push(column);
                                 }
                             }
@@ -707,7 +716,11 @@ Reactable = (function() {
 
             // Determine if we render the filter box
             var filtering = false;
-            if (this.props.filterable && Array.isArray(this.props.filterable) && this.props.filterable.length > 0) {
+            if (
+                this.props.filterable &&
+                Array.isArray(this.props.filterable) &&
+                this.props.filterable.length > 0
+            ) {
                 filtering = true;
             }
 
@@ -726,8 +739,9 @@ Reactable = (function() {
                 itemsPerPage = this.props.itemsPerPage;
                 pagination = true;
                 currentChildren = filteredChildren.slice(
-                        this.state.currentPage * itemsPerPage,
-                        (this.state.currentPage + 1) * itemsPerPage);
+                    this.state.currentPage * itemsPerPage,
+                    (this.state.currentPage + 1) * itemsPerPage
+                );
             }
 
             return this.transferPropsTo(
