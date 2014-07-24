@@ -19,6 +19,10 @@ bower install [--save] reactable
 Or, you can just download the raw file
 [here](https://github.com/glittershark/reactable/raw/master/build/reactable.js).
 
+Keep in mind that we depend on the latest version of React (0.11), **with
+addons**. That can be downloaded
+[here](http://facebook.github.io/react/downloads.html)
+
 ## Usage
 
 The simplest example:
