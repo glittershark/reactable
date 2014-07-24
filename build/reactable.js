@@ -592,7 +592,10 @@ Reactable = (function() {
                 for (var j = 0; j < this.props.filterable.length; j++) {
                     var filterColumn = this.props.filterable[j];
 
-                    if (data[filterColumn].toString().toLowerCase().indexOf(filter) > -1) {
+                    if (
+                        typeof(data[filterColumn]) !== 'undefined' &&
+                        data[filterColumn].toString().toLowerCase().indexOf(filter) > -1
+                    ) {
                         matchedChildren.push(children[i]);
                         break;
                     }
@@ -707,6 +710,9 @@ Reactable = (function() {
                     );
                 }.bind(this)));
             }
+
+            /* console.log(columns); */
+
 
             if (this.props.sortable === true) {
                 for (var i = 0; i < columns.length; i++) {

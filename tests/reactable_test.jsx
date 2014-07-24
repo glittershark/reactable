@@ -4,8 +4,8 @@ var expect = chai.expect;
 
 var ReactableTestUtils = {
     resetTestEnvironment:  function() {
-        React.unmountComponentAtNode($('body')[0]);
-        $('body').empty();
+        React.unmountComponentAtNode($('div#test-node')[0]);
+        $('div#test-node').remove();
     },
     // Expect the columns of a the data row specified to have the values in the array as their text values
     expectRowText: function(rowIndex, textArray) {
@@ -16,6 +16,12 @@ var ReactableTestUtils = {
         for (var i = 0; i < row.length; i++) {
             expect($(row[i])).to.have.text(textArray[i]);
         }
+    },
+    testNode: function() {
+        testNode = $('<div>').attr('id', 'test-node');
+        $('body').append(testNode);
+        testNode.empty();
+        return testNode[0];
     }
 };
 
@@ -28,7 +34,7 @@ describe('Reactable', function() {
                     { Age: '23', Name: 'Lee Salminen'},
                     { Age: '28', Position: 'Developer'}
                 ]} />,
-                $('body')[0]
+                ReactableTestUtils.testNode()
             );
         });
 
@@ -68,7 +74,7 @@ describe('Reactable', function() {
                     <Reactable.Tr data={{ Age: '23', Name: 'Lee Salminen'}}/>
                     <Reactable.Tr data={{ Age: '28', Position: 'Developer'}}/>
                 </Reactable.Table>,
-                $('body')[0]
+                ReactableTestUtils.testNode()
             );
         });
 
@@ -118,7 +124,7 @@ describe('Reactable', function() {
                         <Reactable.Td column="Age">28</Reactable.Td>
                     </Reactable.Tr>
                 </Reactable.Table>,
-                $('body')[0]
+                ReactableTestUtils.testNode()
             );
             window.tr_test = false;
         });
@@ -160,7 +166,7 @@ describe('Reactable', function() {
                         { Age: '23', Name: 'Lee Salminen', HideThis: 'two'},
                         { Age: '28', Position: 'Developer'},
                     ]} columns={['Name', 'Age']}/>,
-                    $('body')[0]
+                    ReactableTestUtils.testNode()
                 );
             });
 
@@ -185,7 +191,7 @@ describe('Reactable', function() {
                         { key: 'name', label: 'Name' },
                         { key: 'age', label: 'Age' }
                     ]}/>,
-                    $('body')[0]
+                    ReactableTestUtils.testNode()
                 );
             });
 
@@ -213,7 +219,7 @@ describe('Reactable', function() {
                         { Age: '23', Name: unsafe('<span id="lees-name">Lee Salminen</span>')},
                         { Age: '28', Position: unsafe('<span id="who-knows-job">Developer</span>')},
                     ]} />,
-                    $('body')[0]
+                    ReactableTestUtils.testNode()
                 );
             });
 
@@ -242,7 +248,7 @@ describe('Reactable', function() {
                         <Reactable.Tr data={{ Age: '23', Name: unsafe('<span id="lees-name">Lee Salminen</span>')}} />,
                         <Reactable.Tr data={{ Age: '28', Position: unsafe('<span id="who-knows-job">Developer</span>')}} />,
                     </Reactable.Table>,
-                    $('body')[0]
+                    ReactableTestUtils.testNode()
                 );
             });
 
@@ -280,7 +286,7 @@ describe('Reactable', function() {
                             <Reactable.Td column="Age">28</Reactable.Td>
                         </Reactable.Tr>
                     </Reactable.Table>,
-                    $('body')[0]
+                    ReactableTestUtils.testNode()
                 );
             });
 
@@ -317,7 +323,7 @@ describe('Reactable', function() {
                         {'Age': '23', 'Name': 'Lee Salminen'},
                         {'Age': '28', 'Position': 'Developer'},
                     ]} itemsPerPage={4} />,
-                    document.getElementsByTagName('body')[0]
+                    ReactableTestUtils.testNode()
                 );
             });
 
@@ -388,7 +394,7 @@ describe('Reactable', function() {
                         {'Age': '23', 'Name': 'Lee Salminen'},
                         {'Age': '28', 'Position': 'Developer'},
                     ]} itemsPerPage={20} />,
-                    document.getElementsByTagName('body')[0]
+                    ReactableTestUtils.testNode()
                 );
             });
 
@@ -419,7 +425,7 @@ describe('Reactable', function() {
                         {'Age': '23', 'Name': 'Lee Salminen'},
                         {'Age': '28', 'Position': 'Developer'},
                     ]} />,
-                    document.getElementsByTagName('body')[0]
+                    ReactableTestUtils.testNode()
                 );
             });
 
@@ -444,7 +450,7 @@ describe('Reactable', function() {
                         {'Age': '23', 'Name': 'Lee Salminen'},
                         {'Age': '28', 'Position': 'Developer'},
                     ]} itemsPerPage={0} />,
-                    document.getElementsByTagName('body')[0]
+                    ReactableTestUtils.testNode()
                 );
             });
 
@@ -479,7 +485,7 @@ describe('Reactable', function() {
                         'Age',
                         'Position'
                     ]} />,
-                    document.getElementsByTagName('body')[0]
+                    ReactableTestUtils.testNode()
                 );
             });
 
@@ -549,7 +555,7 @@ describe('Reactable', function() {
                         { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
                     ]}
                     sortable={true} />,
-                    document.getElementsByTagName('body')[0]
+                    ReactableTestUtils.testNode()
                 );
             });
 
@@ -652,7 +658,7 @@ describe('Reactable', function() {
                         'Position'
                     ]}
                     defaultSort={{column: 'Age', direction: 'desc'}}/>,
-                    document.getElementsByTagName('body')[0]
+                    ReactableTestUtils.testNode()
                 );
             });
 
@@ -688,7 +694,7 @@ describe('Reactable', function() {
                         'Position'
                     ]}
                     defaultSort={'Age'}/>,
-                    document.getElementsByTagName('body')[0]
+                    ReactableTestUtils.testNode()
                 );
             });
 
@@ -714,7 +720,7 @@ describe('Reactable', function() {
                         'Age',
                         'Position'
                     ]} />,
-                    document.getElementsByTagName('body')[0]
+                    ReactableTestUtils.testNode()
                 );
             });
 
@@ -743,7 +749,7 @@ describe('Reactable', function() {
                         { Count: '123'}
                     ]}
                     columns={[{ key: 'Count', sortable: Reactable.Sort.Numeric }]} />,
-                    document.getElementsByTagName('body')[0]
+                    ReactableTestUtils.testNode()
                 );
             });
 
@@ -783,7 +789,7 @@ describe('Reactable', function() {
                         { Price: '.1'},
                     ]}
                     columns={[{ key: 'Price', sortable: Reactable.Sort.Currency }]} />,
-                    document.getElementsByTagName('body')[0]
+                    ReactableTestUtils.testNode()
                 );
             });
 
@@ -822,7 +828,7 @@ describe('Reactable', function() {
                         { 'Date': 'z'},
                     ]}
                     columns={[{ key: 'Date', sortable: Reactable.Sort.Date }]} />,
-                    document.getElementsByTagName('body')[0]
+                    ReactableTestUtils.testNode()
                 );
             });
 
@@ -855,7 +861,7 @@ describe('Reactable', function() {
                         { 'Name': 'Ian zhang'},
                     ]}
                     columns={[{ key: 'Name', sortable: Reactable.Sort.CaseInsensitive }]} />,
-                    document.getElementsByTagName('body')[0]
+                    ReactableTestUtils.testNode()
                 );
             });
 
@@ -886,8 +892,8 @@ describe('Reactable', function() {
                         {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
                         {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter', 'Tag': 'old'},
                         {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
-                    ]} filterable={['State', 'Tag']} />,
-                    document.getElementsByTagName('body')[0]
+                    ]} filterable={['State', 'Tag']} columns={['State', 'Description', 'Tag']}/>,
+                    ReactableTestUtils.testNode()
                 );
             });
 
@@ -899,10 +905,9 @@ describe('Reactable', function() {
                 $filter.val('new');
                 React.addons.TestUtils.Simulate.keyUp($filter[0]);
 
-                var rows = $('#table tbody.reactable-data tr');
-                expect($($(rows[0]).find('td')[0])).to.have.text('New York');
-                expect($($(rows[1]).find('td')[0])).to.have.text('New Mexico');
-                expect($($(rows[2]).find('td')[0])).to.have.text('Alaska');
+                ReactableTestUtils.expectRowText(0, ['New York', 'this is some text', 'new']);
+                ReactableTestUtils.expectRowText(1, ['New Mexico', 'lorem ipsum', 'old']);
+                ReactableTestUtils.expectRowText(2, ['Alaska', 'bacon', 'renewed']);
             });
         });
 
@@ -914,8 +919,11 @@ describe('Reactable', function() {
                         {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
                         {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter', 'Tag': 'old'},
                         {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
-                    ]} filterable={['State', 'Tag']} itemsPerPage={2} />,
-                    document.getElementsByTagName('body')[0]
+                    ]}
+                        filterable={['State', 'Tag']}
+                        columns={['State', 'Description', 'Tag']}
+                        itemsPerPage={2} />,
+                    ReactableTestUtils.testNode()
                 );
             });
 
