@@ -428,9 +428,12 @@ Reactable = (function() {
             // Transform any children back to a data array
             if (typeof(props.children) !== 'undefined') {
                 React.Children.forEach(props.children, function(child) {
+                    // TODO: figure out a new way to determine the type of a component
+                    /*
                     if (child.type.ConvenienceConstructor !== Tr) {
                         return; // (continue)
                     }
+                    */
 
                     var childData = child.props.data || {};
 
@@ -658,7 +661,6 @@ Reactable = (function() {
             this.sortByCurrentSort();
         },
         render: function() {
-            // Test if the caller passed in data
             var children = [];
             var columns;
             var userColumnsSpecified = false;
@@ -710,9 +712,6 @@ Reactable = (function() {
                     );
                 }.bind(this)));
             }
-
-            /* console.log(columns); */
-
 
             if (this.props.sortable === true) {
                 for (var i = 0; i < columns.length; i++) {
