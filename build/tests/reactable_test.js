@@ -215,9 +215,9 @@ describe('Reactable', function() {
             before(function() {
                 React.renderComponent(
                     Reactable.Table({className: "table", id: "table", data: [
-                        { Name: unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
-                        { Age: '23', Name: unsafe('<span id="lees-name">Lee Salminen</span>')},
-                        { Age: '28', Position: unsafe('<span id="who-knows-job">Developer</span>')},
+                        { Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
+                        { Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')},
+                        { Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')},
                     ]}),
                     ReactableTestUtils.testNode()
                 );
@@ -244,9 +244,9 @@ describe('Reactable', function() {
             before(function() {
                 React.renderComponent(
                     Reactable.Table({className: "table", id: "table"}, 
-                        Reactable.Tr({data: { Name: unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'}}), ",", 
-                        Reactable.Tr({data: { Age: '23', Name: unsafe('<span id="lees-name">Lee Salminen</span>')}}), ",", 
-                        Reactable.Tr({data: { Age: '28', Position: unsafe('<span id="who-knows-job">Developer</span>')}}), ","
+                        Reactable.Tr({data: { Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'}}), ",", 
+                        Reactable.Tr({data: { Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')}}), ",", 
+                        Reactable.Tr({data: { Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')}}), ","
                     ),
                     ReactableTestUtils.testNode()
                 );
@@ -274,15 +274,15 @@ describe('Reactable', function() {
                 React.renderComponent(
                     Reactable.Table({className: "table", id: "table"}, 
                         Reactable.Tr(null, 
-                            Reactable.Td({column: "Name"}, unsafe('<span id="griffins-name">Griffin Smith</span>')), 
+                            Reactable.Td({column: "Name"}, Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>')), 
                             Reactable.Td({column: "Age"}, "18")
                         ), 
                         Reactable.Tr(null, 
-                            Reactable.Td({column: "Name"}, unsafe('<span id="lees-name">Lee Salminen</span>')), 
+                            Reactable.Td({column: "Name"}, Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')), 
                             Reactable.Td({column: "Age"}, "23")
                         ), 
                         Reactable.Tr(null, 
-                            Reactable.Td({column: "Position"}, unsafe('<span id="who-knows-job">Developer</span>')), 
+                            Reactable.Td({column: "Position"}, Reactable.unsafe('<span id="who-knows-job">Developer</span>')), 
                             Reactable.Td({column: "Age"}, "28")
                         )
                     ),
@@ -904,8 +904,6 @@ describe('Reactable', function() {
 
                 $filter.val('new');
                 React.addons.TestUtils.Simulate.keyUp($filter[0]);
-
-                /* var rows = $('#table tbody.reactable-data tr'); */
 
                 ReactableTestUtils.expectRowText(0, ['New York', 'this is some text', 'new']);
                 ReactableTestUtils.expectRowText(1, ['New Mexico', 'lorem ipsum', 'old']);

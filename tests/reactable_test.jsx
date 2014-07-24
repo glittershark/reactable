@@ -215,9 +215,9 @@ describe('Reactable', function() {
             before(function() {
                 React.renderComponent(
                     <Reactable.Table className="table" id="table" data={[
-                        { Name: unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
-                        { Age: '23', Name: unsafe('<span id="lees-name">Lee Salminen</span>')},
-                        { Age: '28', Position: unsafe('<span id="who-knows-job">Developer</span>')},
+                        { Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
+                        { Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')},
+                        { Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')},
                     ]} />,
                     ReactableTestUtils.testNode()
                 );
@@ -244,9 +244,9 @@ describe('Reactable', function() {
             before(function() {
                 React.renderComponent(
                     <Reactable.Table className="table" id="table">
-                        <Reactable.Tr data={{ Name: unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'}} />,
-                        <Reactable.Tr data={{ Age: '23', Name: unsafe('<span id="lees-name">Lee Salminen</span>')}} />,
-                        <Reactable.Tr data={{ Age: '28', Position: unsafe('<span id="who-knows-job">Developer</span>')}} />,
+                        <Reactable.Tr data={{ Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'}} />,
+                        <Reactable.Tr data={{ Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')}} />,
+                        <Reactable.Tr data={{ Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')}} />,
                     </Reactable.Table>,
                     ReactableTestUtils.testNode()
                 );
@@ -274,15 +274,15 @@ describe('Reactable', function() {
                 React.renderComponent(
                     <Reactable.Table className="table" id="table">
                         <Reactable.Tr>
-                            <Reactable.Td column="Name">{unsafe('<span id="griffins-name">Griffin Smith</span>')}</Reactable.Td>
+                            <Reactable.Td column="Name">{Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>')}</Reactable.Td>
                             <Reactable.Td column="Age">18</Reactable.Td>
                         </Reactable.Tr>
                         <Reactable.Tr>
-                            <Reactable.Td column="Name">{unsafe('<span id="lees-name">Lee Salminen</span>')}</Reactable.Td>
+                            <Reactable.Td column="Name">{Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')}</Reactable.Td>
                             <Reactable.Td column="Age">23</Reactable.Td>
                         </Reactable.Tr>
                         <Reactable.Tr>
-                            <Reactable.Td column="Position">{unsafe('<span id="who-knows-job">Developer</span>')}</Reactable.Td>
+                            <Reactable.Td column="Position">{Reactable.unsafe('<span id="who-knows-job">Developer</span>')}</Reactable.Td>
                             <Reactable.Td column="Age">28</Reactable.Td>
                         </Reactable.Tr>
                     </Reactable.Table>,
