@@ -197,24 +197,6 @@ Reactable = (function() {
                 return this.props.handleClick(e, this);
             }
         },
-        initialize: function(props) {
-            if (
-                typeof(props.data) === 'undefined' &&
-                typeof(props.children) === 'string'
-            ) {
-                props.data = props.children;
-            }
-
-            this.setState({
-                data: props.data
-            });
-        },
-        componentDidMount: function() {
-            this.initialize(this.props);
-        },
-        componentWillReceiveProps: function(nextProps) {
-            //this.initialize(nextProps);
-        },
         render: function() {
             var tdProps = {
                 'data-column': this.props.column.key,
@@ -229,11 +211,19 @@ Reactable = (function() {
                 }
             }
 
+            var data = this.props.data;
+            if (
+                typeof(this.props.data) === 'undefined' &&
+                typeof(this.props.children) === 'string'
+            ) {
+                data = this.props.children;
+            }
+
             if (typeof(this.props.children) !== 'undefined') {
                 if (this.props.children instanceof Unsafe) {
                     tdProps.dangerouslySetInnerHTML= { __html: this.props.children.toString() }
                 } else {
-                    tdProps.children = this.props.children;
+                    tdProps.children = data;
                 }
             }
 
@@ -447,7 +437,9 @@ Reactable = (function() {
                         var childChildren = child.props.children;
                         for (var i = 0; i < childChildren.length; i++) {
                             var descendant = childChildren[i];
-                            if (descendant.type.ConvenienceConstructor === Td) {
+                            // TODO
+                            /* if (descendant.type.ConvenienceConstructor === Td) { */
+                            if (true) {
                                 if (typeof(descendant.props.column) !== 'undefined') {
                                     if (typeof(descendant.props.data) !== 'undefined') {
 
