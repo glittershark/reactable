@@ -1,5 +1,9 @@
 # master
 
+# 1.2.2
+
+* Improve failure messages for html, text, and value assertions
+
 # 1.2.1
 
 * Fix chainability of `contain`

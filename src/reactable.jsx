@@ -197,48 +197,37 @@ Reactable = (function() {
                 return this.props.handleClick(e, this);
             }
         },
-        getDefaultProps: function() {
-            var props = this.props;
-            if (
-                typeof(props.data) === 'undefined' &&
-                typeof(this.props.children) === 'string'
-            ) {
-                props.data = this.props.children;
+        render: function() {
+            var tdProps = {
+                'data-column': this.props.column.key,
+                className: this.props.className,
+                onClick: this.handleClick
             }
 
             // Attach any properties on the column to this Td object to allow things like custom event handlers
             for (var key in this.props.column) {
                 if (key !== 'key' && key !== 'name') {
-                    props[key] = this.props.column[key];
+                    tdProps[key] = this.props.column[key];
                 }
             }
 
-            return props;
-        },
-        render: function() {
+            var data = this.props.data;
+            if (
+                typeof(this.props.data) === 'undefined' &&
+                typeof(this.props.children) === 'string'
+            ) {
+                data = this.props.children;
+            }
+
             if (typeof(this.props.children) !== 'undefined') {
                 if (this.props.children instanceof Unsafe) {
-                    return this.transferPropsTo(
-                        <td
-                            data-column={this.props.column.key}
-                            className={this.props.className}
-                            onClick={this.handleClick}
-                            dangerouslySetInnerHTML={{ __html: this.props.children.toString() }
-                        } />
-                    );
+                    tdProps.dangerouslySetInnerHTML= { __html: this.props.children.toString() }
                 } else {
-                    return this.transferPropsTo(
-                        <td
-                            data-column={this.props.column.key}
-                            className={this.props.className}
-                            onClick={this.handleClick}>
-                            {this.props.children}
-                        </td>
-                    );
+                    tdProps.children = data;
                 }
-            } else {
-                return this.transferPropsTo(<td/>);
             }
+
+            return React.DOM.td(tdProps);
         }
     });
 
@@ -414,19 +403,27 @@ Reactable = (function() {
                         label: column
                     };
                 } else {
+                    if (typeof(column.sortable) !== 'undefined') {
+                        var sortFunction = column.sortable === true ? 'default' : column.sortable;
+                        this._sortable[column.key] = sortFunction;
+                    }
+
                     return column;
                 }
-            });
+            }.bind(this));
         },
-        parseChildData: function() {
+        parseChildData: function(props) {
             var data = [];
 
             // Transform any children back to a data array
-            if (typeof(this.props.children) !== 'undefined') {
-                React.Children.forEach(this.props.children, function(child) {
+            if (typeof(props.children) !== 'undefined') {
+                React.Children.forEach(props.children, function(child) {
+                    // TODO: figure out a new way to determine the type of a component
+                    /*
                     if (child.type.ConvenienceConstructor !== Tr) {
                         return; // (continue)
                     }
+                    */
 
                     var childData = child.props.data || {};
 
@@ -440,7 +437,9 @@ Reactable = (function() {
                         var childChildren = child.props.children;
                         for (var i = 0; i < childChildren.length; i++) {
                             var descendant = childChildren[i];
-                            if (descendant.type.ConvenienceConstructor === Td) {
+                            // TODO
+                            /* if (descendant.type.ConvenienceConstructor === Td) { */
+                            if (true) {
                                 if (typeof(descendant.props.column) !== 'undefined') {
                                     if (typeof(descendant.props.data) !== 'undefined') {
 
@@ -470,18 +469,13 @@ Reactable = (function() {
 
             return data;
         },
-        getDefaultProps: function() {
-            var data = this.props.data || [];
-            var defaultProps = {
-                data: data.concat(this.parseChildData()),
-                columns: [],
-                sortable: [],
-                filterable: [],
-                defaultSort: false,
-                itemsPerPage: 0,
-                _sortable: [],
-            }
-
+        initialize: function(props) {
+            this.data = props.data || [];
+            this.data = this.data.concat(this.parseChildData(props));
+            this.initializeSorts(props);
+        },
+        initializeSorts: function() {
+            this._sortable = {};
             // Transform sortable properties into a more friendly list
             for (var i in this.props.sortable) {
                 var column = this.props.sortable[i];
@@ -505,9 +499,17 @@ Reactable = (function() {
                     sortFunction    = 'default';
                 }
 
-                defaultProps._sortable[columnName] = sortFunction;
+                this._sortable[columnName] = sortFunction;
             }
-
+        },
+        getDefaultProps: function() {
+            var defaultProps = {
+                columns: [],
+                sortable: [],
+                filterable: [],
+                defaultSort: false,
+                itemsPerPage: 0,
+            }
             return defaultProps;
         },
         getInitialState: function() {
@@ -560,7 +562,12 @@ Reactable = (function() {
 
             return initialState;
         },
-        componentWillMount: function(){
+        componentWillMount: function() {
+            this.initialize(this.props);
+            this.sortByCurrentSort();
+        },
+        componentWillReceiveProps: function(nextProps) {
+            this.initialize(nextProps);
             this.sortByCurrentSort();
         },
         onPageChange: function(page) {
@@ -580,7 +587,10 @@ Reactable = (function() {
                 for (var j = 0; j < this.props.filterable.length; j++) {
                     var filterColumn = this.props.filterable[j];
 
-                    if (data[filterColumn].toString().toLowerCase().indexOf(filter) > -1) {
+                    if (
+                        typeof(data[filterColumn]) !== 'undefined' &&
+                        data[filterColumn].toString().toLowerCase().indexOf(filter) > -1
+                    ) {
                         matchedChildren.push(children[i]);
                         break;
                     }
@@ -598,12 +608,12 @@ Reactable = (function() {
                 return;
             }
 
-            this.props.data.sort(function(a, b){
+            this.data.sort(function(a, b){
                 var keyA = a[currentSort.column];
                 var keyB = b[currentSort.column];
 
                 // Default sort
-                if (this.props._sortable[currentSort.column] === 'default') {
+                if (this._sortable[currentSort.column] === 'default') {
                     // Reverse direction if we're doing a reverse sort
                     if (keyA < keyB) {
                         return -1 * currentSort.direction;
@@ -613,20 +623,19 @@ Reactable = (function() {
                     }
 
                     return 0;
-                }
-                else{
+                } else {
                     // Reverse columns if we're doing a reverse sort
                     if (currentSort.direction === 1) {
-                        return this.props._sortable[currentSort.column](keyA, keyB);
+                        return this._sortable[currentSort.column](keyA, keyB);
                     } else {
-                        return this.props._sortable[currentSort.column](keyB, keyA);
+                        return this._sortable[currentSort.column](keyB, keyA);
                     }
                 }
             }.bind(this));
         },
-        onSort: function(column){
+        onSort: function(column) {
             // Don't perform sort on unsortable columns
-            if (typeof(this.props._sortable[column]) === 'undefined') {
+            if (typeof(this._sortable[column]) === 'undefined') {
                 return;
             }
 
@@ -644,7 +653,6 @@ Reactable = (function() {
             this.sortByCurrentSort();
         },
         render: function() {
-            // Test if the caller passed in data
             var children = [];
             var columns;
             var userColumnsSpecified = false;
@@ -665,13 +673,14 @@ Reactable = (function() {
             }
 
             // Build up table rows
-            if (this.props.data && typeof this.props.data.map === 'function') {
+            if (this.data && typeof this.data.map === 'function') {
                 // Build up the columns array
-                children = children.concat(this.props.data.map(function(data, i) {
+                children = children.concat(this.data.map(function(data, i) {
                     // Loop through the keys in each data row and build a td for it
                     for (var k in data) {
                         if (data.hasOwnProperty(k)) {
-                            // Update the columns array with the data's keys if columns were not already specified
+                            // Update the columns array with the data's keys if columns were not
+                            // already specified
                             if (userColumnsSpecified === false) {
                                 var column = {
                                     key:   k,
@@ -679,7 +688,11 @@ Reactable = (function() {
                                 };
 
                                 // Only add a new column if it doesn't already exist in the columns array
-                                if (columns.find(function(element){return element.key === column.key}) === undefined) {
+                                if (
+                                    columns.find(function(element) {
+                                        return element.key === column.key
+                                    }) === undefined
+                                ) {
                                     columns.push(column);
                                 }
                             }
@@ -694,13 +707,17 @@ Reactable = (function() {
 
             if (this.props.sortable === true) {
                 for (var i = 0; i < columns.length; i++) {
-                    this.props._sortable[columns[i].key] = 'default';
+                    this._sortable[columns[i].key] = 'default';
                 }
             }
 
             // Determine if we render the filter box
             var filtering = false;
-            if (this.props.filterable && Array.isArray(this.props.filterable) && this.props.filterable.length > 0) {
+            if (
+                this.props.filterable &&
+                Array.isArray(this.props.filterable) &&
+                this.props.filterable.length > 0
+            ) {
                 filtering = true;
             }
 
@@ -719,8 +736,9 @@ Reactable = (function() {
                 itemsPerPage = this.props.itemsPerPage;
                 pagination = true;
                 currentChildren = filteredChildren.slice(
-                        this.state.currentPage * itemsPerPage,
-                        (this.state.currentPage + 1) * itemsPerPage);
+                    this.state.currentPage * itemsPerPage,
+                    (this.state.currentPage + 1) * itemsPerPage
+                );
             }
 
             return this.transferPropsTo(
