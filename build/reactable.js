@@ -730,14 +730,22 @@ Reactable = (function() {
             // Determine pagination properties and which columns to display
             var itemsPerPage = 0;
             var pagination = false;
+            var numPages;
+            var currentPage = this.state.currentPage;
 
             var currentChildren = filteredChildren;
             if (this.props.itemsPerPage > 0) {
                 itemsPerPage = this.props.itemsPerPage;
+                numPages = Math.ceil(filteredChildren.length / itemsPerPage)
+
+                if (currentPage > numPages - 1) {
+                    currentPage = numPages - 1;
+                }
+
                 pagination = true;
                 currentChildren = filteredChildren.slice(
-                    this.state.currentPage * itemsPerPage,
-                    (this.state.currentPage + 1) * itemsPerPage
+                    currentPage * itemsPerPage,
+                    (currentPage + 1) * itemsPerPage
                 );
             }
 
@@ -758,8 +766,8 @@ Reactable = (function() {
                     pagination === true ?
                         Paginator({
                             colSpan: columns.length, 
-                            numPages: Math.ceil(filteredChildren.length / itemsPerPage), 
-                            currentPage: this.state.currentPage, 
+                            numPages: numPages, 
+                            currentPage: currentPage, 
                             onPageChange: this.onPageChange}) : ''
                     
                 )

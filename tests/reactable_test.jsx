@@ -890,7 +890,8 @@ describe('Reactable', function() {
                     <Reactable.Table className="table" id="table" data={[
                         {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
                         {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
-                        {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter', 'Tag': 'old'},
+                        {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter',
+                            'Tag': 'old'},
                         {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
                     ]} filterable={['State', 'Tag']} columns={['State', 'Description', 'Tag']}/>,
                     ReactableTestUtils.testNode()
@@ -911,13 +912,14 @@ describe('Reactable', function() {
             });
         });
 
-        describe('filtering and pagination together', function(){
+        context('filtering and pagination together', function(){
             before(function() {
                 React.renderComponent(
                     <Reactable.Table className="table" id="table" data={[
                         {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
                         {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
-                        {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter', 'Tag': 'old'},
+                        {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter',
+                            'Tag': 'old'},
                         {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
                     ]}
                         filterable={['State', 'Tag']}
@@ -929,6 +931,12 @@ describe('Reactable', function() {
 
             after(ReactableTestUtils.resetTestEnvironment);
 
+            afterEach(function() {
+                var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
+                $filter.val('');
+                React.addons.TestUtils.Simulate.keyUp($filter[0]);
+            });
+
             it('updates the pagination links', function() {
                 var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
 
@@ -938,6 +946,28 @@ describe('Reactable', function() {
                 var pageButtons = $('#table tbody.reactable-pagination a.reactable-page-button');
                 expect(pageButtons.length).to.equal(1);
                 expect($(pageButtons[0])).to.have.text('1');
+            });
+
+            it('updates the current page if necessary', function() {
+                var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
+                var $pageButtons = $('#table tbody.reactable-pagination a.reactable-page-button');
+
+                // Go to the last page
+                React.addons.TestUtils.Simulate.click($pageButtons[1])
+
+                // Then filter so that that page doesn't exist anymore
+                $filter.val('colorado');
+                React.addons.TestUtils.Simulate.keyUp($filter[0]);
+
+                ReactableTestUtils.expectRowText(0, [
+                    'Colorado',
+                    "new description that shouldn't match filter",
+                    'old'
+                ]);
+                var activePage = $('#table tbody.reactable-pagination ' +
+                    'a.reactable-page-button.reactable-current-page');
+                expect(activePage.length).to.equal(1);
+                expect(activePage).to.have.text('1');
             });
         });
     });
