@@ -211,14 +211,14 @@ describe('Reactable', function() {
     });
 
     describe('unsafe() strings', function() {
-        describe('in the <Table> directly', function() {
+        context('in the <Table> directly', function() {
             before(function() {
                 React.renderComponent(
                     <Reactable.Table className="table" id="table" data={[
                         { Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
-                        { Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')},
                         { Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')},
-                    ]} />,
+                        { Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')},
+                    ]} sortable={['Name']}/>,
                     ReactableTestUtils.testNode()
                 );
             });
@@ -238,9 +238,21 @@ describe('Reactable', function() {
                 expect(who_knows_job.length).to.equal(1);
                 expect(who_knows_job).to.have.text('Developer');
             });
+
+            it('still allows sorting', function() {
+                var nameHeader = $('#table thead tr.reactable-column-header th')[0];
+                ReactTestUtils.Simulate.click(nameHeader);
+
+                ReactableTestUtils.expectRowText(0, ['', '28', 'Developer']);
+                ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', '']);
+                ReactableTestUtils.expectRowText(2, ['Lee Salminen', '23', '']);
+
+                // Make sure the headers have the right classes
+                expect($(positionHeader)).to.have.class('reactable-header-sort-asc');
+            });
         });
 
-        describe('in the <Tr>s', function() {
+        context('in the <Tr>s', function() {
             before(function() {
                 React.renderComponent(
                     <Reactable.Table className="table" id="table">
@@ -269,7 +281,7 @@ describe('Reactable', function() {
             });
         });
 
-        describe('in the <Td>s', function() {
+        context('in the <Td>s', function() {
             before(function() {
                 React.renderComponent(
                     <Reactable.Table className="table" id="table">
