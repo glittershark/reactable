@@ -3,10 +3,17 @@ Reactable [![Build Status](https://travis-ci.org/glittershark/reactable.svg?bran
 
 Fast, flexible, and simple data tables in React.
 
-This is a work in progress. Much of the API defined in this readme won't work
-yet. If you like the look of this, feel free to star or watch the repository. If
-you're ambitious or feel like getting your hands dirty, I welcome pull requests!
-I promise I won't bite.
+Reactable allows you to display tabular data client-side, and provides sorting,
+filtering, and pagination over that data. It uses the power of
+[React.js](http://facebook.github.io/react/) to do all this very, very quickly,
+and provides an API that makes simple things easy, while trying to get out of
+your way as much as possible if you want to do something complicated or
+unconventional.
+
+This project is currently alpha-stage, which means the API may or may not be
+unstable and there might be hidden bugs lurking around any corner. I'll try to
+tag any releases with breaking changes, however, and the more people who use
+this the faster we can get to 1.0!
 
 ## Installation
 
