@@ -86,7 +86,8 @@ Example:
 
 ```javascript
 var Table = Reactable.Table,
-    Tr = Reactable.Tr;
+    Tr = Reactable.Tr,
+    Td = Reactable.Td;
 
 React.renderComponent(
     <Table className="table" id="table">
