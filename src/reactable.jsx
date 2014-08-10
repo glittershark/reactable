@@ -610,14 +610,18 @@ Reactable = (function() {
 
             this.data.sort(function(a, b){
                 var keyA = a[currentSort.column];
+                keyA = keyA ? keyA.toString() : '';
                 var keyB = b[currentSort.column];
+                keyB = keyB ? keyB.toString() : '';
 
                 // Default sort
                 if (this._sortable[currentSort.column] === 'default') {
+
                     // Reverse direction if we're doing a reverse sort
                     if (keyA < keyB) {
                         return -1 * currentSort.direction;
                     }
+
                     if (keyA > keyB) {
                         return 1 * currentSort.direction;
                     }
