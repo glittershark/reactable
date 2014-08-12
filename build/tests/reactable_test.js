@@ -246,9 +246,6 @@ describe('Reactable', function() {
                 ReactableTestUtils.expectRowText(0, ['', '28', 'Developer']);
                 ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', '']);
                 ReactableTestUtils.expectRowText(2, ['Lee Salminen', '23', '']);
-
-                // Make sure the headers have the right classes
-                expect($(positionHeader)).to.have.class('reactable-header-sort-asc');
             });
         });
 
