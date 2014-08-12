@@ -10,30 +10,15 @@
                 Thead = Reactable.Thead,
                 Th = Reactable.Th,
                 Tr = Reactable.Tr,
-                Td = Reactable.Td;
+                Td = Reactable.Td,
+                unsafe = Reactable.unsafe;
+
             React.renderComponent(
                 <Table className="table" id="table" data={[
-                    { Name: 'Lee Salminen', Age: 123, Position: 'Programmer'},
-                    { Name: 'Griffin Smith', Age: 19, Position: 'Engineer'},
-                    { Name: 'Ian Zhang', Age: 'a', Position: 'Developer'}
-                ]} sortable={[
-                        {
-                            column: 'Name',
-                            sortFunction: function(a, b){
-                                // Sort by last name
-                                var nameA = a.split(' ');
-                                var nameB = b.split(' ');
-
-                                return nameA[1].localeCompare(nameB[1]);
-                            }
-                        },
-                        {
-                            column: 'Age',
-                            sortFunction: Reactable.Sort.Numeric
-                        },
-                        'Position'
-                    ]} filterable={['Name', 'Age', 'Position']}
-                    defaultSort={{column: 'Age', direction: -1}} />,
+                    { Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
+                    { Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')},
+                    { Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')},
+                ]} sortable={['Name']} />,
                 document.getElementById('test-div')
             );
         </script>
