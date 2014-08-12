@@ -10,22 +10,15 @@
                 Thead = Reactable.Thead,
                 Th = Reactable.Th,
                 Tr = Reactable.Tr,
-                Td = Reactable.Td;
+                Td = Reactable.Td,
+                unsafe = Reactable.unsafe;
+
             React.renderComponent(
-                <Table className="table" id="table">
-                    <Tr>
-                        <Td column="Name">Griffin Smith</Td>
-                        <Td column="Age">18</Td>
-                    </Tr>
-                    <Tr>
-                        <Td column="Name">Lee Salminen</Td>
-                        <Td column="Age">23</Td>
-                    </Tr>
-                    <Tr>
-                        <Td column="Position">Developer</Td>
-                        <Td column="Age">28</Td>
-                    </Tr>
-                </Table>,
+                <Table className="table" id="table" data={[
+                    { Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
+                    { Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')},
+                    { Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')},
+                ]} sortable={['Name']} />,
                 document.getElementById('test-div')
             );
         </script>

@@ -19,6 +19,10 @@ bower install [--save] reactable
 Or, you can just download the raw file
 [here](https://github.com/glittershark/reactable/raw/master/build/reactable.js).
 
+Keep in mind that we depend on the latest version of React (0.11), **with
+addons**. That can be downloaded
+[here](http://facebook.github.io/react/downloads.html)
+
 ## Usage
 
 The simplest example:
@@ -94,6 +98,42 @@ React.renderComponent(
             <Td column="Age">28</Td>
         </Tr>
     </Table>,
+    document.getElementById('table')
+);
+```
+
+### Manually specifying columns
+
+To override the automatic grabbing of the column list from the attributes of the passed
+`data` objects, you can pass a `columns` property to the `<Table>` component. This can be
+either:
+
+- An array of strings, in which case only the given properties will be included as columns
+  in the rendered table.
+- An array of objects, each of which must have a `key` and `label` property. The `key`
+  property is the attribute of the row object from which to retrieve value, and the
+  `label` is the text to render in the column header row.
+
+### Preventing escaping of HTML
+
+If you don't want to go all the way down the JSX rabbit hole to render individual cells as
+HTML, and you know your source data is safe, you can wrap strings in `Reactable.unsafe` to
+prevent their content from being escaped, like so:
+```javascript
+var Table = Reactable.Table,
+    unsafe = Reactable.unsafe;
+
+React.renderComponent(
+    <Table className="table" id="table" data={[
+        {
+            'Name': unsafe('<b>Griffin Smith</b>'),
+            'Github': unsafe('<a href="https://github.com/glittershark"><img src="https://d2k1ftgv7pobq7.cloudfront.net/images/services/8cab38550d1f23032facde191031d024/github.png"></a>')
+        },
+        {
+            'Name': unsafe('<b>Ian Zhang</b>'),
+            'Github': unsafe('<a href="https://github.com/lofiinterstate"><img src="https://d2k1ftgv7pobq7.cloudfront.net/images/services/8cab38550d1f23032facde191031d024/github.png"></a>')
+        },
+    ]}/>,
     document.getElementById('table')
 );
 ```
