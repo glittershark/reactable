@@ -8,6 +8,7 @@
   "devDependencies": {
     "chai-jquery": "~1.2.1",
     "jquery": "~2.1.0",
-    "chai": "~1.9.1"
+    "chai": "~1.9.1",
+    "es5-shim": "~4.0.2"
   }
 }
