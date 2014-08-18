@@ -15,7 +15,7 @@ module.exports = function(config) {
         'bower_components/react/react-with-addons.js',
         'bower_components/chai/chai.js',
         'bower_components/chai-jquery/chai-jquery.js',
-        'build/*.js',
+        'build/reactable.js',
         'build/tests/*.js',
     ],
 
