@@ -751,8 +751,8 @@ var Table = exports.Table = React.createClass({displayName: 'Table',
             );
         }
 
-        return this.transferPropsTo(
-            React.DOM.table(null, 
+        return (
+            React.DOM.table({className: this.props.className, id: this.props.id, style: this.props.style}, 
                 columns && columns.length > 0 ?
                     Thead({
                         columns: columns, 
@@ -773,7 +773,7 @@ var Table = exports.Table = React.createClass({displayName: 'Table',
                         onPageChange: this.onPageChange}) : ''
                 
             )
-        );
+        )
     }
 });
 
