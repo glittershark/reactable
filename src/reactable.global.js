@@ -1,1 +1,1 @@
-window.Reactable = require('../build/reactable.browserify');
+window.Reactable = require('../build/reactable.common');
