@@ -779,6 +779,6 @@ var Table = exports.Table = React.createClass({displayName: 'Table',
 
 
 },{}],2:[function(require,module,exports){
-window.Reactable = require('../build/reactable.browserify');
+window.Reactable = require('../build/reactable.common');
 
-},{"../build/reactable.browserify":1}]},{},[2]);
+},{"../build/reactable.common":1}]},{},[2]);
