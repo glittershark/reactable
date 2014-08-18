@@ -13,7 +13,7 @@ module.exports = function(grunt) {
         react: {
             compile: {
                 files: {
-                    'build/reactable.browserify.js': 'src/reactable.jsx',
+                    'build/reactable.common.js': 'src/reactable.jsx',
                     'build/tests/reactable_test.js': 'tests/reactable_test.jsx'
                 }
             }

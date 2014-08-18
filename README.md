@@ -28,8 +28,8 @@ Or, you can just download the raw file
 
 That file exposes a global object `Reactable`. If you'd rather use browserify or
 another CommonJS implementation to `require()` it, there's a file
-`build/reactable.browserify.js` in the repo or 
-[here](https://github.com/glittershark/reactable/raw/master/build/reactable.browserify.js)
+`build/reactable.common.js` in the repo or 
+[here](https://github.com/glittershark/reactable/raw/master/build/reactable.common.js)
 if you'd like to download it directly.
 
 Keep in mind that we depend on the latest version of React (0.11), **with
