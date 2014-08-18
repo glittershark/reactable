@@ -260,9 +260,10 @@ var Tr = exports.Tr = React.createClass({displayName: 'Tr',
             }.bind(this)));
         }
 
-        return this.transferPropsTo(
-            React.DOM.tr(null, children)
-        );
+        // Manually transfer props
+        var props = filterPropsFrom(this.props);
+
+        return React.DOM.tr(props, children)
     }
 });
 
@@ -276,37 +277,45 @@ var Thead = exports.Thead = React.createClass({displayName: 'Thead',
             }
         });
     },
+    handleClickTh: function (column) {
+        this.props.onSort(column.key)
+    },
     render: function() {
-        return this.transferPropsTo(
-            React.DOM.thead(null, 
-                this.props.filtering === true ?
-                    Filterer({
-                        colSpan: this.props.columns.length, 
-                        onFilter: this.props.onFilter}) : '', 
-                
-                React.DOM.tr({className: "reactable-column-header"}, 
-                    this.props.columns.map(function(column, index) {
-                        var sortClass = '';
 
-                        if (this.props.sort.column === column.key) {
-                            sortClass = 'reactable-header-sort';
-                            if (this.props.sort.direction === 1) {
-                                sortClass += '-asc';
-                            }
-                            else {
-                                sortClass += '-desc';
-                            }
-                        }
+        // Declare the list of Ths
+        var Ths = []
+        for (var index = 0; index < this.props.columns.length; index++) {
+            var column = this.props.columns[index];
+            var sortClass = '';
 
-                        return (
-                            React.DOM.th({
-                                className: sortClass, 
-                                key: index, 
-                                onClick: function(){ this.props.onSort(column.key) }.bind(this)}, column.label)
-                        );
-                    }.bind(this))
-                )
-            )
+            if (this.props.sort.column === column.key) {
+                sortClass = 'reactable-header-sort';
+                if (this.props.sort.direction === 1) {
+                    sortClass += '-asc';
+                }
+                else {
+                    sortClass += '-desc';
+                }
+            }
+
+            Ths.push(React.DOM.th({
+                className: sortClass,
+                key: index,
+                onClick: this.handleClickTh.bind(this, column)
+            }, column.label))
+        }
+
+        // Manually transfer props
+        var props = filterPropsFrom(this.props);
+        
+        return React.DOM.thead(props,
+            (this.props.filtering === true ?
+                Filterer({
+                    colSpan: this.props.columns.length,
+                    onFilter: this.props.onFilter
+                }) 
+            : ''),
+            React.DOM.tr({className: "reactable-column-header"}, Ths)
         );
     }
 });
@@ -750,29 +759,49 @@ var Table = exports.Table = React.createClass({displayName: 'Table',
             );
         }
 
-        return (
-            React.DOM.table({className: this.props.className, id: this.props.id, style: this.props.style}, 
-                columns && columns.length > 0 ?
-                    Thead({
-                        columns: columns, 
-                        filtering: filtering, 
-                        onFilter: this.onFilter, 
-                        sort: this.state.currentSort, 
-                        onSort: this.onSort})
-                    : '', 
-                
-                React.DOM.tbody({className: "reactable-data"}, 
-                    currentChildren
-                ), 
-                pagination === true ?
-                    Paginator({
-                        colSpan: columns.length, 
-                        numPages: numPages, 
-                        currentPage: currentPage, 
-                        onPageChange: this.onPageChange}) : ''
-                
-            )
-        )
+        // Manually transfer props
+        var props = filterPropsFrom(this.props);
+
+        return React.DOM.table(props,
+            (columns && columns.length > 0 ?
+                Thead({
+                    columns: columns,
+                    filtering: filtering,
+                    onFilter: this.onFilter,
+                    sort: this.state.currentSort,
+                    onSort: this.onSort
+                })
+            : null),
+            React.DOM.tbody({className: "reactable-data"}, currentChildren),
+            (pagination === true ?
+                Paginator({
+                    colSpan: columns.length,
+                    numPages: numPages,
+                    currentPage: currentPage,
+                    onPageChange: this.onPageChange
+                })
+            : '')
+        );
     }
 });
 
+function filterPropsFrom(baseProps) {
+    baseProps = baseProps || {};
+    var props = {};
+    for (var key in baseProps) {
+        if (!(key in internalProps)) {
+            props[key] = baseProps[key];
+        }
+    }
+    return props;
+};
+
+var internalProps = {
+    columns: true,
+    sortable: true,
+    filterable: true,
+    defaultSort: true,
+    itemsPerPage: true,
+    childNode: true,
+    data: true
+}
