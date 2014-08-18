@@ -2,6 +2,8 @@
 var ReactTestUtils = React.addons.TestUtils;
 var expect = chai.expect;
 
+console.log(Reactable);
+
 var ReactableTestUtils = {
     resetTestEnvironment:  function() {
         React.unmountComponentAtNode($('div#test-node')[0]);

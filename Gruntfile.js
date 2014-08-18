@@ -13,10 +13,17 @@ module.exports = function(grunt) {
         react: {
             compile: {
                 files: {
-                    'build/reactable.js': 'src/reactable.jsx',
+                    'build/reactable.browserify.js': 'src/reactable.jsx',
                     'build/tests/reactable_test.js': 'tests/reactable_test.jsx'
                 }
             }
+        },
+        browserify: {
+            compile: {
+                files: {
+                    'build/reactable.js': './src/reactable.global.js',
+                }
+            },
         },
         karma: {
             unit: {
@@ -27,12 +34,13 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-react');
+    grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-karma');
 
     grunt.registerTask('testOnce', ['build', 'karma']);
-    grunt.registerTask('test', ['testOnce', 'watch:test'])
+    grunt.registerTask('test', ['testOnce', 'watch:test']);
 
-    grunt.registerTask('build', ['react']);
+    grunt.registerTask('build', ['react', 'browserify']);
     grunt.registerTask('default', ['build', 'watch:build']);
 };
 
