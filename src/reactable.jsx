@@ -574,7 +574,7 @@ var Table = exports.Table = React.createClass({
             sortBy.column !== this.state.currentSort.column &&
             sortBy.direction !== this.state.currentSort.direction) {
 
-            this.setState({ currentSort: this.getCurrentSort(sortBy) });
+            this.state.currentSort = this.getCurrentSort(sortBy);
         }
     },
     componentWillMount: function() {
