@@ -513,6 +513,7 @@ var Table = exports.Table = React.createClass({
             columns: [],
             sortable: [],
             filterable: [],
+            sortBy: false,
             defaultSort: false,
             itemsPerPage: 0,
         }
@@ -529,44 +530,52 @@ var Table = exports.Table = React.createClass({
         }
 
         // Set the state of the current sort to the default sort
-        if (this.props.defaultSort !== false) {
-            var column = this.props.defaultSort;
-            var currentSort = {};
+        if (this.props.sortBy !== false || this.props.defaultSort !== false) {
+            var sortingColumn = this.props.sortBy || this.props.defaultSort;
+            initialState.currentSort = this.getCurrentSort(sortingColumn);
+        }
+        return initialState;
+    },
+    getCurrentSort: function(column) {
+        if (column instanceof Object) {
+            var columnName, sortDirection;
 
-            if (column instanceof Object) {
-                var columnName, sortDirection;
-
-                if (typeof(column.column) !== 'undefined') {
-                    columnName = column.column;
-                } else {
-                    console.warn('Default column specified without column name');
-                    return;
-                }
-
-                if (typeof(column.direction) !== 'undefined') {
-                    if (column.direction === 1 || column.direction === 'asc') {
-                        sortDirection = 1;
-                    } else if (column.direction === -1 || column.direction === 'desc') {
-                        sortDirection = -1;
-                    } else {
-                        console.warn('Invalid default sort specified.  Defaulting to ascending');
-                        sortDirection = 1;
-                    }
-                } else {
-                    sortFunction = 1;
-                }
+            if (typeof(column.column) !== 'undefined') {
+                columnName = column.column;
             } else {
-                columnName      = column;
-                sortDirection   = 1;
+                console.warn('Default column specified without column name');
+                return;
             }
 
-            initialState.currentSort = {
-                column: columnName,
-                direction: sortDirection
-            };
+            if (typeof(column.direction) !== 'undefined') {
+                if (column.direction === 1 || column.direction === 'asc') {
+                    sortDirection = 1;
+                } else if (column.direction === -1 || column.direction === 'desc') {
+                    sortDirection = -1;
+                } else {
+                    console.warn('Invalid default sort specified.  Defaulting to ascending');
+                    sortDirection = 1;
+                }
+            } else {
+                sortFunction = 1;
+            }
+        } else {
+            columnName      = column;
+            sortDirection   = 1;
         }
 
-        return initialState;
+        return {
+            column: columnName,
+            direction: sortDirection
+        };
+    },
+    updateCurrentSort: function(sortBy) {
+        if (sortBy !== false &&
+            sortBy.column !== this.state.currentSort.column &&
+            sortBy.direction !== this.state.currentSort.direction) {
+
+            this.setState({ currentSort: this.getCurrentSort(sortBy) });
+        }
     },
     componentWillMount: function() {
         this.initialize(this.props);
@@ -574,6 +583,7 @@ var Table = exports.Table = React.createClass({
     },
     componentWillReceiveProps: function(nextProps) {
         this.initialize(nextProps);
+        this.updateCurrentSort(nextProps.sortBy);
         this.sortByCurrentSort();
     },
     onPageChange: function(page) {
@@ -800,6 +810,7 @@ var internalProps = {
     columns: true,
     sortable: true,
     filterable: true,
+    sortBy: true,
     defaultSort: true,
     itemsPerPage: true,
     childNode: true,
