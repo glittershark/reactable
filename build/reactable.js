@@ -260,7 +260,16 @@
             return 0;
         }
     };
-    
+
+    function unique(a) {
+        return a.reduce(function(p, c) {
+            if (p.indexOf(c) < 0) {
+                p.push(c);
+            }
+            return p;
+        }, []);
+    }
+
     var Td = exports.Td = React.createClass({displayName: 'Td',
         handleClick: function(e){
             if (typeof this.props.handleClick !== 'undefined') {
@@ -553,6 +562,24 @@
             this.data = this.data.concat(this.parseChildData(props));
             this.initializeSorts(props);
         },
+        updateColumns: function(props) {
+            var existingColumns = this.state.columns || [],
+                nextColumns,
+                foundColumns = this.data.reduce(function(currentColumns, datum) {
+                    return unique(currentColumns.concat(Object.keys(datum)));
+                }, []);
+
+            // Discard any columns that have dropped.
+            nextColumns = existingColumns.filter(function(column) {
+                return foundColumns.indexOf(column) > -1;
+            }).concat(foundColumns.filter(function(column) {
+                // Add any columns that don't already exist.
+                return typeof existingColumns.indexOf(column) === -1;
+            }));
+
+            //Set state so that we can retain and update column information when data changes
+            this.setState({columns: nextColumns});
+        },
         initializeSorts: function() {
             this._sortable = {};
             // Transform sortable properties into a more friendly list
@@ -656,6 +683,7 @@
         },
         componentWillReceiveProps: function(nextProps) {
             this.initialize(nextProps);
+            this.updateColumns();
             this.updateCurrentSort(nextProps.sortBy);
             this.sortByCurrentSort();
         },
@@ -749,17 +777,11 @@
             var children = [];
             var columns;
             var userColumnsSpecified = false;
-    
-            if (
-                this.props.children &&
-                this.props.children.length > 0 &&
-                this.props.children[0].type.ConvenienceConstructor === Thead
-            ) {
-                columns = this.props.children[0].getColumns();
-            } else {
-                columns = this.props.columns || [];
-            }
-    
+
+            // Columns are updated in state whenever props are going to be received.
+            // This helps keep columns consistent for sorting purposes whenever columns change in a dataset.
+            columns = this.state.columns || this.props.columns || [];
+
             if (columns.length > 0) {
                 userColumnsSpecified = true;
                 columns = this.translateColumnsArray(columns);
