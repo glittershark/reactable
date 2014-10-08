@@ -15,9 +15,11 @@
   "scripts": {
     "test": "./node_modules/grunt-cli/bin/grunt testOnce"
   },
+  "peerDependencies": {
+    "react": "*"
+  },
   "devDependencies": {
     "grunt": "^0.4.4",
-    "grunt-browserify": "^2.1.4",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-karma": "^0.8.2",
