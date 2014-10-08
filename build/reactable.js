@@ -116,9 +116,7 @@
                 var len = this.length >>> 0;
     
                 var from = Number(arguments[1]) || 0;
-                from = (from < 0)
-                     ? Math.ceil(from)
-                     : Math.floor(from);
+                from = (from < 0) ? Math.ceil(from) : Math.floor(from);
                 if (from < 0) {
                     from += len;
                 }
@@ -176,11 +174,11 @@
     
     Unsafe.prototype.toString = function() {
         return this.content;
-    }
+    };
     
     exports.unsafe = function(str) {
         return new Unsafe(str);
-    }
+    };
     
     exports.Sort = {
         Numeric: function(a, b) {
@@ -260,7 +258,7 @@
             }
     
             return 0;
-        },
+        }
     };
     
     var Td = exports.Td = React.createClass({displayName: 'Td',
@@ -274,7 +272,7 @@
                 'data-column': this.props.column.key,
                 className: this.props.className,
                 onClick: this.handleClick
-            }
+            };
     
             // Attach any properties on the column to this Td object to allow things like custom event handlers
             for (var key in this.props.column) {
@@ -293,7 +291,7 @@
     
             if (typeof(this.props.children) !== 'undefined') {
                 if (this.props.children instanceof Unsafe) {
-                    tdProps.dangerouslySetInnerHTML= { __html: this.props.children.toString() }
+                    tdProps.dangerouslySetInnerHTML = { __html: this.props.children.toString() };
                 } else {
                     tdProps.children = data;
                 }
@@ -314,7 +312,7 @@
                 childNode: Td,
                 columns: [],
                 data: {}
-            }
+            };
     
             return defaultProps;
         },
@@ -338,7 +336,7 @@
             // Manually transfer props
             var props = filterPropsFrom(this.props);
     
-            return React.DOM.tr(props, children)
+            return React.DOM.tr(props, children);
         }
     });
     
@@ -353,12 +351,12 @@
             });
         },
         handleClickTh: function (column) {
-            this.props.onSort(column.key)
+            this.props.onSort(column.key);
         },
         render: function() {
     
             // Declare the list of Ths
-            var Ths = []
+            var Ths = [];
             for (var index = 0; index < this.props.columns.length; index++) {
                 var column = this.props.columns[index];
                 var sortClass = '';
@@ -377,7 +375,7 @@
                     className: sortClass,
                     key: index,
                     onClick: this.handleClickTh.bind(this, column)
-                }, column.label))
+                }, column.label));
             }
     
             // Manually transfer props
@@ -409,7 +407,7 @@
                         this.props.onFilter(this.getDOMNode().value);
                     }.bind(this)})
             );
-        },
+        }
     });
     
     var Filterer = React.createClass({displayName: 'Filterer',
@@ -425,7 +423,7 @@
                     )
                 )
             );
-        },
+        }
     });
     
     var Paginator = React.createClass({displayName: 'Paginator',
@@ -456,7 +454,7 @@
                        onClick: (function(pageNum) {
                            return function() {
                                this.props.onPageChange(pageNum);
-                           }.bind(this)
+                           }.bind(this);
                        }.bind(this))(i)}, i + 1)
                 );
             }
@@ -590,8 +588,8 @@
                 filterable: [],
                 sortBy: false,
                 defaultSort: false,
-                itemsPerPage: 0,
-            }
+                itemsPerPage: 0
+            };
             return defaultProps;
         },
         getInitialState: function() {
@@ -599,10 +597,10 @@
                 currentPage: 0,
                 currentSort: {
                     column: null,
-                    direction: 1,
+                    direction: 1
                 },
-                filter: '',
-            }
+                filter: ''
+            };
     
             // Set the state of the current sort to the default sort
             if (this.props.sortBy !== false || this.props.defaultSort !== false) {
