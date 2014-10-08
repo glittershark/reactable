@@ -573,7 +573,7 @@
                         sortDirection = 1;
                     }
                 } else {
-                    sortFunction = 1;
+                    sortDirection = 1;
                 }
             } else {
                 columnName      = column;
