@@ -247,9 +247,9 @@ describe('Reactable', function() {
                 var nameHeader = $('#table thead tr.reactable-column-header th')[0];
                 ReactTestUtils.Simulate.click(nameHeader);
 
-                ReactableTestUtils.expectRowText(0, ['', '28', 'Developer']);
-                ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', '']);
-                ReactableTestUtils.expectRowText(2, ['Lee Salminen', '23', '']);
+                ReactableTestUtils.expectRowText(0, ['28', 'Developer', '']);
+                ReactableTestUtils.expectRowText(1, ['18', '', 'Griffin Smith']);
+                ReactableTestUtils.expectRowText(2, ['23', '', 'Lee Salminen']);
             });
         });
 
@@ -1216,113 +1216,6 @@ describe('Reactable', function() {
         });
     });
 
-    describe('unsafe() strings', function() {
-        context('in the <Table> directly', function() {
-            before(function() {
-                React.renderComponent(
-                    <Reactable.Table className="table" id="table" data={[
-                        { Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
-                        { Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')},
-                        { Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')},
-                    ]} sortable={['Name']}/>,
-                    ReactableTestUtils.testNode()
-                );
-            });
-
-            after(ReactableTestUtils.resetTestEnvironment);
-
-            it('renders the HTML in the table cells', function() {
-                var griffins_name = $('span#griffins-name');
-                expect(griffins_name.length).to.equal(1);
-                expect(griffins_name).to.have.text('Griffin Smith');
-
-                var lees_name = $('span#lees-name');
-                expect(lees_name.length).to.equal(1);
-                expect(lees_name).to.have.text('Lee Salminen');
-
-                var who_knows_job = $('span#who-knows-job');
-                expect(who_knows_job.length).to.equal(1);
-                expect(who_knows_job).to.have.text('Developer');
-            });
-
-            it('still allows sorting', function() {
-                var nameHeader = $('#table thead tr.reactable-column-header th')[0];
-                ReactTestUtils.Simulate.click(nameHeader);
-
-                ReactableTestUtils.expectRowText(0, ['', '28', 'Developer']);
-                ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', '']);
-                ReactableTestUtils.expectRowText(2, ['Lee Salminen', '23', '']);
-            });
-        });
-
-        context('in the <Tr>s', function() {
-            before(function() {
-                React.renderComponent(
-                    <Reactable.Table className="table" id="table">
-                        <Reactable.Tr data={{ Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'}} />,
-                        <Reactable.Tr data={{ Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')}} />,
-                        <Reactable.Tr data={{ Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')}} />,
-                    </Reactable.Table>,
-                    ReactableTestUtils.testNode()
-                );
-            });
-
-            after(ReactableTestUtils.resetTestEnvironment);
-
-            it('renders the HTML in the table cells', function() {
-                var griffins_name = $('span#griffins-name');
-                expect(griffins_name.length).to.equal(1);
-                expect(griffins_name).to.have.text('Griffin Smith');
-
-                var lees_name = $('span#lees-name');
-                expect(lees_name.length).to.equal(1);
-                expect(lees_name).to.have.text('Lee Salminen');
-
-                var who_knows_job = $('span#who-knows-job');
-                expect(who_knows_job.length).to.equal(1);
-                expect(who_knows_job).to.have.text('Developer');
-            });
-        });
-
-        context('in the <Td>s', function() {
-            before(function() {
-                React.renderComponent(
-                    <Reactable.Table className="table" id="table">
-                        <Reactable.Tr>
-                            <Reactable.Td column="Name">{Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>')}</Reactable.Td>
-                            <Reactable.Td column="Age">18</Reactable.Td>
-                        </Reactable.Tr>
-                        <Reactable.Tr>
-                            <Reactable.Td column="Name">{Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')}</Reactable.Td>
-                            <Reactable.Td column="Age">23</Reactable.Td>
-                        </Reactable.Tr>
-                        <Reactable.Tr>
-                            <Reactable.Td column="Position">{Reactable.unsafe('<span id="who-knows-job">Developer</span>')}</Reactable.Td>
-                            <Reactable.Td column="Age">28</Reactable.Td>
-                        </Reactable.Tr>
-                    </Reactable.Table>,
-                    ReactableTestUtils.testNode()
-                );
-            });
-
-            after(ReactableTestUtils.resetTestEnvironment);
-
-            it('renders the HTML in the table cells', function() {
-                var griffins_name = $('span#griffins-name');
-                expect(griffins_name.length).to.equal(1);
-                expect(griffins_name).to.have.text('Griffin Smith');
-
-                var lees_name = $('span#lees-name');
-                expect(lees_name.length).to.equal(1);
-                expect(lees_name).to.have.text('Lee Salminen');
-
-                var who_knows_job = $('span#who-knows-job');
-                expect(who_knows_job.length).to.equal(1);
-                expect(who_knows_job).to.have.text('Developer');
-            });
-        });
-    });
-
     describe('pagination', function() {
         describe('specifying itemsPerPage', function(){
             before(function() {
@@ -2029,15 +1922,15 @@ describe('Reactable', function() {
 
     describe('multiple tables on a page', function() {
         before(function() {
-            var parentTestNode = ReactableTestUtils.testNode();
-            this.testNode1 = $(parentTestNode).append('<div>').attr('id', 'test-node-1');
-            this.testNode2 = $(parentTestNode).append('<div>').attr('id', 'test-node-2');
+            this.parentTestNode = ReactableTestUtils.testNode();
+            this.testNode1 = $(this.parentTestNode).append('<div>').attr('id', 'test-node-1');
+            this.testNode2 = $(this.parentTestNode).append('<div>').attr('id', 'test-node-2');
 
             this.testNode1.empty();
             this.testNode2.empty();
 
             React.renderComponent(
-                <Reactable.Table className="table" id="table" data={[
+                <Reactable.Table className="table" id="table1" data={[
                     { Name: 'Griffin Smith', Age: '18'},
                     { Age: '23', Name: 'Lee Salminen'},
                     { Age: '28', Position: 'Developer'}
@@ -2045,16 +1938,19 @@ describe('Reactable', function() {
                 this.testNode1[0]
             );
 
-
             React.renderComponent(
-                <Reactable.Table className="table" id="table" data={[
+                <Reactable.Table className="table" id="table2" data={[
                     { Moniker: 'Griffin Smith', Elderliness: '18'},
                     { Elderliness: '23', Moniker: 'Lee Salminen'},
                     { Elderliness: '28', Title: 'Developer'}
                 ]} />,
                 this.testNode2[0]
             );
-        })
+        });
+
+        after(function() {
+            $(this.parentTestNode).empty().remove();
+        });
 
         it('renders the column headers in the second table', function() {
             var headers = [];

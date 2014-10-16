@@ -172,6 +172,10 @@
         this.content = content;
     }
 
+    function stringable(thing) {
+        return typeof(thing) !== 'undefined' && typeof(thing.toString === 'function');
+    }
+
     Unsafe.prototype.toString = function() {
         return this.content;
     };
@@ -285,7 +289,7 @@
             if (typeof(this.props.children) !== 'undefined') {
                 if (
                     typeof(this.props.data) === 'undefined' &&
-                    typeof(this.props.children.toString) === 'function'
+                    stringable(this.props.children)
                 ) {
                     data = this.props.children.toString();
                 }
@@ -306,15 +310,6 @@
         statics: {
             childNode: Td,
             dataType: 'object'
-        },
-        getDefaultProps: function() {
-            var defaultProps = {
-                childNode: Td,
-                columns: [],
-                data: {}
-            };
-
-            return defaultProps;
         },
         render: function() {
             var children = this.props.children || [];
@@ -568,7 +563,7 @@
                         return;
                     }
 
-                    if (typeof(column.sortFunction) !== 'undefined' && column.sortFunction instanceof Function) {
+                    if (typeof(column.sortFunction) === 'function') {
                         sortFunction = column.sortFunction;
                     } else {
                         sortFunction = 'default';
@@ -583,12 +578,9 @@
         },
         getDefaultProps: function() {
             var defaultProps = {
-                columns: [],
-                sortable: [],
-                filterable: [],
                 sortBy: false,
                 defaultSort: false,
-                itemsPerPage: 0
+                itemsPerPage: 0,
             };
             return defaultProps;
         },
@@ -699,9 +691,9 @@
 
             this.data.sort(function(a, b){
                 var keyA = a[currentSort.column];
-                keyA = keyA ? keyA.toString() : '';
+                keyA = stringable(keyA) ? keyA.toString() : '';
                 var keyB = b[currentSort.column];
-                keyB = keyB ? keyB.toString() : '';
+                keyB = stringable(keyB) ? keyB.toString() : '';
 
                 // Default sort
                 if (this._sortable[currentSort.column] === 'default') {
