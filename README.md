@@ -44,9 +44,9 @@ The simplest example:
 var Table = Reactable.Table;
 React.renderComponent(
     <Table className="table" data={[
-        { Name: 'Griffin Smith', Age: '18' },
-        { Age: '23',  Name: 'Lee Salminen' },
-        { Age: '28', Position: 'Developer' },
+        { Name: 'Griffin Smith', Age: 18 },
+        { Age: 23,  Name: 'Lee Salminen' },
+        { Age: 28, Position: 'Developer' },
     ]} />,
     document.getElementById('table')
 );
@@ -56,6 +56,7 @@ While pretty basic, this example demonstrates a couple things:
 - Columns in the data array can be in any order, and you can omit any you like
 - Regular React DOM attributes such as className will pass-through to the
   rendered `<table>`
+- Data values can be any type with a `toString()` method
 
 ### Further Customization
 

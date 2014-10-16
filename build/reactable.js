@@ -114,13 +114,13 @@
           Array.prototype.indexOf = function(elt /*, from*/)
           {
                 var len = this.length >>> 0;
-    
+
                 var from = Number(arguments[1]) || 0;
                 from = (from < 0) ? Math.ceil(from) : Math.floor(from);
                 if (from < 0) {
                     from += len;
                 }
-    
+
                 for (; from < len; from++)
                 {
                     if (from in this && this[from] === elt) {
@@ -130,7 +130,7 @@
                 return -1;
           };
     }
-    
+
     // Array.prototype.find polyfill - see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
     if (!Array.prototype.find) {
         Object.defineProperty(Array.prototype, 'find', {
@@ -148,7 +148,7 @@
                 var length = list.length >>> 0;
                 var thisArg = arguments[1];
                 var value;
-    
+
                 for (var i = 0; i < length; i++) {
                     if (i in list) {
                         value = list[i];
@@ -161,30 +161,30 @@
             }
         });
     }
-    
+
     if (!Array.isArray) {
         Array.isArray = function (value) {
             return Object.prototype.toString.call(value) === '[object Array]';
         };
     }
-    
+
     function Unsafe(content) {
         this.content = content;
     }
-    
+
     Unsafe.prototype.toString = function() {
         return this.content;
     };
-    
+
     exports.unsafe = function(str) {
         return new Unsafe(str);
     };
-    
+
     exports.Sort = {
         Numeric: function(a, b) {
             var valA = parseFloat(a.toString().replace(',', ''));
             var valB = parseFloat(b.toString().replace(',', ''));
-    
+
             // Sort non-numeric values alphabetically at the bottom of the list
             if (isNaN(valA) && isNaN(valB)) {
                 valA = a;
@@ -197,70 +197,70 @@
                     return -1;
                 }
             }
-    
+
             if (valA < valB) {
                 return -1;
             }
             if (valA > valB) {
                 return 1;
             }
-    
+
             return 0;
         },
-    
+
         Currency: function(a, b) {
             // Parse out dollar signs, then do a regular numeric sort
             // TODO: handle non-American currency
-    
+
             if (a[0] === '$') {
                 a = a.substring(1);
             }
             if (b[0] === '$') {
                 b = b.substring(1);
             }
-    
+
             return exports.Sort.Numeric(a, b);
         },
-    
+
         Date: function(a, b) {
             // Note: this function tries to do a standard javascript string -> date conversion
             // If you need more control over the date string format, consider using a different
             // date library and writing your own function
             var valA = Date.parse(a);
             var valB = Date.parse(b);
-    
+
             // Handle non-date values with numeric sort
             // Sort non-numeric values alphabetically at the bottom of the list
             if (isNaN(valA) || isNaN(valB)) {
                 return exports.Sort.Numeric(a, b);
             }
-    
+
             if (valA > valB) {
                 return 1;
             }
             if (valB > valA) {
                 return -1;
             }
-    
+
             return 0;
         },
-    
+
         CaseInsensitive: function(a, b) {
             var valA = a.toLowerCase();
             var valB = b.toLowerCase();
-    
+
             if(valA > valB) {
                 return 1;
             }
-    
+
             if(valB > valA) {
                 return -1;
             }
-    
+
             return 0;
         }
     };
-    
+
     var Td = exports.Td = React.createClass({displayName: 'Td',
         handleClick: function(e){
             if (typeof this.props.handleClick !== 'undefined') {
@@ -273,35 +273,35 @@
                 className: this.props.className,
                 onClick: this.handleClick
             };
-    
+
             // Attach any properties on the column to this Td object to allow things like custom event handlers
             for (var key in this.props.column) {
                 if (key !== 'key' && key !== 'name') {
                     tdProps[key] = this.props.column[key];
                 }
             }
-    
+
             var data = this.props.data;
-            if (
-                typeof(this.props.data) === 'undefined' &&
-                typeof(this.props.children) === 'string'
-            ) {
-                data = this.props.children;
-            }
-    
             if (typeof(this.props.children) !== 'undefined') {
+                if (
+                    typeof(this.props.data) === 'undefined' &&
+                    typeof(this.props.children.toString) === 'function'
+                ) {
+                    data = this.props.children.toString();
+                }
+
                 if (this.props.children instanceof Unsafe) {
                     tdProps.dangerouslySetInnerHTML = { __html: this.props.children.toString() };
                 } else {
                     tdProps.children = data;
                 }
             }
-    
+
             return React.DOM.td(tdProps);
         }
     });
-    
-    
+
+
     var Tr = exports.Tr = React.createClass({displayName: 'Tr',
         statics: {
             childNode: Td,
@@ -313,12 +313,12 @@
                 columns: [],
                 data: {}
             };
-    
+
             return defaultProps;
         },
         render: function() {
             var children = this.props.children || [];
-    
+
             if (
                 this.props.data &&
                 this.props.columns &&
@@ -332,14 +332,14 @@
                     }
                 }.bind(this)));
             }
-    
+
             // Manually transfer props
             var props = filterPropsFrom(this.props);
-    
+
             return React.DOM.tr(props, children);
         }
     });
-    
+
     var Thead = exports.Thead = React.createClass({displayName: 'Thead',
         getColumns: function() {
             return React.Children.map(this.props.children, function(th) {
@@ -354,13 +354,13 @@
             this.props.onSort(column.key);
         },
         render: function() {
-    
+
             // Declare the list of Ths
             var Ths = [];
             for (var index = 0; index < this.props.columns.length; index++) {
                 var column = this.props.columns[index];
                 var sortClass = '';
-    
+
                 if (this.props.sort.column === column.key) {
                     sortClass = 'reactable-header-sort';
                     if (this.props.sort.direction === 1) {
@@ -370,35 +370,35 @@
                         sortClass += '-desc';
                     }
                 }
-    
+
                 Ths.push(React.DOM.th({
                     className: sortClass,
                     key: index,
                     onClick: this.handleClickTh.bind(this, column)
                 }, column.label));
             }
-    
+
             // Manually transfer props
             var props = filterPropsFrom(this.props);
-            
+
             return React.DOM.thead(props,
                 (this.props.filtering === true ?
                     Filterer({
                         colSpan: this.props.columns.length,
                         onFilter: this.props.onFilter
-                    }) 
+                    })
                 : ''),
                 React.DOM.tr({className: "reactable-column-header"}, Ths)
             );
         }
     });
-    
+
     var Th = exports.Th = React.createClass({displayName: 'Th',
         render: function() {
             return this.transferPropsTo(React.DOM.th(null, this.props.children));
         }
     });
-    
+
     var FiltererInput = React.createClass({displayName: 'FiltererInput',
         render: function() {
             return (
@@ -409,13 +409,13 @@
             );
         }
     });
-    
+
     var Filterer = React.createClass({displayName: 'Filterer',
         render: function() {
             if (typeof this.props.colSpan === 'undefined') {
                 throw new TypeError('Must pass a colSpan argument to Filterer');
             }
-    
+
             return (
                 React.DOM.tr({className: "reactable-filterer"}, 
                     React.DOM.td({colSpan: this.props.colSpan}, 
@@ -425,21 +425,21 @@
             );
         }
     });
-    
+
     var Paginator = React.createClass({displayName: 'Paginator',
         render: function() {
             if (typeof this.props.colSpan === 'undefined') {
                 throw new TypeError('Must pass a colSpan argument to Paginator');
             }
-    
+
             if (typeof this.props.numPages === 'undefined') {
                 throw new TypeError('Must pass a non-zero numPages argument to Paginator');
             }
-    
+
             if (typeof this.props.currentPage === 'undefined') {
                 throw new TypeError('Must pass a currentPage argument to Paginator');
             }
-    
+
             var pageButtons = [];
             for (var i = 0; i < this.props.numPages; i++) {
                 var pageNum = i;
@@ -447,7 +447,7 @@
                 if (this.props.currentPage === i) {
                     className += " reactable-current-page";
                 }
-    
+
                 pageButtons.push(
                     React.DOM.a({className: className, key: i, 
                        // create function to get around for-loop closure issue
@@ -458,7 +458,7 @@
                        }.bind(this))(i)}, i + 1)
                 );
             }
-    
+
             return (
                 React.DOM.tbody({className: "reactable-pagination"}, 
                     React.DOM.tr(null, 
@@ -470,7 +470,7 @@
             );
         }
     });
-    
+
     var Table = exports.Table = React.createClass({displayName: 'Table',
         // Translate a user defined column array to hold column objects if strings are specified
         // (e.g. ['column1'] => [{key: 'column1', label: 'column1'}])
@@ -486,14 +486,14 @@
                         var sortFunction = column.sortable === true ? 'default' : column.sortable;
                         this._sortable[column.key] = sortFunction;
                     }
-    
+
                     return column;
                 }
             }.bind(this));
         },
         parseChildData: function(props) {
             var data = [];
-    
+
             // Transform any children back to a data array
             if (typeof(props.children) !== 'undefined') {
                 React.Children.forEach(props.children, function(child) {
@@ -503,16 +503,16 @@
                         return; // (continue)
                     }
                     */
-    
+
                     var childData = child.props.data || {};
-    
+
                     // Given our modification of Array.prototype, this is the
                     // best way to check if child.props.children is an array
                     if (
                         typeof(child.props.children) !== 'undefined' &&
                         typeof(child.props.children.map) === 'function'
                     ) {
-    
+
                         var childChildren = child.props.children;
                         for (var i = 0; i < childChildren.length; i++) {
                             var descendant = childChildren[i];
@@ -521,7 +521,7 @@
                             if (true) {
                                 if (typeof(descendant.props.column) !== 'undefined') {
                                     if (typeof(descendant.props.data) !== 'undefined') {
-    
+
                                         childData[descendant.props.column] =
                                             descendant.props.data;
                                     } else if (
@@ -541,11 +541,11 @@
                             }
                         }
                     }
-    
+
                     data.push(childData);
                 }.bind(this));
             }
-    
+
             return data;
         },
         initialize: function(props) {
@@ -559,7 +559,7 @@
             for (var i in this.props.sortable) {
                 var column = this.props.sortable[i];
                 var columnName, sortFunction;
-    
+
                 if (column instanceof Object) {
                     if (typeof(column.column) !== 'undefined') {
                         columnName = column.column;
@@ -567,7 +567,7 @@
                         console.warn('Sortable column specified without column name');
                         return;
                     }
-    
+
                     if (typeof(column.sortFunction) !== 'undefined' && column.sortFunction instanceof Function) {
                         sortFunction = column.sortFunction;
                     } else {
@@ -577,7 +577,7 @@
                     columnName      = column;
                     sortFunction    = 'default';
                 }
-    
+
                 this._sortable[columnName] = sortFunction;
             }
         },
@@ -601,7 +601,7 @@
                 },
                 filter: ''
             };
-    
+
             // Set the state of the current sort to the default sort
             if (this.props.sortBy !== false || this.props.defaultSort !== false) {
                 var sortingColumn = this.props.sortBy || this.props.defaultSort;
@@ -612,14 +612,14 @@
         getCurrentSort: function(column) {
             if (column instanceof Object) {
                 var columnName, sortDirection;
-    
+
                 if (typeof(column.column) !== 'undefined') {
                     columnName = column.column;
                 } else {
                     console.warn('Default column specified without column name');
                     return;
                 }
-    
+
                 if (typeof(column.direction) !== 'undefined') {
                     if (column.direction === 1 || column.direction === 'asc') {
                         sortDirection = 1;
@@ -636,7 +636,7 @@
                 columnName      = column;
                 sortDirection   = 1;
             }
-    
+
             return {
                 column: columnName,
                 direction: sortDirection
@@ -646,7 +646,7 @@
             if (sortBy !== false &&
                 sortBy.column !== this.state.currentSort.column &&
                 sortBy.direction !== this.state.currentSort.direction) {
-    
+
                 this.setState({ currentSort: this.getCurrentSort(sortBy) });
             }
         },
@@ -669,13 +669,13 @@
             // Helper function to apply filter text to a list of table rows
             var filter = filter.toLowerCase();
             var matchedChildren = [];
-    
+
             for (var i = 0; i < children.length; i++) {
                 var data = children[i].props.data;
-    
+
                 for (var j = 0; j < this.props.filterable.length; j++) {
                     var filterColumn = this.props.filterable[j];
-    
+
                     if (
                         typeof(data[filterColumn]) !== 'undefined' &&
                         data[filterColumn].toString().toLowerCase().indexOf(filter) > -1
@@ -685,36 +685,36 @@
                     }
                 }
             }
-    
+
             return matchedChildren;
         },
         sortByCurrentSort: function(){
             // Apply a sort function according to the current sort in the state.
             // This allows us to perform a default sort even on a non sortable column.
             var currentSort = this.state.currentSort;
-    
+
             if (currentSort.column === null) {
                 return;
             }
-    
+
             this.data.sort(function(a, b){
                 var keyA = a[currentSort.column];
                 keyA = keyA ? keyA.toString() : '';
                 var keyB = b[currentSort.column];
                 keyB = keyB ? keyB.toString() : '';
-    
+
                 // Default sort
                 if (this._sortable[currentSort.column] === 'default') {
-    
+
                     // Reverse direction if we're doing a reverse sort
                     if (keyA < keyB) {
                         return -1 * currentSort.direction;
                     }
-    
+
                     if (keyA > keyB) {
                         return 1 * currentSort.direction;
                     }
-    
+
                     return 0;
                 } else {
                     // Reverse columns if we're doing a reverse sort
@@ -731,16 +731,16 @@
             if (typeof(this._sortable[column]) === 'undefined') {
                 return;
             }
-    
+
             var currentSort = this.state.currentSort;
-    
+
             if (currentSort.column === column) {
                 currentSort.direction *= -1;
             } else {
                 currentSort.column = column;
                 currentSort.direction = 1;
             }
-    
+
             // Set the current sort and pass it to the sort function
             this.setState({ currentSort: currentSort });
             this.sortByCurrentSort();
@@ -749,7 +749,7 @@
             var children = [];
             var columns;
             var userColumnsSpecified = false;
-    
+
             if (
                 this.props.children &&
                 this.props.children.length > 0 &&
@@ -759,12 +759,12 @@
             } else {
                 columns = this.props.columns || [];
             }
-    
+
             if (columns.length > 0) {
                 userColumnsSpecified = true;
                 columns = this.translateColumnsArray(columns);
             }
-    
+
             // Build up table rows
             if (this.data && typeof this.data.map === 'function') {
                 // Build up the columns array
@@ -779,7 +779,7 @@
                                     key:   k,
                                     label: k
                                 };
-    
+
                                 // Only add a new column if it doesn't already exist in the columns array
                                 if (
                                     columns.find(function(element) {
@@ -791,19 +791,19 @@
                             }
                         }
                     }
-    
+
                     return (
                         Tr({columns: columns, key: i, data: data})
                     );
                 }.bind(this)));
             }
-    
+
             if (this.props.sortable === true) {
                 for (var i = 0; i < columns.length; i++) {
                     this._sortable[columns[i].key] = 'default';
                 }
             }
-    
+
             // Determine if we render the filter box
             var filtering = false;
             if (
@@ -813,38 +813,38 @@
             ) {
                 filtering = true;
             }
-    
+
             // Apply filters
             var filteredChildren = children;
             if (this.state.filter !== '') {
                 filteredChildren = this.applyFilter(this.state.filter, filteredChildren);
             }
-    
+
             // Determine pagination properties and which columns to display
             var itemsPerPage = 0;
             var pagination = false;
             var numPages;
             var currentPage = this.state.currentPage;
-    
+
             var currentChildren = filteredChildren;
             if (this.props.itemsPerPage > 0) {
                 itemsPerPage = this.props.itemsPerPage;
                 numPages = Math.ceil(filteredChildren.length / itemsPerPage)
-    
+
                 if (currentPage > numPages - 1) {
                     currentPage = numPages - 1;
                 }
-    
+
                 pagination = true;
                 currentChildren = filteredChildren.slice(
                     currentPage * itemsPerPage,
                     (currentPage + 1) * itemsPerPage
                 );
             }
-    
+
             // Manually transfer props
             var props = filterPropsFrom(this.props);
-    
+
             return React.DOM.table(props,
                 (columns && columns.length > 0 ?
                     Thead({
@@ -867,7 +867,7 @@
             );
         }
     });
-    
+
     function filterPropsFrom(baseProps) {
         baseProps = baseProps || {};
         var props = {};
@@ -878,7 +878,7 @@
         }
         return props;
     };
-    
+
     var internalProps = {
         columns: true,
         sortable: true,
