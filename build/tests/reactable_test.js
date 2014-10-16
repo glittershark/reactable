@@ -980,4 +980,44 @@ describe('Reactable', function() {
             });
         });
     });
+
+    describe('directly passing a data array with numeric data', function() {
+        before(function() {
+            React.renderComponent(
+                Reactable.Table({className: "table", id: "table", data: [
+                    { Name: 'Griffin Smith', Age: 18},
+                    { Age: 23, Name: 'Lee Salminen'},
+                    { Age: 28.45, Position: 'Developer'}
+                ]}),
+                ReactableTestUtils.testNode()
+            );
+        });
+
+        after(ReactableTestUtils.resetTestEnvironment);
+
+        it('renders the table', function() {
+            expect($('table#table.table')).to.exist;
+        });
+
+        it('renders the column headers in the table', function() {
+            var headers = [];
+            $('thead th').each(function() {
+                headers.push($(this).text());
+            });
+
+            expect(headers).to.eql([ 'Name', 'Age', 'Position']);
+        });
+
+        it('renders the first row with the correct data', function() {
+            ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', '']);
+        });
+
+        it('renders the second row with the correct data', function() {
+            ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', '']);
+        });
+
+        it('renders the third row with the correct data', function() {
+            ReactableTestUtils.expectRowText(2, ['', '28.45', 'Developer']);
+        });
+    });
 });

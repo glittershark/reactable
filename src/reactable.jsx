@@ -280,13 +280,15 @@
                     tdProps[key] = this.props.column[key];
                 }
             }
-    
+
             var data = this.props.data;
-            if (
-                typeof(this.props.data) === 'undefined' &&
-                typeof(this.props.children) === 'string'
-            ) {
-                data = this.props.children;
+            if (typeof(this.props.data) === 'undefined') {
+                if (typeof(this.props.children) === 'string') {
+                    data = this.props.children;
+                }
+                else if (typeof this.props.children !== 'undefined' && typeof(this.props.children.toString) === 'function') {
+                    data = this.props.children.toString();
+                }
             }
     
             if (typeof(this.props.children) !== 'undefined') {
