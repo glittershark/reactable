@@ -981,12 +981,12 @@ describe('Reactable', function() {
         });
     });
 
-    describe('directly passing a data array with numeric data', function() {
+    describe('directly passing a data array with non-string data', function() {
         before(function() {
             React.renderComponent(
                 Reactable.Table({className: "table", id: "table", data: [
                     { Name: 'Griffin Smith', Age: 18},
-                    { Age: 23, Name: 'Lee Salminen'},
+                    { Age: 23, Name: { toString: function() { return 'Lee Salminen' } } },
                     { Age: 28.45, Position: 'Developer'}
                 ]}),
                 ReactableTestUtils.testNode()
