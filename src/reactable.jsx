@@ -283,10 +283,11 @@
 
             var data = this.props.data;
             if (typeof(this.props.children) !== 'undefined') {
-                if (typeof(this.props.data) === 'undefined') {
-                    if (typeof(this.props.children.toString) === 'function') {
-                        data = this.props.children.toString();
-                    }
+                if (
+                    typeof(this.props.data) === 'undefined' &&
+                    typeof(this.props.children.toString) === 'function'
+                ) {
+                    data = this.props.children.toString();
                 }
 
                 if (this.props.children instanceof Unsafe) {
