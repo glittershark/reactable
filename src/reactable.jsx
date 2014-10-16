@@ -286,7 +286,7 @@
                 if (typeof(this.props.children) === 'string') {
                     data = this.props.children;
                 }
-                else if (typeof(this.props.children) === 'number') {
+                else if (typeof this.props.children !== 'undefined' && typeof(this.props.children.toString) === 'function') {
                     data = this.props.children.toString();
                 }
             }
