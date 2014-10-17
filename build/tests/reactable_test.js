@@ -1952,13 +1952,22 @@ describe('Reactable', function() {
             $(this.parentTestNode).empty().remove();
         });
 
+        it('renders the column headers in the first table', function() {
+            var headers = [];
+            this.testNode1.find('thead th').each(function() {
+                headers.push($(this).text());
+            });
+
+            expect(headers).to.eql(['Name', 'Age', 'Position']);
+        });
+
         it('renders the column headers in the second table', function() {
             var headers = [];
             this.testNode2.find('thead th').each(function() {
                 headers.push($(this).text());
             });
 
-            expect(headers).to.eql([ 'Moniker', 'Elderliness', 'Title']);
+            expect(headers).to.eql(['Moniker', 'Elderliness', 'Title']);
         });
     });
 });
