@@ -1923,11 +1923,8 @@ describe('Reactable', function() {
     describe('multiple tables on a page', function() {
         before(function() {
             this.parentTestNode = ReactableTestUtils.testNode();
-            this.testNode1 = $(this.parentTestNode).append('<div>').attr('id', 'test-node-1');
-            this.testNode2 = $(this.parentTestNode).append('<div>').attr('id', 'test-node-2');
-
-            this.testNode1.empty();
-            this.testNode2.empty();
+            this.testNode1 = $('<div>').attr('id', 'test-node-1');
+            this.testNode2 = $('<div>').attr('id', 'test-node-2');
 
             React.renderComponent(
                 Reactable.Table({className: "table", id: "table1", data: [
