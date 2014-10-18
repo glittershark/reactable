@@ -1923,11 +1923,8 @@ describe('Reactable', function() {
     describe('multiple tables on a page', function() {
         before(function() {
             this.parentTestNode = ReactableTestUtils.testNode();
-            this.testNode1 = $(this.parentTestNode).append('<div>').attr('id', 'test-node-1');
-            this.testNode2 = $(this.parentTestNode).append('<div>').attr('id', 'test-node-2');
-
-            this.testNode1.empty();
-            this.testNode2.empty();
+            this.testNode1 = $('<div>').attr('id', 'test-node-1');
+            this.testNode2 = $('<div>').attr('id', 'test-node-2');
 
             React.renderComponent(
                 <Reactable.Table className="table" id="table1" data={[
@@ -1952,13 +1949,22 @@ describe('Reactable', function() {
             $(this.parentTestNode).empty().remove();
         });
 
+        it('renders the column headers in the first table', function() {
+            var headers = [];
+            this.testNode1.find('thead th').each(function() {
+                headers.push($(this).text());
+            });
+
+            expect(headers).to.eql(['Name', 'Age', 'Position']);
+        });
+
         it('renders the column headers in the second table', function() {
             var headers = [];
             this.testNode2.find('thead th').each(function() {
                 headers.push($(this).text());
             });
 
-            expect(headers).to.eql([ 'Moniker', 'Elderliness', 'Title']);
+            expect(headers).to.eql(['Moniker', 'Elderliness', 'Title']);
         });
     });
 });
