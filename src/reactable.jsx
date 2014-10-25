@@ -121,6 +121,11 @@
         return typeof(thing) !== 'undefined' && typeof(thing.toString === 'function');
     }
 
+    // this is a bit hacky - it'd be nice if React exposed an API for this
+    function isReactComponent(thing) {
+        return typeof(thing) === 'object' && typeof(thing.props) !== 'undefined';
+    }
+
     Unsafe.prototype.toString = function() {
         return this.content;
     };
@@ -232,10 +237,13 @@
 
             var data = this.props.data;
             if (typeof(this.props.children) !== 'undefined') {
-                if (
+                if (isReactComponent(this.props.children)) {
+                    data = this.props.children;
+                } else if (
                     typeof(this.props.data) === 'undefined' &&
                     stringable(this.props.children)
                 ) {
+                    if (isReactComponent(this.props.children)) { console.log('child is component'); }
                     data = this.props.children.toString();
                 }
 
