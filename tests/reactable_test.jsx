@@ -21,6 +21,7 @@ var ReactableTestUtils = {
             expect($(row[i])).to.have.text(textArray[i]);
         }
     },
+
     testNode: function() {
         testNode = $('<div>').attr('id', 'test-node');
         $('body').append(testNode);
@@ -111,54 +112,107 @@ describe('Reactable', function() {
     });
 
     describe('adding <Td>s to the <Tr>s', function() {
-        before(function() {
-            window.tr_test = true;
-            React.renderComponent(
-                <Reactable.Table className="table" id="table">
-                    <Reactable.Tr>
-                        <Reactable.Td column="Name">Griffin Smith</Reactable.Td>
-                        <Reactable.Td column="Age">18</Reactable.Td>
-                    </Reactable.Tr>
-                    <Reactable.Tr>
-                        <Reactable.Td column="Name">Lee Salminen</Reactable.Td>
-                        <Reactable.Td column="Age">23</Reactable.Td>
-                    </Reactable.Tr>
-                    <Reactable.Tr>
-                        <Reactable.Td column="Position">Developer</Reactable.Td>
-                        <Reactable.Td column="Age">28</Reactable.Td>
-                    </Reactable.Tr>
-                </Reactable.Table>,
-                ReactableTestUtils.testNode()
-            );
-            window.tr_test = false;
-        });
-
-        after(ReactableTestUtils.resetTestEnvironment);
-
-        it('renders the table', function() {
-            expect($('table#table.table')).to.exist;
-        });
-
-        it('renders the column headers in the table', function() {
-            var headers = [];
-            $('thead th').each(function() {
-                headers.push($(this).text());
+        context('with plain text', function() {
+            before(function() {
+                window.tr_test = true;
+                React.renderComponent(
+                    <Reactable.Table className="table" id="table">
+                        <Reactable.Tr>
+                            <Reactable.Td column="Name">Griffin Smith</Reactable.Td>
+                            <Reactable.Td column="Age">18</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column="Name">Lee Salminen</Reactable.Td>
+                            <Reactable.Td column="Age">23</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column="Position">Developer</Reactable.Td>
+                            <Reactable.Td column="Age">28</Reactable.Td>
+                        </Reactable.Tr>
+                    </Reactable.Table>,
+                    ReactableTestUtils.testNode()
+                );
+                window.tr_test = false;
             });
 
-            expect(headers).to.eql([ 'Name', 'Age', 'Position' ]);
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('renders the table', function() {
+                expect($('table#table.table')).to.exist;
+            });
+
+            it('renders the column headers in the table', function() {
+                var headers = [];
+                $('thead th').each(function() {
+                    headers.push($(this).text());
+                });
+
+                expect(headers).to.eql([ 'Name', 'Age', 'Position' ]);
+            });
+
+            it('renders the first row with the correct data', function() {
+                ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', '']);
+            });
+
+            it('renders the second row with the correct data', function() {
+                ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', '']);
+            });
+
+            it('renders the third row with the correct data', function() {
+                ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
+            });
         });
 
-        it('renders the first row with the correct data', function() {
-            ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', '']);
-        });
+        context('with React.DOM nodes inside', function() {
+            before(function() {
+                window.tr_test = true;
+                React.renderComponent(
+                    <Reactable.Table className="table" id="table">
+                        <Reactable.Tr>
+                            <Reactable.Td column="Name"><b>Griffin Smith</b></Reactable.Td>
+                            <Reactable.Td column="Age"><em>18</em></Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column="Name"><b>Lee Salminen</b></Reactable.Td>
+                            <Reactable.Td column="Age"><em>23</em></Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column="Position"><b>Developer</b></Reactable.Td>
+                            <Reactable.Td column="Age"><em>28</em></Reactable.Td>
+                        </Reactable.Tr>
+                    </Reactable.Table>,
+                    ReactableTestUtils.testNode()
+                );
+                window.tr_test = false;
+            });
 
-        it('renders the second row with the correct data', function() {
-            ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', '']);
-        });
+            after(ReactableTestUtils.resetTestEnvironment);
 
-        it('renders the third row with the correct data', function() {
-            ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
-        });
+            it('renders the table', function() {
+                expect($('table#table.table')).to.exist;
+            });
+
+            it('renders the column headers in the table', function() {
+                var headers = [];
+                $('thead th').each(function() {
+                    headers.push($(this).text());
+                });
+
+                expect(headers).to.eql([ 'Name', 'Age', 'Position' ]);
+            });
+
+            it('renders the first row with the correct data', function() {
+                ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', '']);
+            });
+
+            it('renders the second row with the correct data', function() {
+                ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', '']);
+            });
+
+            it('renders the third row with the correct data', function() {
+                ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
+            });
+        })
     });
 
     describe('specifying an array of columns', function() {
@@ -987,14 +1041,9 @@ describe('Reactable', function() {
 
     describe('multiple tables on a page', function() {
         before(function() {
-            var parentTestNode = ReactTestUtils.testNode();
-            var testNode1 = $(parentTestNode).append('<div>');
-            var testNode2 = $(parentTestNode).append('<div>');
-            var data = [
-                { Name: 'Griffin Smith', Age: '18'},
-                { Age: '23', Name: 'Lee Salminen'},
-                { Age: '28', Position: 'Developer'}
-            ];
+            this.parentTestNode = ReactableTestUtils.testNode();
+            this.testNode1 = $('<div>').attr('id', 'test-node-1');
+            this.testNode2 = $('<div>').attr('id', 'test-node-2');
 
             React.renderComponent(
                 <Reactable.Table className="table" id="table" data={$.extend(true, [], data)} />,
@@ -1008,6 +1057,7 @@ describe('Reactable', function() {
         })
     });
 });
+
 var ReactableTestUtils = {
     resetTestEnvironment:  function() {
         React.unmountComponentAtNode($('div#test-node')[0]);
