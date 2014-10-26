@@ -26,7 +26,7 @@ module.exports = function(config) {
 
     // test results reporter to use
     // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-    reporters: ['spec'],
+    reporters: [ process.env.CI === 'true' ? 'spec' : 'dots'],
 
     // web server port
     port: 9876,
