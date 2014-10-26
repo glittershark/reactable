@@ -112,22 +112,19 @@ describe('Reactable', function() {
     });
 
     describe('adding <Td>s to the <Tr>s', function() {
-        context('with plain text', function() {
+        context('with only one <Td>', function() {
             before(function() {
                 window.tr_test = true;
                 React.renderComponent(
                     <Reactable.Table className="table" id="table">
                         <Reactable.Tr>
                             <Reactable.Td column="Name">Griffin Smith</Reactable.Td>
-                            <Reactable.Td column="Age">18</Reactable.Td>
                         </Reactable.Tr>
                         <Reactable.Tr>
                             <Reactable.Td column="Name">Lee Salminen</Reactable.Td>
-                            <Reactable.Td column="Age">23</Reactable.Td>
                         </Reactable.Tr>
                         <Reactable.Tr>
-                            <Reactable.Td column="Position">Developer</Reactable.Td>
-                            <Reactable.Td column="Age">28</Reactable.Td>
+                            <Reactable.Td column="Name">Ian Zhang</Reactable.Td>
                         </Reactable.Tr>
                     </Reactable.Table>,
                     ReactableTestUtils.testNode()
@@ -147,19 +144,72 @@ describe('Reactable', function() {
                     headers.push($(this).text());
                 });
 
-                expect(headers).to.eql([ 'Name', 'Age', 'Position' ]);
+                expect(headers).to.eql(['Name']);
             });
 
             it('renders the first row with the correct data', function() {
-                ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', '']);
+                ReactableTestUtils.expectRowText(0, ['Griffin Smith']);
             });
 
             it('renders the second row with the correct data', function() {
-                ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', '']);
+                ReactableTestUtils.expectRowText(1, ['Lee Salminen']);
             });
 
             it('renders the third row with the correct data', function() {
-                ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
+                ReactableTestUtils.expectRowText(2, ['Ian Zhang']);
+            });
+        });
+
+        context('with multiple <Td>s', function () {
+            context('with plain text', function() {
+                before(function() {
+                    window.tr_test = true;
+                    React.renderComponent(
+                        <Reactable.Table className="table" id="table">
+                            <Reactable.Tr>
+                                <Reactable.Td column="Name">Griffin Smith</Reactable.Td>
+                                <Reactable.Td column="Age">18</Reactable.Td>
+                            </Reactable.Tr>
+                            <Reactable.Tr>
+                                <Reactable.Td column="Name">Lee Salminen</Reactable.Td>
+                                <Reactable.Td column="Age">23</Reactable.Td>
+                            </Reactable.Tr>
+                            <Reactable.Tr>
+                                <Reactable.Td column="Position">Developer</Reactable.Td>
+                                <Reactable.Td column="Age">28</Reactable.Td>
+                            </Reactable.Tr>
+                        </Reactable.Table>,
+                        ReactableTestUtils.testNode()
+                    );
+                    window.tr_test = false;
+                });
+
+                after(ReactableTestUtils.resetTestEnvironment);
+
+                it('renders the table', function() {
+                    expect($('table#table.table')).to.exist;
+                });
+
+                it('renders the column headers in the table', function() {
+                    var headers = [];
+                    $('thead th').each(function() {
+                        headers.push($(this).text());
+                    });
+
+                    expect(headers).to.eql([ 'Name', 'Age', 'Position' ]);
+                });
+
+                it('renders the first row with the correct data', function() {
+                    ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', '']);
+                });
+
+                it('renders the second row with the correct data', function() {
+                    ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', '']);
+                });
+
+                it('renders the third row with the correct data', function() {
+                    ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
+                });
             });
         });
 
