@@ -126,6 +126,10 @@
         return typeof(thing) === 'object' && typeof(thing.props) !== 'undefined';
     }
 
+    React.Children.children = function(children) {
+        return React.Children.map(children, function(x) { return x; }) || [];
+    };
+
     Unsafe.prototype.toString = function() {
         return this.content;
     };
@@ -265,7 +269,7 @@
             dataType: 'object'
         },
         render: function() {
-            var children = this.props.children || [];
+            var children = React.Children.children(this.props.children);
 
             if (
                 this.props.data &&
@@ -454,41 +458,31 @@
 
                     var childData = child.props.data || {};
 
-                    // Given our modification of Array.prototype, this is the
-                    // best way to check if child.props.children is an array
-                    if (
-                        typeof(child.props.children) !== 'undefined' &&
-                        typeof(child.props.children.map) === 'function'
-                    ) {
+                    React.Children.forEach(child.props.children, function(descendant) {
+                        // TODO
+                        /* if (descendant.type.ConvenienceConstructor === Td) { */
+                        if (true) {
+                            if (typeof(descendant.props.column) !== 'undefined') {
+                                if (typeof(descendant.props.data) !== 'undefined') {
 
-                        var childChildren = child.props.children;
-                        for (var i = 0; i < childChildren.length; i++) {
-                            var descendant = childChildren[i];
-                            // TODO
-                            /* if (descendant.type.ConvenienceConstructor === Td) { */
-                            if (true) {
-                                if (typeof(descendant.props.column) !== 'undefined') {
-                                    if (typeof(descendant.props.data) !== 'undefined') {
-
-                                        childData[descendant.props.column] =
-                                            descendant.props.data;
-                                    } else if (
-                                        typeof(descendant.props.children) !== 'undefined'
-                                    ) {
-                                        childData[descendant.props.column] =
-                                            descendant.props.children;
-                                    } else {
-                                        console.warn('exports.Td specified without ' +
-                                                'a `data` property or children, ' +
-                                                'ignoring');
-                                    }
+                                    childData[descendant.props.column] =
+                                        descendant.props.data;
+                                } else if (
+                                    typeof(descendant.props.children) !== 'undefined'
+                                ) {
+                                    childData[descendant.props.column] =
+                                        descendant.props.children;
                                 } else {
-                                    console.warn('exports.Td specified without a ' +
-                                            '`column` property, ignoring');
+                                    console.warn('exports.Td specified without ' +
+                                            'a `data` property or children, ' +
+                                            'ignoring');
                                 }
+                            } else {
+                                console.warn('exports.Td specified without a ' +
+                                        '`column` property, ignoring');
                             }
                         }
-                    }
+                    });
 
                     data.push(childData);
                 }.bind(this));
