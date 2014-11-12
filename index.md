@@ -130,6 +130,7 @@ either:
 If you don't want to go all the way down the JSX rabbit hole to render individual cells as
 HTML, and you know your source data is safe, you can wrap strings in `Reactable.unsafe` to
 prevent their content from being escaped, like so:
+
 ~~~javascript
 var Table = Reactable.Table,
     unsafe = Reactable.unsafe;
@@ -184,7 +185,6 @@ We've pre-built some sort functions for you.
 To specify a custom sort function, use the following structure for the column object:
 
 ~~~javascript
-
 {column: 'Column Name', sortFunction: function(a, b){} }
 ~~~
 
@@ -193,7 +193,6 @@ with a column and a `direction` paramenter of either `asc` or `desc`.
 If no direction is specified, the default sort will be ascending.  Example:
 
 ~~~javascript
-
 {column: 'Column Name', direction: 'asc' }
 ~~~
 
@@ -221,6 +220,7 @@ sortable={[
 ]}
 defaultSort={{column: 'Age', direction: 'desc'}}/>
 ~~~
+
 ### Filtering
 
 You can do simple case-insensitive filtering by specifying a filterable property on the table.  This
