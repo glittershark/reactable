@@ -357,6 +357,38 @@ describe('Reactable', function() {
             });
         });
 
+        context('in column labels', function() {
+            before(function() {
+                React.renderComponent(
+                    <Reactable.Table className="table" id="table" data={[
+                        { Name: 'Griffin Smith', Age: '18'},
+                        { Age: '23', Name: 'Lee Salminen'},
+                        { Age: '28', Position: 'Developer'}
+                    ]} columns={[
+                        { key: 'Name', label: Reactable.unsafe('<strong>Name</strong>') },
+                        { key: 'Age', label: Reactable.unsafe('<em>Age</em>') },
+                        { key: 'Position', label: Reactable.unsafe('<small>Position</small>') }
+                    ]} />,
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('renders the HTML in the column headers', function() {
+                var headers = [];
+                $('thead th').each(function() {
+                    headers.push($(this).html());
+                });
+
+                expect(headers).to.eql([
+                    '<strong>Name</strong>',
+                    '<em>Age</em>',
+                    '<small>Position</small>'
+                ]);
+            });
+        });
+
         context('in the <Tr>s', function() {
             before(function() {
                 React.renderComponent(
