@@ -153,6 +153,8 @@ React.renderComponent(
 );
 ```
 
+You can also pass in `unsafe` strings as column labels or in a `<Reactable.Th>`
+
 ### Pagination
 
 You can also use pagination, by just specifying an `itemsPerPage` argument to the
