@@ -117,6 +117,10 @@
         this.content = content;
     }
 
+    Unsafe.prototype.toString = function() {
+        return this.content;
+    };
+
     function stringable(thing) {
         return typeof(thing) !== 'undefined' && typeof(thing.toString === 'function');
     }
@@ -128,10 +132,6 @@
 
     React.Children.children = function(children) {
         return React.Children.map(children, function(x) { return x; }) || [];
-    };
-
-    Unsafe.prototype.toString = function() {
-        return this.content;
     };
 
     exports.unsafe = function(str) {
@@ -240,6 +240,7 @@
             }
 
             var data = this.props.data;
+
             if (typeof(this.props.children) !== 'undefined') {
                 if (isReactComponent(this.props.children)) {
                     data = this.props.children;
@@ -323,11 +324,11 @@
                     }
                 }
 
-                Ths.push(React.DOM.th({
-                    className: sortClass,
-                    key: index,
-                    onClick: this.handleClickTh.bind(this, column)
-                }, column.label));
+                Ths.push(
+                    Th({className: sortClass, key: index, onClick: this.handleClickTh.bind(this, column)}, 
+                        column.label
+                    )
+                );
             }
 
             // Manually transfer props
@@ -347,7 +348,13 @@
 
     var Th = exports.Th = React.createClass({displayName: 'Th',
         render: function() {
-            return this.transferPropsTo(React.DOM.th(null, this.props.children));
+            if (this.props.children instanceof Unsafe) {
+                return this.transferPropsTo(
+                    React.DOM.th({dangerouslySetInnerHTML: {__html: this.props.children.toString()}})
+                );
+            } else {
+                return this.transferPropsTo(React.DOM.th(null, this.props.children));
+            }
         }
     });
 
