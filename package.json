@@ -1,10 +1,15 @@
 {
-  "name": "Reactable",
-  "version": "0.9.0",
+  "name": "reactable",
+  "version": "0.9.3",
   "description": "Fast, flexible, simple data tables in React",
+  "main": "./build/reactable.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/glittershark/reactable.git"
+  },
+  "bugs": {
+    "url" : "http://github.com/glittershark/reactable/issues",
+    "email" : "wildgriffin45@gmail.com"
   },
   "author": "Griffin Smith",
   "license": "MIT",
