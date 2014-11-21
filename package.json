@@ -31,5 +31,6 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-spec-reporter": "0.0.12",
     "mocha": "^1.18.2"
-  }
+  },
+  "keywords": ["react-component", "react", "table", "data-tables"]
 }
