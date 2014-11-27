@@ -341,7 +341,7 @@
                         onFilter: this.props.onFilter
                     })
                 : ''),
-                React.DOM.tr({className: "reactable-column-header"}, Ths)
+                React.DOM.tr({className: "reactable-column-header", style: {display: this.props.noHeaders ? 'none' : 'table-row'}}, Ths)
             );
         }
     });
@@ -781,7 +781,7 @@
                     currentPage = numPages - 1;
                 }
 
-                pagination = true;
+                pagination = numPages > 1;
                 currentChildren = filteredChildren.slice(
                     currentPage * itemsPerPage,
                     (currentPage + 1) * itemsPerPage
@@ -791,6 +791,7 @@
             // Manually transfer props
             var props = filterPropsFrom(this.props);
 
+            var noResultsView = this.props.noResults || (<div style={{textAlign: 'center'}}>No results were found.</div>);
             return React.DOM.table(props,
                 (columns && columns.length > 0 ?
                     Thead({
@@ -798,10 +799,11 @@
                         filtering: filtering,
                         onFilter: this.onFilter,
                         sort: this.state.currentSort,
-                        onSort: this.onSort
+                        onSort: this.onSort,
+                        noHeaders: !currentChildren || currentChildren.length === 0
                     })
                 : null),
-                React.DOM.tbody({className: "reactable-data"}, currentChildren),
+                (currentChildren && currentChildren.length ? React.DOM.tbody({className: "reactable-data"}, currentChildren) : noResultsView),
                 (pagination === true ?
                     Paginator({
                         colSpan: columns.length,
