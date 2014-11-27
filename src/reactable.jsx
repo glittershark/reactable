@@ -800,7 +800,7 @@
                         onFilter: this.onFilter,
                         sort: this.state.currentSort,
                         onSort: this.onSort,
-                        noHeaders: currentChildren.length === 0
+                        noHeaders: ! currentChildren || currentChildren.length === 0
                     })
                 : noResultsView),
                 React.DOM.tbody({className: "reactable-data"}, currentChildren),
