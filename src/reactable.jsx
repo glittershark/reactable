@@ -337,7 +337,7 @@
             return React.DOM.thead(props,
                 (this.props.filtering === true ?
                     Filterer({
-                        colSpan: this.props.noHeaders === true ? 1 : this.props.columns.length,
+                        colSpan: this.props.columns.length,
                         onFilter: this.props.onFilter
                     })
                 : ''),
