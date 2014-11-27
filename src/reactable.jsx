@@ -803,7 +803,7 @@
                         noHeaders: !currentChildren || currentChildren.length === 0
                     })
                 : null),
-                (currentChildren ? React.DOM.tbody({className: "reactable-data"}, currentChildren) : noResultsView),
+                (currentChildren && currentChildren.length ? React.DOM.tbody({className: "reactable-data"}, currentChildren) : noResultsView),
                 (pagination === true ?
                     Paginator({
                         colSpan: columns.length,
