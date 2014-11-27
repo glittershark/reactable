@@ -341,7 +341,7 @@
                         onFilter: this.props.onFilter
                     })
                 : ''),
-                (this.props.noHeaders === true ? React.DOM.tr({className: "reactable-column-header"}, Ths) : '')
+                React.DOM.tr({className: "reactable-column-header", style: {display: this.props.noHeaders ? 'none' : 'table-cell'}}, Ths)
             );
         }
     });
@@ -800,7 +800,7 @@
                         onFilter: this.onFilter,
                         sort: this.state.currentSort,
                         onSort: this.onSort,
-                        noHeaders: ! currentChildren || currentChildren.length === 0
+                        noHeaders: !currentChildren || currentChildren.length === 0
                     })
                 : noResultsView),
                 React.DOM.tbody({className: "reactable-data"}, currentChildren),
