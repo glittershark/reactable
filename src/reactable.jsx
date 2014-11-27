@@ -781,7 +781,7 @@
                     currentPage = numPages - 1;
                 }
 
-                pagination = true;
+                pagination = numPages > 1;
                 currentChildren = filteredChildren.slice(
                     currentPage * itemsPerPage,
                     (currentPage + 1) * itemsPerPage
@@ -791,8 +791,9 @@
             // Manually transfer props
             var props = filterPropsFrom(this.props);
 
+            var noResultsView = this.props.noResults || (<div>No results were found.</div>);
             return React.DOM.table(props,
-                (columns && columns.length > 0 ?
+                (columns && columns.length > 0 && currentChildren.length > 0 ?
                     Thead({
                         columns: columns,
                         filtering: filtering,
@@ -800,7 +801,7 @@
                         sort: this.state.currentSort,
                         onSort: this.onSort
                     })
-                : null),
+                : noResultsView),
                 React.DOM.tbody({className: "reactable-data"}, currentChildren),
                 (pagination === true ?
                     Paginator({
