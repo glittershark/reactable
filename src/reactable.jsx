@@ -337,11 +337,11 @@
             return React.DOM.thead(props,
                 (this.props.filtering === true ?
                     Filterer({
-                        colSpan: this.props.columns.length,
+                        colSpan: this.props.noHeaders === true ? 1 : this.props.columns.length,
                         onFilter: this.props.onFilter
                     })
                 : ''),
-                React.DOM.tr({className: "reactable-column-header"}, Ths)
+                (this.props.noHeaders === true ? React.DOM.tr({className: "reactable-column-header"}, Ths) : '')
             );
         }
     });
@@ -791,15 +791,16 @@
             // Manually transfer props
             var props = filterPropsFrom(this.props);
 
-            var noResultsView = this.props.noResults || (<div>No results were found.</div>);
+            var noResultsView = this.props.noResults || (<div style={{textAlign: 'center'}}>No results were found.</div>);
             return React.DOM.table(props,
-                (columns && columns.length > 0 && currentChildren.length > 0 ?
+                (columns && columns.length > 0 ?
                     Thead({
                         columns: columns,
                         filtering: filtering,
                         onFilter: this.onFilter,
                         sort: this.state.currentSort,
-                        onSort: this.onSort
+                        onSort: this.onSort,
+                        noHeaders: currentChildren.length === 0
                     })
                 : noResultsView),
                 React.DOM.tbody({className: "reactable-data"}, currentChildren),
