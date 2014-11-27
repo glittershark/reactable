@@ -341,7 +341,7 @@
                         onFilter: this.props.onFilter
                     })
                 : ''),
-                React.DOM.tr({className: "reactable-column-header", style: {display: this.props.noHeaders ? 'none' : 'table-cell'}}, Ths)
+                React.DOM.tr({className: "reactable-column-header", style: {display: this.props.noHeaders ? 'none' : 'table-row'}}, Ths)
             );
         }
     });
@@ -802,8 +802,8 @@
                         onSort: this.onSort,
                         noHeaders: !currentChildren || currentChildren.length === 0
                     })
-                : noResultsView),
-                React.DOM.tbody({className: "reactable-data"}, currentChildren),
+                : null),
+                (currentChildren ? React.DOM.tbody({className: "reactable-data"}, currentChildren) : noResultsView),
                 (pagination === true ?
                     Paginator({
                         colSpan: columns.length,
