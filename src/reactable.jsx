@@ -637,7 +637,7 @@
         onPageChange: function(page) {
             this.setState({ currentPage: page });
         },
-        onFilter: function(filter) {
+        filterBy: function(filter) {
             this.setState({ filter: filter });
         },
         applyFilter: function(filter, children) {
@@ -824,7 +824,7 @@
                 (columns && columns.length > 0
                     ? <Thead columns={columns}
                              filtering={filtering}
-                             onFilter={this.onFilter}
+                             onFilter={this.filterBy}
                              sort={this.state.currentSort}
                              sortableColumns={this._sortable}
                              onSort={this.onSort}
