@@ -314,8 +314,12 @@
                 var column = this.props.columns[index];
                 var sortClass = '';
 
+                if (this.props.sortableColumns[column.key]) {
+                  sortClass += 'reactable-header-sortable ';
+                }
+
                 if (this.props.sort.column === column.key) {
-                    sortClass = 'reactable-header-sort';
+                    sortClass += 'reactable-header-sort';
                     if (this.props.sort.direction === 1) {
                         sortClass += '-asc';
                     }
@@ -798,6 +802,7 @@
                         filtering: filtering,
                         onFilter: this.onFilter,
                         sort: this.state.currentSort,
+                        sortableColumns: this._sortable,
                         onSort: this.onSort
                     })
                 : null),

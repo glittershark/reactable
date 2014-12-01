@@ -646,6 +646,17 @@ describe('Reactable', function() {
                 ReactableTestUtils.expectRowText(2, ['Ian Zhang', '28', 'Developer']);
             });
 
+            it('adds reactable-header-sortable to all headers', function(){
+              var header = $('#table thead tr.reactable-column-header th')[0];
+              expect($(header)).to.have.class('reactable-header-sortable');
+
+              header = $('#table thead tr.reactable-column-header th')[1];
+              expect($(header)).to.have.class('reactable-header-sortable');
+
+              header = $('#table thead tr.reactable-column-header th')[2];
+              expect($(header)).to.have.class('reactable-header-sortable');
+            });
+
             it('sorts by text in ascending order', function(){
                 var positionHeader = $('#table thead tr.reactable-column-header th')[2];
                 ReactTestUtils.Simulate.click(positionHeader);
