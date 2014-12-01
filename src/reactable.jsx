@@ -113,6 +113,31 @@
         };
     }
 
+    if (!Object.assign) {
+        Object.defineProperty(Object, "assign", {
+            enumerable: false,
+            configurable: true,
+            writable: true,
+            value: function(target, firstSource) {
+                "use strict";
+                if (target === undefined || target === null)
+            throw new TypeError("Cannot convert first argument to object");
+        var to = Object(target);
+        for (var i = 1; i < arguments.length; i++) {
+            var nextSource = arguments[i];
+            if (nextSource === undefined || nextSource === null) continue;
+            var keysArray = Object.keys(Object(nextSource));
+            for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+                var nextKey = keysArray[nextIndex];
+                var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
+                if (desc !== undefined && desc.enumerable) to[nextKey] = nextSource[nextKey];
+            }
+        }
+        return to;
+            }
+        });
+    }
+
     function Unsafe(content) {
         this.content = content;
     }
@@ -341,7 +366,7 @@
                         onFilter: this.props.onFilter
                     })
                 : ''),
-                React.DOM.tr({className: "reactable-column-header"}, Ths)
+                <tr className="reactable-column-header">{Ths}</tr>
             );
         }
     });
@@ -791,26 +816,28 @@
             // Manually transfer props
             var props = filterPropsFrom(this.props);
 
-            return React.DOM.table(props,
-                (columns && columns.length > 0 ?
-                    Thead({
-                        columns: columns,
-                        filtering: filtering,
-                        onFilter: this.onFilter,
-                        sort: this.state.currentSort,
-                        onSort: this.onSort
-                    })
-                : null),
-                React.DOM.tbody({className: "reactable-data"}, currentChildren),
-                (pagination === true ?
-                    Paginator({
-                        colSpan: columns.length,
-                        numPages: numPages,
-                        currentPage: currentPage,
-                        onPageChange: this.onPageChange
-                    })
-                : '')
-            );
+            return <table {...props}>{[
+                (columns && columns.length > 0
+                    ? <Thead columns={columns}
+                             filtering={filtering}
+                             onFilter={this.onFilter}
+                             sort={this.state.currentSort}
+                             onSort={this.onSort}
+                             key="thead"/>
+                    : null
+                ),
+                <tbody className="reactable-data" key="tbody">
+                    {currentChildren}
+                </tbody>,
+                (pagination === true
+                    ? <Paginator colSpan={columns.length}
+                                 numPages={numPages}
+                                 currentPage={currentPage}
+                                 onPageChange={this.onPageChange}
+                                 key="paginator"/>
+                    : null
+                )
+            ]}</table>;
         }
     });
 
