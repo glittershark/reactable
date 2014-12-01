@@ -122,12 +122,12 @@
     };
 
     function stringable(thing) {
-        return typeof(thing) !== 'undefined' && typeof(thing.toString === 'function');
+        return thing !== null && typeof(thing) !== 'undefined' && typeof(thing.toString === 'function');
     }
 
     // this is a bit hacky - it'd be nice if React exposed an API for this
     function isReactComponent(thing) {
-        return typeof(thing) === 'object' && typeof(thing.props) !== 'undefined';
+        return thing !== null && typeof(thing) === 'object' && typeof(thing.props) !== 'undefined';
     }
 
     React.Children.children = function(children) {

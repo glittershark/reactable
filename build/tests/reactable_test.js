@@ -37,7 +37,8 @@ describe('Reactable', function() {
                 Reactable.Table({className: "table", id: "table", data: [
                     { Name: 'Griffin Smith', Age: '18'},
                     { Age: '23', Name: 'Lee Salminen'},
-                    { Age: '28', Position: 'Developer'}
+                    { Age: '28', Position: 'Developer'},
+                    { Name: 'Leonor Hyatt', Position: null}
                 ]}),
                 ReactableTestUtils.testNode()
             );
@@ -68,6 +69,10 @@ describe('Reactable', function() {
 
         it('renders the third row with the correct data', function() {
             ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
+        });
+
+        it('handles null values', function() {
+          ReactableTestUtils.expectRowText(3, ['Leonor Hyatt', '', '']);
         });
     });
 
