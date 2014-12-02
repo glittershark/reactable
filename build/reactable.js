@@ -367,7 +367,8 @@
                 (this.props.filtering === true ?
                     Filterer({
                         colSpan: this.props.columns.length,
-                        onFilter: this.props.onFilter
+                        onFilter: this.props.onFilter,
+                        value: this.props.currentFilter
                     })
                 : ''),
                 React.DOM.tr({className: "reactable-column-header"}, Ths)
@@ -388,12 +389,16 @@
     });
 
     var FiltererInput = React.createClass({displayName: 'FiltererInput',
+        onChange: function() {
+            this.props.onFilter(this.getDOMNode().value);
+        },
         render: function() {
             return (
-                React.DOM.input({type: "text", className: "reactable-filter-input", 
-                    onKeyUp: function(){
-                        this.props.onFilter(this.getDOMNode().value);
-                    }.bind(this)})
+                React.DOM.input({type: "text", 
+                       className: "reactable-filter-input", 
+                       value: this.props.value, 
+                       onKeyUp: this.onChange, 
+                       onChange: this.onChange})
             );
         }
     });
@@ -407,7 +412,8 @@
             return (
                 React.DOM.tr({className: "reactable-filterer"}, 
                     React.DOM.td({colSpan: this.props.colSpan}, 
-                        FiltererInput({onFilter: this.props.onFilter})
+                        FiltererInput({onFilter: this.props.onFilter, 
+                                       value: this.props.value})
                     )
                 )
             );
@@ -637,7 +643,7 @@
         onPageChange: function(page) {
             this.setState({ currentPage: page });
         },
-        onFilter: function(filter) {
+        filterBy: function(filter) {
             this.setState({ filter: filter });
         },
         applyFilter: function(filter, children) {
@@ -824,7 +830,8 @@
                 (columns && columns.length > 0
                     ? Thead({columns: columns, 
                              filtering: filtering, 
-                             onFilter: this.onFilter, 
+                             onFilter: this.filterBy, 
+                             currentFilter: this.state.filter, 
                              sort: this.state.currentSort, 
                              sortableColumns: this._sortable, 
                              onSort: this.onSort, 

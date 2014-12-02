@@ -1047,7 +1047,7 @@ describe('Reactable', function() {
     describe('filtering', function() {
         describe('basic case-insensitive filtering', function(){
             before(function() {
-                React.renderComponent(
+                this.component = React.renderComponent(
                     Reactable.Table({className: "table", id: "table", data: [
                         {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
                         {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
@@ -1061,15 +1061,32 @@ describe('Reactable', function() {
 
             after(ReactableTestUtils.resetTestEnvironment);
 
-            it('filters case insensitive on specified columns', function() {
-                var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
+            context('from the filterer field', function() {
+                it('filters case insensitive on specified columns', function() {
+                    var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
 
-                $filter.val('new');
-                React.addons.TestUtils.Simulate.keyUp($filter[0]);
+                    $filter.val('new');
+                    React.addons.TestUtils.Simulate.keyUp($filter[0]);
 
-                ReactableTestUtils.expectRowText(0, ['New York', 'this is some text', 'new']);
-                ReactableTestUtils.expectRowText(1, ['New Mexico', 'lorem ipsum', 'old']);
-                ReactableTestUtils.expectRowText(2, ['Alaska', 'bacon', 'renewed']);
+                    ReactableTestUtils.expectRowText(0, ['New York', 'this is some text', 'new']);
+                    ReactableTestUtils.expectRowText(1, ['New Mexico', 'lorem ipsum', 'old']);
+                    ReactableTestUtils.expectRowText(2, ['Alaska', 'bacon', 'renewed']);
+                });
+            });
+
+            context('from the function', function() {
+                before(function() {
+                    this.component.filterBy('york');
+                });
+
+                it('applies the filtering', function() {
+                    ReactableTestUtils.expectRowText(0, ['New York', 'this is some text', 'new']);
+                });
+
+                it('updates the value of the filterer', function() {
+                    var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
+                    expect($filter).to.have.value('york');
+                });
             });
         });
 
