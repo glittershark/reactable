@@ -367,7 +367,8 @@
                 (this.props.filtering === true ?
                     Filterer({
                         colSpan: this.props.columns.length,
-                        onFilter: this.props.onFilter
+                        onFilter: this.props.onFilter,
+                        value: this.props.currentFilter
                     })
                 : ''),
                 <tr className="reactable-column-header">{Ths}</tr>
@@ -388,12 +389,16 @@
     });
 
     var FiltererInput = React.createClass({
+        onChange: function() {
+            this.props.onFilter(this.getDOMNode().value);
+        },
         render: function() {
             return (
-                <input type="text" className="reactable-filter-input"
-                    onKeyUp={function(){
-                        this.props.onFilter(this.getDOMNode().value);
-                    }.bind(this)} />
+                <input type="text"
+                       className="reactable-filter-input"
+                       value={this.props.value}
+                       onKeyUp={this.onChange}
+                       onChange={this.onChange} />
             );
         }
     });
@@ -407,7 +412,8 @@
             return (
                 <tr className="reactable-filterer">
                     <td colSpan={this.props.colSpan}>
-                        <FiltererInput onFilter={this.props.onFilter}/>
+                        <FiltererInput onFilter={this.props.onFilter}
+                                       value={this.props.value} />
                     </td>
                 </tr>
             );
@@ -825,6 +831,7 @@
                     ? <Thead columns={columns}
                              filtering={filtering}
                              onFilter={this.filterBy}
+                             currentFilter={this.state.filter}
                              sort={this.state.currentSort}
                              sortableColumns={this._sortable}
                              onSort={this.onSort}

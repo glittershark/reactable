@@ -1076,13 +1076,16 @@ describe('Reactable', function() {
 
             context('from the function', function() {
                 before(function() {
-                    this.component.filterBy('new');
+                    this.component.filterBy('york');
                 });
 
                 it('applies the filtering', function() {
                     ReactableTestUtils.expectRowText(0, ['New York', 'this is some text', 'new']);
-                    ReactableTestUtils.expectRowText(1, ['New Mexico', 'lorem ipsum', 'old']);
-                    ReactableTestUtils.expectRowText(2, ['Alaska', 'bacon', 'renewed']);
+                });
+
+                it('updates the value of the filterer', function() {
+                    var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
+                    expect($filter).to.have.value('york');
                 });
             });
         });
