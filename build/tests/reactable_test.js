@@ -708,8 +708,9 @@ describe('Reactable', function() {
         });
 
         describe('passing `true` to sortable', function() {
+            var component;
             before(function() {
-                React.renderComponent(
+                component = React.renderComponent(
                     Reactable.Table({className: "table", id: "table", data: [
                         { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
                         { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
@@ -793,6 +794,14 @@ describe('Reactable', function() {
 
                 // Make sure the headers have the right classes
                 expect($(positionHeader)).to.have.class('reactable-header-sort-desc');
+            });
+
+            it('Keeps the same sort after rerendering', function(){
+                expect(function() {component.setProps({update: true})}).to.not.throw(Error);
+
+                ReactableTestUtils.expectRowText(0, ['Lee Salminen', '23', 'Programmer']);
+                ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', 'Engineer']);
+                ReactableTestUtils.expectRowText(2, ['Ian Zhang', '28', 'Developer']);
             });
         });
 
