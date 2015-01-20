@@ -7,6 +7,13 @@ var ReactableTestUtils = {
         React.unmountComponentAtNode($('div#test-node')[0]);
         $('div#test-node').remove();
     },
+
+    // Expect the row specified to have the specified class
+    expectRowClass: function(rowIndex, className) {
+        var row = $($('#table tbody.reactable-data tr')[rowIndex]);
+        expect(row).to.have.class(className);
+    },
+
     // Expect the columns of a the data row specified to have the values in the array as their text values
     expectRowText: function(rowIndex, textArray) {
         var row = $($('#table tbody.reactable-data tr')[rowIndex]).find('td');
@@ -109,6 +116,46 @@ describe('Reactable', function() {
 
         it('renders the third row with the correct data', function() {
             ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
+        });
+    });
+
+    describe('adding <Tr>s with className to the <Table>', function() {
+        before(function() {
+            React.renderComponent(
+                <Reactable.Table className="table" id="table">
+                    <Reactable.Tr className="rowClass1" data={{ Name: 'Griffin Smith', Age: '18'}}/>
+                    <Reactable.Tr className="rowClass2" data={{ Age: '23', Name: 'Lee Salminen'}}/>
+                    <Reactable.Tr className="rowClass3" data={{ Age: '28', Position: 'Developer'}}/>
+                </Reactable.Table>,
+                ReactableTestUtils.testNode()
+            );
+        });
+
+        after(ReactableTestUtils.resetTestEnvironment);
+
+        it('renders the table', function() {
+            expect($('table#table.table')).to.exist;
+        });
+
+        it('renders the column headers in the table', function() {
+            var headers = [];
+            $('thead th').each(function() {
+                headers.push($(this).text());
+            });
+
+            expect(headers).to.eql([ 'Name', 'Age', 'Position' ]);
+        });
+
+        it('renders the first row with the correct class name', function() {
+            ReactableTestUtils.expectRowClass(0, 'rowClass1');
+        });
+
+        it('renders the second row with the correct class name', function() {
+            ReactableTestUtils.expectRowClass(1, 'rowClass2');
+        });
+
+        it('renders the third row with the correct class name', function() {
+            ReactableTestUtils.expectRowClass(2, 'rowClass3');
         });
     });
 
@@ -1177,29 +1224,6 @@ describe('Reactable', function() {
         })
     });
 });
-
-var ReactableTestUtils = {
-    resetTestEnvironment:  function() {
-        React.unmountComponentAtNode($('div#test-node')[0]);
-        $('div#test-node').remove();
-    },
-    // Expect the columns of a the data row specified to have the values in the array as their text values
-    expectRowText: function(rowIndex, textArray) {
-        var row = $($('#table tbody.reactable-data tr')[rowIndex]).find('td');
-
-        expect(row.length).to.equal(textArray.length);
-
-        for (var i = 0; i < row.length; i++) {
-            expect($(row[i])).to.have.text(textArray[i]);
-        }
-    },
-    testNode: function() {
-        testNode = $('<div>').attr('id', 'test-node');
-        $('body').append(testNode);
-        testNode.empty();
-        return testNode[0];
-    }
-};
 
 describe('Reactable', function() {
     describe('directly passing a data array', function() {

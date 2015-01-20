@@ -685,7 +685,10 @@
                 keyB = stringable(keyB) ? keyB.toString() : '';
 
                 // Default sort
-                if (this._sortable[currentSort.column] === undefined || this._sortable[currentSort.column] === 'default') {
+                if (
+                    typeof(this._sortable[currentSort.column]) === 'undefined' ||
+                    this._sortable[currentSort.column] === 'default'
+                ) {
 
                     // Reverse direction if we're doing a reverse sort
                     if (keyA < keyB) {
