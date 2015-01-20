@@ -40,7 +40,7 @@ addons**. That can be downloaded
 
 The simplest example:
 
-```javascript
+```jsx
 var Table = Reactable.Table;
 React.renderComponent(
     <Table className="table" data={[
@@ -65,7 +65,7 @@ also using the `data` prop, but this time containing only one javascript object.
 This approach can be freely combined with the `data` property on the `<Table>`,
 and is useful if you want to specify per-row attributes such as classes, like so:
 
-```javascript
+```jsx
 var Table = Reactable.Table,
     Tr = Reactable.Tr;
 
@@ -91,7 +91,7 @@ the `Td`'s children.
 
 Example:
 
-```javascript
+```jsx
 var Table = Reactable.Table,
     Tr = Reactable.Tr,
     Td = Reactable.Td;
@@ -134,7 +134,7 @@ either:
 If you don't want to go all the way down the JSX rabbit hole to render individual cells as
 HTML, and you know your source data is safe, you can wrap strings in `Reactable.unsafe` to
 prevent their content from being escaped, like so:
-```javascript
+```jsx
 var Table = Reactable.Table,
     unsafe = Reactable.unsafe;
 
@@ -160,7 +160,7 @@ You can also pass in `unsafe` strings as column labels or in a `<Reactable.Th>`
 You can also use pagination, by just specifying an `itemsPerPage` argument to the
 `<Table>` component. For example:
 
-```javascript
+```jsx
 <Table className="table" data={[
     { Name: 'Griffin Smith', Age: '18' },
     { Age: '23',  Name: 'Lee Salminen' },
@@ -189,7 +189,7 @@ We've pre-built some sort functions for you.
 
 To specify a custom sort function, use the following structure for the column object:
 
-```javascript
+```jsx
 
 {column: 'Column Name', sortFunction: function(a, b){} }
 ```
@@ -198,14 +198,14 @@ You can also specify a default sort by passing in either a column name by itself
 with a column and a `direction` paramenter of either `asc` or `desc`.
 If no direction is specified, the default sort will be ascending.  Example:
 
-```javascript
+```jsx
 
 {column: 'Column Name', direction: 'asc' }
 ```
 
 Combined example:
 
-```javascript
+```jsx
 <Table className="table" id="table" data={[
     { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
     { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
@@ -235,7 +235,7 @@ is provided, then an input box with class reactable-filter-input will be prepend
 
 Example:
 
-```javascript
+```jsx
 <Table className="table" id="table" data={[
     {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
     {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
@@ -247,7 +247,7 @@ Example:
 There is also a `filterBy()` function on the component itself which takes a 
 single string and applies that as the filtered value. It can be used like so:
 
-```javascript
+```jsx
 var table = React.renderComponent(
   <Table className="table" id="table" data={[
       {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
