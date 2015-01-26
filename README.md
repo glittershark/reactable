@@ -15,6 +15,19 @@ unstable and there might be hidden bugs lurking around any corner. I'll try to
 tag any releases with breaking changes, however, and the more people who use
 this the faster we can get to 1.0!
 
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Further Customization](#further-customization)
+  - [Even More Customization](#even-more-customization)
+  - [Manually specifying columns](#manually-specifying-columns)
+  - [Preventing escaping of HTML](#preventing-escaping-of-html)
+  - [Pagination](#pagination)
+  - [Sorting](#sorting)
+  - [Filtering](#filtering)
+
+
 ## Installation
 
 **Using Bower:**
