@@ -273,7 +273,6 @@
                     typeof(this.props.data) === 'undefined' &&
                     stringable(this.props.children)
                 ) {
-                    if (isReactComponent(this.props.children)) { console.log('child is component'); }
                     data = this.props.children.toString();
                 }
 
@@ -295,13 +294,15 @@
             dataType: 'object'
         },
         render: function() {
-            var children = React.Children.children(this.props.children);
+            var children = toArray(React.Children.children(this.props.children));
 
             if (
                 this.props.data &&
                 this.props.columns &&
                 typeof this.props.columns.map === 'function'
             ) {
+                if (typeof(children.concat) === 'undefined') { console.log(children); }
+
                 children = children.concat(this.props.columns.map(function(column, i) {
                     if (this.props.data.hasOwnProperty(column.key)) {
                         return <Td column={column} key={column.key}>{this.props.data[column.key]}</Td>;
@@ -526,17 +527,23 @@
                         }
                     });
 
-                    data.push(childData);
+                    data.push({
+                        data: childData,
+                        props: filterPropsFrom(child.props),
+                        __reactableMeta: true
+                    });
                 }.bind(this));
             }
 
             return data;
         },
+
         initialize: function(props) {
             this.data = props.data || [];
             this.data = this.data.concat(this.parseChildData(props));
             this.initializeSorts(props);
         },
+
         initializeSorts: function() {
             this._sortable = {};
             // Transform sortable properties into a more friendly list
@@ -565,6 +572,7 @@
                 this._sortable[columnName] = sortFunction;
             }
         },
+
         getDefaultProps: function() {
             var defaultProps = {
                 sortBy: false,
@@ -573,6 +581,7 @@
             };
             return defaultProps;
         },
+
         getInitialState: function() {
             var initialState = {
                 currentPage: 0,
@@ -590,6 +599,7 @@
             }
             return initialState;
         },
+
         getCurrentSort: function(column) {
             if (column instanceof Object) {
                 var columnName, sortDirection;
@@ -623,6 +633,7 @@
                 direction: sortDirection
             };
         },
+
         updateCurrentSort: function(sortBy) {
             if (sortBy !== false &&
                 sortBy.column !== this.state.currentSort.column &&
@@ -631,6 +642,7 @@
                 this.setState({ currentSort: this.getCurrentSort(sortBy) });
             }
         },
+
         componentWillMount: function() {
             this.initialize(this.props);
             this.sortByCurrentSort();
@@ -752,7 +764,14 @@
             // Build up table rows
             if (this.data && typeof this.data.map === 'function') {
                 // Build up the columns array
-                children = children.concat(this.data.map(function(data, i) {
+                children = children.concat(this.data.map(function(rawData, i) {
+                    var data = rawData;
+                    var props = {};
+                    if (rawData.__reactableMeta === true) {
+                        data = rawData.data;
+                        props = rawData.props;
+                    }
+
                     // Loop through the keys in each data row and build a td for it
                     for (var k in data) {
                         if (data.hasOwnProperty(k)) {
@@ -777,7 +796,7 @@
                     }
 
                     return (
-                        <Tr columns={columns} key={i} data={data} />
+                        <Tr columns={columns} key={i} data={data} {...props} />
                     );
                 }.bind(this)));
             }
@@ -855,6 +874,15 @@
             ]}</table>;
         }
     });
+
+    function toArray(obj) {
+        var ret = [];
+        for (var attr in obj) {
+            ret[attr] = obj;
+        }
+
+        return ret;
+    }
 
     function filterPropsFrom(baseProps) {
         baseProps = baseProps || {};
