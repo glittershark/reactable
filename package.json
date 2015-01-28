@@ -1,6 +1,6 @@
 {
   "name": "reactable",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "description": "Fast, flexible, simple data tables in React",
   "main": "./build/reactable.js",
   "repository": {
