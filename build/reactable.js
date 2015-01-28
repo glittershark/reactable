@@ -305,7 +305,19 @@
 
                 children = children.concat(this.props.columns.map(function(column, i) {
                     if (this.props.data.hasOwnProperty(column.key)) {
-                        return Td({column: column, key: column.key}, this.props.data[column.key]);
+                        var value = this.props.data[column.key];
+                        var props = {};
+
+                        if (
+                            typeof(value) !== 'undefined' &&
+                            value !== null &&
+                            value.__reactableMeta === true
+                        ) {
+                            props = value.props;
+                            value = value.value;
+                        }
+
+                        return Td(Object.assign({column: column, key: column.key}, props), value);
                     } else {
                         return Td({column: column, key: column.key});
                     }
@@ -506,20 +518,24 @@
                         /* if (descendant.type.ConvenienceConstructor === Td) { */
                         if (true) {
                             if (typeof(descendant.props.column) !== 'undefined') {
-                                if (typeof(descendant.props.data) !== 'undefined') {
+                                var value;
 
-                                    childData[descendant.props.column] =
-                                        descendant.props.data;
-                                } else if (
-                                    typeof(descendant.props.children) !== 'undefined'
-                                ) {
-                                    childData[descendant.props.column] =
-                                        descendant.props.children;
+                                if (typeof(descendant.props.data) !== 'undefined') {
+                                    value = descendant.props.data;
+                                } else if (typeof(descendant.props.children) !== 'undefined') {
+                                    value = descendant.props.children;
                                 } else {
                                     console.warn('exports.Td specified without ' +
                                             'a `data` property or children, ' +
                                             'ignoring');
+                                    return;
                                 }
+
+                                childData[descendant.props.column] = {
+                                    value: value,
+                                    props: filterPropsFrom(descendant.props),
+                                    __reactableMeta: true
+                                };
                             } else {
                                 console.warn('exports.Td specified without a ' +
                                         '`column` property, ignoring');

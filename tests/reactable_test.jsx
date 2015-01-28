@@ -119,46 +119,6 @@ describe('Reactable', function() {
         });
     });
 
-    describe('adding <Tr>s with className to the <Table>', function() {
-        before(function() {
-            React.renderComponent(
-                <Reactable.Table className="table" id="table">
-                    <Reactable.Tr className="rowClass1" data={{ Name: 'Griffin Smith', Age: '18'}}/>
-                    <Reactable.Tr className="rowClass2" data={{ Age: '23', Name: 'Lee Salminen'}}/>
-                    <Reactable.Tr className="rowClass3" data={{ Age: '28', Position: 'Developer'}}/>
-                </Reactable.Table>,
-                ReactableTestUtils.testNode()
-            );
-        });
-
-        after(ReactableTestUtils.resetTestEnvironment);
-
-        it('renders the table', function() {
-            expect($('table#table.table')).to.exist;
-        });
-
-        it('renders the column headers in the table', function() {
-            var headers = [];
-            $('thead th').each(function() {
-                headers.push($(this).text());
-            });
-
-            expect(headers).to.eql([ 'Name', 'Age', 'Position' ]);
-        });
-
-        it('renders the first row with the correct class name', function() {
-            ReactableTestUtils.expectRowClass(0, 'rowClass1');
-        });
-
-        it('renders the second row with the correct class name', function() {
-            ReactableTestUtils.expectRowClass(1, 'rowClass2');
-        });
-
-        it('renders the third row with the correct class name', function() {
-            ReactableTestUtils.expectRowClass(2, 'rowClass3');
-        });
-    });
-
     describe('adding <Td>s to the <Tr>s', function() {
         context('with only one <Td>', function() {
             before(function() {
@@ -311,6 +271,84 @@ describe('Reactable', function() {
                 ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
             });
         })
+    });
+
+    describe('passing through HTML props', function() {
+        describe('adding <Tr>s with className to the <Table>', function() {
+            before(function() {
+                React.renderComponent(
+                    <Reactable.Table className="table" id="table">
+                        <Reactable.Tr className="rowClass1" data={{ Name: 'Griffin Smith', Age: '18'}}/>
+                        <Reactable.Tr className="rowClass2" data={{ Age: '23', Name: 'Lee Salminen'}}/>
+                        <Reactable.Tr className="rowClass3" data={{ Age: '28', Position: 'Developer'}}/>
+                    </Reactable.Table>,
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('renders the table', function() {
+                expect($('table#table.table')).to.exist;
+            });
+
+            it('renders the column headers in the table', function() {
+                var headers = [];
+                $('thead th').each(function() {
+                    headers.push($(this).text());
+                });
+
+                expect(headers).to.eql([ 'Name', 'Age', 'Position' ]);
+            });
+
+            it('renders the first row with the correct class name', function() {
+                ReactableTestUtils.expectRowClass(0, 'rowClass1');
+            });
+
+            it('renders the second row with the correct class name', function() {
+                ReactableTestUtils.expectRowClass(1, 'rowClass2');
+            });
+
+            it('renders the third row with the correct class name', function() {
+                ReactableTestUtils.expectRowClass(2, 'rowClass3');
+            });
+        });
+
+        describe('adding <Td>s with classNames to the <Table>', function() {
+            before(function () {
+                React.renderComponent(
+                    <Reactable.Table className="table" id="table">
+                        <Reactable.Tr>
+                            <Reactable.Td column="Name" className="name-1">Griffin Smith</Reactable.Td>
+                            <Reactable.Td column="Age">18</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column="Name" className="name-2">Lee Salminen</Reactable.Td>
+                            <Reactable.Td column="Age">23</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column="Position" className="position">Developer</Reactable.Td>
+                            <Reactable.Td column="Age">28</Reactable.Td>
+                        </Reactable.Tr>
+                    </Reactable.Table>,
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('renders the first column with the correct class name', function() {
+                expect($('td.name-1')).to.have.text('Griffin Smith');
+            });
+
+            it('renders the second column with the correct class name', function() {
+                expect($('td.name-2')).to.have.text('Lee Salminen');
+            });
+
+            it('renders the third column with the correct class name', function() {
+                expect($('td.position')).to.have.text('Developer');
+            });
+        });
     });
 
     describe('specifying an array of columns', function() {
