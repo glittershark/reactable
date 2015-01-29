@@ -1,5 +1,4 @@
 /** @jsx React.DOM */
-"use strict";
 
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) { // AMD. Register as an anonymous module.
@@ -14,6 +13,7 @@
         root.Reactable = factory(root.React);
     }
 }(this, function (React) {
+    "use strict";
     var exports = {};
 
     // Array.prototype.map polyfill - see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map#Polyfill
@@ -24,7 +24,7 @@
         Array.prototype.map = function(callback, thisArg) {
             var T, A, k;
 
-            if (this == null) {
+            if (this === null) {
                 throw new TypeError(" this is null or not defined");
             }
 
@@ -57,22 +57,22 @@
 
     // Array.prototype.indexOf polyfill for IE8
     if (!Array.prototype.indexOf) {
-          Array.prototype.indexOf = function(elt /*, from*/) {
-                var len = this.length >>> 0;
+        Array.prototype.indexOf = function(elt /*, from*/) {
+            var len = this.length >>> 0;
 
-                var from = Number(arguments[1]) || 0;
-                from = (from < 0) ? Math.ceil(from) : Math.floor(from);
-                if (from < 0) {
-                    from += len;
-                }
+            var from = Number(arguments[1]) || 0;
+            from = (from < 0) ? Math.ceil(from) : Math.floor(from);
+            if (from < 0) {
+                from += len;
+            }
 
-                for (; from < len; from++) {
-                    if (from in this && this[from] === elt) {
-                        return from;
-                    }
+            for (; from < len; from++) {
+                if (from in this && this[from] === elt) {
+                    return from;
                 }
-                return -1;
-          };
+            }
+            return -1;
+        };
     }
 
     // Array.prototype.find polyfill - see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
@@ -82,7 +82,7 @@
             configurable: true,
             writable: true,
             value: function(predicate) {
-                if (this == null) {
+                if (this === null) {
                     throw new TypeError('Array.prototype.find called on null or undefined');
                 }
                 if (typeof predicate !== 'function') {
@@ -118,21 +118,20 @@
             configurable: true,
             writable: true,
             value: function(target, firstSource) {
-                "use strict";
                 if (target === undefined || target === null)
-            throw new TypeError("Cannot convert first argument to object");
-        var to = Object(target);
-        for (var i = 1; i < arguments.length; i++) {
-            var nextSource = arguments[i];
-            if (nextSource === undefined || nextSource === null) continue;
-            var keysArray = Object.keys(Object(nextSource));
-            for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
-                var nextKey = keysArray[nextIndex];
-                var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
-                if (desc !== undefined && desc.enumerable) to[nextKey] = nextSource[nextKey];
-            }
-        }
-        return to;
+                    throw new TypeError("Cannot convert first argument to object");
+                var to = Object(target);
+                for (var i = 1; i < arguments.length; i++) {
+                    var nextSource = arguments[i];
+                    if (nextSource === undefined || nextSource === null) continue;
+                    var keysArray = Object.keys(Object(nextSource));
+                    for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+                        var nextKey = keysArray[nextIndex];
+                        var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
+                        if (desc !== undefined && desc.enumerable) to[nextKey] = nextSource[nextKey];
+                    }
+                }
+                return to;
             }
         });
     }
@@ -270,7 +269,7 @@
                     data = this.props.children;
                 } else if (
                     typeof(this.props.data) === 'undefined' &&
-                    stringable(this.props.children)
+                        stringable(this.props.children)
                 ) {
                     data = this.props.children.toString();
                 }
@@ -297,8 +296,8 @@
 
             if (
                 this.props.data &&
-                this.props.columns &&
-                typeof this.props.columns.map === 'function'
+                    this.props.columns &&
+                        typeof this.props.columns.map === 'function'
             ) {
                 if (typeof(children.concat) === 'undefined') { console.log(children); }
 
@@ -309,8 +308,8 @@
 
                         if (
                             typeof(value) !== 'undefined' &&
-                            value !== null &&
-                            value.__reactableMeta === true
+                                value !== null &&
+                                    value.__reactableMeta === true
                         ) {
                             props = value.props;
                             value = value.value;
@@ -352,7 +351,7 @@
                 var sortClass = '';
 
                 if (this.props.sortableColumns[column.key]) {
-                  sortClass += 'reactable-header-sortable ';
+                    sortClass += 'reactable-header-sortable ';
                 }
 
                 if (this.props.sort.column === column.key) {
@@ -375,15 +374,16 @@
             // Manually transfer props
             var props = filterPropsFrom(this.props);
 
-            return React.DOM.thead(props,
-                (this.props.filtering === true ?
-                    Filterer({
-                        colSpan: this.props.columns.length,
-                        onFilter: this.props.onFilter,
-                        value: this.props.currentFilter
-                    })
-                : ''),
-                <tr className="reactable-column-header">{Ths}</tr>
+            return (
+                <thead {...props}>
+                    {this.props.filtering === true ?
+                        <Filterer
+                            colSpan={this.props.columns.length}
+                            onFilter={this.props.onFilter}
+                            value={this.props.currentFilter}
+                        /> : ''}
+                        <tr className="reactable-column-header">{Ths}</tr>
+                    </thead>
             );
         }
     });
@@ -407,10 +407,10 @@
         render: function() {
             return (
                 <input type="text"
-                       className="reactable-filter-input"
-                       value={this.props.value}
-                       onKeyUp={this.onChange}
-                       onChange={this.onChange} />
+                    className="reactable-filter-input"
+                    value={this.props.value}
+                    onKeyUp={this.onChange}
+                    onChange={this.onChange} />
             );
         }
     });
@@ -425,7 +425,7 @@
                 <tr className="reactable-filterer">
                     <td colSpan={this.props.colSpan}>
                         <FiltererInput onFilter={this.props.onFilter}
-                                       value={this.props.value} />
+                            value={this.props.value} />
                     </td>
                 </tr>
             );
@@ -456,12 +456,12 @@
 
                 pageButtons.push(
                     <a className={className} key={i}
-                       // create function to get around for-loop closure issue
-                       onClick={(function(pageNum) {
-                           return function() {
-                               this.props.onPageChange(pageNum);
-                           }.bind(this);
-                       }.bind(this))(i)}>{i + 1}</a>
+                        // create function to get around for-loop closure issue
+                        onClick={(function(pageNum) {
+                            return function() {
+                                this.props.onPageChange(pageNum);
+                            }.bind(this);
+                        }.bind(this))(i)}>{i + 1}</a>
                 );
             }
 
@@ -505,10 +505,10 @@
                 React.Children.forEach(props.children, function(child) {
                     // TODO: figure out a new way to determine the type of a component
                     /*
-                    if (child.type.ConvenienceConstructor !== Tr) {
-                        return; // (continue)
-                    }
-                    */
+                       if (child.type.ConvenienceConstructor !== Tr) {
+                       return; // (continue)
+                       }
+                       */
 
                     var childData = child.props.data || {};
 
@@ -525,8 +525,8 @@
                                     value = descendant.props.children;
                                 } else {
                                     console.warn('exports.Td specified without ' +
-                                            'a `data` property or children, ' +
-                                            'ignoring');
+                                                 'a `data` property or children, ' +
+                                                 'ignoring');
                                     return;
                                 }
 
@@ -537,7 +537,7 @@
                                 };
                             } else {
                                 console.warn('exports.Td specified without a ' +
-                                        '`column` property, ignoring');
+                                             '`column` property, ignoring');
                             }
                         }
                     });
@@ -616,9 +616,9 @@
         },
 
         getCurrentSort: function(column) {
-            if (column instanceof Object) {
-                var columnName, sortDirection;
+            var columnName, sortDirection;
 
+            if (column instanceof Object) {
                 if (typeof(column.column) !== 'undefined') {
                     columnName = column.column;
                 } else {
@@ -652,7 +652,7 @@
         updateCurrentSort: function(sortBy) {
             if (sortBy !== false &&
                 sortBy.column !== this.state.currentSort.column &&
-                sortBy.direction !== this.state.currentSort.direction) {
+                    sortBy.direction !== this.state.currentSort.direction) {
 
                 this.setState({ currentSort: this.getCurrentSort(sortBy) });
             }
@@ -675,7 +675,7 @@
         },
         applyFilter: function(filter, children) {
             // Helper function to apply filter text to a list of table rows
-            var filter = filter.toLowerCase();
+            filter = filter.toLowerCase();
             var matchedChildren = [];
 
             for (var i = 0; i < children.length; i++) {
@@ -686,7 +686,7 @@
 
                     if (
                         typeof(data[filterColumn]) !== 'undefined' &&
-                        data[filterColumn].toString().toLowerCase().indexOf(filter) > -1
+                            data[filterColumn].toString().toLowerCase().indexOf(filter) > -1
                     ) {
                         matchedChildren.push(children[i]);
                         break;
@@ -714,7 +714,7 @@
                 // Default sort
                 if (
                     typeof(this._sortable[currentSort.column]) === 'undefined' ||
-                    this._sortable[currentSort.column] === 'default'
+                        this._sortable[currentSort.column] === 'default'
                 ) {
 
                     // Reverse direction if we're doing a reverse sort
@@ -763,8 +763,8 @@
 
             if (
                 this.props.children &&
-                this.props.children.length > 0 &&
-                this.props.children[0].type.ConvenienceConstructor === Thead
+                    this.props.children.length > 0 &&
+                        this.props.children[0].type.ConvenienceConstructor === Thead
             ) {
                 columns = this.props.children[0].getColumns();
             } else {
@@ -801,8 +801,8 @@
                                 // Only add a new column if it doesn't already exist in the columns array
                                 if (
                                     columns.find(function(element) {
-                                        return element.key === column.key
-                                    }) === undefined
+                                    return element.key === column.key;
+                                }) === undefined
                                 ) {
                                     columns.push(column);
                                 }
@@ -826,8 +826,8 @@
             var filtering = false;
             if (
                 this.props.filterable &&
-                Array.isArray(this.props.filterable) &&
-                this.props.filterable.length > 0
+                    Array.isArray(this.props.filterable) &&
+                        this.props.filterable.length > 0
             ) {
                 filtering = true;
             }
@@ -847,7 +847,7 @@
             var currentChildren = filteredChildren;
             if (this.props.itemsPerPage > 0) {
                 itemsPerPage = this.props.itemsPerPage;
-                numPages = Math.ceil(filteredChildren.length / itemsPerPage)
+                numPages = Math.ceil(filteredChildren.length / itemsPerPage);
 
                 if (currentPage > numPages - 1) {
                     currentPage = numPages - 1;
@@ -864,27 +864,27 @@
             var props = filterPropsFrom(this.props);
 
             return <table {...props}>{[
-                (columns && columns.length > 0
-                    ? <Thead columns={columns}
-                             filtering={filtering}
-                             onFilter={this.filterBy}
-                             currentFilter={this.state.filter}
-                             sort={this.state.currentSort}
-                             sortableColumns={this._sortable}
-                             onSort={this.onSort}
-                             key="thead"/>
-                    : null
+                (columns && columns.length > 0 ?
+                 <Thead columns={columns}
+                     filtering={filtering}
+                     onFilter={this.filterBy}
+                     currentFilter={this.state.filter}
+                     sort={this.state.currentSort}
+                     sortableColumns={this._sortable}
+                     onSort={this.onSort}
+                     key="thead"/>
+                 : null
                 ),
                 <tbody className="reactable-data" key="tbody">
                     {currentChildren}
                 </tbody>,
-                (pagination === true
-                    ? <Paginator colSpan={columns.length}
-                                 numPages={numPages}
-                                 currentPage={currentPage}
-                                 onPageChange={this.onPageChange}
-                                 key="paginator"/>
-                    : null
+                (pagination === true ?
+                 <Paginator colSpan={columns.length}
+                     numPages={numPages}
+                     currentPage={currentPage}
+                     onPageChange={this.onPageChange}
+                     key="paginator"/>
+                 : null
                 )
             ]}</table>;
         }
@@ -914,8 +914,8 @@
         var value;
         if (
             typeof(key) !== 'undefined' &&
-            key !== null &&
-            key.__reactableMeta === true
+                key !== null &&
+                    key.__reactableMeta === true
         ) {
             value = key.data[column];
         } else {
@@ -924,8 +924,8 @@
 
         if (
             typeof(value) !== 'undefined' &&
-            value !== null &&
-            value.__reactableMeta === true
+                value !== null &&
+                    value.__reactableMeta === true
         ) {
             value = value.value;
         }
@@ -946,7 +946,7 @@
         itemsPerPage: true,
         childNode: true,
         data: true
-    }
+    };
 
     return exports;
 }));
