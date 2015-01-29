@@ -1032,42 +1032,27 @@ describe('Reactable', function() {
                     <Reactable.Table
                         className="table"
                         id="table"
-                        columns={[{ key: 'Count', sortable: Reactable.Sort.Numeric }]}
-                    >
+                        columns={[{ key: 'Count', sortable: Reactable.Sort.Numeric }]}>
                         <Reactable.Tr>
-                            <Reactable.Td column='Count'>
-                                23
-                            </Reactable.Td>
+                            <Reactable.Td column='Count'>23</Reactable.Td>
                         </Reactable.Tr>
                         <Reactable.Tr>
-                            <Reactable.Td column='Count'>
-                                18
-                            </Reactable.Td>
+                            <Reactable.Td column='Count'>18</Reactable.Td>
                         </Reactable.Tr>
                         <Reactable.Tr>
-                            <Reactable.Td column='Count'>
-                                28
-                            </Reactable.Td>
+                            <Reactable.Td column='Count'>28</Reactable.Td>
                         </Reactable.Tr>
                         <Reactable.Tr>
-                            <Reactable.Td column='Count'>
-                                1.23
-                            </Reactable.Td>
+                            <Reactable.Td column='Count'>1.23</Reactable.Td>
                         </Reactable.Tr>
                         <Reactable.Tr>
-                            <Reactable.Td column='Count'>
-                                a
-                            </Reactable.Td>
+                            <Reactable.Td column='Count'>a</Reactable.Td>
                         </Reactable.Tr>
                         <Reactable.Tr>
-                            <Reactable.Td column='Count'>
-                                z
-                            </Reactable.Td>
+                            <Reactable.Td column='Count'>z</Reactable.Td>
                         </Reactable.Tr>
                         <Reactable.Tr>
-                            <Reactable.Td column='Count'>
-                                123
-                            </Reactable.Td>
+                            <Reactable.Td column='Count'>123</Reactable.Td>
                         </Reactable.Tr>
                     </Reactable.Table>,
                     ReactableTestUtils.testNode()
