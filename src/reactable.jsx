@@ -2,8 +2,7 @@
 "use strict";
 
 (function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
+    if (typeof define === 'function' && define.amd) { // AMD. Register as an anonymous module.
         define(['react'], factory);
     } else if (typeof exports === 'object') {
         // Node. Does not work with strict CommonJS, but
@@ -707,9 +706,9 @@
             }
 
             this.data.sort(function(a, b){
-                var keyA = a[currentSort.column];
+                var keyA = extractDataFrom(a, currentSort.column);
                 keyA = stringable(keyA) ? keyA.toString() : '';
-                var keyB = b[currentSort.column];
+                var keyB = extractDataFrom(b, currentSort.column);
                 keyB = stringable(keyB) ? keyB.toString() : '';
 
                 // Default sort
@@ -909,7 +908,34 @@
             }
         }
         return props;
-    };
+    }
+
+    function extractDataFrom(key, column) {
+        var value;
+        if (
+            typeof(key) !== 'undefined' &&
+            key !== null &&
+            key.__reactableMeta === true
+        ) {
+            value = key.data[column];
+        } else {
+            value = key[column];
+        }
+
+        if (
+            typeof(value) !== 'undefined' &&
+            value !== null &&
+            value.__reactableMeta === true
+        ) {
+            value = value.value;
+        }
+
+        if (stringable(value)) {
+            return value.toString();
+        } else {
+            return value;
+        }
+    }
 
     var internalProps = {
         columns: true,
