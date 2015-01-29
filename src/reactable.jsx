@@ -782,7 +782,7 @@
                 // Build up the columns array
                 children = children.concat(this.data.map(function(rawData, i) {
                     var data = rawData;
-                    var props = {};
+                    var props = this.props.defaultTrProps || {};
                     if (rawData.__reactableMeta === true) {
                         data = rawData.data;
                         props = rawData.props;
