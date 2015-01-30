@@ -927,7 +927,8 @@
                 value !== null &&
                     value.__reactableMeta === true
         ) {
-            value = value.value;
+            value = (typeof(value.props.value) !== 'undefined' && value.props.value !== null) ?
+                value.props.value : value.value;
         }
 
         if (stringable(value)) {
