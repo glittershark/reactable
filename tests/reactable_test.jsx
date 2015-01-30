@@ -1077,6 +1077,57 @@ describe('Reactable', function() {
             });
         });
 
+        describe('numeric sort with Tr and Td specified and custom value', function(){
+            before(function() {
+                React.renderComponent(
+                    <Reactable.Table
+                        className="table"
+                        id="table"
+                        columns={[{ key: 'Count', sortable: Reactable.Sort.Numeric }]}>
+                        <Reactable.Tr>
+                            <Reactable.Td column='Count' value={23}>twenty-three</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column='Count' value={18}>eighteen</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column='Count' value={28}>twenty-eight</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column='Count' value={1.23}>one point two three</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column='Count' value='a'>a</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column='Count' value='z'>z</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column='Count' value={123}>one hundred twenty-three</Reactable.Td>
+                        </Reactable.Tr>
+                    </Reactable.Table>,
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+            after(function() {
+                ReactableTestUtils.resetTestEnvironment();
+            });
+
+            it('sorts columns numerically', function(){
+                var sortHeader = $('#table thead tr.reactable-column-header th')[0];
+                ReactTestUtils.Simulate.click(sortHeader);
+
+                ReactableTestUtils.expectRowText(0, ['one point two three']);
+                ReactableTestUtils.expectRowText(1, ['eighteen']);
+                ReactableTestUtils.expectRowText(2, ['twenty-three']);
+                ReactableTestUtils.expectRowText(3, ['twenty-eight']);
+                ReactableTestUtils.expectRowText(4, ['one hundred twenty-three']);
+                ReactableTestUtils.expectRowText(5, ['a']);
+                ReactableTestUtils.expectRowText(6, ['z']);
+            });
+        });
+
         describe('currency sort', function(){
             before(function() {
                 React.renderComponent(
