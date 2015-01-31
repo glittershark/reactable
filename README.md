@@ -4,11 +4,12 @@ Reactable [![Build Status](https://travis-ci.org/glittershark/reactable.svg?bran
 Fast, flexible, and simple data tables in React.
 
 Reactable allows you to display tabular data client-side, and provides sorting,
-filtering, and pagination over that data. It uses the power of
-[React.js](http://facebook.github.io/react/) to do all this very, very quickly,
-and provides an API that makes simple things easy, while trying to get out of
-your way as much as possible if you want to do something complicated or
-unconventional.
+filtering, and pagination over that data. It uses the power of [React.js][react]
+to do all this very, very quickly, and provides an API that makes simple things
+easy, while trying to get out of your way as much as possible if you want to do
+something complicated or unconventional.
+
+[react]: http://facebook.github.io/react/
 
 This project is currently alpha-stage, which means the API may or may not be
 unstable and there might be hidden bugs lurking around any corner. I'll try to
@@ -39,15 +40,14 @@ bower install [--save] reactable
 Or, you can just download the raw file
 [here](https://github.com/glittershark/reactable/raw/master/build/reactable.js).
 
-That file exposes a global object `Reactable`. If you'd rather use browserify or
-another CommonJS implementation to `require()` it, there's a file
-`build/reactable.common.js` in the repo or 
-[here](https://github.com/glittershark/reactable/raw/master/build/reactable.common.js)
-if you'd like to download it directly.
+That file can be used either as an AMD module, as a CommonJS module in Node, or,
+if neither are supported, will register the Reactable object as a property of
+the `window` object.
 
-Keep in mind that we depend on the latest version of React (0.11), **with
-addons**. That can be downloaded
-[here](http://facebook.github.io/react/downloads.html)
+Keep in mind that Reactable depends on the latest version of React (0.11),
+**with addons**. That can be downloaded [here][download]
+
+[download]: http://facebook.github.io/react/downloads.html
 
 ## Usage
 
