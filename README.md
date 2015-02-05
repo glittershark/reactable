@@ -203,6 +203,7 @@ We've pre-built some sort functions for you.
   12:05 PM)
 - `Currency` will sort USD format (e.g. $1,000.00)
 - `Numeric` will parse integer-like strings as integers (e.g. "1")
+- `NumericInteger` will parse integer strings (use `Numeric` if you might have floats)
 
 To specify a custom sort function, use the following structure for the column
 object:

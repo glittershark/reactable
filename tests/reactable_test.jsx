@@ -991,38 +991,40 @@ describe('Reactable', function() {
             });
         });
 
-        describe('numeric sort', function(){
-            before(function() {
-                React.renderComponent(
-                    <Reactable.Table className="table" id="table" data={[
-                        { Count: '23'},
-                        { Count: '18'},
-                        { Count: '28'},
-                        { Count: '1.23'},
-                        { Count: 'a'},
-                        { Count: 'z'},
-                        { Count: '123'}
-                    ]}
-                    columns={[{ key: 'Count', sortable: Reactable.Sort.Numeric }]} />,
-                    ReactableTestUtils.testNode()
-                );
-            });
+        [Reactable.Sort.Numeric, Reactable.Sort.NumericInteger].forEach(function(method) {
+            describe('numeric sort', function(){
+                before(function() {
+                    React.renderComponent(
+                        <Reactable.Table className="table" id="table" data={[
+                            { Count: '23'},
+                            { Count: '18'},
+                            { Count: '28'},
+                            { Count: '1.23'},
+                            { Count: 'a'},
+                            { Count: 'z'},
+                            { Count: '123'}
+                        ]}
+                        columns={[{ key: 'Count', sortable: method }]} />,
+                        ReactableTestUtils.testNode()
+                    );
+                });
 
-            after(function() {
-                ReactableTestUtils.resetTestEnvironment();
-            });
+                after(function() {
+                    ReactableTestUtils.resetTestEnvironment();
+                });
 
-            it('sorts columns numerically', function(){
-                var sortHeader = $('#table thead tr.reactable-column-header th')[0];
-                ReactTestUtils.Simulate.click(sortHeader);
+                it('sorts columns numerically', function(){
+                    var sortHeader = $('#table thead tr.reactable-column-header th')[0];
+                    ReactTestUtils.Simulate.click(sortHeader);
 
-                ReactableTestUtils.expectRowText(0, ['1.23']);
-                ReactableTestUtils.expectRowText(1, ['18']);
-                ReactableTestUtils.expectRowText(2, ['23']);
-                ReactableTestUtils.expectRowText(3, ['28']);
-                ReactableTestUtils.expectRowText(4, ['123']);
-                ReactableTestUtils.expectRowText(5, ['a']);
-                ReactableTestUtils.expectRowText(6, ['z']);
+                    ReactableTestUtils.expectRowText(0, ['1.23']);
+                    ReactableTestUtils.expectRowText(1, ['18']);
+                    ReactableTestUtils.expectRowText(2, ['23']);
+                    ReactableTestUtils.expectRowText(3, ['28']);
+                    ReactableTestUtils.expectRowText(4, ['123']);
+                    ReactableTestUtils.expectRowText(5, ['a']);
+                    ReactableTestUtils.expectRowText(6, ['z']);
+                });
             });
         });
 

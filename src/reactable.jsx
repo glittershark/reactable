@@ -189,6 +189,14 @@
             return 0;
         },
 
+        NumericInteger: function(a, b) {
+          if (isNaN(a) || isNaN(b)) {
+            return a > b ? 1 : -1;
+          }
+
+          return a - b;
+        },
+
         Currency: function(a, b) {
             // Parse out dollar signs, then do a regular numeric sort
             // TODO: handle non-American currency
