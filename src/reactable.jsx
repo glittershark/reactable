@@ -189,6 +189,14 @@
             return 0;
         },
 
+        NumericInteger: function(a, b) {
+          if (isNaN(a) || isNaN(b)) {
+            return a > b ? 1 : -1;
+          }
+
+          return a - b;
+        },
+
         Currency: function(a, b) {
             // Parse out dollar signs, then do a regular numeric sort
             // TODO: handle non-American currency
@@ -227,18 +235,7 @@
         },
 
         CaseInsensitive: function(a, b) {
-            var valA = a.toLowerCase();
-            var valB = b.toLowerCase();
-
-            if(valA > valB) {
-                return 1;
-            }
-
-            if(valB > valA) {
-                return -1;
-            }
-
-            return 0;
+            return a.toLowerCase().localeCompare(b.toLowerCase());
         }
     };
 
