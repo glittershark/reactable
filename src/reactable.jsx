@@ -227,18 +227,7 @@
         },
 
         CaseInsensitive: function(a, b) {
-            var valA = a.toLowerCase();
-            var valB = b.toLowerCase();
-
-            if(valA > valB) {
-                return 1;
-            }
-
-            if(valB > valA) {
-                return -1;
-            }
-
-            return 0;
+            return a.toLowerCase().localeCompare(b.toLowerCase());
         }
     };
 
