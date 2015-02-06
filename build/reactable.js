@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) { // AMD. Register as an anonymous module.
         define(['react'], factory);
@@ -239,7 +237,7 @@
         }
     };
 
-    var Td = exports.Td = React.createClass({displayName: 'Td',
+    var Td = exports.Td = React.createClass({displayName: "Td",
         handleClick: function(e){
             if (typeof this.props.handleClick !== 'undefined') {
                 return this.props.handleClick(e, this);
@@ -283,7 +281,7 @@
     });
 
 
-    var Tr = exports.Tr = React.createClass({displayName: 'Tr',
+    var Tr = exports.Tr = React.createClass({displayName: "Tr",
         statics: {
             childNode: Td,
             dataType: 'object'
@@ -312,9 +310,9 @@
                             value = value.value;
                         }
 
-                        return Td(Object.assign({column: column, key: column.key}, props), value);
+                        return React.createElement(Td, React.__spread({column: column, key: column.key},  props), value);
                     } else {
-                        return Td({column: column, key: column.key});
+                        return React.createElement(Td, {column: column, key: column.key});
                     }
                 }.bind(this)));
             }
@@ -326,7 +324,7 @@
         }
     });
 
-    var Thead = exports.Thead = React.createClass({displayName: 'Thead',
+    var Thead = exports.Thead = React.createClass({displayName: "Thead",
         getColumns: function() {
             return React.Children.map(this.props.children, function(th) {
                 if (typeof th.props.children === 'string') {
@@ -362,7 +360,7 @@
                 }
 
                 Ths.push(
-                    Th({className: sortClass, key: index, onClick: this.handleClickTh.bind(this, column)}, 
+                    React.createElement(Th, {className: sortClass, key: index, onClick: this.handleClickTh.bind(this, column)}, 
                         column.label
                     )
                 );
@@ -372,38 +370,40 @@
             var props = filterPropsFrom(this.props);
 
             return (
-                React.DOM.thead(Object.assign({}, props), 
+                React.createElement("thead", React.__spread({},  props), 
                     this.props.filtering === true ?
-                        Filterer({
+                        React.createElement(Filterer, {
                             colSpan: this.props.columns.length, 
                             onFilter: this.props.onFilter, 
                             value: this.props.currentFilter}
                         ) : '', 
-                        React.DOM.tr({className: "reactable-column-header"}, Ths)
+                        React.createElement("tr", {className: "reactable-column-header"}, Ths)
                     )
             );
         }
     });
 
-    var Th = exports.Th = React.createClass({displayName: 'Th',
+    var Th = exports.Th = React.createClass({displayName: "Th",
         render: function() {
+                var childProps
             if (this.props.children instanceof Unsafe) {
-                return this.transferPropsTo(
-                    React.DOM.th({dangerouslySetInnerHTML: {__html: this.props.children.toString()}})
-                );
+                return React.createElement("th", React.__spread({},  filterPropsFrom(this.props), 
+                    {dangerouslySetInnerHTML: {__html: this.props.children.toString()}}))
             } else {
-                return this.transferPropsTo(React.DOM.th(null, this.props.children));
+                return React.createElement("th", React.__spread({},  filterPropsFrom(this.props)), 
+                    this.props.children
+                );
             }
         }
     });
 
-    var FiltererInput = React.createClass({displayName: 'FiltererInput',
+    var FiltererInput = React.createClass({displayName: "FiltererInput",
         onChange: function() {
             this.props.onFilter(this.getDOMNode().value);
         },
         render: function() {
             return (
-                React.DOM.input({type: "text", 
+                React.createElement("input", {type: "text", 
                     className: "reactable-filter-input", 
                     value: this.props.value, 
                     onKeyUp: this.onChange, 
@@ -412,16 +412,16 @@
         }
     });
 
-    var Filterer = React.createClass({displayName: 'Filterer',
+    var Filterer = React.createClass({displayName: "Filterer",
         render: function() {
             if (typeof this.props.colSpan === 'undefined') {
                 throw new TypeError('Must pass a colSpan argument to Filterer');
             }
 
             return (
-                React.DOM.tr({className: "reactable-filterer"}, 
-                    React.DOM.td({colSpan: this.props.colSpan}, 
-                        FiltererInput({onFilter: this.props.onFilter, 
+                React.createElement("tr", {className: "reactable-filterer"}, 
+                    React.createElement("td", {colSpan: this.props.colSpan}, 
+                        React.createElement(FiltererInput, {onFilter: this.props.onFilter, 
                             value: this.props.value})
                     )
                 )
@@ -429,7 +429,7 @@
         }
     });
 
-    var Paginator = React.createClass({displayName: 'Paginator',
+    var Paginator = React.createClass({displayName: "Paginator",
         render: function() {
             if (typeof this.props.colSpan === 'undefined') {
                 throw new TypeError('Must pass a colSpan argument to Paginator');
@@ -452,7 +452,7 @@
                 }
 
                 pageButtons.push(
-                    React.DOM.a({className: className, key: i, 
+                    React.createElement("a", {className: className, key: i, 
                         // create function to get around for-loop closure issue
                         onClick: (function(pageNum) {
                             return function() {
@@ -463,9 +463,9 @@
             }
 
             return (
-                React.DOM.tbody({className: "reactable-pagination"}, 
-                    React.DOM.tr(null, 
-                        React.DOM.td({colSpan: this.props.colSpan}, 
+                React.createElement("tbody", {className: "reactable-pagination"}, 
+                    React.createElement("tr", null, 
+                        React.createElement("td", {colSpan: this.props.colSpan}, 
                             pageButtons
                         )
                     )
@@ -474,7 +474,7 @@
         }
     });
 
-    var Table = exports.Table = React.createClass({displayName: 'Table',
+    var Table = exports.Table = React.createClass({displayName: "Table",
         // Translate a user defined column array to hold column objects if strings are specified
         // (e.g. ['column1'] => [{key: 'column1', label: 'column1'}])
         translateColumnsArray: function(columns) {
@@ -506,6 +506,9 @@
                        return; // (continue)
                        }
                        */
+                    if (typeof(child.props) !== 'object') {
+                        return console.warn('Child passed to <Reactable.Table> was not an object: ' + child.toString());
+                    }
 
                     var childData = child.props.data || {};
 
@@ -808,7 +811,7 @@
                     }
 
                     return (
-                        Tr(Object.assign({columns: columns, key: i, data: data}, props))
+                        React.createElement(Tr, React.__spread({columns: columns, key: i, data: data},  props))
                     );
                 }.bind(this)));
             }
@@ -860,9 +863,9 @@
             // Manually transfer props
             var props = filterPropsFrom(this.props);
 
-            return React.DOM.table(Object.assign({}, props), [
+            return React.createElement("table", React.__spread({},  props), [
                 (columns && columns.length > 0 ?
-                 Thead({columns: columns, 
+                 React.createElement(Thead, {columns: columns, 
                      filtering: filtering, 
                      onFilter: this.filterBy, 
                      currentFilter: this.state.filter, 
@@ -872,11 +875,11 @@
                      key: "thead"})
                  : null
                 ),
-                React.DOM.tbody({className: "reactable-data", key: "tbody"}, 
+                React.createElement("tbody", {className: "reactable-data", key: "tbody"}, 
                     currentChildren
                 ),
                 (pagination === true ?
-                 Paginator({colSpan: columns.length, 
+                 React.createElement(Paginator, {colSpan: columns.length, 
                      numPages: numPages, 
                      currentPage: currentPage, 
                      onPageChange: this.onPageChange, 
@@ -943,7 +946,8 @@
         defaultSort: true,
         itemsPerPage: true,
         childNode: true,
-        data: true
+        data: true,
+        children: true
     };
 
     return exports;
