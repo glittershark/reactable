@@ -16,6 +16,12 @@ unstable and there might be hidden bugs lurking around any corner. I'll try to
 tag any releases with breaking changes, however, and the more people who use
 this the faster we can get to 1.0!
 
+**Note:** Version [0.9.8][0.9.8] is the last version that supports React 0.11 -
+as of version 0.10 (this version) Reactable will only continue to support React
+0.12 and higher.
+
+[0.9.8]: https://github.com/glittershark/reactable/tree/0.9.8
+
 ## Table of Contents
 
 - [Installation](#installation)
