@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) { // AMD. Register as an anonymous module.
         define(['react'], factory);
@@ -387,12 +385,14 @@
 
     var Th = exports.Th = React.createClass({
         render: function() {
+                var childProps
             if (this.props.children instanceof Unsafe) {
-                return this.transferPropsTo(
-                    <th dangerouslySetInnerHTML={{__html: this.props.children.toString()}}/>
-                );
+                return <th {...filterPropsFrom(this.props)}
+                    dangerouslySetInnerHTML={{__html: this.props.children.toString()}}/>
             } else {
-                return this.transferPropsTo(<th>{this.props.children}</th>);
+                return <th {...filterPropsFrom(this.props)}>
+                    {this.props.children}
+                </th>;
             }
         }
     });
@@ -506,6 +506,9 @@
                        return; // (continue)
                        }
                        */
+                    if (typeof(child.props) !== 'object') {
+                        return console.warn('Child passed to <Reactable.Table> was not an object: ' + child.toString());
+                    }
 
                     var childData = child.props.data || {};
 
@@ -943,7 +946,8 @@
         defaultSort: true,
         itemsPerPage: true,
         childNode: true,
-        data: true
+        data: true,
+        children: true
     };
 
     return exports;
