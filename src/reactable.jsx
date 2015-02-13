@@ -707,9 +707,9 @@
 
             this.data.sort(function(a, b){
                 var keyA = extractDataFrom(a, currentSort.column);
-                keyA = stringable(keyA) ? keyA.toString() : '';
+                keyA = (keyA instanceof Unsafe) ? keyA.toString() : keyA || '';
                 var keyB = extractDataFrom(b, currentSort.column);
-                keyB = stringable(keyB) ? keyB.toString() : '';
+                keyB = (keyB instanceof Unsafe) ? keyB.toString() : keyB || '';
 
                 // Default sort
                 if (
@@ -931,11 +931,7 @@
                 value.props.value : value.value;
         }
 
-        if (stringable(value)) {
-            return value.toString();
-        } else {
-            return value;
-        }
+        return value;
     }
 
     var internalProps = {
