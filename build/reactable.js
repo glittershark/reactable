@@ -686,7 +686,7 @@
 
                     if (
                         typeof(data[filterColumn]) !== 'undefined' &&
-                            data[filterColumn].toString().toLowerCase().indexOf(filter) > -1
+                            extractDataFrom(data, filterColumn).toString().toLowerCase().indexOf(filter) > -1
                     ) {
                         matchedChildren.push(children[i]);
                         break;

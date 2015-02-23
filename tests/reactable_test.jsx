@@ -1245,13 +1245,32 @@ describe('Reactable', function() {
         describe('basic case-insensitive filtering', function(){
             before(function() {
                 this.component = React.render(
-                    <Reactable.Table className="table" id="table" data={[
-                        {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
-                        {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
-                        {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter',
-                            'Tag': 'old'},
-                        {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
-                    ]} filterable={['State', 'Tag']} columns={['State', 'Description', 'Tag']}/>,
+                    <Reactable.Table className="table" id="table"
+                        filterable={['State', 'Tag']}
+                        columns={['State', 'Description', 'Tag']}>
+                        <Reactable.Tr>
+                            <Reactable.Td column='State'>New York</Reactable.Td>
+                            <Reactable.Td column='Description'>this is some text</Reactable.Td>
+                            <Reactable.Td column='Tag'>new</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column='State'>New Mexico</Reactable.Td>
+                            <Reactable.Td column='Description'>lorem ipsum</Reactable.Td>
+                            <Reactable.Td column='Tag'>old</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column='State'>Colorado</Reactable.Td>
+                            <Reactable.Td column='Description'>
+                                new description that shouldnt match filter
+                            </Reactable.Td>
+                            <Reactable.Td column='Tag'>old</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column='State'>Alaska</Reactable.Td>
+                            <Reactable.Td column='Description'>bacon</Reactable.Td>
+                            <Reactable.Td column='Tag'>renewed</Reactable.Td>
+                        </Reactable.Tr>
+                    </Reactable.Table>,
                     ReactableTestUtils.testNode()
                 );
             });
