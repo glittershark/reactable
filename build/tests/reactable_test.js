@@ -1245,13 +1245,32 @@ describe('Reactable', function() {
         describe('basic case-insensitive filtering', function(){
             before(function() {
                 this.component = React.render(
-                    React.createElement(Reactable.Table, {className: "table", id: "table", data: [
-                        {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
-                        {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
-                        {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter',
-                            'Tag': 'old'},
-                        {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
-                    ], filterable: ['State', 'Tag'], columns: ['State', 'Description', 'Tag']}),
+                    React.createElement(Reactable.Table, {className: "table", id: "table", 
+                        filterable: ['State', 'Tag'], 
+                        columns: ['State', 'Description', 'Tag']}, 
+                        React.createElement(Reactable.Tr, null, 
+                            React.createElement(Reactable.Td, {column: "State"}, "New York"), 
+                            React.createElement(Reactable.Td, {column: "Description"}, "this is some text"), 
+                            React.createElement(Reactable.Td, {column: "Tag"}, "new")
+                        ), 
+                        React.createElement(Reactable.Tr, null, 
+                            React.createElement(Reactable.Td, {column: "State"}, "New Mexico"), 
+                            React.createElement(Reactable.Td, {column: "Description"}, "lorem ipsum"), 
+                            React.createElement(Reactable.Td, {column: "Tag"}, "old")
+                        ), 
+                        React.createElement(Reactable.Tr, null, 
+                            React.createElement(Reactable.Td, {column: "State"}, "Colorado"), 
+                            React.createElement(Reactable.Td, {column: "Description"}, 
+                                "new description that shouldnt match filter"
+                            ), 
+                            React.createElement(Reactable.Td, {column: "Tag"}, "old")
+                        ), 
+                        React.createElement(Reactable.Tr, null, 
+                            React.createElement(Reactable.Td, {column: "State"}, "Alaska"), 
+                            React.createElement(Reactable.Td, {column: "Description"}, "bacon"), 
+                            React.createElement(Reactable.Td, {column: "Tag"}, "renewed")
+                        )
+                    ),
                     ReactableTestUtils.testNode()
                 );
             });
