@@ -1239,6 +1239,39 @@ describe('Reactable', function() {
                 ReactableTestUtils.expectRowText(5, ['lee Salminen']);
             });
         });
+
+        describe('custom sort with React Components', function(){
+            before(function() {
+                React.render(
+                    <Reactable.Table className="table" id="table" data={[
+                        {'Rank': <span className="3">Third</span>},
+                        {'Rank': <span className="1">First</span>},
+                        {'Rank': <span className="2">Second</span>},
+                    ]}
+                        columns={[{
+                            key: 'Rank', sortable: function (a, b) {
+                                // sort based on classname
+								console.log(a.props.className, b.props.className)
+                                return a.props.className.localeCompare(b.props.className);
+                            }
+                        }]} />,
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+            after(function() {
+                ReactableTestUtils.resetTestEnvironment();
+            });
+
+            it('sorts columns by value', function(){
+                var sortHeader = $('#table thead tr.reactable-column-header th')[0];
+                ReactTestUtils.Simulate.click(sortHeader);
+
+                ReactableTestUtils.expectRowText(0, ['First']);
+                ReactableTestUtils.expectRowText(1, ['Second']);
+                ReactableTestUtils.expectRowText(2, ['Third']);
+            });
+        });
     });
 
     describe('filtering', function() {
