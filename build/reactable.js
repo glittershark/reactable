@@ -239,7 +239,7 @@
 
     var Td = exports.Td = React.createClass({displayName: "Td",
         handleClick: function(e){
-            if (typeof this.props.handleClick !== 'undefined') {
+            if (typeof this.props.handleClick === 'function') {
                 return this.props.handleClick(e, this);
             }
         },
