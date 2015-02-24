@@ -136,7 +136,6 @@ describe('Reactable', function() {
                     </Reactable.Table>,
                     ReactableTestUtils.testNode()
                 );
-                window.tr_test = false;
             });
 
             after(ReactableTestUtils.resetTestEnvironment);
@@ -170,7 +169,6 @@ describe('Reactable', function() {
         context('with multiple <Td>s', function () {
             context('with plain text', function() {
                 before(function() {
-                    window.tr_test = true;
                     React.render(
                         <Reactable.Table className="table" id="table">
                             <Reactable.Tr>
