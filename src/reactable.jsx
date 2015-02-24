@@ -245,15 +245,16 @@
         },
         render: function() {
             var tdProps = {
-                'data-column': this.props.column.key,
                 className: this.props.className,
                 onClick: this.handleClick
             };
 
             // Attach any properties on the column to this Td object to allow things like custom event handlers
-            for (var key in this.props.column) {
-                if (key !== 'key' && key !== 'name') {
-                    tdProps[key] = this.props.column[key];
+            if (typeof(this.props.column) === 'object') {
+                for (var key in this.props.column) {
+                    if (key !== 'key' && key !== 'name') {
+                        tdProps[key] = this.props.column[key];
+                    }
                 }
             }
 
