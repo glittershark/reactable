@@ -50,7 +50,7 @@ That file can be used either as an AMD module, as a CommonJS module in Node, or,
 if neither are supported, will register the Reactable object as a property of
 the `window` object.
 
-Keep in mind that Reactable depends on the latest version of React (0.11),
+Keep in mind that Reactable depends on the latest version of React (0.12),
 **with addons**. That can be downloaded [here][download]
 
 [download]: http://facebook.github.io/react/downloads.html
