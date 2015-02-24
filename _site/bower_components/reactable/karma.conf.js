@@ -10,11 +10,12 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+        'bower_components/es5-shim/es5-shim.js',
         'bower_components/jquery/dist/jquery.js',
         'bower_components/react/react-with-addons.js',
         'bower_components/chai/chai.js',
         'bower_components/chai-jquery/chai-jquery.js',
-        'build/*.js',
+        'build/reactable.js',
         'build/tests/*.js',
     ],
 
@@ -25,7 +26,7 @@ module.exports = function(config) {
 
     // test results reporter to use
     // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-    reporters: ['spec'],
+    reporters: [ process.env.CI === 'true' ? 'spec' : 'dots'],
 
     // web server port
     port: 9876,
@@ -48,7 +49,7 @@ module.exports = function(config) {
     // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
     // - PhantomJS
     // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-    browsers: ['Firefox'],
+    browsers: ['PhantomJS'],
 
     // If browser does not capture in given timeout [ms], kill it
     captureTimeout: 60000,

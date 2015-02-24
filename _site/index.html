@@ -43,16 +43,36 @@
         <p>Fast, flexible, and simple data tables in React.</p>
 
 <p>Reactable allows you to display tabular data client-side, and provides sorting,
-filtering, and pagination over that data. It uses the power of
-<a href="http://facebook.github.io/react/">React.js</a> to do all this very, very quickly,
-and provides an API that makes simple things easy, while trying to get out of
-your way as much as possible if you want to do something complicated or
-unconventional.</p>
+filtering, and pagination over that data. It uses the power of <a href="http://facebook.github.io/react/">React.js</a>
+to do all this very, very quickly, and provides an API that makes simple things
+easy, while trying to get out of your way as much as possible if you want to do
+something complicated or unconventional.</p>
 
 <p>This project is currently alpha-stage, which means the API may or may not be
 unstable and there might be hidden bugs lurking around any corner. I’ll try to
 tag any releases with breaking changes, however, and the more people who use
 this the faster we can get to 1.0!</p>
+
+<p><strong>Note:</strong> Version <a href="https://github.com/glittershark/reactable/tree/0.9.8">0.9.8</a> is the last version that supports React 0.11 -
+as of version 0.10 (this version) Reactable will only continue to support React
+0.12 and higher.</p>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ul>
+  <li><a href="#installation">Installation</a></li>
+  <li><a href="#usage">Usage</a>
+    <ul>
+      <li><a href="#further-customization">Further Customization</a></li>
+      <li><a href="#even-more-customization">Even More Customization</a></li>
+      <li><a href="#manually-specifying-columns">Manually specifying columns</a></li>
+      <li><a href="#preventing-escaping-of-html">Preventing escaping of HTML</a></li>
+      <li><a href="#pagination">Pagination</a></li>
+      <li><a href="#sorting">Sorting</a></li>
+      <li><a href="#filtering">Filtering</a></li>
+    </ul>
+  </li>
+</ul>
 
 <h2 id="installation">Installation</h2>
 
@@ -64,9 +84,12 @@ this the faster we can get to 1.0!</p>
 <p>Or, you can just download the raw file
 <a href="https://github.com/glittershark/reactable/raw/master/build/reactable.js">here</a>.</p>
 
-<p>Keep in mind that we depend on the latest version of React (0.11), <strong>with
-addons</strong>. That can be downloaded
-<a href="http://facebook.github.io/react/downloads.html">here</a></p>
+<p>That file can be used either as an AMD module, as a CommonJS module in Node, or,
+if neither are supported, will register the Reactable object as a property of
+the <code>window</code> object.</p>
+
+<p>Keep in mind that Reactable depends on the latest version of React (0.11),
+<strong>with addons</strong>. That can be downloaded <a href="http://facebook.github.io/react/downloads.html">here</a></p>
 
 <h2 id="usage">Usage</h2>
 
@@ -76,9 +99,9 @@ addons</strong>. That can be downloaded
   <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">var</span> Table = Reactable.Table;
 <span class="line-numbers"> <a href="#n2" name="n2">2</a></span>React.renderComponent(
 <span class="line-numbers"> <a href="#n3" name="n3">3</a></span>    <span style="color:#070;font-weight:bold">&lt;Table</span> <span style="color:#b48">className</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">table</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">data</span>=<span style="color:#F00;background-color:#FAA">{</span><span style="color:#F00;background-color:#FAA">[</span>
-<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>        <span style="color:#F00;background-color:#FAA">{</span> <span style="color:#700">Name:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Griffin</span> <span style="color:#b48">Smith</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#b48">Age:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">18</span><span style="color:#F00;background-color:#FAA">'</span> <span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
-<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>        <span style="color:#F00;background-color:#FAA">{</span> <span style="color:#b48">Age:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">23</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span>  <span style="color:#b48">Name:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Lee</span> <span style="color:#b48">Salminen</span><span style="color:#F00;background-color:#FAA">'</span> <span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
-<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>        <span style="color:#F00;background-color:#FAA">{</span> <span style="color:#b48">Age:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">28</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#b48">Position:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Developer</span><span style="color:#F00;background-color:#FAA">'</span> <span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>        <span style="color:#F00;background-color:#FAA">{</span> <span style="color:#700">Name:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Griffin</span> <span style="color:#b48">Smith</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#b48">Age:</span> <span style="color:#b48">18</span> <span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>        <span style="color:#F00;background-color:#FAA">{</span> <span style="color:#b48">Age:</span> <span style="color:#b48">23</span><span style="color:#F00;background-color:#FAA">,</span>  <span style="color:#b48">Name:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Lee</span> <span style="color:#b48">Salminen</span><span style="color:#F00;background-color:#FAA">'</span> <span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>        <span style="color:#F00;background-color:#FAA">{</span> <span style="color:#b48">Age:</span> <span style="color:#b48">28</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#b48">Position:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Developer</span><span style="color:#F00;background-color:#FAA">'</span> <span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
 <span class="line-numbers"> <a href="#n7" name="n7">7</a></span>    <span style="color:#F00;background-color:#FAA">]</span><span style="color:#F00;background-color:#FAA">}</span> <span style="color:#070;font-weight:bold">/&gt;</span>,
 <span class="line-numbers"> <a href="#n8" name="n8">8</a></span>    document.getElementById(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">table</span><span style="color:#710">'</span></span>)
 <span class="line-numbers"> <a href="#n9" name="n9">9</a></span>);
@@ -89,7 +112,8 @@ addons</strong>. That can be downloaded
 <p>While pretty basic, this example demonstrates a couple things:
 - Columns in the data array can be in any order, and you can omit any you like
 - Regular React DOM attributes such as className will pass-through to the
-  rendered <code>&lt;table&gt;</code></p>
+  rendered <code>&lt;table&gt;</code>
+- Data values can be any type with a <code>toString()</code> method</p>
 
 <h3 id="further-customization">Further Customization</h3>
 
@@ -118,11 +142,11 @@ and is useful if you want to specify per-row attributes such as classes, like so
 
 <h3 id="even-more-customization">Even More Customization</h3>
 
-<p>If you want to customize the rendering of individual columns, you can go a level deeper by
-embedding a <code>Reactable.Td</code> inside your <code>Reactable.Tr</code>. These have the required <code>column</code>
-property, and an optional <code>data</code> property if you want to customize the data that’s used
-for sorting and filtering - if the latter isn’t specified, the data used will default to
-the <code>Td</code>’s children.</p>
+<p>If you want to customize the rendering of individual columns, you can go a level
+deeper by embedding a <code>Reactable.Td</code> inside your <code>Reactable.Tr</code>. These have the
+required <code>column</code> property, and an optional <code>value</code> property if you want to
+customize the data that’s used for sorting and filtering - if the latter isn’t
+specified, the data used will default to the <code>Td</code>’s children.</p>
 
 <p>Example:</p>
 
@@ -156,23 +180,24 @@ the <code>Td</code>’s children.</p>
 
 <h3 id="manually-specifying-columns">Manually specifying columns</h3>
 
-<p>To override the automatic grabbing of the column list from the attributes of the passed
-<code>data</code> objects, you can pass a <code>columns</code> property to the <code>&lt;Table&gt;</code> component. This can be
-either:</p>
+<p>To override the automatic grabbing of the column list from the attributes of the
+passed <code>data</code> objects, you can pass a <code>columns</code> property to the <code>&lt;Table&gt;</code>
+component. This can be either:</p>
 
 <ul>
-  <li>An array of strings, in which case only the given properties will be included as columns
-in the rendered table.</li>
-  <li>An array of objects, each of which must have a <code>key</code> and <code>label</code> property. The <code>key</code>
-property is the attribute of the row object from which to retrieve value, and the
-<code>label</code> is the text to render in the column header row.</li>
+  <li>An array of strings, in which case only the given properties will be included
+as columns in the rendered table.</li>
+  <li>An array of objects, each of which must have a <code>key</code> and <code>label</code> property. The
+<code>key</code> property is the attribute of the row object from which to retrieve
+value, and the <code>label</code> is the text to render in the column header row.</li>
 </ul>
 
 <h3 id="preventing-escaping-of-html">Preventing escaping of HTML</h3>
 
-<p>If you don’t want to go all the way down the JSX rabbit hole to render individual cells as
-HTML, and you know your source data is safe, you can wrap strings in <code>Reactable.unsafe</code> to
-prevent their content from being escaped, like so:</p>
+<p>If you don’t want to go all the way down the JSX rabbit hole to render
+individual cells as HTML, and you know your source data is safe, you can wrap
+strings in <code>Reactable.unsafe</code> to prevent their content from being escaped, like
+so:</p>
 
 <div class="highlighter-coderay"><div class="CodeRay">
   <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">var</span> Table = Reactable.Table,
@@ -194,6 +219,8 @@ prevent their content from being escaped, like so:</p>
 </pre></div>
 </div>
 </div>
+
+<p>You can also pass in <code>unsafe</code> strings as column labels or in a <code>&lt;Reactable.Th&gt;</code></p>
 
 <h3 id="pagination">Pagination</h3>
 
@@ -217,34 +244,41 @@ prevent their content from being escaped, like so:</p>
 
 <h3 id="sorting">Sorting</h3>
 
-<p>To enable sorting on all columns, just specify <code>sortable={true}</code> on the <code>&lt;Table&gt;</code>
-component. For further customization, ie disabling sort or using a custom sort function
-on a per-column basis, you can pass an array to <code>sortable</code>, which contains either string
-column names or column objects.</p>
+<p>To enable sorting on all columns, just specify <code>sortable={true}</code> on the
+<code>&lt;Table&gt;</code> component. For further customization, ie disabling sort or using a
+custom sort function on a per-column basis, you can pass an array to <code>sortable</code>,
+which contains either string column names or column objects.</p>
 
 <p>We’ve pre-built some sort functions for you.</p>
 
 <ul>
-  <li><code>CaseInsensitive</code> will sort strings alphabetically regardless of capitalization (e.g. Joe Smith === joe smith)</li>
-  <li><code>Date</code> will sort dates using JavaScript’s native Date parser (e.g. 4/20/2014 12:05 PM)</li>
+  <li><code>CaseInsensitive</code> will sort strings alphabetically regardless of
+capitalization (e.g. Joe Smith === joe smith)</li>
+  <li><code>Date</code> will sort dates using JavaScript’s native Date parser (e.g. 4/20/2014
+12:05 PM)</li>
   <li><code>Currency</code> will sort USD format (e.g. $1,000.00)</li>
   <li><code>Numeric</code> will parse integer-like strings as integers (e.g. “1”)</li>
+  <li><code>NumericInteger</code> will parse integer strings (use <code>Numeric</code> if you might have floats)</li>
 </ul>
 
-<p>To specify a custom sort function, use the following structure for the column object:</p>
+<p>To specify a custom sort function, use the following structure for the column
+object:</p>
 
 <div class="highlighter-coderay"><div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>{<span style="color:#606">column</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Column Name</span><span style="color:#710">'</span></span>, <span style="color:#06B;font-weight:bold">sortFunction</span>: <span style="color:#080;font-weight:bold">function</span>(a, b){} }
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>{<span style="color:#606">column</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Column Name</span><span style="color:#710">'</span></span>, <span style="color:#06B;font-weight:bold">sortFunction</span>: <span style="color:#080;font-weight:bold">function</span>(a, b){} }
 </pre></div>
 </div>
 </div>
 
-<p>You can also specify a default sort by passing in either a column name by itself, or an object
-with a column and a <code>direction</code> paramenter of either <code>asc</code> or <code>desc</code>.
-If no direction is specified, the default sort will be ascending.  Example:</p>
+<p>You can also specify a default sort by passing in either a column name by
+itself, or an object with a column and a <code>direction</code> paramenter of either <code>asc</code>
+or <code>desc</code>.  If no direction is specified, the default sort will be ascending.
+Example:</p>
 
 <div class="highlighter-coderay"><div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>{<span style="color:#606">column</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Column Name</span><span style="color:#710">'</span></span>, <span style="color:#606">direction</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">asc</span><span style="color:#710">'</span></span> }
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>{<span style="color:#606">column</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Column Name</span><span style="color:#710">'</span></span>, <span style="color:#606">direction</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">asc</span><span style="color:#710">'</span></span> }
 </pre></div>
 </div>
 </div>
@@ -255,32 +289,34 @@ If no direction is specified, the default sort will be ascending.  Example:</p>
   <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>&lt;Table className=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">table</span><span style="color:#710">&quot;</span></span> id=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">table</span><span style="color:#710">&quot;</span></span> data={[
 <span class="line-numbers"> <a href="#n2" name="n2">2</a></span>    { <span style="color:#606">Name</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Lee Salminen</span><span style="color:#710">'</span></span>, <span style="color:#606">Age</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">23</span><span style="color:#710">'</span></span>, <span style="color:#606">Position</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Programmer</span><span style="color:#710">'</span></span>},
 <span class="line-numbers"> <a href="#n3" name="n3">3</a></span>    { <span style="color:#606">Name</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Griffin Smith</span><span style="color:#710">'</span></span>, <span style="color:#606">Age</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">18</span><span style="color:#710">'</span></span>, <span style="color:#606">Position</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Engineer</span><span style="color:#710">'</span></span>},
-<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>    { <span style="color:#606">Name</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Ian Zhang</span><span style="color:#710">'</span></span>, <span style="color:#606">Age</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">28</span><span style="color:#710">'</span></span>, <span style="color:#606">Position</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Developer</span><span style="color:#710">'</span></span>}
-<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>]}
-<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>sortable={[
-<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>    {
-<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>        <span style="color:#606">column</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Name</span><span style="color:#710">'</span></span>,
-<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>        <span style="color:#06B;font-weight:bold">sortFunction</span>: <span style="color:#080;font-weight:bold">function</span>(a, b){
-<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>            <span style="color:#777">// Sort by last name</span>
-<span class="line-numbers"><a href="#n11" name="n11">11</a></span>            <span style="color:#080;font-weight:bold">var</span> nameA = a.split(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20"> </span><span style="color:#710">'</span></span>);
-<span class="line-numbers"><a href="#n12" name="n12">12</a></span>            <span style="color:#080;font-weight:bold">var</span> nameB = b.split(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20"> </span><span style="color:#710">'</span></span>);
-<span class="line-numbers"><a href="#n13" name="n13">13</a></span>
-<span class="line-numbers"><a href="#n14" name="n14">14</a></span>            <span style="color:#080;font-weight:bold">return</span> nameA[<span style="color:#00D">1</span>].localeCompare(nameB[<span style="color:#00D">1</span>]);
-<span class="line-numbers"><a href="#n15" name="n15">15</a></span>        }
-<span class="line-numbers"><a href="#n16" name="n16">16</a></span>    },
-<span class="line-numbers"><a href="#n17" name="n17">17</a></span>    <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Age</span><span style="color:#710">'</span></span>,
-<span class="line-numbers"><a href="#n18" name="n18">18</a></span>    <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Position</span><span style="color:#710">'</span></span>
-<span class="line-numbers"><a href="#n19" name="n19">19</a></span>]}
-<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>defaultSort=<span style="background-color:hsla(300,100%,50%,0.06)"><span style="color:#404">/</span><span style="color:#808">&gt;</span></span>
-<span class="line-numbers"><a href="#n21" name="n21">21</a></span><span style="background-color:hsla(300,100%,50%,0.06)"><span style="color:#808"></span></span></pre></div>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>    { <span style="color:#606">Name</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Ian Zhang</span><span style="color:#710">'</span></span>, <span style="color:#606">Age</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">28</span><span style="color:#710">'</span></span>, <span style="color:#606">Position</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">De</span></span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span><span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">100 10074  100 10074    0     0  63660      0 --:--:-- --:--:-- --:--:-- 63759</span></span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span><span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">veloper</span><span style="color:#710">'</span></span>}
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>]}
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>sortable={[
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>    {
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>        <span style="color:#606">column</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Name</span><span style="color:#710">'</span></span>,
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>        <span style="color:#06B;font-weight:bold">sortFunction</span>: <span style="color:#080;font-weight:bold">function</span>(a, b){
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>            <span style="color:#777">// Sort by last name</span>
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>            <span style="color:#080;font-weight:bold">var</span> nameA = a.split(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20"> </span><span style="color:#710">'</span></span>);
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>            <span style="color:#080;font-weight:bold">var</span> nameB = b.split(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20"> </span><span style="color:#710">'</span></span>);
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>            <span style="color:#080;font-weight:bold">return</span> nameA[<span style="color:#00D">1</span>].localeCompare(nameB[<span style="color:#00D">1</span>]);
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span>        }
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span>    },
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span>    <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Age</span><span style="color:#710">'</span></span>,
+<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>    <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Position</span><span style="color:#710">'</span></span>
+<span class="line-numbers"><a href="#n21" name="n21">21</a></span>]}
+<span class="line-numbers"><a href="#n22" name="n22">22</a></span>defaultSort=<span style="background-color:hsla(300,100%,50%,0.06)"><span style="color:#404">/</span><span style="color:#808">&gt;</span></span>
+<span class="line-numbers"><a href="#n23" name="n23">23</a></span><span style="background-color:hsla(300,100%,50%,0.06)"><span style="color:#808"></span></span></pre></div>
 </div>
 </div>
+<p>### Filtering</p>
 
-<h3 id="filtering">Filtering</h3>
-
-<p>You can do simple case-insensitive filtering by specifying a filterable property on the table.  This
-property should contain a list of columns which the filter is performed on.  If the filterable property
-is provided, then an input box with class reactable-filter-input will be prepended to the thead of the table.</p>
+<p>You can do simple case-insensitive filtering by specifying a filterable property
+on the table.  This property should contain a list of columns which the filter
+is performed on.  If the filterable property is provided, then an input box with
+class reactable-filter-input will be prepended to the thead of the table.</p>
 
 <p>Example:</p>
 
@@ -294,6 +330,28 @@ is provided, then an input box with class reactable-filter-input will be prepend
 </pre></div>
 </div>
 </div>
+
+<p>There is also a <code>filterBy()</code> function on the component itself which takes a 
+single string and applies that as the filtered value. It can be used like so:</p>
+
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">var</span> table = React.renderComponent(
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>  <span style="color:#070;font-weight:bold">&lt;Table</span> <span style="color:#b48">className</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">table</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">id</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">table</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">data</span>=<span style="color:#F00;background-color:#FAA">{</span><span style="color:#F00;background-color:#FAA">[</span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>      <span style="color:#F00;background-color:#FAA">{</span><span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">State</span><span style="color:#710">'</span></span><span style="color:#b48">:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">New</span> <span style="color:#b48">York</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Description</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">this</span> <span style="color:#b48">is</span> <span style="color:#b48">some</span> <span style="color:#b48">text</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Tag</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">new</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>      <span style="color:#F00;background-color:#FAA">{</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">State</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">New</span> <span style="color:#b48">Mexico</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Description</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">lorem</span> <span style="color:#b48">ipsum</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Tag</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">old</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>      <span style="color:#F00;background-color:#FAA">{</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">State</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Colorado</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Description</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">new</span> <span style="color:#b48">description</span> <span style="color:#b48">that</span> <span style="color:#b48">shouldn</span><span style="color:#F00;background-color:#FAA">\</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">t</span> <span style="color:#b48">match</span> <span style="color:#b48">filter</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Tag</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">old</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>      <span style="color:#F00;background-color:#FAA">{</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">State</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Alaska</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Description</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">bacon</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Tag</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">:</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">renewed</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">}</span><span style="color:#F00;background-color:#FAA">,</span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>  <span style="color:#F00;background-color:#FAA">]</span><span style="color:#F00;background-color:#FAA">}</span> <span style="color:#b48">filterable</span>=<span style="color:#F00;background-color:#FAA">{</span><span style="color:#F00;background-color:#FAA">[</span><span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">State</span><span style="color:#710">'</span></span><span style="color:#F00;background-color:#FAA">,</span> <span style="color:#F00;background-color:#FAA">'</span><span style="color:#b48">Tag</span><span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">]</span><span style="color:#F00;background-color:#FAA">}</span> <span style="color:#070;font-weight:bold">/&gt;</span>,
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>  document.getElementById(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">table</span><span style="color:#710">'</span></span>)
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>);
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>table.filterBy(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">new</span><span style="color:#710">'</span></span>);
+</pre></div>
+</div>
+</div>
+
+<p>This can be useful if you want to roll your own filtering input field outside of
+Reactable.</p>
 
       </section>
     </div>

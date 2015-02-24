@@ -30,7 +30,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-karma');
 
     grunt.registerTask('testOnce', ['build', 'karma']);
-    grunt.registerTask('test', ['testOnce', 'watch:test'])
+    grunt.registerTask('test', ['testOnce', 'watch:test']);
 
     grunt.registerTask('build', ['react']);
     grunt.registerTask('default', ['build', 'watch:build']);

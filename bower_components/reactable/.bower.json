@@ -1,23 +1,24 @@
 {
   "name": "Reactable",
-  "version": "0.7.0",
+  "version": "0.10.0",
   "main": "build/reactable.js",
   "dependencies": {
-    "react": "0.11"
+    "react": "0.12"
   },
   "devDependencies": {
     "chai-jquery": "~1.2.1",
     "jquery": "~2.1.0",
-    "chai": "~1.9.1"
+    "chai": "~1.9.1",
+    "es5-shim": "~4.0.2"
   },
   "homepage": "https://github.com/glittershark/reactable",
-  "_release": "0.7.0",
+  "_release": "0.10.0",
   "_resolution": {
     "type": "version",
-    "tag": "0.7.0",
-    "commit": "16650f1ece0065271bfc0dce84ea694bbbc64780"
+    "tag": "0.10.0",
+    "commit": "9fe8bee221c5d98e20379fb8c4fc09f3b7120b17"
   },
   "_source": "git://github.com/glittershark/reactable.git",
-  "_target": "0.7.0",
+  "_target": "0.10.0",
   "_originalSource": "reactable"
 }

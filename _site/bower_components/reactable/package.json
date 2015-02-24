@@ -1,10 +1,15 @@
 {
-  "name": "Reactable",
-  "version": "0.7.0",
+  "name": "reactable",
+  "version": "0.10.0",
   "description": "Fast, flexible, simple data tables in React",
+  "main": "./build/reactable.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/glittershark/reactable.git"
+  },
+  "bugs": {
+    "url" : "http://github.com/glittershark/reactable/issues",
+    "email" : "wildgriffin45@gmail.com"
   },
   "author": "Griffin Smith",
   "license": "MIT",
@@ -15,12 +20,15 @@
   "scripts": {
     "test": "./node_modules/grunt-cli/bin/grunt testOnce"
   },
+  "peerDependencies": {
+    "react": "*"
+  },
   "devDependencies": {
     "grunt": "^0.4.4",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-karma": "^0.8.2",
-    "grunt-react": "^0.8.3",
+    "grunt-react": "^0.10.0",
     "karma": "^0.12.9",
     "karma-chrome-launcher": "^0.1.3",
     "karma-firefox-launcher": "^0.1.3",
@@ -28,5 +36,6 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-spec-reporter": "0.0.12",
     "mocha": "^1.18.2"
-  }
+  },
+  "keywords": ["react-component", "react", "table", "data-tables"]
 }

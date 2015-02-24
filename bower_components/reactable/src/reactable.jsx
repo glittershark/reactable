@@ -1,62 +1,76 @@
-/** @jsx React.DOM */
-Reactable = (function() {
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) { // AMD. Register as an anonymous module.
+        define(['react'], factory);
+    } else if (typeof exports === 'object') {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like environments that support module.exports,
+        // like Node.
+        module.exports = factory(require('react'));
+    } else {
+        // Browser globals (root is window)
+        root.Reactable = factory(root.React);
+    }
+}(this, function (React) {
     "use strict";
+    var exports = {};
 
     // Array.prototype.map polyfill - see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map#Polyfill
+    // Production steps of ECMA-262, Edition 5, 15.4.4.19
+    // Reference: http://es5.github.io/#x15.4.4.19
     if (!Array.prototype.map) {
-        Array.prototype.map = function(fun /*, thisArg */) {
-            "use strict";
 
-            if (this === void 0 || this === null) {
-                throw new TypeError();
+        Array.prototype.map = function(callback, thisArg) {
+            var T, A, k;
+
+            if (this === null) {
+                throw new TypeError(" this is null or not defined");
             }
 
-            var t = Object(this);
-            var len = t.length >>> 0;
-            if (typeof fun !== "function") {
-                throw new TypeError();
+            var O = Object(this);
+            var len = O.length >>> 0;
+
+            if (typeof callback !== "function") {
+                throw new TypeError(callback + " is not a function");
             }
 
-            var res = new Array(len);
-            var thisArg = arguments.length >= 2 ? arguments[1] : void 0;
-            for (var i = 0; i < len; i++) {
-                // NOTE: Absolute correctness would demand Object.defineProperty
-                //       be used.  But this method is fairly new, and failure is
-                //       possible only if Object.prototype or Array.prototype
-                //       has a property |i| (very unlikely), so use a less-correct
-                //       but more portable alternative.
-                if (i in t) {
-                    res[i] = fun.call(thisArg, t[i], i, t);
+            if (arguments.length > 1) {
+                T = thisArg;
+            }
+
+            A = new Array(len);
+            k = 0;
+
+            while (k < len) {
+                var kValue, mappedValue;
+                if (k in O) {
+                    kValue = O[k];
+                    mappedValue = callback.call(T, kValue, k, O);
+                    A[k] = mappedValue;
                 }
+                k++;
             }
-
-            return res;
+            return A;
         };
     }
 
     // Array.prototype.indexOf polyfill for IE8
-    if (!Array.prototype.indexOf)
-    {
-          Array.prototype.indexOf = function(elt /*, from*/)
-          {
-                var len = this.length >>> 0;
+    if (!Array.prototype.indexOf) {
+        Array.prototype.indexOf = function(elt /*, from*/) {
+            var len = this.length >>> 0;
 
-                var from = Number(arguments[1]) || 0;
-                from = (from < 0)
-                     ? Math.ceil(from)
-                     : Math.floor(from);
-                if (from < 0) {
-                    from += len;
-                }
+            var from = Number(arguments[1]) || 0;
+            from = (from < 0) ? Math.ceil(from) : Math.floor(from);
+            if (from < 0) {
+                from += len;
+            }
 
-                for (; from < len; from++)
-                {
-                    if (from in this && this[from] === elt) {
-                        return from;
-                    }
+            for (; from < len; from++) {
+                if (from in this && this[from] === elt) {
+                    return from;
                 }
-                return -1;
-          };
+            }
+            return -1;
+        };
     }
 
     // Array.prototype.find polyfill - see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
@@ -66,7 +80,7 @@ Reactable = (function() {
             configurable: true,
             writable: true,
             value: function(predicate) {
-                if (this == null) {
+                if (this === null) {
                     throw new TypeError('Array.prototype.find called on null or undefined');
                 }
                 if (typeof predicate !== 'function') {
@@ -96,7 +110,29 @@ Reactable = (function() {
         };
     }
 
-    var Reactable = {};
+    if (!Object.assign) {
+        Object.defineProperty(Object, "assign", {
+            enumerable: false,
+            configurable: true,
+            writable: true,
+            value: function(target, firstSource) {
+                if (target === undefined || target === null)
+                    throw new TypeError("Cannot convert first argument to object");
+                var to = Object(target);
+                for (var i = 1; i < arguments.length; i++) {
+                    var nextSource = arguments[i];
+                    if (nextSource === undefined || nextSource === null) continue;
+                    var keysArray = Object.keys(Object(nextSource));
+                    for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+                        var nextKey = keysArray[nextIndex];
+                        var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
+                        if (desc !== undefined && desc.enumerable) to[nextKey] = nextSource[nextKey];
+                    }
+                }
+                return to;
+            }
+        });
+    }
 
     function Unsafe(content) {
         this.content = content;
@@ -104,13 +140,26 @@ Reactable = (function() {
 
     Unsafe.prototype.toString = function() {
         return this.content;
+    };
+
+    function stringable(thing) {
+        return thing !== null && typeof(thing) !== 'undefined' && typeof(thing.toString === 'function');
     }
 
-    Reactable.unsafe = function(str) {
+    // this is a bit hacky - it'd be nice if React exposed an API for this
+    function isReactComponent(thing) {
+        return thing !== null && typeof(thing) === 'object' && typeof(thing.props) !== 'undefined';
+    }
+
+    React.Children.children = function(children) {
+        return React.Children.map(children, function(x) { return x; }) || [];
+    };
+
+    exports.unsafe = function(str) {
         return new Unsafe(str);
-    }
+    };
 
-    Reactable.Sort = {
+    exports.Sort = {
         Numeric: function(a, b) {
             var valA = parseFloat(a.toString().replace(',', ''));
             var valB = parseFloat(b.toString().replace(',', ''));
@@ -138,6 +187,14 @@ Reactable = (function() {
             return 0;
         },
 
+        NumericInteger: function(a, b) {
+          if (isNaN(a) || isNaN(b)) {
+            return a > b ? 1 : -1;
+          }
+
+          return a - b;
+        },
+
         Currency: function(a, b) {
             // Parse out dollar signs, then do a regular numeric sort
             // TODO: handle non-American currency
@@ -149,7 +206,7 @@ Reactable = (function() {
                 b = b.substring(1);
             }
 
-            return Reactable.Sort.Numeric(a, b);
+            return exports.Sort.Numeric(a, b);
         },
 
         Date: function(a, b) {
@@ -162,7 +219,7 @@ Reactable = (function() {
             // Handle non-date values with numeric sort
             // Sort non-numeric values alphabetically at the bottom of the list
             if (isNaN(valA) || isNaN(valB)) {
-                return Reactable.Sort.Numeric(a, b);
+                return exports.Sort.Numeric(a, b);
             }
 
             if (valA > valB) {
@@ -176,22 +233,11 @@ Reactable = (function() {
         },
 
         CaseInsensitive: function(a, b) {
-            var valA = a.toLowerCase();
-            var valB = b.toLowerCase();
-
-            if(valA > valB) {
-                return 1;
-            }
-
-            if(valB > valA) {
-                return -1;
-            }
-
-            return 0;
-        },
+            return a.toLowerCase().localeCompare(b.toLowerCase());
+        }
     };
 
-    var Td = Reactable.Td = React.createClass({
+    var Td = exports.Td = React.createClass({
         handleClick: function(e){
             if (typeof this.props.handleClick !== 'undefined') {
                 return this.props.handleClick(e, this);
@@ -202,7 +248,7 @@ Reactable = (function() {
                 'data-column': this.props.column.key,
                 className: this.props.className,
                 onClick: this.handleClick
-            }
+            };
 
             // Attach any properties on the column to this Td object to allow things like custom event handlers
             for (var key in this.props.column) {
@@ -212,16 +258,19 @@ Reactable = (function() {
             }
 
             var data = this.props.data;
-            if (
-                typeof(this.props.data) === 'undefined' &&
-                typeof(this.props.children) === 'string'
-            ) {
-                data = this.props.children;
-            }
 
             if (typeof(this.props.children) !== 'undefined') {
+                if (isReactComponent(this.props.children)) {
+                    data = this.props.children;
+                } else if (
+                    typeof(this.props.data) === 'undefined' &&
+                        stringable(this.props.children)
+                ) {
+                    data = this.props.children.toString();
+                }
+
                 if (this.props.children instanceof Unsafe) {
-                    tdProps.dangerouslySetInnerHTML= { __html: this.props.children.toString() }
+                    tdProps.dangerouslySetInnerHTML = { __html: this.props.children.toString() };
                 } else {
                     tdProps.children = data;
                 }
@@ -232,44 +281,50 @@ Reactable = (function() {
     });
 
 
-    var Tr = Reactable.Tr = React.createClass({
+    var Tr = exports.Tr = React.createClass({
         statics: {
             childNode: Td,
             dataType: 'object'
         },
-        getDefaultProps: function() {
-            var defaultProps = {
-                childNode: Td,
-                columns: [],
-                data: {}
-            }
-
-            return defaultProps;
-        },
         render: function() {
-            var children = this.props.children || [];
+            var children = toArray(React.Children.children(this.props.children));
 
             if (
                 this.props.data &&
-                this.props.columns &&
-                typeof this.props.columns.map === 'function'
+                    this.props.columns &&
+                        typeof this.props.columns.map === 'function'
             ) {
+                if (typeof(children.concat) === 'undefined') { console.log(children); }
+
                 children = children.concat(this.props.columns.map(function(column, i) {
                     if (this.props.data.hasOwnProperty(column.key)) {
-                        return <Td column={column} key={column.key}>{this.props.data[column.key]}</Td>;
+                        var value = this.props.data[column.key];
+                        var props = {};
+
+                        if (
+                            typeof(value) !== 'undefined' &&
+                                value !== null &&
+                                    value.__reactableMeta === true
+                        ) {
+                            props = value.props;
+                            value = value.value;
+                        }
+
+                        return <Td column={column} key={column.key} {...props}>{value}</Td>;
                     } else {
                         return <Td column={column} key={column.key} />;
                     }
                 }.bind(this)));
             }
 
-            return this.transferPropsTo(
-                <tr>{children}</tr>
-            );
+            // Manually transfer props
+            var props = filterPropsFrom(this.props);
+
+            return React.DOM.tr(props, children);
         }
     });
 
-    var Thead = Reactable.Thead = React.createClass({
+    var Thead = exports.Thead = React.createClass({
         getColumns: function() {
             return React.Children.map(this.props.children, function(th) {
                 if (typeof th.props.children === 'string') {
@@ -279,56 +334,82 @@ Reactable = (function() {
                 }
             });
         },
+        handleClickTh: function (column) {
+            this.props.onSort(column.key);
+        },
         render: function() {
-            return this.transferPropsTo(
-                <thead>
+
+            // Declare the list of Ths
+            var Ths = [];
+            for (var index = 0; index < this.props.columns.length; index++) {
+                var column = this.props.columns[index];
+                var sortClass = '';
+
+                if (this.props.sortableColumns[column.key]) {
+                    sortClass += 'reactable-header-sortable ';
+                }
+
+                if (this.props.sort.column === column.key) {
+                    sortClass += 'reactable-header-sort';
+                    if (this.props.sort.direction === 1) {
+                        sortClass += '-asc';
+                    }
+                    else {
+                        sortClass += '-desc';
+                    }
+                }
+
+                Ths.push(
+                    <Th className={sortClass} key={index} onClick={this.handleClickTh.bind(this, column)}>
+                        {column.label}
+                    </Th>
+                );
+            }
+
+            // Manually transfer props
+            var props = filterPropsFrom(this.props);
+
+            return (
+                <thead {...props}>
                     {this.props.filtering === true ?
                         <Filterer
                             colSpan={this.props.columns.length}
-                            onFilter={this.props.onFilter}/> : ''
-                    }
-                    <tr className="reactable-column-header">
-                        {this.props.columns.map(function(column, index) {
-                            var sortClass = '';
-
-                            if (this.props.sort.column === column.key) {
-                                sortClass = 'reactable-header-sort';
-                                if (this.props.sort.direction === 1) {
-                                    sortClass += '-asc';
-                                }
-                                else {
-                                    sortClass += '-desc';
-                                }
-                            }
-
-                            return (
-                                <th
-                                    className={sortClass}
-                                    key={index}
-                                    onClick={function(){ this.props.onSort(column.key) }.bind(this)}>{column.label}</th>
-                            );
-                        }.bind(this))}
-                    </tr>
-                </thead>
+                            onFilter={this.props.onFilter}
+                            value={this.props.currentFilter}
+                        /> : ''}
+                        <tr className="reactable-column-header">{Ths}</tr>
+                    </thead>
             );
         }
     });
 
-    var Th = Reactable.Th = React.createClass({
+    var Th = exports.Th = React.createClass({
         render: function() {
-            return this.transferPropsTo(<th>{this.props.children}</th>);
+                var childProps
+            if (this.props.children instanceof Unsafe) {
+                return <th {...filterPropsFrom(this.props)}
+                    dangerouslySetInnerHTML={{__html: this.props.children.toString()}}/>
+            } else {
+                return <th {...filterPropsFrom(this.props)}>
+                    {this.props.children}
+                </th>;
+            }
         }
     });
 
     var FiltererInput = React.createClass({
+        onChange: function() {
+            this.props.onFilter(this.getDOMNode().value);
+        },
         render: function() {
             return (
-                <input type="text" className="reactable-filter-input"
-                    onKeyUp={function(){
-                        this.props.onFilter(this.getDOMNode().value);
-                    }.bind(this)} />
+                <input type="text"
+                    className="reactable-filter-input"
+                    value={this.props.value}
+                    onKeyUp={this.onChange}
+                    onChange={this.onChange} />
             );
-        },
+        }
     });
 
     var Filterer = React.createClass({
@@ -340,11 +421,12 @@ Reactable = (function() {
             return (
                 <tr className="reactable-filterer">
                     <td colSpan={this.props.colSpan}>
-                        <FiltererInput onFilter={this.props.onFilter}/>
+                        <FiltererInput onFilter={this.props.onFilter}
+                            value={this.props.value} />
                     </td>
                 </tr>
             );
-        },
+        }
     });
 
     var Paginator = React.createClass({
@@ -371,12 +453,12 @@ Reactable = (function() {
 
                 pageButtons.push(
                     <a className={className} key={i}
-                       // create function to get around for-loop closure issue
-                       onClick={(function(pageNum) {
-                           return function() {
-                               this.props.onPageChange(pageNum);
-                           }.bind(this)
-                       }.bind(this))(i)}>{i + 1}</a>
+                        // create function to get around for-loop closure issue
+                        onClick={(function(pageNum) {
+                            return function() {
+                                this.props.onPageChange(pageNum);
+                            }.bind(this);
+                        }.bind(this))(i)}>{i + 1}</a>
                 );
             }
 
@@ -392,7 +474,7 @@ Reactable = (function() {
         }
     });
 
-    var Table = Reactable.Table = React.createClass({
+    var Table = exports.Table = React.createClass({
         // Translate a user defined column array to hold column objects if strings are specified
         // (e.g. ['column1'] => [{key: 'column1', label: 'column1'}])
         translateColumnsArray: function(columns) {
@@ -420,60 +502,63 @@ Reactable = (function() {
                 React.Children.forEach(props.children, function(child) {
                     // TODO: figure out a new way to determine the type of a component
                     /*
-                    if (child.type.ConvenienceConstructor !== Tr) {
-                        return; // (continue)
+                       if (child.type.ConvenienceConstructor !== Tr) {
+                       return; // (continue)
+                       }
+                       */
+                    if (typeof(child.props) !== 'object') {
+                        return console.warn('Child passed to <Reactable.Table> was not an object: ' + child.toString());
                     }
-                    */
 
                     var childData = child.props.data || {};
 
-                    // Given our modification of Array.prototype, this is the
-                    // best way to check if child.props.children is an array
-                    if (
-                        typeof(child.props.children) !== 'undefined' &&
-                        typeof(child.props.children.map) === 'function'
-                    ) {
+                    React.Children.forEach(child.props.children, function(descendant) {
+                        // TODO
+                        /* if (descendant.type.ConvenienceConstructor === Td) { */
+                        if (true) {
+                            if (typeof(descendant.props.column) !== 'undefined') {
+                                var value;
 
-                        var childChildren = child.props.children;
-                        for (var i = 0; i < childChildren.length; i++) {
-                            var descendant = childChildren[i];
-                            // TODO
-                            /* if (descendant.type.ConvenienceConstructor === Td) { */
-                            if (true) {
-                                if (typeof(descendant.props.column) !== 'undefined') {
-                                    if (typeof(descendant.props.data) !== 'undefined') {
-
-                                        childData[descendant.props.column] =
-                                            descendant.props.data;
-                                    } else if (
-                                        typeof(descendant.props.children) !== 'undefined'
-                                    ) {
-                                        childData[descendant.props.column] =
-                                            descendant.props.children;
-                                    } else {
-                                        console.warn('Reactable.Td specified without ' +
-                                                'a `data` property or children, ' +
-                                                'ignoring');
-                                    }
+                                if (typeof(descendant.props.data) !== 'undefined') {
+                                    value = descendant.props.data;
+                                } else if (typeof(descendant.props.children) !== 'undefined') {
+                                    value = descendant.props.children;
                                 } else {
-                                    console.warn('Reactable.Td specified without a ' +
-                                            '`column` property, ignoring');
+                                    console.warn('exports.Td specified without ' +
+                                                 'a `data` property or children, ' +
+                                                 'ignoring');
+                                    return;
                                 }
+
+                                childData[descendant.props.column] = {
+                                    value: value,
+                                    props: filterPropsFrom(descendant.props),
+                                    __reactableMeta: true
+                                };
+                            } else {
+                                console.warn('exports.Td specified without a ' +
+                                             '`column` property, ignoring');
                             }
                         }
-                    }
+                    });
 
-                    data.push(childData);
+                    data.push({
+                        data: childData,
+                        props: filterPropsFrom(child.props),
+                        __reactableMeta: true
+                    });
                 }.bind(this));
             }
 
             return data;
         },
+
         initialize: function(props) {
             this.data = props.data || [];
             this.data = this.data.concat(this.parseChildData(props));
             this.initializeSorts(props);
         },
+
         initializeSorts: function() {
             this._sortable = {};
             // Transform sortable properties into a more friendly list
@@ -489,7 +574,7 @@ Reactable = (function() {
                         return;
                     }
 
-                    if (typeof(column.sortFunction) !== 'undefined' && column.sortFunction instanceof Function) {
+                    if (typeof(column.sortFunction) === 'function') {
                         sortFunction = column.sortFunction;
                     } else {
                         sortFunction = 'default';
@@ -502,83 +587,95 @@ Reactable = (function() {
                 this._sortable[columnName] = sortFunction;
             }
         },
+
         getDefaultProps: function() {
             var defaultProps = {
-                columns: [],
-                sortable: [],
-                filterable: [],
+                sortBy: false,
                 defaultSort: false,
                 itemsPerPage: 0,
-            }
+            };
             return defaultProps;
         },
+
         getInitialState: function() {
             var initialState = {
                 currentPage: 0,
                 currentSort: {
                     column: null,
-                    direction: 1,
+                    direction: 1
                 },
-                filter: '',
-            }
+                filter: ''
+            };
 
             // Set the state of the current sort to the default sort
-            if (this.props.defaultSort !== false) {
-                var column = this.props.defaultSort;
-                var currentSort = {};
-
-                if (column instanceof Object) {
-                    var columnName, sortDirection;
-
-                    if (typeof(column.column) !== 'undefined') {
-                        columnName = column.column;
-                    } else {
-                        console.warn('Default column specified without column name');
-                        return;
-                    }
-
-                    if (typeof(column.direction) !== 'undefined') {
-                        if (column.direction === 1 || column.direction === 'asc') {
-                            sortDirection = 1;
-                        } else if (column.direction === -1 || column.direction === 'desc') {
-                            sortDirection = -1;
-                        } else {
-                            console.warn('Invalid default sort specified.  Defaulting to ascending');
-                            sortDirection = 1;
-                        }
-                    } else {
-                        sortFunction = 1;
-                    }
-                } else {
-                    columnName      = column;
-                    sortDirection   = 1;
-                }
-
-                initialState.currentSort = {
-                    column: columnName,
-                    direction: sortDirection
-                };
+            if (this.props.sortBy !== false || this.props.defaultSort !== false) {
+                var sortingColumn = this.props.sortBy || this.props.defaultSort;
+                initialState.currentSort = this.getCurrentSort(sortingColumn);
             }
-
             return initialState;
         },
+
+        getCurrentSort: function(column) {
+            var columnName, sortDirection;
+
+            if (column instanceof Object) {
+                if (typeof(column.column) !== 'undefined') {
+                    columnName = column.column;
+                } else {
+                    console.warn('Default column specified without column name');
+                    return;
+                }
+
+                if (typeof(column.direction) !== 'undefined') {
+                    if (column.direction === 1 || column.direction === 'asc') {
+                        sortDirection = 1;
+                    } else if (column.direction === -1 || column.direction === 'desc') {
+                        sortDirection = -1;
+                    } else {
+                        console.warn('Invalid default sort specified.  Defaulting to ascending');
+                        sortDirection = 1;
+                    }
+                } else {
+                    sortDirection = 1;
+                }
+            } else {
+                columnName      = column;
+                sortDirection   = 1;
+            }
+
+            return {
+                column: columnName,
+                direction: sortDirection
+            };
+        },
+
+        updateCurrentSort: function(sortBy) {
+            if (sortBy !== false &&
+                sortBy.column !== this.state.currentSort.column &&
+                    sortBy.direction !== this.state.currentSort.direction) {
+
+                this.setState({ currentSort: this.getCurrentSort(sortBy) });
+            }
+        },
+
         componentWillMount: function() {
             this.initialize(this.props);
             this.sortByCurrentSort();
         },
         componentWillReceiveProps: function(nextProps) {
             this.initialize(nextProps);
+            this.updateCurrentSort(nextProps.sortBy);
             this.sortByCurrentSort();
         },
         onPageChange: function(page) {
             this.setState({ currentPage: page });
         },
-        onFilter: function(filter) {
+        filterBy: function(filter) {
             this.setState({ filter: filter });
         },
         applyFilter: function(filter, children) {
             // Helper function to apply filter text to a list of table rows
-            var filter = filter.toLowerCase();
+            filter = filter.toLowerCase();
             var matchedChildren = [];
 
             for (var i = 0; i < children.length; i++) {
@@ -589,7 +686,7 @@ Reactable = (function() {
 
                     if (
                         typeof(data[filterColumn]) !== 'undefined' &&
-                        data[filterColumn].toString().toLowerCase().indexOf(filter) > -1
+                            data[filterColumn].toString().toLowerCase().indexOf(filter) > -1
                     ) {
                         matchedChildren.push(children[i]);
                         break;
@@ -609,13 +706,16 @@ Reactable = (function() {
             }
 
             this.data.sort(function(a, b){
-                var keyA = a[currentSort.column];
-                keyA = keyA ? keyA.toString() : '';
-                var keyB = b[currentSort.column];
-                keyB = keyB ? keyB.toString() : '';
+                var keyA = extractDataFrom(a, currentSort.column);
+                keyA = stringable(keyA) ? keyA.toString() : '';
+                var keyB = extractDataFrom(b, currentSort.column);
+                keyB = stringable(keyB) ? keyB.toString() : '';
 
                 // Default sort
-                if (this._sortable[currentSort.column] === 'default') {
+                if (
+                    typeof(this._sortable[currentSort.column]) === 'undefined' ||
+                        this._sortable[currentSort.column] === 'default'
+                ) {
 
                     // Reverse direction if we're doing a reverse sort
                     if (keyA < keyB) {
@@ -663,8 +763,8 @@ Reactable = (function() {
 
             if (
                 this.props.children &&
-                this.props.children.length > 0 &&
-                this.props.children[0].type.ConvenienceConstructor === Thead
+                    this.props.children.length > 0 &&
+                        this.props.children[0].type.ConvenienceConstructor === Thead
             ) {
                 columns = this.props.children[0].getColumns();
             } else {
@@ -679,7 +779,14 @@ Reactable = (function() {
             // Build up table rows
             if (this.data && typeof this.data.map === 'function') {
                 // Build up the columns array
-                children = children.concat(this.data.map(function(data, i) {
+                children = children.concat(this.data.map(function(rawData, i) {
+                    var data = rawData;
+                    var props = {};
+                    if (rawData.__reactableMeta === true) {
+                        data = rawData.data;
+                        props = rawData.props;
+                    }
+
                     // Loop through the keys in each data row and build a td for it
                     for (var k in data) {
                         if (data.hasOwnProperty(k)) {
@@ -694,8 +801,8 @@ Reactable = (function() {
                                 // Only add a new column if it doesn't already exist in the columns array
                                 if (
                                     columns.find(function(element) {
-                                        return element.key === column.key
-                                    }) === undefined
+                                    return element.key === column.key;
+                                }) === undefined
                                 ) {
                                     columns.push(column);
                                 }
@@ -704,7 +811,7 @@ Reactable = (function() {
                     }
 
                     return (
-                        <Tr columns={columns} key={i} data={data} />
+                        <Tr columns={columns} key={i} data={data} {...props} />
                     );
                 }.bind(this)));
             }
@@ -719,8 +826,8 @@ Reactable = (function() {
             var filtering = false;
             if (
                 this.props.filterable &&
-                Array.isArray(this.props.filterable) &&
-                this.props.filterable.length > 0
+                    Array.isArray(this.props.filterable) &&
+                        this.props.filterable.length > 0
             ) {
                 filtering = true;
             }
@@ -740,7 +847,7 @@ Reactable = (function() {
             var currentChildren = filteredChildren;
             if (this.props.itemsPerPage > 0) {
                 itemsPerPage = this.props.itemsPerPage;
-                numPages = Math.ceil(filteredChildren.length / itemsPerPage)
+                numPages = Math.ceil(filteredChildren.length / itemsPerPage);
 
                 if (currentPage > numPages - 1) {
                     currentPage = numPages - 1;
@@ -753,32 +860,95 @@ Reactable = (function() {
                 );
             }
 
-            return this.transferPropsTo(
-                <table>
-                    {columns && columns.length > 0 ?
-                        <Thead
-                            columns={columns}
-                            filtering={filtering}
-                            onFilter={this.onFilter}
-                            sort={this.state.currentSort}
-                            onSort={this.onSort} />
-                        : ''
-                    }
-                    <tbody className="reactable-data">
-                        {currentChildren}
-                    </tbody>
-                    {pagination === true ?
-                        <Paginator
-                            colSpan={columns.length}
-                            numPages={numPages}
-                            currentPage={currentPage}
-                            onPageChange={this.onPageChange}/> : ''
-                    }
-                </table>
-            );
+            // Manually transfer props
+            var props = filterPropsFrom(this.props);
+
+            return <table {...props}>{[
+                (columns && columns.length > 0 ?
+                 <Thead columns={columns}
+                     filtering={filtering}
+                     onFilter={this.filterBy}
+                     currentFilter={this.state.filter}
+                     sort={this.state.currentSort}
+                     sortableColumns={this._sortable}
+                     onSort={this.onSort}
+                     key="thead"/>
+                 : null
+                ),
+                <tbody className="reactable-data" key="tbody">
+                    {currentChildren}
+                </tbody>,
+                (pagination === true ?
+                 <Paginator colSpan={columns.length}
+                     numPages={numPages}
+                     currentPage={currentPage}
+                     onPageChange={this.onPageChange}
+                     key="paginator"/>
+                 : null
+                )
+            ]}</table>;
         }
     });
 
-    return Reactable;
-}());
+    function toArray(obj) {
+        var ret = [];
+        for (var attr in obj) {
+            ret[attr] = obj;
+        }
 
+        return ret;
+    }
+
+    function filterPropsFrom(baseProps) {
+        baseProps = baseProps || {};
+        var props = {};
+        for (var key in baseProps) {
+            if (!(key in internalProps)) {
+                props[key] = baseProps[key];
+            }
+        }
+        return props;
+    }
+
+    function extractDataFrom(key, column) {
+        var value;
+        if (
+            typeof(key) !== 'undefined' &&
+                key !== null &&
+                    key.__reactableMeta === true
+        ) {
+            value = key.data[column];
+        } else {
+            value = key[column];
+        }
+
+        if (
+            typeof(value) !== 'undefined' &&
+                value !== null &&
+                    value.__reactableMeta === true
+        ) {
+            value = (typeof(value.props.value) !== 'undefined' && value.props.value !== null) ?
+                value.props.value : value.value;
+        }
+
+        if (stringable(value)) {
+            return value.toString();
+        } else {
+            return value;
+        }
+    }
+
+    var internalProps = {
+        columns: true,
+        sortable: true,
+        filterable: true,
+        sortBy: true,
+        defaultSort: true,
+        itemsPerPage: true,
+        childNode: true,
+        data: true,
+        children: true
+    };
+
+    return exports;
+}));
