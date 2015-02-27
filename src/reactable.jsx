@@ -759,15 +759,29 @@
         },
         render: function() {
             var children = [];
-            var columns;
+            var columns = [];
             var userColumnsSpecified = false;
 
             if (
                 this.props.children &&
                     this.props.children.length > 0 &&
-                        this.props.children[0].type.ConvenienceConstructor === Thead
+                        // @todo get the type of ReactElement
+                        // Seems as if you can only access .contructor.displayName from
+                        // within a CompositeComponent
+                        // this.props.children[0].type.ConvenienceConstructor === Thead
+                        typeof this.props.children[0].props.displayName === 'string' && this.props.children[0].props.displayName.toLowerCase() === 'thead'
             ) {
-                columns = this.props.children[0].getColumns();
+                // Remove thead row from data so it doesn't get inserted into the body
+                if (this.data[0].props && typeof this.data[0].props.displayName === 'string' && this.data[0].props.displayName.toLowerCase() === 'thead') {
+                    this.data.splice(0, 1);
+                }
+                // columns = this.props.children[0].getColumns();
+                // Work around to get Thead > Tr > Th column names
+                if (this.props.children[0].props.children && this.props.children[0].props.children.props.children.length) {
+                    columns = this.props.children[0].props.children.props.children.map(function(child) {
+                        return child.props.column;
+                    });
+                }
             } else {
                 columns = this.props.columns || [];
             }
