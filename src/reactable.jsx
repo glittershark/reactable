@@ -362,7 +362,7 @@
 
                 Ths.push(
                     <Th className={sortClass} key={index} onClick={this.handleClickTh.bind(this, column)}>
-                        {column.label}
+                        {column.label || column}
                     </Th>
                 );
             }
@@ -779,6 +779,12 @@
                 // Work around to get Thead > Tr > Th column names
                 if (this.props.children[0].props.children && this.props.children[0].props.children.props.children.length) {
                     columns = this.props.children[0].props.children.props.children.map(function(child) {
+                        if (child.props.children instanceof Unsafe) {
+                            return {
+                                key: child.props.column,
+                                label: child.props.children
+                            };
+                        }
                         return child.props.column;
                     });
                 }
