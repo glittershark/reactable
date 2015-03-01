@@ -345,6 +345,7 @@
             for (var index = 0; index < this.props.columns.length; index++) {
                 var column = this.props.columns[index];
                 var sortClass = '';
+                var label = column.label || column;
 
                 if (this.props.sortableColumns[column.key]) {
                     sortClass += 'reactable-header-sortable ';
@@ -362,7 +363,7 @@
 
                 Ths.push(
                     <Th className={sortClass} key={index} onClick={this.handleClickTh.bind(this, column)}>
-                        {column.label || column}
+                        {label}
                     </Th>
                 );
             }
@@ -769,15 +770,18 @@
                         // Seems as if you can only access .contructor.displayName from
                         // within a CompositeComponent
                         // this.props.children[0].type.ConvenienceConstructor === Thead
-                        typeof this.props.children[0].props.displayName === 'string' && this.props.children[0].props.displayName.toLowerCase() === 'thead'
+                        typeof this.props.children[0].props.displayName === 'string' && 
+                        this.props.children[0].props.displayName.toLowerCase() === 'thead'
             ) {
                 // Remove thead row from data so it doesn't get inserted into the body
-                if (this.data[0].props && typeof this.data[0].props.displayName === 'string' && this.data[0].props.displayName.toLowerCase() === 'thead') {
+                if (this.data[0].props && typeof this.data[0].props.displayName === 'string' &&
+                    this.data[0].props.displayName.toLowerCase() === 'thead') {
                     this.data.splice(0, 1);
                 }
                 // columns = this.props.children[0].getColumns();
                 // Work around to get Thead > Tr > Th column names
-                if (this.props.children[0].props.children && this.props.children[0].props.children.props.children.length) {
+                if (this.props.children[0].props.children &&
+                    this.props.children[0].props.children.props.children.length) {
                     columns = this.props.children[0].props.children.props.children.map(function(child) {
                         if (child.props.children instanceof Unsafe) {
                             return {
