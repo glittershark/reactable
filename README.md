@@ -290,3 +290,28 @@ table.filterBy('new');
 
 This can be useful if you want to roll your own filtering input field outside of
 Reactable.
+
+### Customizing Pagination
+
+The paginationRenderer prop accepts a react component to customize the pagination view.   The component will be passed an array of links in this.props.children.
+
+Example:
+
+```jsx
+var ReactableBootstrapPagination = React.createClass({
+  render: function() {
+    return (
+      <nav>
+        <ul className="pagination">
+          {React.Children.map(this.props.children, function(child, i) {
+            var className = child.props.className.indexOf('reactable-current-page') >=0 ? 'active' : '';
+            return <li key={i} className={className}>{child}</li>;
+          })}
+        </ul>
+      </nav>
+    );
+  }
+});
+
+return <Table paginationRenderer={ReactableBootstrapPagination} ...
+```

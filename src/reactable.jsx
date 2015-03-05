@@ -467,7 +467,10 @@
                 <tbody className="reactable-pagination">
                     <tr>
                         <td colSpan={this.props.colSpan}>
-                            {pageButtons}
+                            {this.props.paginationRenderer ?
+                             React.createElement(this.props.paginationRenderer, {}, pageButtons) :
+                             pageButtons
+                            }
                         </td>
                     </tr>
                 </tbody>
@@ -884,6 +887,7 @@
                      numPages={numPages}
                      currentPage={currentPage}
                      onPageChange={this.onPageChange}
+                     paginationRenderer={this.props.paginationRenderer}
                      key="paginator"/>
                  : null
                 )
