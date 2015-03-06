@@ -376,6 +376,7 @@
                         <Filterer
                             colSpan={this.props.columns.length}
                             onFilter={this.props.onFilter}
+                            filterPlaceholder={this.props.filterPlaceholder}
                             value={this.props.currentFilter}
                         /> : ''}
                         <tr className="reactable-column-header">{Ths}</tr>
@@ -406,6 +407,7 @@
             return (
                 <input type="text"
                     className="reactable-filter-input"
+                    placeholder={this.props.filterPlaceholder}
                     value={this.props.value}
                     onKeyUp={this.onChange}
                     onChange={this.onChange} />
@@ -423,7 +425,8 @@
                 <tr className="reactable-filterer">
                     <td colSpan={this.props.colSpan}>
                         <FiltererInput onFilter={this.props.onFilter}
-                            value={this.props.value} />
+                            value={this.props.value}
+                            filterPlaceholder={this.props.filterPlaceholder}/>
                     </td>
                 </tr>
             );
@@ -869,6 +872,7 @@
                  <Thead columns={columns}
                      filtering={filtering}
                      onFilter={this.filterBy}
+                     filterPlaceholder={this.props.filterPlaceholder}
                      currentFilter={this.state.filter}
                      sort={this.state.currentSort}
                      sortableColumns={this._sortable}
