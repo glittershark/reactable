@@ -270,6 +270,34 @@ describe('Reactable', function() {
         })
     });
 
+    describe('Adding a <Thead> to the table', function() {
+        before(function() {
+            React.render(
+                React.createElement(Reactable.Table, {className: "table", id: "table"}, 
+                    React.createElement(Reactable.Thead, {displayName: "thead"}, 
+                        React.createElement(Reactable.Th, {column: "key"}, 
+                             Reactable.unsafe('<span>Header</span>') 
+                        )
+                    ), 
+                    React.createElement(Reactable.Tr, null, 
+                        React.createElement(Reactable.Td, {column: "key"}, "Stuff")
+                    )
+                ),
+                ReactableTestUtils.testNode()
+            );
+        });
+
+        after(ReactableTestUtils.resetTestEnvironment);
+
+        it('renders the <thead>', function() {
+            expect($('#table thead>th').length).to.eq(1);
+        });
+
+        it('renders unsafe() strings in the thead', function () {
+            expect($('#table th')).to.have.html('<span>Header</span>');
+        });
+    });
+
     describe('passing through HTML props', function() {
         describe('adding <Tr>s with className to the <Table>', function() {
             before(function() {
