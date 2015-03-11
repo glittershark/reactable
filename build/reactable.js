@@ -376,10 +376,11 @@
                         React.createElement(Filterer, {
                             colSpan: this.props.columns.length, 
                             onFilter: this.props.onFilter, 
+                            placeholder: this.props.filterPlaceholder, 
                             value: this.props.currentFilter}
                         ) : '', 
-                        React.createElement("tr", {className: "reactable-column-header"}, Ths)
-                    )
+                    React.createElement("tr", {className: "reactable-column-header"}, Ths)
+                )
             );
         }
     });
@@ -406,6 +407,7 @@
             return (
                 React.createElement("input", {type: "text", 
                     className: "reactable-filter-input", 
+                    placeholder: this.props.placeholder, 
                     value: this.props.value, 
                     onKeyUp: this.onChange, 
                     onChange: this.onChange})
@@ -423,7 +425,8 @@
                 React.createElement("tr", {className: "reactable-filterer"}, 
                     React.createElement("td", {colSpan: this.props.colSpan}, 
                         React.createElement(FiltererInput, {onFilter: this.props.onFilter, 
-                            value: this.props.value})
+                            value: this.props.value, 
+                            placeholder: this.props.placeholder})
                     )
                 )
             );
@@ -869,6 +872,7 @@
                  React.createElement(Thead, {columns: columns, 
                      filtering: filtering, 
                      onFilter: this.filterBy, 
+                     filterPlaceholder: this.props.filterPlaceholder, 
                      currentFilter: this.state.filter, 
                      sort: this.state.currentSort, 
                      sortableColumns: this._sortable, 

@@ -376,11 +376,11 @@
                         <Filterer
                             colSpan={this.props.columns.length}
                             onFilter={this.props.onFilter}
-                            filterPlaceholder={this.props.filterPlaceholder}
+                            placeholder={this.props.filterPlaceholder}
                             value={this.props.currentFilter}
                         /> : ''}
-                        <tr className="reactable-column-header">{Ths}</tr>
-                    </thead>
+                    <tr className="reactable-column-header">{Ths}</tr>
+                </thead>
             );
         }
     });
@@ -407,7 +407,7 @@
             return (
                 <input type="text"
                     className="reactable-filter-input"
-                    placeholder={this.props.filterPlaceholder}
+                    placeholder={this.props.placeholder}
                     value={this.props.value}
                     onKeyUp={this.onChange}
                     onChange={this.onChange} />
@@ -426,7 +426,7 @@
                     <td colSpan={this.props.colSpan}>
                         <FiltererInput onFilter={this.props.onFilter}
                             value={this.props.value}
-                            filterPlaceholder={this.props.filterPlaceholder}/>
+                            placeholder={this.props.placeholder}/>
                     </td>
                 </tr>
             );
