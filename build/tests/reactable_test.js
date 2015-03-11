@@ -1277,6 +1277,7 @@ describe('Reactable', function() {
                 this.component = React.render(
                     React.createElement(Reactable.Table, {className: "table", id: "table", 
                         filterable: ['State', 'Tag'], 
+                        filterPlaceholder: "Filter Results", 
                         columns: ['State', 'Description', 'Tag']}, 
                         React.createElement(Reactable.Tr, null, 
                             React.createElement(Reactable.Td, {column: "State"}, "New York"), 
@@ -1318,6 +1319,11 @@ describe('Reactable', function() {
                     ReactableTestUtils.expectRowText(1, ['New Mexico', 'lorem ipsum', 'old']);
                     ReactableTestUtils.expectRowText(2, ['Alaska', 'bacon', 'renewed']);
                 });
+
+                it('filter placeholder is set', function(){
+                    var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
+                    expect($filter.attr("placeholder")).to.equal('Filter Results');
+                })
             });
 
             context('from the function', function() {
