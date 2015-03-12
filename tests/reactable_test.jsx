@@ -1400,6 +1400,44 @@ describe('Reactable', function() {
                 expect(activePage).to.have.text('1');
             });
         });
+
+        describe('enabling and disabling filtering', function() {
+            before(function() {
+                var Wrapper = React.createClass({
+                    getInitialState: function() { return { filterEnabled: false }; },
+                    render: function() {
+                        return <Reactable.Table
+                            id="table"
+                            filterable={this.state.filterEnabled && ['a', 'b']}
+                            data={[{ a: 1, b: 2 }]} />;
+                    }
+                });
+
+                this.component = React.render(<Wrapper/>, ReactableTestUtils.testNode());
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            context('initially', function() {
+                it('renders column headers', function() {
+                    expect($('#table thead th').length).to.eq(2);
+                });
+            });
+
+            context('switching filtering on via state', function() {
+                before(function() {
+                    this.component.setState({ filterEnabled: true });
+                });
+
+                it('renders the filter input', function() {
+                    expect($('#table input').length).to.eq(1);
+                });
+
+                it('renders column headers', function() {
+                    expect($('#table thead th').length).to.eq(2);
+                });
+            });
+        });
     });
 
     describe('directly passing a data array with non-string data', function() {
