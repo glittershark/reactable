@@ -936,7 +936,7 @@
                 value.props.value : value.value;
         }
 
-        return value;
+        return (stringable(value) ? value : '');
     }
 
     var internalProps = {
