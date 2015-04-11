@@ -161,8 +161,8 @@
 
     exports.Sort = {
         Numeric: function(a, b) {
-            var valA = parseFloat(a.toString().replace(',', ''));
-            var valB = parseFloat(b.toString().replace(',', ''));
+            var valA = parseFloat(a.toString().replace(/,/g,''));
+            var valB = parseFloat(b.toString().replace(/,/g,''));
 
             // Sort non-numeric values alphabetically at the bottom of the list
             if (isNaN(valA) && isNaN(valB)) {
