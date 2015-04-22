@@ -246,7 +246,9 @@
         render: function() {
             var tdProps = {
                 className: this.props.className,
-                onClick: this.handleClick
+                onClick: this.handleClick,
+                colSpan: this.props.colSpan,
+                style: this.props.style
             };
 
             // Attach any properties on the column to this Td object to allow things like custom event handlers
@@ -289,7 +291,7 @@
         },
         render: function() {
             var children = toArray(React.Children.children(this.props.children));
-
+            var colSpanDebt = 0;
             if (
                 this.props.data &&
                     this.props.columns &&
@@ -311,9 +313,21 @@
                             value = value.value;
                         }
 
+                        if(typeof(props.colSpan) !== 'undefined') {
+                            colSpanDebt += props.colSpan - 1;
+                        }
+
                         return React.createElement(Td, React.__spread({column: column, key: column.key},  props), value);
                     } else {
-                        return React.createElement(Td, {column: column, key: column.key});
+                        if(colSpanDebt > 0) {
+                            colSpanDebt--;
+                            var hiddenStyle = {
+                                display: "none"
+                            }
+                            return React.createElement(Td, {column: column, key: column.key, style: hiddenStyle});
+                        } else {
+                            return React.createElement(Td, {column: column, key: column.key});
+                        }
                     }
                 }.bind(this)));
             }

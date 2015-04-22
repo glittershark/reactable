@@ -247,7 +247,8 @@
             var tdProps = {
                 className: this.props.className,
                 onClick: this.handleClick,
-                colSpan: this.props.colSpan
+                colSpan: this.props.colSpan,
+                style: this.props.style
             };
 
             // Attach any properties on the column to this Td object to allow things like custom event handlers
@@ -320,7 +321,10 @@
                     } else {
                         if(colSpanDebt > 0) {
                             colSpanDebt--;
-                            return '';
+                            var hiddenStyle = {
+                                display: "none"
+                            }
+                            return <Td column={column} key={column.key} style={hiddenStyle} />;
                         } else {
                             return <Td column={column} key={column.key} />;
                         }

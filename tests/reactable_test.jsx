@@ -314,7 +314,7 @@ describe('Reactable', function() {
             });
 
             it('renders the fourth row with the correct data', function() {
-                ReactableTestUtils.expectRowText(3, ['This summary spans 3 cols']);
+                ReactableTestUtils.expectRowText(3, ['This summary spans 3 cols', '', '']);
             });
         });
 
@@ -341,7 +341,7 @@ describe('Reactable', function() {
                 });
 
                 it('applies the filtering', function() {
-                    ReactableTestUtils.expectRowText(0, ['This summary spans 3 cols']);
+                    ReactableTestUtils.expectRowText(0, ['This summary spans 3 cols', '', '']);
                 });
             });
 
