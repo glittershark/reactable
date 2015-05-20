@@ -216,7 +216,9 @@ object:
 
 ```jsx
 
-{column: 'Column Name', sortFunction: function(a, b){} }
+{column: 'Column Name', sortFunction: function(a, b){
+    return a > b ? 1 : -1;
+}}
 ```
 
 You can also specify a default sort by passing in either a column name by
