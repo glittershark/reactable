@@ -267,7 +267,98 @@ describe('Reactable', function() {
             it('renders the third row with the correct data', function() {
                 ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
             });
-        })
+        });
+
+        context('with null <Td>s', function(){
+            before(function() {
+                React.render(
+                    React.createElement(Reactable.Table, {className: "table", id: "table"}, 
+                        React.createElement(Reactable.Tr, null, 
+                            React.createElement(Reactable.Td, {column: "Name"}, React.createElement("b", null, "Griffin Smith")), 
+                            null
+                        ), 
+                        React.createElement(Reactable.Tr, null, 
+                            React.createElement(Reactable.Td, {column: "Name"}, React.createElement("b", null, "Lee Salminen")), 
+                            React.createElement(Reactable.Td, {column: "Age"}, React.createElement("em", null, "23"))
+                        ), 
+                        React.createElement(Reactable.Tr, null, 
+                            React.createElement(Reactable.Td, {column: "Position"}, React.createElement("b", null, "Developer")), 
+                            React.createElement(Reactable.Td, {column: "Age"}, React.createElement("em", null, "28"))
+                        )
+                    ),
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('renders the table', function() {
+                expect($('table#table.table')).to.exist;
+            });
+
+            it('renders the column headers in the table', function() {
+                var headers = [];
+                $('thead th').each(function() {
+                    headers.push($(this).text());
+                });
+
+                expect(headers).to.eql([ 'Name', 'Age', 'Position' ]);
+            });
+
+            it('renders the first row with the correct data', function() {
+                ReactableTestUtils.expectRowText(0, ['Griffin Smith', '', '']);
+            });
+
+            it('renders the second row with the correct data', function() {
+                ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', '']);
+            });
+
+            it('renders the third row with the correct data', function() {
+                ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
+            });
+        });
+
+        context('with null <Tr>s', function(){
+            before(function() {
+                React.render(
+                    React.createElement(Reactable.Table, {className: "table", id: "table"}, 
+                        React.createElement(Reactable.Tr, null, 
+                            React.createElement(Reactable.Td, {column: "Name"}, React.createElement("b", null, "Griffin Smith")), 
+                            React.createElement(Reactable.Td, {column: "Age"}, React.createElement("em", null, "18"))
+                        ), 
+                        null, 
+                        React.createElement(Reactable.Tr, null, 
+                            React.createElement(Reactable.Td, {column: "Position"}, React.createElement("b", null, "Developer")), 
+                            React.createElement(Reactable.Td, {column: "Age"}, React.createElement("em", null, "28"))
+                        )
+                    ),
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('renders the table', function() {
+                expect($('table#table.table')).to.exist;
+            });
+
+            it('renders the column headers in the table', function() {
+                var headers = [];
+                $('thead th').each(function() {
+                    headers.push($(this).text());
+                });
+
+                expect(headers).to.eql([ 'Name', 'Age', 'Position' ]);
+            });
+
+            it('renders the first row with the correct data', function() {
+                ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', '']);
+            });
+
+            it('renders the second row with the correct data', function() {
+                ReactableTestUtils.expectRowText(1, ['', '28', 'Developer']);
+            });
+        });
     });
 
     describe('passing through HTML props', function() {
@@ -1272,6 +1363,42 @@ describe('Reactable', function() {
     });
 
     describe('filtering', function() {
+        describe('filtering with javascript objects for data', function(){
+            var data = [{name:"Lee SomeoneElse", age:18},{name:"Lee Salminen", age:23},{name:"No Age", age:null}]
+            before(function () {
+                React.render(
+                    React.createElement(Reactable.Table, {className: "table", id: "table", 
+                        filterable: ['Name', 'Age']}, 
+                        React.createElement(Reactable.Tr, null, 
+                            React.createElement(Reactable.Td, {column: "Name", data: data[0].name}), 
+                            React.createElement(Reactable.Td, {column: "Age", data: data[0].age})
+                        ), 
+                        React.createElement(Reactable.Tr, null, 
+                            React.createElement(Reactable.Td, {column: "Name", data: data[1].name}), 
+                            React.createElement(Reactable.Td, {column: "Age", data: data[1].age})
+                        ), 
+                        React.createElement(Reactable.Tr, null, 
+                            React.createElement(Reactable.Td, {column: "Name", data: data[2].name}), 
+                            React.createElement(Reactable.Td, {column: "Age", data: data[2].age})
+                        )
+                    ),
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('filters case insensitive on specified columns', function() {
+                var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
+
+                $filter.val('lee');
+                React.addons.TestUtils.Simulate.keyUp($filter[0]);
+
+                ReactableTestUtils.expectRowText(0, ['Lee SomeoneElse', '18']);
+                ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23']);
+            });
+        });
+
         describe('basic case-insensitive filtering', function(){
             before(function() {
                 this.component = React.render(
