@@ -121,7 +121,6 @@ describe('Reactable', function() {
     describe('adding <Td>s to the <Tr>s', function() {
         context('with only one <Td>', function() {
             before(function() {
-                window.tr_test = true;
                 React.render(
                     React.createElement(Reactable.Table, {className: "table", id: "table"}, 
                         React.createElement(Reactable.Tr, null, 
@@ -186,7 +185,6 @@ describe('Reactable', function() {
                         ),
                         ReactableTestUtils.testNode()
                     );
-                    window.tr_test = false;
                 });
 
                 after(ReactableTestUtils.resetTestEnvironment);
@@ -220,7 +218,6 @@ describe('Reactable', function() {
 
         context('with React.DOM nodes inside', function() {
             before(function() {
-                window.tr_test = true;
                 React.render(
                     React.createElement(Reactable.Table, {className: "table", id: "table"}, 
                         React.createElement(Reactable.Tr, null, 
@@ -238,7 +235,6 @@ describe('Reactable', function() {
                     ),
                     ReactableTestUtils.testNode()
                 );
-                window.tr_test = false;
             });
 
             after(ReactableTestUtils.resetTestEnvironment);
@@ -1272,6 +1268,42 @@ describe('Reactable', function() {
     });
 
     describe('filtering', function() {
+        describe('filtering with javascript objects for data', function(){
+            var data = [{name:"Lee SomeoneElse", age:18},{name:"Lee Salminen", age:23},{name:"No Age", age:null}]
+            before(function () {
+                React.render(
+                    React.createElement(Reactable.Table, {className: "table", id: "table", 
+                        filterable: ['Name', 'Age']}, 
+                        React.createElement(Reactable.Tr, null, 
+                            React.createElement(Reactable.Td, {column: "Name", data: data[0].name}), 
+                            React.createElement(Reactable.Td, {column: "Age", data: data[0].age})
+                        ), 
+                        React.createElement(Reactable.Tr, null, 
+                            React.createElement(Reactable.Td, {column: "Name", data: data[1].name}), 
+                            React.createElement(Reactable.Td, {column: "Age", data: data[1].age})
+                        ), 
+                        React.createElement(Reactable.Tr, null, 
+                            React.createElement(Reactable.Td, {column: "Name", data: data[2].name}), 
+                            React.createElement(Reactable.Td, {column: "Age", data: data[2].age})
+                        )
+                    ),
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('filters case insensitive on specified columns', function() {
+                var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
+
+                $filter.val('lee');
+                React.addons.TestUtils.Simulate.keyUp($filter[0]);
+
+                ReactableTestUtils.expectRowText(0, ['Lee SomeoneElse', '18']);
+                ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23']);
+            });
+        });
+
         describe('basic case-insensitive filtering', function(){
             before(function() {
                 this.component = React.render(

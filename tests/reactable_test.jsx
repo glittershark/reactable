@@ -121,7 +121,6 @@ describe('Reactable', function() {
     describe('adding <Td>s to the <Tr>s', function() {
         context('with only one <Td>', function() {
             before(function() {
-                window.tr_test = true;
                 React.render(
                     <Reactable.Table className="table" id="table">
                         <Reactable.Tr>
@@ -186,7 +185,6 @@ describe('Reactable', function() {
                         </Reactable.Table>,
                         ReactableTestUtils.testNode()
                     );
-                    window.tr_test = false;
                 });
 
                 after(ReactableTestUtils.resetTestEnvironment);
@@ -220,7 +218,6 @@ describe('Reactable', function() {
 
         context('with React.DOM nodes inside', function() {
             before(function() {
-                window.tr_test = true;
                 React.render(
                     <Reactable.Table className="table" id="table">
                         <Reactable.Tr>
@@ -238,7 +235,6 @@ describe('Reactable', function() {
                     </Reactable.Table>,
                     ReactableTestUtils.testNode()
                 );
-                window.tr_test = false;
             });
 
             after(ReactableTestUtils.resetTestEnvironment);
