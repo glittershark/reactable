@@ -510,39 +510,40 @@
                        return; // (continue)
                        }
                        */
-                    if (typeof(child.props) !== 'object') {
-                        return console.warn('Child passed to <Reactable.Table> was not an object: ' + child.toString());
-                    }
+                    if (child == null || typeof(child.props) !== 'object') { return; }
 
                     var childData = child.props.data || {};
 
                     React.Children.forEach(child.props.children, function(descendant) {
                         // TODO
                         /* if (descendant.type.ConvenienceConstructor === Td) { */
-                        if (true) {
-                            if (typeof(descendant.props.column) !== 'undefined') {
-                                var value;
+                        if (
+                            typeof(descendant) !== 'object' ||
+                            descendant == null
+                        ) {
+                            return;
+                        } else if (typeof(descendant.props.column) !== 'undefined') {
+                            var value;
 
-                                if (typeof(descendant.props.data) !== 'undefined') {
-                                    value = descendant.props.data;
-                                } else if (typeof(descendant.props.children) !== 'undefined') {
-                                    value = descendant.props.children;
-                                } else {
-                                    console.warn('exports.Td specified without ' +
-                                                 'a `data` property or children, ' +
-                                                 'ignoring');
-                                    return;
-                                }
-
-                                childData[descendant.props.column] = {
-                                    value: value,
-                                    props: filterPropsFrom(descendant.props),
-                                    __reactableMeta: true
-                                };
+                            if (typeof(descendant.props.data) !== 'undefined') {
+                                value = descendant.props.data;
+                            } else if (typeof(descendant.props.children) !== 'undefined') {
+                                value = descendant.props.children;
                             } else {
-                                console.warn('exports.Td specified without a ' +
-                                             '`column` property, ignoring');
+                                console.warn('exports.Td specified without ' +
+                                             'a `data` property or children, ' +
+                                             'ignoring');
+                                return;
                             }
+
+                            childData[descendant.props.column] = {
+                                value: value,
+                                props: filterPropsFrom(descendant.props),
+                                __reactableMeta: true
+                            };
+                        } else {
+                            console.warn('exports.Td specified without a ' +
+                                         '`column` property, ignoring');
                         }
                     });
 

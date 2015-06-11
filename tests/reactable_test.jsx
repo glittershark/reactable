@@ -263,7 +263,98 @@ describe('Reactable', function() {
             it('renders the third row with the correct data', function() {
                 ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
             });
-        })
+        });
+
+        context('with null <Td>s', function(){
+            before(function() {
+                React.render(
+                    <Reactable.Table className="table" id="table">
+                        <Reactable.Tr>
+                            <Reactable.Td column="Name"><b>Griffin Smith</b></Reactable.Td>
+                            {null}
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column="Name"><b>Lee Salminen</b></Reactable.Td>
+                            <Reactable.Td column="Age"><em>23</em></Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column="Position"><b>Developer</b></Reactable.Td>
+                            <Reactable.Td column="Age"><em>28</em></Reactable.Td>
+                        </Reactable.Tr>
+                    </Reactable.Table>,
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('renders the table', function() {
+                expect($('table#table.table')).to.exist;
+            });
+
+            it('renders the column headers in the table', function() {
+                var headers = [];
+                $('thead th').each(function() {
+                    headers.push($(this).text());
+                });
+
+                expect(headers).to.eql([ 'Name', 'Age', 'Position' ]);
+            });
+
+            it('renders the first row with the correct data', function() {
+                ReactableTestUtils.expectRowText(0, ['Griffin Smith', '', '']);
+            });
+
+            it('renders the second row with the correct data', function() {
+                ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', '']);
+            });
+
+            it('renders the third row with the correct data', function() {
+                ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
+            });
+        });
+
+        context('with null <Tr>s', function(){
+            before(function() {
+                React.render(
+                    <Reactable.Table className="table" id="table">
+                        <Reactable.Tr>
+                            <Reactable.Td column="Name"><b>Griffin Smith</b></Reactable.Td>
+                            <Reactable.Td column="Age"><em>18</em></Reactable.Td>
+                        </Reactable.Tr>
+                        {null}
+                        <Reactable.Tr>
+                            <Reactable.Td column="Position"><b>Developer</b></Reactable.Td>
+                            <Reactable.Td column="Age"><em>28</em></Reactable.Td>
+                        </Reactable.Tr>
+                    </Reactable.Table>,
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('renders the table', function() {
+                expect($('table#table.table')).to.exist;
+            });
+
+            it('renders the column headers in the table', function() {
+                var headers = [];
+                $('thead th').each(function() {
+                    headers.push($(this).text());
+                });
+
+                expect(headers).to.eql([ 'Name', 'Age', 'Position' ]);
+            });
+
+            it('renders the first row with the correct data', function() {
+                ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', '']);
+            });
+
+            it('renders the second row with the correct data', function() {
+                ReactableTestUtils.expectRowText(1, ['', '28', 'Developer']);
+            });
+        });
     });
 
     describe('passing through HTML props', function() {
