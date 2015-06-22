@@ -344,7 +344,7 @@
             var Ths = [];
             for (var index = 0; index < this.props.columns.length; index++) {
                 var column = this.props.columns[index];
-                var thClass = column.key
+                var thClass = 'reactable-th-' + column.key.replace(/\s+/g, '-').toLowerCase()
                 var sortClass = '';
 
                 if (this.props.sortableColumns[column.key]) {

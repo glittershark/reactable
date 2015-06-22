@@ -456,6 +456,12 @@ describe('Reactable', function() {
                 expect($(columns[0])).to.have.text('Name');
                 expect($(columns[1])).to.have.text('Age');
             });
+
+            it('adds class name for each column base on its label', function() {
+                var columns = $('tr.reactable-column-header th');
+                expect($(columns[0])).to.have.class('reactable-th-name');
+                expect($(columns[1])).to.have.class('reactable-th-age');
+            });
         });
 
         describe('as objects', function() {
@@ -486,10 +492,10 @@ describe('Reactable', function() {
                 expect($(columns[1])).to.have.text('Age');
             });
 
-            it('adds column key to class name of each header', function() {
+            it('adds class name for each column base on its key', function() {
                 var columns = $('tr.reactable-column-header th');
-                expect($(columns[0])).to.have.class('name');
-                expect($(columns[1])).to.have.class('age');
+                expect($(columns[0])).to.have.class('reactable-th-name');
+                expect($(columns[1])).to.have.class('reactable-th-age');
             });
         });
     });
