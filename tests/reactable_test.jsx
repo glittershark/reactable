@@ -485,6 +485,12 @@ describe('Reactable', function() {
                 expect($(columns[0])).to.have.text('Name');
                 expect($(columns[1])).to.have.text('Age');
             });
+
+            it('adds column key to class name of each header', function() {
+                var columns = $('tr.reactable-column-header th');
+                expect($(columns[0])).to.have.class('name');
+                expect($(columns[1])).to.have.class('age');
+            });
         });
     });
 
