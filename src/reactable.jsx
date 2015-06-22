@@ -344,6 +344,7 @@
             var Ths = [];
             for (var index = 0; index < this.props.columns.length; index++) {
                 var column = this.props.columns[index];
+                var thClass = column.key
                 var sortClass = '';
 
                 if (this.props.sortableColumns[column.key]) {
@@ -360,8 +361,12 @@
                     }
                 }
 
+                if (sortClass.length > 0) {
+                  thClass += ' ' + sortClass
+                }
+
                 Ths.push(
-                    <Th className={sortClass} key={index} onClick={this.handleClickTh.bind(this, column)}>
+                    <Th className={thClass} key={index} onClick={this.handleClickTh.bind(this, column)}>
                         {column.label}
                     </Th>
                 );
