@@ -8,14 +8,10 @@
     "url": "https://github.com/glittershark/reactable.git"
   },
   "bugs": {
-    "url" : "http://github.com/glittershark/reactable/issues",
-    "email" : "wildgriffin45@gmail.com"
+    "url": "https://github.com/glittershark/reactable/issues"
   },
   "author": "Griffin Smith",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/glittershark/reactable/issues"
-  },
   "homepage": "https://github.com/glittershark/reactable",
   "scripts": {
     "test": "./node_modules/grunt-cli/bin/grunt testOnce"
@@ -25,7 +21,9 @@
   },
   "devDependencies": {
     "grunt": "^0.4.4",
+    "grunt-babel": "^5.0.1",
     "grunt-cli": "^0.1.13",
+    "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-karma": "^0.8.2",
     "grunt-react": "^0.10.0",
@@ -35,7 +33,13 @@
     "karma-mocha": "^0.1.3",
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-spec-reporter": "0.0.12",
+    "load-grunt-tasks": "^3.2.0",
     "mocha": "^1.18.2"
   },
-  "keywords": ["react-component", "react", "table", "data-tables"]
+  "keywords": [
+    "react-component",
+    "react",
+    "table",
+    "data-tables"
+  ]
 }

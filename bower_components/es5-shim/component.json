@@ -2,12 +2,11 @@
     "name": "es5-shim",
     "repo": "es-shims/es5-shim",
     "description": "ECMAScript 5 compatibility shims for legacy JavaScript engines",
-    "version": "v4.0.2",
+    "version": "v4.0.6",
     "keywords": [
         "shim",
         "es5",
-        "es5",
-        "shim",
+        "es5 shim",
         "javascript",
         "ecmascript",
         "polyfill"
