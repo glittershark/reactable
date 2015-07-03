@@ -3,7 +3,7 @@
   "version": "0.10.2",
   "main": "build/reactable.js",
   "dependencies": {
-    "react": "0.12"
+    "react": "0.13"
   },
   "devDependencies": {
     "chai-jquery": "~1.2.1",

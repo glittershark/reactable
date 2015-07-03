@@ -1,8 +1,10 @@
-#es5-shim <sup>[![Version Badge][2]][1]</sup>
+#es5-shim <sup>[![Version Badge][npm-version-svg]][npm-url]</sup>
 
-[![npm badge][9]][1]
+[![npm badge][npm-badge-png]][npm-url]
 
-[![Build Status][3]][4] [![dependency status][5]][6]  [![dev dependency status][7]][8]
+[![Build Status][travis-svg]][travis-url]
+[![dependency status][deps-svg]][deps-url]
+[![dev dependency status][dev-deps-svg]][dev-deps-url]
 
 `es5-shim.js` and `es5-shim.min.js` monkey-patch a JavaScript context to
 contain all EcmaScript 5 methods that can be faithfully emulated with a
@@ -14,12 +16,14 @@ is not very close.  Many of these shams are intended only to allow code
 to be written to ES5 without causing run-time errors in older engines.
 In many cases, this means that these shams cause many ES5 methods to
 silently fail.  Decide carefully whether this is what you want.
+**Note:** `es5-sham.js` requires `es5-shim.js` to be able to work properly.
 
 
 ## Tests
 
 The tests are written with the Jasmine BDD test framework.
-To run the tests, navigate to <root-folder>/tests/. 
+To run the tests, navigate to <root-folder>/tests/ , or,
+simply `npm install` and `npm test`.
 
 ## Shims
 
@@ -62,7 +66,7 @@ To run the tests, navigate to <root-folder>/tests/.
     engines.
 
     :warning: The second argument is passed to Object.defineProperties
-    which will probably fail either silently or with extreme predudice.
+    which will probably fail either silently or with extreme prejudice.
 
 * :warning: Object.getPrototypeOf
 
@@ -128,7 +132,7 @@ To run the tests, navigate to <root-folder>/tests/.
 
 * :warning: Object.defineProperties
 
-    This uses the Object.defineProperty shim
+    This uses the Object.defineProperty shim.
 
 * Object.seal
 
@@ -151,13 +155,13 @@ To run the tests, navigate to <root-folder>/tests/.
     provisions of this method, which you cannot possibly
     obtain in legacy engines.
 
-[1]: https://npmjs.org/package/es5-shim
-[2]: http://vb.teelaun.ch/es-shims/es5-shim.svg
-[3]: https://travis-ci.org/es-shims/es5-shim.png
-[4]: https://travis-ci.org/es-shims/es5-shim
-[5]: https://david-dm.org/es-shims/es5-shim.png
-[6]: https://david-dm.org/es-shims/es5-shim
-[7]: https://david-dm.org/es-shims/es5-shim/dev-status.png
-[8]: https://david-dm.org/es-shims/es5-shim#info=devDependencies
-[9]: https://nodei.co/npm/es5-shim.png?downloads=true&stars=true
+[npm-url]: https://npmjs.org/package/es5-shim
+[npm-version-svg]: http://vb.teelaun.ch/es-shims/es5-shim.svg
+[travis-svg]: https://travis-ci.org/es-shims/es5-shim.svg
+[travis-url]: https://travis-ci.org/es-shims/es5-shim
+[deps-svg]: https://david-dm.org/es-shims/es5-shim.svg
+[deps-url]: https://david-dm.org/es-shims/es5-shim
+[dev-deps-svg]: https://david-dm.org/es-shims/es5-shim/dev-status.svg
+[dev-deps-url]: https://david-dm.org/es-shims/es5-shim#info=devDependencies
+[npm-badge-png]: https://nodei.co/npm/es5-shim.png?downloads=true&stars=true
 

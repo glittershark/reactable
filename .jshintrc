@@ -1,4 +1,5 @@
 {
     "browser" : true,
-    "loopfunc": true
+    "loopfunc": true,
+    "esnext": true
 }

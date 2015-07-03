@@ -1,5 +1,9 @@
 # master
 
+# 1.2.3
+
+* Don't silently ignore incorrect `be` usage (#39)
+
 # 1.2.2
 
 * Improve failure messages for html, text, and value assertions

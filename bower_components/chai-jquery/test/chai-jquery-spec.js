@@ -695,6 +695,16 @@ describe("jQuery assertions", function(){
       ("hello").should.be.equal("hello");
     });
 
+    it("preserves length assertion on non-jQuery objects", function(){
+      (['foo','bar']).should.be.of.length(2);
+    });
+
+    it("preserves existing behavior when used incorrectly", function(){
+      (function(){
+        (1 + 1).should.be(3);
+      }).should.throw(TypeError, "is not a function");
+    });
+
     var subject = $('<div></div>');
 
     it("passes when the selection matches the given selector", function(){

@@ -184,21 +184,22 @@
 
   chai.Assertion.overwriteProperty('be', function (_super) {
     return function () {
-      var be = function (selector) {
-        var obj = flag(this, 'object');
-        if (obj instanceof $) {
+      var obj = flag(this, 'object');
+      if (obj instanceof $) {
+        var be = function (selector) {
           this.assert(
               obj.is(selector)
             , 'expected #{this} to be #{exp}'
             , 'expected #{this} not to be #{exp}'
             , selector
           );
-        } else {
-          _super.apply(this, arguments);
-        }
-      };
-      setPrototypeOf(be, this);
-      return be;
+        };
+        setPrototypeOf(be, this);
+        return be;
+      }
+      else {
+        _super.call(this);
+      }
     }
   });
 

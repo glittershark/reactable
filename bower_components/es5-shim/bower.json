@@ -1,6 +1,6 @@
 {
     "name": "es5-shim",
-    "version": "4.0.2",
+    "version": "4.0.6",
     "main": "es5-shim.js",
     "repository": {
         "type": "git",
@@ -19,8 +19,7 @@
     "keywords": [
         "shim",
         "es5",
-        "es5",
-        "shim",
+        "es5 shim",
         "javascript",
         "ecmascript",
         "polyfill"

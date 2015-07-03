@@ -25,7 +25,7 @@ var ReactableTestUtils = {
     },
 
     testNode: function() {
-        testNode = $('<div>').attr('id', 'test-node');
+        var testNode = $('<div>').attr('id', 'test-node');
         $('body').append(testNode);
         testNode.empty();
         return testNode[0];
@@ -891,15 +891,19 @@ describe('Reactable', function() {
         describe('passing `true` to sortable', function() {
             var component;
             before(function() {
-                component = React.render(
-                    <Reactable.Table className="table" id="table" data={[
-                        { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
-                        { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
-                        { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
-                    ]}
-                    sortable={true} />,
-                    ReactableTestUtils.testNode()
-                );
+                this.render = () => {
+                    React.render(
+                        <Reactable.Table className="table" id="table" data={[
+                            { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
+                            { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
+                            { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
+                        ]}
+                        sortable={true} />,
+                        ReactableTestUtils.testNode()
+                    );
+                };
+
+                this.render();
             });
 
             after(ReactableTestUtils.resetTestEnvironment);
@@ -978,7 +982,7 @@ describe('Reactable', function() {
             });
 
             it('Keeps the same sort after rerendering', function(){
-                expect(function() {component.setProps({update: true})}).to.not.throw(Error);
+                expect(this.render).to.not.throw(Error);
 
                 ReactableTestUtils.expectRowText(0, ['Lee Salminen', '23', 'Programmer']);
                 ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', 'Engineer']);
