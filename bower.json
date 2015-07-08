@@ -1,6 +1,6 @@
 {
   "name": "Reactable",
-  "version": "0.11.0-beta1",
+  "version": "0.11.0-beta2",
   "main": "build/reactable.js",
   "dependencies": {
     "react": "0.13"
