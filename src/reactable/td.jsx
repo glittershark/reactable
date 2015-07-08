@@ -12,7 +12,7 @@ export class Td {
     render() {
         var tdProps = {
             className: this.props.className,
-            onClick: this.handleClick
+            onClick: this.handleClick.bind(this)
         };
 
         // Attach any properties on the column to this Td object to allow things like custom event handlers
@@ -46,4 +46,3 @@ export class Td {
         return <td {...tdProps} />;
     }
 };
-

@@ -1792,5 +1792,39 @@
                 expect(headers).to.eql(['Moniker', 'Elderliness', 'Title']);
             });
         });
+
+        describe('handleClick callbacks', function () {
+            before(function () {
+                this.clicked = false;
+
+                React.render(React.createElement(
+                    Reactable.Table,
+                    { className: 'table', id: 'table' },
+                    React.createElement(
+                        Reactable.Tr,
+                        null,
+                        React.createElement(
+                            Reactable.Td,
+                            { column: 'Name', handleClick: (function () {
+                                    this.clicked = true;
+                                }).bind(this) },
+                            React.createElement(
+                                'b',
+                                null,
+                                'Griffin Smith'
+                            )
+                        )
+                    )
+                ), ReactableTestUtils.testNode());
+
+                ReactTestUtils.Simulate.click($('td')[0]);
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('calls the callbacks on click', function () {
+                expect(this.clicked).to.eq(true);
+            });
+        });
     });
 });
