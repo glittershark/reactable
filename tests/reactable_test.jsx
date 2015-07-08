@@ -355,6 +355,7 @@ describe('Reactable', function() {
                 ReactableTestUtils.expectRowText(1, ['', '28', 'Developer']);
             });
         });
+
     });
 
     describe('passing through HTML props', function() {
@@ -1626,6 +1627,33 @@ describe('Reactable', function() {
             });
 
             expect(headers).to.eql(['Moniker', 'Elderliness', 'Title']);
+        });
+    });
+
+    describe('handleClick callbacks', function(){
+        before(function() {
+            this.clicked = false
+
+            React.render(
+                <Reactable.Table className="table" id="table">
+                    <Reactable.Tr>
+                        <Reactable.Td column="Name" handleClick={function() {
+                            this.clicked = true;
+                        }.bind(this)}>
+                            <b>Griffin Smith</b>
+                        </Reactable.Td>
+                    </Reactable.Tr>
+                </Reactable.Table>,
+                ReactableTestUtils.testNode()
+            );
+
+            ReactTestUtils.Simulate.click($('td')[0])
+        });
+
+        after(ReactableTestUtils.resetTestEnvironment);
+
+        it('calls the callbacks on click', function() {
+            expect(this.clicked).to.eq(true);
         });
     });
 });
