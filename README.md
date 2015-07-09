@@ -28,6 +28,7 @@ as of version 0.10.0 Reactable will only continue to support React
 - [Usage](#usage)
   - [Further Customization](#further-customization)
   - [Even More Customization](#even-more-customization)
+  - [Additional node types](#additional-node-types)
   - [Manually specifying columns](#manually-specifying-columns)
   - [Preventing escaping of HTML](#preventing-escaping-of-html)
   - [Pagination](#pagination)
@@ -135,6 +136,13 @@ React.renderComponent(
     document.getElementById('table')
 );
 ```
+
+### Additional node types
+
+Reactable also supports specifying a `<tfoot>` for your table, via the
+`Reactable.Tfoot` class. Per the HTML spec, there can only be one `<Tfoot>` per
+table and its only children should be React.DOM `<tr>` elements (**not**
+`<Reactable.Tr>` elements).
 
 ### Manually specifying columns
 
