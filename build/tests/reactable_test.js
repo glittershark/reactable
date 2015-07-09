@@ -542,6 +542,74 @@
             });
         });
 
+        describe('Adding a <Tfoot>', function () {
+            before(function () {
+                React.render(React.createElement(
+                    Reactable.Table,
+                    { className: 'table', id: 'table', sortable: ['Name'], filterable: ['Name', 'Age'] },
+                    React.createElement(Reactable.Tr, { className: 'rowClass1', data: { Name: 'Griffin Smith', Age: '18' } }),
+                    React.createElement(Reactable.Tr, { className: 'rowClass2', data: { Age: '23', Name: 'Lee Salminen' } }),
+                    React.createElement(Reactable.Tr, { className: 'rowClass3', data: { Age: '28', Position: 'Developer' } }),
+                    React.createElement(
+                        Reactable.Tfoot,
+                        { id: 'tfoot' },
+                        React.createElement(
+                            'tr',
+                            null,
+                            React.createElement(
+                                'td',
+                                { id: 'tfoot-stuff' },
+                                'Test'
+                            )
+                        )
+                    )
+                ), ReactableTestUtils.testNode());
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('renders the table', function () {
+                expect($('#table')).to.exist;
+            });
+
+            it('renders the regular data rows', function () {
+                ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', '']);
+                ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', '']);
+                ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
+            });
+
+            it('renders the tfoot', function () {
+                expect($('#tfoot')).to.exist;
+            });
+
+            it('renders the children of the tfoot', function () {
+                expect($('#tfoot-stuff')).to.exist;
+            });
+
+            context('when sorting', function () {
+                before(function () {
+                    ReactTestUtils.Simulate.click($('th')[0]);
+                });
+
+                it('leaves the tfoot alone', function () {
+                    expect($('table :last-child')).to.match('tfoot');
+                });
+            });
+
+            context('when filtering', function () {
+                before(function () {
+                    var $filter = $('.reactable-filter-input');
+
+                    $filter.val('griffin');
+                    ReactTestUtils.Simulate.keyUp($filter[0]);
+                });
+
+                it('leaves the tfoot alone', function () {
+                    expect($('table :last-child')).to.match('tfoot');
+                });
+            });
+        });
+
         describe('passing through HTML props', function () {
             describe('adding <Tr>s with className to the <Table>', function () {
                 before(function () {

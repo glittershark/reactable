@@ -29,6 +29,7 @@ module.exports = function(grunt) {
                     'tmp/reactable/td.js': 'src/reactable/td.jsx',
                     'tmp/reactable/tr.js': 'src/reactable/tr.jsx',
                     'tmp/reactable/thead.js': 'src/reactable/thead.jsx',
+                    'tmp/reactable/tfoot.js': 'src/reactable/tfoot.jsx',
                     'tmp/reactable/unsafe.js': 'src/reactable/unsafe.jsx',
                     'tmp/reactable/th.js': 'src/reactable/th.jsx',
                     'tmp/reactable/paginator.js': 'src/reactable/paginator.jsx',
@@ -55,6 +56,7 @@ module.exports = function(grunt) {
                     'tmp/reactable/tr.js',
                     'tmp/reactable/th.js',
                     'tmp/reactable/thead.js',
+                    'tmp/reactable/tfoot.js',
                     'tmp/reactable/paginator.js',
                     'tmp/reactable/table.js',
                     'tmp/reactable.js'

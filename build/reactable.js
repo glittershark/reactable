@@ -697,6 +697,51 @@
 });
 
 (function (global, factory) {
+    if (typeof define === "function" && define.amd) {
+        define(["exports"], factory);
+    } else if (typeof exports !== "undefined") {
+        factory(exports);
+    } else {
+        var mod = {
+            exports: {}
+        };
+        factory(mod.exports);
+        global.tfoot = mod.exports;
+    }
+})(this, function (exports) {
+    "use strict";
+
+    var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+    function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+    function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+    var Tfoot = (function (_React$Component) {
+        function Tfoot() {
+            _classCallCheck(this, Tfoot);
+
+            _get(Object.getPrototypeOf(Tfoot.prototype), "constructor", this).apply(this, arguments);
+        }
+
+        _inherits(Tfoot, _React$Component);
+
+        _createClass(Tfoot, [{
+            key: "render",
+            value: function render() {
+                return React.createElement("tfoot", this.props);
+            }
+        }]);
+
+        return Tfoot;
+    })(React.Component);
+
+    exports.Tfoot = Tfoot;
+});
+
+(function (global, factory) {
     if (typeof define === 'function' && define.amd) {
         define(['exports'], factory);
     } else if (typeof exports !== 'undefined') {
@@ -781,17 +826,17 @@
 
 (function (global, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['exports', './lib/filter_props_from', './lib/extract_data_from', './unsafe', './thead', './th', './tr', './paginator'], factory);
+        define(['exports', './lib/filter_props_from', './lib/extract_data_from', './unsafe', './thead', './th', './tr', './tfoot', './paginator'], factory);
     } else if (typeof exports !== 'undefined') {
-        factory(exports, require('./lib/filter_props_from'), require('./lib/extract_data_from'), require('./unsafe'), require('./thead'), require('./th'), require('./tr'), require('./paginator'));
+        factory(exports, require('./lib/filter_props_from'), require('./lib/extract_data_from'), require('./unsafe'), require('./thead'), require('./th'), require('./tr'), require('./tfoot'), require('./paginator'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.filter_props_from, global.extract_data_from, global.unsafe, global.thead, global.th, global.tr, global.paginator);
+        factory(mod.exports, global.filter_props_from, global.extract_data_from, global.unsafe, global.thead, global.th, global.tr, global.tfoot, global.paginator);
         global.table = mod.exports;
     }
-})(this, function (exports, _libFilter_props_from, _libExtract_data_from, _unsafe, _thead, _th, _tr, _paginator) {
+})(this, function (exports, _libFilter_props_from, _libExtract_data_from, _unsafe, _thead, _th, _tr, _tfoot, _paginator) {
     'use strict';
 
     var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -858,65 +903,76 @@
         }, {
             key: 'parseChildData',
             value: function parseChildData(props) {
-                var data = [];
+                var data = [],
+                    tfoots = [];
 
                 // Transform any children back to a data array
                 if (typeof props.children !== 'undefined') {
+
                     React.Children.forEach(props.children, (function (child) {
-                        // TODO: figure out a new way to determine the type of a component
-                        /*
-                           if (child.type.ConvenienceConstructor !== Tr) {
-                           return; // (continue)
-                           }
-                           */
-                        if (child === null || typeof child.props !== 'object') {
+                        if (typeof child === 'undefined' || child === null) {
                             return;
                         }
 
-                        var childData = child.props.data || {};
+                        switch (child.type) {
+                            case _tfoot.Tfoot:
+                                tfoots.push(child);
+                                break;
+                            case _tr.Tr:
+                                var childData = child.props.data || {};
 
-                        React.Children.forEach(child.props.children, function (descendant) {
-                            // TODO
-                            /* if (descendant.type.ConvenienceConstructor === Td) { */
-                            if (typeof descendant !== 'object' || descendant == null) {
-                                return;
-                            } else if (typeof descendant.props.column !== 'undefined') {
-                                var value = undefined;
+                                React.Children.forEach(child.props.children, function (descendant) {
+                                    // TODO
+                                    /* if (descendant.type.ConvenienceConstructor === Td) { */
+                                    if (typeof descendant !== 'object' || descendant == null) {
+                                        return;
+                                    } else if (typeof descendant.props.column !== 'undefined') {
+                                        var value = undefined;
 
-                                if (typeof descendant.props.data !== 'undefined') {
-                                    value = descendant.props.data;
-                                } else if (typeof descendant.props.children !== 'undefined') {
-                                    value = descendant.props.children;
-                                } else {
-                                    console.warn('exports.Td specified without ' + 'a `data` property or children, ' + 'ignoring');
-                                    return;
-                                }
+                                        if (typeof descendant.props.data !== 'undefined') {
+                                            value = descendant.props.data;
+                                        } else if (typeof descendant.props.children !== 'undefined') {
+                                            value = descendant.props.children;
+                                        } else {
+                                            console.warn('exports.Td specified without ' + 'a `data` property or children, ' + 'ignoring');
+                                            return;
+                                        }
 
-                                childData[descendant.props.column] = {
-                                    value: value,
-                                    props: (0, _libFilter_props_from.filterPropsFrom)(descendant.props),
+                                        childData[descendant.props.column] = {
+                                            value: value,
+                                            props: (0, _libFilter_props_from.filterPropsFrom)(descendant.props),
+                                            __reactableMeta: true
+                                        };
+                                    } else {
+                                        console.warn('exports.Td specified without a ' + '`column` property, ignoring');
+                                    }
+                                });
+
+                                data.push({
+                                    data: childData,
+                                    props: (0, _libFilter_props_from.filterPropsFrom)(child.props),
                                     __reactableMeta: true
-                                };
-                            } else {
-                                console.warn('exports.Td specified without a ' + '`column` property, ignoring');
-                            }
-                        });
-
-                        data.push({
-                            data: childData,
-                            props: (0, _libFilter_props_from.filterPropsFrom)(child.props),
-                            __reactableMeta: true
-                        });
+                                });
+                                break;
+                        }
                     }).bind(this));
                 }
 
-                return data;
+                return { data: data, tfoots: tfoots };
             }
         }, {
             key: 'initialize',
             value: function initialize(props) {
                 this.data = props.data || [];
-                this.data = this.data.concat(this.parseChildData(props));
+
+                var _parseChildData = this.parseChildData(props);
+
+                var data = _parseChildData.data;
+                var tfoots = _parseChildData.tfoots;
+
+                this.data = this.data.concat(data);
+                this.tfoots = tfoots;
+
                 this.initializeSorts(props);
             }
         }, {
@@ -1099,7 +1155,7 @@
                 var columns = undefined;
                 var userColumnsSpecified = false;
 
-                if (this.props.children && this.props.children.length > 0 && this.props.children[0].type.ConvenienceConstructor === _thead.Thead) {
+                if (this.props.children && this.props.children.length > 0 && this.props.children[0].type === _thead.Thead) {
                     columns = this.props.children[0].getColumns();
                 } else {
                     columns = this.props.columns || [];
@@ -1191,7 +1247,7 @@
                 return React.createElement(
                     'table',
                     props,
-                    [columns && columns.length > 0 ? React.createElement(_thead.Thead, { columns: columns,
+                    columns && columns.length > 0 ? React.createElement(_thead.Thead, { columns: columns,
                         filtering: filtering,
                         onFilter: function (filter) {
                             _this.setState({ filter: filter });
@@ -1201,17 +1257,20 @@
                         sort: this.state.currentSort,
                         sortableColumns: this._sortable,
                         onSort: this.onSort.bind(this),
-                        key: 'thead' }) : null, React.createElement(
+                        key: 'thead' }) : null,
+                    React.createElement(
                         'tbody',
                         { className: 'reactable-data', key: 'tbody' },
                         currentChildren
-                    ), pagination === true ? React.createElement(_paginator.Paginator, { colSpan: columns.length,
+                    ),
+                    pagination === true ? React.createElement(_paginator.Paginator, { colSpan: columns.length,
                         numPages: numPages,
                         currentPage: currentPage,
                         onPageChange: function (page) {
                             _this.setState({ currentPage: page });
                         },
-                        key: 'paginator' }) : null]
+                        key: 'paginator' }) : null,
+                    this.tfoots
                 );
             }
         }]);
@@ -1220,7 +1279,6 @@
     })(React.Component);
 
     exports.Table = Table;
-    ;
 
     Table.defaultProps = {
         sortBy: false,
@@ -1231,17 +1289,17 @@
 
 (function (global, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['exports', './reactable/table', './reactable/tr', './reactable/td', './reactable/sort', './reactable/unsafe'], factory);
+        define(['exports', './reactable/table', './reactable/tr', './reactable/td', './reactable/tfoot', './reactable/thead', './reactable/sort', './reactable/unsafe'], factory);
     } else if (typeof exports !== 'undefined') {
-        factory(exports, require('./reactable/table'), require('./reactable/tr'), require('./reactable/td'), require('./reactable/sort'), require('./reactable/unsafe'));
+        factory(exports, require('./reactable/table'), require('./reactable/tr'), require('./reactable/td'), require('./reactable/tfoot'), require('./reactable/thead'), require('./reactable/sort'), require('./reactable/unsafe'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.table, global.tr, global.td, global.sort, global.unsafe);
+        factory(mod.exports, global.table, global.tr, global.td, global.tfoot, global.thead, global.sort, global.unsafe);
         global.reactable = mod.exports;
     }
-})(this, function (exports, _reactableTable, _reactableTr, _reactableTd, _reactableSort, _reactableUnsafe) {
+})(this, function (exports, _reactableTable, _reactableTr, _reactableTd, _reactableTfoot, _reactableThead, _reactableSort, _reactableUnsafe) {
     'use strict';
 
     React.Children.children = function (children) {
@@ -1280,13 +1338,7 @@
         });
     }
 
-    var Reactable = {
-        Table: _reactableTable.Table,
-        Tr: _reactableTr.Tr,
-        Td: _reactableTd.Td,
-        Sort: _reactableSort.Sort,
-        unsafe: _reactableUnsafe.unsafe
-    };
+    var Reactable = { Table: _reactableTable.Table, Tr: _reactableTr.Tr, Td: _reactableTd.Td, Tfoot: _reactableTfoot.Tfoot, Thead: _reactableThead.Thead, Sort: _reactableSort.Sort, unsafe: _reactableUnsafe.unsafe };
 
     exports['default'] = Reactable;
 

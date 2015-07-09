@@ -1,6 +1,8 @@
 import { Table } from './reactable/table';
 import { Tr } from './reactable/tr';
 import { Td } from './reactable/td';
+import { Tfoot } from './reactable/tfoot';
+import { Thead } from './reactable/thead';
 import { Sort } from './reactable/sort';
 import { unsafe } from './reactable/unsafe';
 
@@ -38,13 +40,7 @@ if (!Array.prototype.find) {
     });
 }
 
-var Reactable = {
-    Table: Table,
-    Tr: Tr,
-    Td: Td,
-    Sort: Sort,
-    unsafe: unsafe
-};
+const Reactable = { Table, Tr, Td, Tfoot, Thead, Sort, unsafe };
 
 export default Reactable;
 
