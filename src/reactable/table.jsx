@@ -4,6 +4,7 @@ import { isUnsafe } from './unsafe';
 import { Thead } from './thead';
 import { Th } from './th';
 import { Tr } from './tr';
+import { Tfoot } from './tfoot';
 import { Paginator } from './paginator';
 
 export class Table extends React.Component {
@@ -51,68 +52,77 @@ export class Table extends React.Component {
     }
 
     parseChildData(props) {
-        let data = [];
+        let data = [],
+            tfoots = [];
 
         // Transform any children back to a data array
         if (typeof(props.children) !== 'undefined') {
+
             React.Children.forEach(props.children, function(child) {
-                // TODO: figure out a new way to determine the type of a component
-                /*
-                   if (child.type.ConvenienceConstructor !== Tr) {
-                   return; // (continue)
-                   }
-                   */
-                if (child === null || typeof(child.props) !== 'object') { return; }
+                if (typeof(child) === 'undefined' || child === null) {
+                    return;
+                }
 
-                let childData = child.props.data || {};
+                switch (child.type) {
+                    case Tfoot:
+                        tfoots.push(child);
+                    break;
+                    case Tr:
+                        let childData = child.props.data || {};
 
-                React.Children.forEach(child.props.children, function(descendant) {
-                    // TODO
-                    /* if (descendant.type.ConvenienceConstructor === Td) { */
-                    if (
-                        typeof(descendant) !== 'object' ||
-                        descendant == null
-                    ) {
-                        return;
-                    } else if (typeof(descendant.props.column) !== 'undefined') {
-                        let value;
+                        React.Children.forEach(child.props.children, function(descendant) {
+                            // TODO
+                            /* if (descendant.type.ConvenienceConstructor === Td) { */
+                            if (
+                                typeof(descendant) !== 'object' ||
+                                descendant == null
+                            ) {
+                                return;
+                            } else if (typeof(descendant.props.column) !== 'undefined') {
+                                let value;
 
-                        if (typeof(descendant.props.data) !== 'undefined') {
-                            value = descendant.props.data;
-                        } else if (typeof(descendant.props.children) !== 'undefined') {
-                            value = descendant.props.children;
-                        } else {
-                            console.warn('exports.Td specified without ' +
-                                         'a `data` property or children, ' +
-                                         'ignoring');
-                            return;
-                        }
+                                if (typeof(descendant.props.data) !== 'undefined') {
+                                    value = descendant.props.data;
+                                } else if (typeof(descendant.props.children) !== 'undefined') {
+                                    value = descendant.props.children;
+                                } else {
+                                    console.warn('exports.Td specified without ' +
+                                                 'a `data` property or children, ' +
+                                                 'ignoring');
+                                    return;
+                                }
 
-                        childData[descendant.props.column] = {
-                            value: value,
-                            props: filterPropsFrom(descendant.props),
+                                childData[descendant.props.column] = {
+                                    value: value,
+                                    props: filterPropsFrom(descendant.props),
+                                    __reactableMeta: true
+                                };
+                            } else {
+                                console.warn('exports.Td specified without a ' +
+                                             '`column` property, ignoring');
+                            }
+                        });
+
+                        data.push({
+                            data: childData,
+                            props: filterPropsFrom(child.props),
                             __reactableMeta: true
-                        };
-                    } else {
-                        console.warn('exports.Td specified without a ' +
-                                     '`column` property, ignoring');
-                    }
-                });
-
-                data.push({
-                    data: childData,
-                    props: filterPropsFrom(child.props),
-                    __reactableMeta: true
-                });
+                        });
+                    break;
+                }
             }.bind(this));
         }
 
-        return data;
+        return { data, tfoots };
     }
 
     initialize(props) {
         this.data = props.data || [];
-        this.data = this.data.concat(this.parseChildData(props));
+        let { data, tfoots } = this.parseChildData(props);
+
+        this.data = this.data.concat(data);
+        this.tfoots = tfoots;
+
         this.initializeSorts(props);
     }
 
@@ -292,8 +302,8 @@ export class Table extends React.Component {
 
         if (
             this.props.children &&
-                this.props.children.length > 0 &&
-                    this.props.children[0].type.ConvenienceConstructor === Thead
+            this.props.children.length > 0 &&
+            this.props.children[0].type === Thead
         ) {
             columns = this.props.children[0].getColumns();
         } else {
@@ -392,8 +402,8 @@ export class Table extends React.Component {
         // Manually transfer props
         let props = filterPropsFrom(this.props);
 
-        return <table {...props}>{[
-            (columns && columns.length > 0 ?
+        return <table {...props}>
+            {columns && columns.length > 0 ?
              <Thead columns={columns}
                  filtering={filtering}
                  onFilter={filter => {
@@ -405,12 +415,11 @@ export class Table extends React.Component {
                  sortableColumns={this._sortable}
                  onSort={this.onSort.bind(this)}
                  key="thead"/>
-             : null
-            ),
+             : null}
             <tbody className="reactable-data" key="tbody">
                 {currentChildren}
-            </tbody>,
-            (pagination === true ?
+            </tbody>
+            {pagination === true ?
              <Paginator colSpan={columns.length}
                  numPages={numPages}
                  currentPage={currentPage}
@@ -418,11 +427,11 @@ export class Table extends React.Component {
                      this.setState({ currentPage: page });
                  }}
                  key="paginator"/>
-             : null
-            )
-        ]}</table>;
+             : null}
+            {this.tfoots}
+        </table>;
     }
-};
+}
 
 Table.defaultProps = {
     sortBy: false,
