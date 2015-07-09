@@ -904,11 +904,10 @@
             key: 'parseChildData',
             value: function parseChildData(props) {
                 var data = [],
-                    tfoots = [];
+                    tfoot = undefined;
 
                 // Transform any children back to a data array
                 if (typeof props.children !== 'undefined') {
-
                     React.Children.forEach(props.children, (function (child) {
                         if (typeof child === 'undefined' || child === null) {
                             return;
@@ -916,7 +915,10 @@
 
                         switch (child.type) {
                             case _tfoot.Tfoot:
-                                tfoots.push(child);
+                                if (typeof tfoot !== 'undefined') {
+                                    console.warn('You can only have one <Tfoot>, but more than one was specified.' + 'Ignoring all but the last one');
+                                }
+                                tfoot = child;
                                 break;
                             case _tr.Tr:
                                 var childData = child.props.data || {};
@@ -958,7 +960,7 @@
                     }).bind(this));
                 }
 
-                return { data: data, tfoots: tfoots };
+                return { data: data, tfoot: tfoot };
             }
         }, {
             key: 'initialize',
@@ -968,10 +970,10 @@
                 var _parseChildData = this.parseChildData(props);
 
                 var data = _parseChildData.data;
-                var tfoots = _parseChildData.tfoots;
+                var tfoot = _parseChildData.tfoot;
 
                 this.data = this.data.concat(data);
-                this.tfoots = tfoots;
+                this.tfoot = tfoot;
 
                 this.initializeSorts(props);
             }
@@ -1270,7 +1272,7 @@
                             _this.setState({ currentPage: page });
                         },
                         key: 'paginator' }) : null,
-                    this.tfoots
+                    this.tfoot
                 );
             }
         }]);

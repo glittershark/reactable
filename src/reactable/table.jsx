@@ -52,12 +52,10 @@ export class Table extends React.Component {
     }
 
     parseChildData(props) {
-        let data = [],
-            tfoots = [];
+        let data = [], tfoot;
 
         // Transform any children back to a data array
         if (typeof(props.children) !== 'undefined') {
-
             React.Children.forEach(props.children, function(child) {
                 if (typeof(child) === 'undefined' || child === null) {
                     return;
@@ -65,7 +63,11 @@ export class Table extends React.Component {
 
                 switch (child.type) {
                     case Tfoot:
-                        tfoots.push(child);
+                        if (typeof(tfoot) !== 'undefined') {
+                            console.warn ('You can only have one <Tfoot>, but more than one was specified.' +
+                                          'Ignoring all but the last one');
+                        }
+                        tfoot = child;
                     break;
                     case Tr:
                         let childData = child.props.data || {};
@@ -113,15 +115,15 @@ export class Table extends React.Component {
             }.bind(this));
         }
 
-        return { data, tfoots };
+        return { data, tfoot };
     }
 
     initialize(props) {
         this.data = props.data || [];
-        let { data, tfoots } = this.parseChildData(props);
+        let { data, tfoot } = this.parseChildData(props);
 
         this.data = this.data.concat(data);
-        this.tfoots = tfoots;
+        this.tfoot = tfoot;
 
         this.initializeSorts(props);
     }
@@ -428,7 +430,7 @@ export class Table extends React.Component {
                  }}
                  key="paginator"/>
              : null}
-            {this.tfoots}
+            {this.tfoot}
         </table>;
     }
 }
