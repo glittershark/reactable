@@ -264,9 +264,13 @@ sortable={[
 defaultSort={{column: 'Age', direction: 'desc'}}/>
 ```
 
-In case you are constructing your table without the data attribute, and the cells contain some additional HTML elements, you can use the value property on the Td element to define the value to sort for. 
+In case you are constructing your table without the data attribute, and the 
+cells contain some additional HTML elements, you can use the value property 
+on the Td element to define the value to sort for. 
 
-In the following example we define two TDs, where the first contains some additional markup. We tell the Td to take "Griffin Smith" as value for data handling (filter or sort).
+In the following example we define two TDs, where the first contains some 
+additional markup. We tell the Td to take "Griffin Smith" as value for data 
+handling (filter or sort).
 
 ```jsx
 var Table = Reactable.Table,
