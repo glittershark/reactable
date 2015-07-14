@@ -263,6 +263,32 @@ sortable={[
 ]}
 defaultSort={{column: 'Age', direction: 'desc'}}/>
 ```
+
+In case your constructing your table without the data attribute, and the cells contain some additional HTML elements, you can use the value property on the Td element to define the value to sort for. 
+
+In the following example we define two TDs, where the first contains some additional markup. We tell the Td to take "Griffin Smith" as value for data handling (filter or sort).
+
+```jsx
+var Table = Reactable.Table,
+    Tr = Reactable.Tr,
+    Td = Reactable.Td;
+
+React.renderComponent(
+    <Table className="table" id="table" sortable={true}>
+        <Tr>
+            <Td column="Name" value="Griffin Smith">
+                <div>
+                   <span>Some Text or Icon</span>
+                   <b>Griffin Smith</b>
+                </div>
+            </Td>
+            <Td column="Age">18</Td>
+        </Tr>
+    </Table>,
+    document.getElementById('table')
+);
+```
+
 ### Filtering
 
 You can do simple case-insensitive filtering by specifying a filterable property
