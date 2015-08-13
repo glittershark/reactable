@@ -13,6 +13,7 @@ export class Table extends React.Component {
         super(props);
 
         this.state = {
+            parsedCustomComponents: false,
             currentPage: 0,
             currentSort: {
                 column: null,
@@ -53,7 +54,7 @@ export class Table extends React.Component {
     }
 
     parseChildData(props) {
-        let data = [], tfoot;
+        let data = [], tfoot, customComponentsCount = 0;
 
         // Transform any children back to a data array
         if (typeof(props.children) !== 'undefined') {
@@ -112,19 +113,26 @@ export class Table extends React.Component {
                             __reactableMeta: true
                         });
                     break;
+                    default:
+                        // Don't know if there are other acceptable types
+                        // that should be dismissed
+                        // console.log("Table, got custom component", child.type)
+                        customComponentsCount++;
+                        break;
                 }
             }.bind(this));
         }
 
-        return { data, tfoot };
+        return { data, tfoot, customComponentsCount };
     }
 
     initialize(props) {
         this.data = props.data || [];
-        let { data, tfoot } = this.parseChildData(props);
+        let { data, tfoot, customComponentsCount } = this.parseChildData(props);
 
         this.data = this.data.concat(data);
         this.tfoot = tfoot;
+        this.customComponentsCount = customComponentsCount;
 
         this.initializeSorts(props);
     }
@@ -204,6 +212,26 @@ export class Table extends React.Component {
     componentWillMount() {
         this.initialize(this.props);
         this.sortByCurrentSort();
+    }
+
+    componentDidMount() {
+        for (var i = 0; i < this.customComponentsCount; i++) {
+            let child = this.refs['child-'+i],
+                childData = child.getData(),
+                childDataToPush = {};
+            for (var key in childData){
+                childDataToPush[key] = {
+                    value: childData[key],
+                    __reactableMeta: true
+                };
+            }
+            this.data.push({
+                data: childDataToPush,
+                props: filterPropsFrom(child.props),
+                __reactableMeta: true
+            });
+        };
+        this.setState({parsedCustomComponents: true});
     }
 
     componentWillReceiveProps(nextProps) {
@@ -297,8 +325,20 @@ export class Table extends React.Component {
         this.setState({ currentSort: currentSort });
         this.sortByCurrentSort();
     }
+    renderUnparsedDataTable() {
+        // http://www.mattzabriskie.com/blog/react-referencing-dynamic-children
+        let index = 0;
+        let children = React.Children.map(this.props.children, function (child) {
+          return React.addons.cloneWithProps(child, {ref: 'child-' + (index++) });
+        });
 
+        return <div>{children}</div>;
+    }
     render() {
+        if (!this.state.parsedCustomComponents && this.customComponentsCount > 0){
+          return this.renderUnparsedDataTable();
+        }
+
         let children = [];
         let columns;
         let userColumnsSpecified = false;

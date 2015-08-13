@@ -426,6 +426,13 @@ describe('Reactable', function() {
                     age: React.PropTypes.number,
                     position: React.PropTypes.string
                 },
+                getData: function(){
+                    return {
+                        Name: this.props.name,
+                        Age: this.props.age,
+                        Position: this.props.position,
+                    }
+                },
                 render: function(){
                     return (
                       <Reactable.Tr>
