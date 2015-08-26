@@ -330,3 +330,18 @@ table.filterBy('new');
 
 This can be useful if you want to roll your own filtering input field outside of
 Reactable.
+
+##### Customising the filter
+
+You can add a placeholder to the filter input field
+
+Example:
+
+```jsx
+<Table className="table" id="table" data={[
+    {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
+    {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
+    {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter', 'Tag': 'old'},
+    {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
+]} filterable={['State', 'Tag']} filterPlaceholder='filter...' />
+```
