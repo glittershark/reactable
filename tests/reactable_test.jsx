@@ -1477,6 +1477,7 @@ describe('Reactable', function() {
                     <Reactable.Table className="table" id="table"
                         filterable={['State', 'Tag']}
                         filterPlaceholder="Filter Results"
+                        filterLabel="Label for filter"
                         columns={['State', 'Description', 'Tag']}>
                         <Reactable.Tr>
                             <Reactable.Td column='State'>New York</Reactable.Td>
@@ -1522,6 +1523,11 @@ describe('Reactable', function() {
                 it('filter placeholder is set', function(){
                     var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
                     expect($filter.attr("placeholder")).to.equal('Filter Results');
+                })
+
+                it('filter label is set', function(){
+                    var $label = $('#table thead tr.reactable-filterer label');
+                    expect($label.html()).to.equal('Label for filter');
                 })
             });
 

@@ -412,6 +412,7 @@ export class Table extends React.Component {
                      this.setState({ filter: filter });
                  }}
                  filterPlaceholder={this.props.filterPlaceholder}
+                 filterLabel={this.props.filterLabel}
                  currentFilter={this.state.filter}
                  sort={this.state.currentSort}
                  sortableColumns={this._sortable}

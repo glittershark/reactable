@@ -21,9 +21,15 @@ export class Filterer extends React.Component {
             throw new TypeError('Must pass a colSpan argument to Filterer');
         }
 
+        var filterLabel;
+        if (this.props.filterLabel) {
+            filterLabel = (<label>{this.props.filterLabel}</label>);
+        }
+
         return (
             <tr className="reactable-filterer">
                 <td colSpan={this.props.colSpan}>
+                    {filterLabel}
                     <FiltererInput onFilter={this.props.onFilter}
                         value={this.props.value}
                         placeholder={this.props.placeholder}/>
