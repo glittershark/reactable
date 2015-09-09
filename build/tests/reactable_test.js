@@ -910,6 +910,19 @@
         });
 
         describe('pagination', function () {
+            describe('specifying pageButtonLimit', function () {
+
+                before(function () {
+                    React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Test Person' }, { 'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Test Person' }, { 'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Test Person' }, { 'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }], itemsPerPage: 2, pageButtonLimit: 8 }), ReactableTestUtils.testNode());
+                });
+
+                after(ReactableTestUtils.resetTestEnvironment);
+
+                it('shows no more page buttons than the pageButtonLimit', function () {
+                    var pageButtons = $('#table tbody.reactable-pagination a.reactable-page-button');
+                    expect(pageButtons.length).to.equal(8);
+                });
+            });
             describe('specifying itemsPerPage', function () {
                 before(function () {
                     React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Test Person' }, { 'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }], itemsPerPage: 4 }), ReactableTestUtils.testNode());
@@ -933,6 +946,16 @@
                     var activePage = $('#table tbody.reactable-pagination a.reactable-page-button.reactable-current-page');
                     expect(activePage.length).to.equal(1);
                     expect(activePage).to.have.text('1');
+                });
+
+                it('does not show previous button', function () {
+                    var previousButton = $('#table tbody.reactable-pagination a.reactable-previous-page');
+                    expect(previousButton.length).to.equal(0);
+                });
+
+                it('shows next button', function () {
+                    var nextButton = $('#table tbody.reactable-pagination a.reactable-next-page');
+                    expect(nextButton.length).to.equal(1);
                 });
 
                 describe('clicking page buttons', function () {
@@ -965,6 +988,11 @@
                         expect($($(rows[2]).find('td')[0])).to.have.text('');
                         expect($($(rows[3]).find('td')[0])).to.have.text('Griffin Smith');
                     });
+
+                    it('shows previous button', function () {
+                        var previousButton = $('#table tbody.reactable-pagination a.reactable-previous-page');
+                        expect(previousButton.length).to.equal(1);
+                    });
                 });
             });
 
@@ -983,6 +1011,12 @@
                     var pageButtons = $('#table tbody.reactable-pagination a.reactable-page-button');
                     expect(pageButtons.length).to.equal(1);
                     expect($(pageButtons[0])).to.have.text('1');
+                });
+
+                it('does not show previous and next buttons', function () {
+                    var previousButton = $('#table tbody.reactable-pagination a.reactable-previous-page');
+                    var nextButton = $('#table tbody.reactable-pagination a.reactable-next-page');
+                    expect(previousButton.length + nextButton.length).to.equal(0);
                 });
             });
 
@@ -1582,7 +1616,7 @@
 
         describe('filtering', function () {
             describe('filtering with javascript objects for data', function () {
-                var data = [{ name: 'Lee SomeoneElse', age: 18 }, { name: 'Lee Salminen', age: 23 }, { name: 'No Age', age: null }];
+                var data = [{ name: "Lee SomeoneElse", age: 18 }, { name: "Lee Salminen", age: 23 }, { name: "No Age", age: null }];
                 before(function () {
                     React.render(React.createElement(
                         Reactable.Table,
@@ -1725,7 +1759,7 @@
 
                     it('filter placeholder is set', function () {
                         var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
-                        expect($filter.attr('placeholder')).to.equal('Filter Results');
+                        expect($filter.attr("placeholder")).to.equal('Filter Results');
                     });
                 });
 
@@ -1784,7 +1818,7 @@
                     $filter.val('colorado');
                     React.addons.TestUtils.Simulate.keyUp($filter[0]);
 
-                    ReactableTestUtils.expectRowText(0, ['Colorado', 'new description that shouldn\'t match filter', 'old']);
+                    ReactableTestUtils.expectRowText(0, ['Colorado', "new description that shouldn't match filter", 'old']);
                     var activePage = $('#table tbody.reactable-pagination ' + 'a.reactable-page-button.reactable-current-page');
                     expect(activePage.length).to.equal(1);
                     expect(activePage).to.have.text('1');
