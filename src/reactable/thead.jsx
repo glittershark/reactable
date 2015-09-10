@@ -1,8 +1,9 @@
+import { React } from 'react';
 import { Th } from './th';
 import { Filterer } from './filterer';
 import { filterPropsFrom } from './lib/filter_props_from';
 
-export class Thead {
+export class Thead extends React.Component {
     getColumns() {
         return React.Children.map(this.props.children, function(th) {
             if (typeof th.props.children === 'string') {
