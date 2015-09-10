@@ -187,7 +187,8 @@ You can also pass in `unsafe` strings as column labels or in a `<Reactable.Th>`
 ### Pagination
 
 You can also use pagination, by just specifying an `itemsPerPage` argument to the
-`<Table>` component. For example:
+`<Table>` component. Include an optional `pageButtonLimit` argument to customize the
+number of page buttons in the pagination, which defaults to 10. For example:
 
 ```jsx
 <Table className="table" data={[
@@ -199,7 +200,7 @@ You can also use pagination, by just specifying an `itemsPerPage` argument to th
     { Name: 'Another Test', Age: '26', Position: 'Developer' },
     { Name: 'Third Test', Age: '19', Position: 'Salesperson' },
     { Age: '23',  Name: 'End of this Page', Position: 'CEO' },
-]} itemsPerPage={4} />
+]} itemsPerPage={4} pageButtonLimit={5} />
 ```
 
 ### Sorting
