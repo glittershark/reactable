@@ -205,7 +205,7 @@
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.react);
+        factory(mod.exports, global.React);
         global.filterer = mod.exports;
     }
 })(this, function (exports, _react) {
@@ -231,12 +231,12 @@
         _createClass(FiltererInput, [{
             key: "onChange",
             value: function onChange() {
-                this.props.onFilter(_react.React.findDOMNode(this).value);
+                this.props.onFilter(_react["default"].findDOMNode(this).value);
             }
         }, {
             key: "render",
             value: function render() {
-                return _react.React.createElement("input", { type: "text",
+                return _react["default"].createElement("input", { type: "text",
                     className: "reactable-filter-input",
                     placeholder: this.props.placeholder,
                     value: this.props.value,
@@ -246,7 +246,7 @@
         }]);
 
         return FiltererInput;
-    })(_react.React.Component);
+    })(_react["default"].Component);
 
     exports.FiltererInput = FiltererInput;
     ;
@@ -267,13 +267,13 @@
                     throw new TypeError('Must pass a colSpan argument to Filterer');
                 }
 
-                return _react.React.createElement(
+                return _react["default"].createElement(
                     "tr",
                     { className: "reactable-filterer" },
-                    _react.React.createElement(
+                    _react["default"].createElement(
                         "td",
                         { colSpan: this.props.colSpan },
-                        _react.React.createElement(FiltererInput, { onFilter: this.props.onFilter,
+                        _react["default"].createElement(FiltererInput, { onFilter: this.props.onFilter,
                             value: this.props.value,
                             placeholder: this.props.placeholder })
                     )
@@ -282,7 +282,7 @@
         }]);
 
         return Filterer;
-    })(_react.React.Component);
+    })(_react["default"].Component);
 
     exports.Filterer = Filterer;
     ;
@@ -402,7 +402,7 @@
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.react, global.is_react_component, global.stringable, global.unsafe);
+        factory(mod.exports, global.React, global.is_react_component, global.stringable, global.unsafe);
         global.td = mod.exports;
     }
 })(this, function (exports, _react, _libIs_react_component, _libStringable, _unsafe) {
@@ -465,12 +465,12 @@
                     }
                 }
 
-                return _react.React.createElement('td', tdProps);
+                return _react['default'].createElement('td', tdProps);
             }
         }]);
 
         return Td;
-    })(_react.React.Component);
+    })(_react['default'].Component);
 
     exports.Td = Td;
     ;
@@ -485,7 +485,7 @@
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.react, global.td, global.to_array, global.filter_props_from);
+        factory(mod.exports, global.React, global.td, global.to_array, global.filter_props_from);
         global.tr = mod.exports;
     }
 })(this, function (exports, _react, _td, _libTo_array, _libFilter_props_from) {
@@ -513,7 +513,7 @@
         _createClass(Tr, [{
             key: 'render',
             value: function render() {
-                var children = (0, _libTo_array.toArray)(_react.React.Children.children(this.props.children));
+                var children = (0, _libTo_array.toArray)(_react['default'].Children.children(this.props.children));
 
                 if (this.props.data && this.props.columns && typeof this.props.columns.map === 'function') {
                     if (typeof children.concat === 'undefined') {
@@ -530,13 +530,13 @@
                                 value = value.value;
                             }
 
-                            return _react.React.createElement(
+                            return _react['default'].createElement(
                                 _td.Td,
                                 _extends({ column: column, key: column.key }, props),
                                 value
                             );
                         } else {
-                            return _react.React.createElement(_td.Td, { column: column, key: column.key });
+                            return _react['default'].createElement(_td.Td, { column: column, key: column.key });
                         }
                     }).bind(this)));
                 }
@@ -544,12 +544,12 @@
                 // Manually transfer props
                 var props = (0, _libFilter_props_from.filterPropsFrom)(this.props);
 
-                return _react.React.DOM.tr(props, children);
+                return _react['default'].DOM.tr(props, children);
             }
         }]);
 
         return Tr;
-    })(_react.React.Component);
+    })(_react['default'].Component);
 
     exports.Tr = Tr;
     ;
@@ -567,7 +567,7 @@
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.react, global.unsafe, global.filter_props_from);
+        factory(mod.exports, global.React, global.unsafe, global.filter_props_from);
         global.th = mod.exports;
     }
 })(this, function (exports, _react, _unsafe, _libFilter_props_from) {
@@ -598,10 +598,10 @@
                 var childProps = undefined;
 
                 if ((0, _unsafe.isUnsafe)(this.props.children)) {
-                    return _react.React.createElement('th', _extends({}, (0, _libFilter_props_from.filterPropsFrom)(this.props), {
+                    return _react['default'].createElement('th', _extends({}, (0, _libFilter_props_from.filterPropsFrom)(this.props), {
                         dangerouslySetInnerHTML: { __html: this.props.children.toString() } }));
                 } else {
-                    return _react.React.createElement(
+                    return _react['default'].createElement(
                         'th',
                         (0, _libFilter_props_from.filterPropsFrom)(this.props),
                         this.props.children
@@ -611,7 +611,7 @@
         }]);
 
         return Th;
-    })(_react.React.Component);
+    })(_react['default'].Component);
 
     exports.Th = Th;
     ;
@@ -626,7 +626,7 @@
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.react, global.th, global.filterer, global.filter_props_from);
+        factory(mod.exports, global.React, global.th, global.filterer, global.filter_props_from);
         global.thead = mod.exports;
     }
 })(this, function (exports, _react, _th, _filterer, _libFilter_props_from) {
@@ -652,7 +652,7 @@
         _createClass(Thead, [{
             key: 'getColumns',
             value: function getColumns() {
-                return _react.React.Children.map(this.props.children, function (th) {
+                return _react['default'].Children.map(this.props.children, function (th) {
                     if (typeof th.props.children === 'string') {
                         return th.props.children;
                     } else {
@@ -693,7 +693,7 @@
                         thClass += ' ' + sortClass;
                     }
 
-                    Ths.push(_react.React.createElement(
+                    Ths.push(_react['default'].createElement(
                         _th.Th,
                         { className: thClass, key: index, onClick: this.handleClickTh.bind(this, column) },
                         column.label
@@ -703,16 +703,16 @@
                 // Manually transfer props
                 var props = (0, _libFilter_props_from.filterPropsFrom)(this.props);
 
-                return _react.React.createElement(
+                return _react['default'].createElement(
                     'thead',
                     props,
-                    this.props.filtering === true ? _react.React.createElement(_filterer.Filterer, {
+                    this.props.filtering === true ? _react['default'].createElement(_filterer.Filterer, {
                         colSpan: this.props.columns.length,
                         onFilter: this.props.onFilter,
                         placeholder: this.props.filterPlaceholder,
                         value: this.props.currentFilter
                     }) : null,
-                    _react.React.createElement(
+                    _react['default'].createElement(
                         'tr',
                         { className: 'reactable-column-header' },
                         Ths
@@ -722,7 +722,7 @@
         }]);
 
         return Thead;
-    })(_react.React.Component);
+    })(_react['default'].Component);
 
     exports.Thead = Thead;
     ;
@@ -737,7 +737,7 @@
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.react);
+        factory(mod.exports, global.React);
         global.tfoot = mod.exports;
     }
 })(this, function (exports, _react) {
@@ -763,12 +763,12 @@
         _createClass(Tfoot, [{
             key: 'render',
             value: function render() {
-                return _react.React.createElement('tfoot', this.props);
+                return _react['default'].createElement('tfoot', this.props);
             }
         }]);
 
         return Tfoot;
-    })(_react.React.Component);
+    })(_react['default'].Component);
 
     exports.Tfoot = Tfoot;
 });
@@ -782,7 +782,7 @@
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.react);
+        factory(mod.exports, global.React);
         global.paginator = mod.exports;
     }
 })(this, function (exports, _react) {
@@ -824,7 +824,7 @@
             key: 'renderPrevious',
             value: function renderPrevious() {
                 if (this.props.currentPage > 0) {
-                    return _react.React.createElement(
+                    return _react['default'].createElement(
                         'a',
                         { className: 'reactable-previous-page', onClick: this.handlePrevious.bind(this) },
                         'Previous'
@@ -835,7 +835,7 @@
             key: 'renderNext',
             value: function renderNext() {
                 if (this.props.currentPage < this.props.numPages - 1) {
-                    return _react.React.createElement(
+                    return _react['default'].createElement(
                         'a',
                         { className: 'reactable-next-page', onClick: this.handleNext.bind(this) },
                         'Next'
@@ -845,7 +845,7 @@
         }, {
             key: 'renderPageButton',
             value: function renderPageButton(className, pageNum) {
-                return _react.React.createElement(
+                return _react['default'].createElement(
                     'a',
                     { className: className, key: pageNum, onClick: this.handlePageButton.bind(this, pageNum) },
                     pageNum + 1
@@ -895,13 +895,13 @@
                     pageButtons.splice(pageButtonLimit, pageButtons.length - pageButtonLimit);
                 }
 
-                return _react.React.createElement(
+                return _react['default'].createElement(
                     'tbody',
                     { className: 'reactable-pagination' },
-                    _react.React.createElement(
+                    _react['default'].createElement(
                         'tr',
                         null,
-                        _react.React.createElement(
+                        _react['default'].createElement(
                             'td',
                             { colSpan: this.props.colSpan },
                             this.renderPrevious(),
@@ -914,7 +914,7 @@
         }]);
 
         return Paginator;
-    })(_react.React.Component);
+    })(_react['default'].Component);
 
     exports.Paginator = Paginator;
     ;
@@ -929,7 +929,7 @@
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.react, global.filter_props_from, global.extract_data_from, global.unsafe, global.thead, global.th, global.tr, global.tfoot, global.paginator);
+        factory(mod.exports, global.React, global.filter_props_from, global.extract_data_from, global.unsafe, global.thead, global.th, global.tr, global.tfoot, global.paginator);
         global.table = mod.exports;
     }
 })(this, function (exports, _react, _libFilter_props_from, _libExtract_data_from, _unsafe, _thead, _th, _tr, _tfoot, _paginator) {
@@ -1004,7 +1004,7 @@
 
                 // Transform any children back to a data array
                 if (typeof props.children !== 'undefined') {
-                    _react.React.Children.forEach(props.children, (function (child) {
+                    _react['default'].Children.forEach(props.children, (function (child) {
                         if (typeof child === 'undefined' || child === null) {
                             return;
                         }
@@ -1019,7 +1019,7 @@
                             case _tr.Tr:
                                 var childData = child.props.data || {};
 
-                                _react.React.Children.forEach(child.props.children, function (descendant) {
+                                _react['default'].Children.forEach(child.props.children, function (descendant) {
                                     // TODO
                                     /* if (descendant.type.ConvenienceConstructor === Td) { */
                                     if (typeof descendant !== 'object' || descendant == null) {
@@ -1298,7 +1298,7 @@
                             }
                         }
 
-                        return _react.React.createElement(_tr.Tr, _extends({ columns: columns, key: i, data: data }, props));
+                        return _react['default'].createElement(_tr.Tr, _extends({ columns: columns, key: i, data: data }, props));
                     }).bind(this)));
                 }
 
@@ -1343,10 +1343,10 @@
                 // Manually transfer props
                 var props = (0, _libFilter_props_from.filterPropsFrom)(this.props);
 
-                return _react.React.createElement(
+                return _react['default'].createElement(
                     'table',
                     props,
-                    columns && columns.length > 0 ? _react.React.createElement(_thead.Thead, { columns: columns,
+                    columns && columns.length > 0 ? _react['default'].createElement(_thead.Thead, { columns: columns,
                         filtering: filtering,
                         onFilter: function (filter) {
                             _this.setState({ filter: filter });
@@ -1357,12 +1357,12 @@
                         sortableColumns: this._sortable,
                         onSort: this.onSort.bind(this),
                         key: 'thead' }) : null,
-                    _react.React.createElement(
+                    _react['default'].createElement(
                         'tbody',
                         { className: 'reactable-data', key: 'tbody' },
                         currentChildren
                     ),
-                    pagination === true ? _react.React.createElement(_paginator.Paginator, { colSpan: columns.length,
+                    pagination === true ? _react['default'].createElement(_paginator.Paginator, { colSpan: columns.length,
                         pageButtonLimit: pageButtonLimit,
                         numPages: numPages,
                         currentPage: currentPage,
@@ -1376,7 +1376,7 @@
         }]);
 
         return Table;
-    })(_react.React.Component);
+    })(_react['default'].Component);
 
     exports.Table = Table;
 
@@ -1396,14 +1396,14 @@
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.react, global.table, global.tr, global.td, global.tfoot, global.thead, global.sort, global.unsafe);
+        factory(mod.exports, global.React, global.table, global.tr, global.td, global.tfoot, global.thead, global.sort, global.unsafe);
         global.reactable = mod.exports;
     }
 })(this, function (exports, _react, _reactableTable, _reactableTr, _reactableTd, _reactableTfoot, _reactableThead, _reactableSort, _reactableUnsafe) {
     'use strict';
 
-    _react.React.Children.children = function (children) {
-        return _react.React.Children.map(children, function (x) {
+    _react['default'].Children.children = function (children) {
+        return _react['default'].Children.map(children, function (x) {
             return x;
         }) || [];
     };

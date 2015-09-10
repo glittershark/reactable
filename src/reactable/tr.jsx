@@ -1,4 +1,4 @@
-import { React } from 'react';
+import React from 'react';
 import { Td } from './td';
 import { toArray } from './lib/to_array';
 import { filterPropsFrom } from './lib/filter_props_from';

@@ -1,4 +1,4 @@
-import { React } from 'react';
+import React from 'react';
 import { filterPropsFrom } from './lib/filter_props_from';
 import { extractDataFrom } from './lib/extract_data_from';
 import { isUnsafe } from './unsafe';

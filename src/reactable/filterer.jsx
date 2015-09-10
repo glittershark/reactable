@@ -1,4 +1,4 @@
-import { React } from 'react';
+import React from 'react';
 
 export class FiltererInput extends React.Component {
     onChange() {
