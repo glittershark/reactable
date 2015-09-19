@@ -86,6 +86,15 @@ module.exports = function(grunt) {
                 dest: 'build/reactable.js'
             }
         },
+        file_append: {
+            umdHack: {
+                files: [{
+                    prepend: 'window.React["default"] = window.React;\n',
+                    input: 'build/reactable.js',
+                    output: 'build/reactable.js'
+                }]
+            }
+        },
         karma: {
             unit: {
                 configFile: 'karma.conf.js'
@@ -96,7 +105,7 @@ module.exports = function(grunt) {
     grunt.registerTask('testOnce', ['build', 'karma']);
     grunt.registerTask('test', ['testOnce', 'watch:test']);
 
-    grunt.registerTask('buildBrowser', ['babel:umd', 'concat'])
+    grunt.registerTask('buildBrowser', ['babel:umd', 'concat', 'file_append:umdHack'])
     grunt.registerTask('build', ['babel:common', 'buildBrowser']);
     grunt.registerTask('default', ['build', 'watch:build']);
 };
