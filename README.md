@@ -45,16 +45,22 @@ bower install [--save] reactable
 ```
 
 Or, you can just download the raw file
-[here](https://github.com/glittershark/reactable/raw/master/build/reactable.js).
+[here][build-file].
 
 That file can be used either as an AMD module, as a CommonJS module in Node, or,
 if neither are supported, will register the Reactable object as a property of
 the `window` object.
 
+Reactable also exposes a set of CommonJS modules for piece-by-piece use with 
+Node, Webpack, Browserify, etc. These modules are located in the [`lib` folder
+at the root of this repositiory][lib-folder].
+
 Keep in mind that Reactable depends on the latest version of React (0.12),
 **with addons**. That can be downloaded [here][download]
 
+[build-file]: https://github.com/glittershark/reactable/raw/master/build/reactable.js
 [download]: http://facebook.github.io/react/downloads.html
+[lib-folder]: https://github.com/glittershark/reactable/tree/master/lib
 
 ## Usage
 
