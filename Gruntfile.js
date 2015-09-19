@@ -1,5 +1,20 @@
+var markdownlint = require('markdownlint');
+
 module.exports = function(grunt) {
     require('load-grunt-tasks')(grunt);
+
+    grunt.registerMultiTask('markdownlint', function task() {
+        var done = this.async();
+        markdownlint(
+            { "files": this.filesSrc },
+            function callback(err, result) {
+                var resultString = err || ((result || '').toString());
+                if (resultString) {
+                    grunt.fail.warn('\n' + resultString + '\n');
+                }
+                done(!err || !resultString);
+            });
+    });
 
     grunt.initConfig({
         watch: {
@@ -99,11 +114,17 @@ module.exports = function(grunt) {
             unit: {
                 configFile: 'karma.conf.js'
             }
+        },
+        markdownlint: {
+            readme: {
+                "src": [ "README.md" ]
+            }
         }
     });
 
     grunt.registerTask('testOnce', ['build', 'karma']);
     grunt.registerTask('test', ['testOnce', 'watch:test']);
+    grunt.registerTask('ci', ['testOnce', 'markdownlint:readme'])
 
     grunt.registerTask('buildBrowser', ['babel:umd', 'concat', 'file_append:umdHack'])
     grunt.registerTask('build', ['babel:common', 'buildBrowser']);

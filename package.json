@@ -14,13 +14,12 @@
   "license": "MIT",
   "homepage": "https://github.com/glittershark/reactable",
   "scripts": {
-    "test": "./node_modules/grunt-cli/bin/grunt testOnce"
+    "test": "./node_modules/grunt-cli/bin/grunt ci"
   },
   "peerDependencies": {
     "react": "* || ^0.14.0-beta1"
   },
   "devDependencies": {
-    "react": "^0.13.3",
     "grunt": "^0.4.4",
     "grunt-babel": "^5.0.1",
     "grunt-cli": "^0.1.13",
@@ -36,7 +35,9 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-spec-reporter": "0.0.12",
     "load-grunt-tasks": "^3.2.0",
-    "mocha": "^1.18.2"
+    "markdownlint": "0.0.7",
+    "mocha": "^1.18.2",
+    "react": "^0.13.3"
   },
   "keywords": [
     "react-component",

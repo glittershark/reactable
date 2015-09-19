@@ -1,5 +1,4 @@
-Reactable [![Build Status](https://travis-ci.org/glittershark/reactable.svg?branch=master)](https://travis-ci.org/glittershark/reactable)
-=========
+# Reactable [![Build Status](https://travis-ci.org/glittershark/reactable.svg?branch=master)](https://travis-ci.org/glittershark/reactable)
 
 Fast, flexible, and simple data tables in React.
 
@@ -35,12 +34,11 @@ as of version 0.10.0 Reactable will only continue to support React
   - [Sorting](#sorting)
   - [Filtering](#filtering)
 
-
 ## Installation
 
-**Using Bower:**
+### Using Bower
 
-```
+```sh
 bower install [--save] reactable
 ```
 
@@ -51,7 +49,7 @@ That file can be used either as an AMD module, as a CommonJS module in Node, or,
 if neither are supported, will register the Reactable object as a property of
 the `window` object.
 
-Reactable also exposes a set of CommonJS modules for piece-by-piece use with 
+Reactable also exposes a set of CommonJS modules for piece-by-piece use with
 Node, Webpack, Browserify, etc. These modules are located in the [`lib` folder
 at the root of this repositiory][lib-folder].
 
@@ -79,6 +77,7 @@ React.renderComponent(
 ```
 
 While pretty basic, this example demonstrates a couple things:
+
 - Columns in the data array can be in any order, and you can omit any you like
 - Regular React DOM attributes such as className will pass-through to the
   rendered `<table>`
@@ -192,9 +191,10 @@ You can also pass in `unsafe` strings as column labels or in a `<Reactable.Th>`
 
 ### Pagination
 
-You can also use pagination, by just specifying an `itemsPerPage` argument to the
-`<Table>` component. Include an optional `pageButtonLimit` argument to customize the
-number of page buttons in the pagination, which defaults to 10. For example:
+You can also use pagination, by just specifying an `itemsPerPage` argument to
+the `<Table>` component. Include an optional `pageButtonLimit` argument to
+customize the number of page buttons in the pagination, which defaults to 10.
+For example:
 
 ```jsx
 <Table className="table" data={[
@@ -271,12 +271,12 @@ sortable={[
 defaultSort={{column: 'Age', direction: 'desc'}}/>
 ```
 
-In case you are constructing your table without the data attribute, and the 
-cells contain some additional HTML elements, you can use the value property 
-on the Td element to define the value to sort for. 
+In case you are constructing your table without the data attribute, and the
+cells contain some additional HTML elements, you can use the value property
+on the Td element to define the value to sort for.
 
-In the following example we define two TDs, where the first contains some 
-additional markup. We tell the Td to take "Griffin Smith" as value for data 
+In the following example we define two TDs, where the first contains some
+additional markup. We tell the Td to take "Griffin Smith" as value for data
 handling (filter or sort).
 
 ```jsx
@@ -313,12 +313,14 @@ Example:
 <Table className="table" id="table" data={[
     {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
     {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
-    {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter', 'Tag': 'old'},
+    {'State': 'Colorado',
+     'Description': 'new description that shouldn\'t match filter',
+     'Tag': 'old'},
     {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
 ]} filterable={['State', 'Tag']} />
 ```
 
-There is also a `filterBy()` function on the component itself which takes a 
+There is also a `filterBy()` function on the component itself which takes a
 single string and applies that as the filtered value. It can be used like so:
 
 ```jsx
@@ -326,7 +328,9 @@ var table = React.renderComponent(
   <Table className="table" id="table" data={[
       {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
       {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
-      {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter', 'Tag': 'old'},
+      {'State': 'Colorado',
+       'Description': 'new description that shouldn\'t match filter',
+       'Tag': 'old'},
       {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
   ]} filterable={['State', 'Tag']} />,
   document.getElementById('table')
