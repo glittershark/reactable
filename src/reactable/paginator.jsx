@@ -1,4 +1,6 @@
-export class Paginator {
+import React from 'react';
+
+export class Paginator extends React.Component {
 
     handlePrevious() {
         this.props.onPageChange(this.props.currentPage - 1)

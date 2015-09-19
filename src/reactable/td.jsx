@@ -1,8 +1,9 @@
+import React from 'react';
 import { isReactComponent } from './lib/is_react_component';
 import { stringable } from './lib/stringable';
 import { isUnsafe } from './unsafe';
 
-export class Td {
+export class Td extends React.Component {
     handleClick(e){
         if (typeof this.props.handleClick === 'function') {
             return this.props.handleClick(e, this);

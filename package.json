@@ -2,7 +2,7 @@
   "name": "reactable",
   "version": "0.11.0",
   "description": "Fast, flexible, simple data tables in React",
-  "main": "./build/reactable.js",
+  "main": "./lib/reactable.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/glittershark/reactable.git"
@@ -20,11 +20,13 @@
     "react": "* || ^0.14.0-beta1"
   },
   "devDependencies": {
+    "react": "^0.13.3",
     "grunt": "^0.4.4",
     "grunt-babel": "^5.0.1",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-watch": "^0.6.1",
+    "grunt-file-append": "0.0.6",
     "grunt-karma": "^0.8.2",
     "grunt-react": "^0.10.0",
     "karma": "^0.12.9",

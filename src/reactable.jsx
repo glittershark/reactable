@@ -1,3 +1,4 @@
+import React from 'react';
 import { Table } from './reactable/table';
 import { Tr } from './reactable/tr';
 import { Td } from './reactable/td';

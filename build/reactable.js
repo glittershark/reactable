@@ -1,3 +1,4 @@
+window.React["default"] = window.React;
 (function (global, factory) {
     if (typeof define === "function" && define.amd) {
         define(["exports"], factory);
@@ -198,17 +199,17 @@
 
 (function (global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(["exports"], factory);
+        define(["exports", "react"], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports);
+        factory(exports, require("react"));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports);
+        factory(mod.exports, global.React);
         global.filterer = mod.exports;
     }
-})(this, function (exports) {
+})(this, function (exports, _react) {
     "use strict";
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -231,12 +232,12 @@
         _createClass(FiltererInput, [{
             key: "onChange",
             value: function onChange() {
-                this.props.onFilter(React.findDOMNode(this).value);
+                this.props.onFilter(_react["default"].findDOMNode(this).value);
             }
         }, {
             key: "render",
             value: function render() {
-                return React.createElement("input", { type: "text",
+                return _react["default"].createElement("input", { type: "text",
                     className: "reactable-filter-input",
                     placeholder: this.props.placeholder,
                     value: this.props.value,
@@ -246,7 +247,7 @@
         }]);
 
         return FiltererInput;
-    })(React.Component);
+    })(_react["default"].Component);
 
     exports.FiltererInput = FiltererInput;
     ;
@@ -267,13 +268,13 @@
                     throw new TypeError('Must pass a colSpan argument to Filterer');
                 }
 
-                return React.createElement(
+                return _react["default"].createElement(
                     "tr",
                     { className: "reactable-filterer" },
-                    React.createElement(
+                    _react["default"].createElement(
                         "td",
                         { colSpan: this.props.colSpan },
-                        React.createElement(FiltererInput, { onFilter: this.props.onFilter,
+                        _react["default"].createElement(FiltererInput, { onFilter: this.props.onFilter,
                             value: this.props.value,
                             placeholder: this.props.placeholder })
                     )
@@ -282,7 +283,7 @@
         }]);
 
         return Filterer;
-    })(React.Component);
+    })(_react["default"].Component);
 
     exports.Filterer = Filterer;
     ;
@@ -395,26 +396,34 @@
 
 (function (global, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['exports', './lib/is_react_component', './lib/stringable', './unsafe'], factory);
+        define(['exports', 'react', './lib/is_react_component', './lib/stringable', './unsafe'], factory);
     } else if (typeof exports !== 'undefined') {
-        factory(exports, require('./lib/is_react_component'), require('./lib/stringable'), require('./unsafe'));
+        factory(exports, require('react'), require('./lib/is_react_component'), require('./lib/stringable'), require('./unsafe'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.is_react_component, global.stringable, global.unsafe);
+        factory(mod.exports, global.React, global.is_react_component, global.stringable, global.unsafe);
         global.td = mod.exports;
     }
-})(this, function (exports, _libIs_react_component, _libStringable, _unsafe) {
+})(this, function (exports, _react, _libIs_react_component, _libStringable, _unsafe) {
     'use strict';
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-    var Td = (function () {
+    function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+    var Td = (function (_React$Component) {
+        _inherits(Td, _React$Component);
+
         function Td() {
             _classCallCheck(this, Td);
+
+            _get(Object.getPrototypeOf(Td.prototype), 'constructor', this).apply(this, arguments);
         }
 
         _createClass(Td, [{
@@ -457,12 +466,12 @@
                     }
                 }
 
-                return React.createElement('td', tdProps);
+                return _react['default'].createElement('td', tdProps);
             }
         }]);
 
         return Td;
-    })();
+    })(_react['default'].Component);
 
     exports.Td = Td;
     ;
@@ -470,34 +479,42 @@
 
 (function (global, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['exports', './td', './lib/to_array', './lib/filter_props_from'], factory);
+        define(['exports', 'react', './td', './lib/to_array', './lib/filter_props_from'], factory);
     } else if (typeof exports !== 'undefined') {
-        factory(exports, require('./td'), require('./lib/to_array'), require('./lib/filter_props_from'));
+        factory(exports, require('react'), require('./td'), require('./lib/to_array'), require('./lib/filter_props_from'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.td, global.to_array, global.filter_props_from);
+        factory(mod.exports, global.React, global.td, global.to_array, global.filter_props_from);
         global.tr = mod.exports;
     }
-})(this, function (exports, _td, _libTo_array, _libFilter_props_from) {
+})(this, function (exports, _react, _td, _libTo_array, _libFilter_props_from) {
     'use strict';
 
     var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-    var Tr = (function () {
+    function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+    var Tr = (function (_React$Component) {
+        _inherits(Tr, _React$Component);
+
         function Tr() {
             _classCallCheck(this, Tr);
+
+            _get(Object.getPrototypeOf(Tr.prototype), 'constructor', this).apply(this, arguments);
         }
 
         _createClass(Tr, [{
             key: 'render',
             value: function render() {
-                var children = (0, _libTo_array.toArray)(React.Children.children(this.props.children));
+                var children = (0, _libTo_array.toArray)(_react['default'].Children.children(this.props.children));
 
                 if (this.props.data && this.props.columns && typeof this.props.columns.map === 'function') {
                     if (typeof children.concat === 'undefined') {
@@ -514,13 +531,13 @@
                                 value = value.value;
                             }
 
-                            return React.createElement(
+                            return _react['default'].createElement(
                                 _td.Td,
                                 _extends({ column: column, key: column.key }, props),
                                 value
                             );
                         } else {
-                            return React.createElement(_td.Td, { column: column, key: column.key });
+                            return _react['default'].createElement(_td.Td, { column: column, key: column.key });
                         }
                     }).bind(this)));
                 }
@@ -528,12 +545,12 @@
                 // Manually transfer props
                 var props = (0, _libFilter_props_from.filterPropsFrom)(this.props);
 
-                return React.DOM.tr(props, children);
+                return _react['default'].DOM.tr(props, children);
             }
         }]);
 
         return Tr;
-    })();
+    })(_react['default'].Component);
 
     exports.Tr = Tr;
     ;
@@ -544,28 +561,36 @@
 
 (function (global, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['exports', './unsafe', './lib/filter_props_from'], factory);
+        define(['exports', 'react', './unsafe', './lib/filter_props_from'], factory);
     } else if (typeof exports !== 'undefined') {
-        factory(exports, require('./unsafe'), require('./lib/filter_props_from'));
+        factory(exports, require('react'), require('./unsafe'), require('./lib/filter_props_from'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.unsafe, global.filter_props_from);
+        factory(mod.exports, global.React, global.unsafe, global.filter_props_from);
         global.th = mod.exports;
     }
-})(this, function (exports, _unsafe, _libFilter_props_from) {
+})(this, function (exports, _react, _unsafe, _libFilter_props_from) {
     'use strict';
 
     var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-    var Th = (function () {
+    function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+    var Th = (function (_React$Component) {
+        _inherits(Th, _React$Component);
+
         function Th() {
             _classCallCheck(this, Th);
+
+            _get(Object.getPrototypeOf(Th.prototype), 'constructor', this).apply(this, arguments);
         }
 
         _createClass(Th, [{
@@ -574,10 +599,10 @@
                 var childProps = undefined;
 
                 if ((0, _unsafe.isUnsafe)(this.props.children)) {
-                    return React.createElement('th', _extends({}, (0, _libFilter_props_from.filterPropsFrom)(this.props), {
+                    return _react['default'].createElement('th', _extends({}, (0, _libFilter_props_from.filterPropsFrom)(this.props), {
                         dangerouslySetInnerHTML: { __html: this.props.children.toString() } }));
                 } else {
-                    return React.createElement(
+                    return _react['default'].createElement(
                         'th',
                         (0, _libFilter_props_from.filterPropsFrom)(this.props),
                         this.props.children
@@ -587,7 +612,7 @@
         }]);
 
         return Th;
-    })();
+    })(_react['default'].Component);
 
     exports.Th = Th;
     ;
@@ -595,32 +620,40 @@
 
 (function (global, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['exports', './th', './filterer', './lib/filter_props_from'], factory);
+        define(['exports', 'react', './th', './filterer', './lib/filter_props_from'], factory);
     } else if (typeof exports !== 'undefined') {
-        factory(exports, require('./th'), require('./filterer'), require('./lib/filter_props_from'));
+        factory(exports, require('react'), require('./th'), require('./filterer'), require('./lib/filter_props_from'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.th, global.filterer, global.filter_props_from);
+        factory(mod.exports, global.React, global.th, global.filterer, global.filter_props_from);
         global.thead = mod.exports;
     }
-})(this, function (exports, _th, _filterer, _libFilter_props_from) {
+})(this, function (exports, _react, _th, _filterer, _libFilter_props_from) {
     'use strict';
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-    var Thead = (function () {
+    function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+    var Thead = (function (_React$Component) {
+        _inherits(Thead, _React$Component);
+
         function Thead() {
             _classCallCheck(this, Thead);
+
+            _get(Object.getPrototypeOf(Thead.prototype), 'constructor', this).apply(this, arguments);
         }
 
         _createClass(Thead, [{
             key: 'getColumns',
             value: function getColumns() {
-                return React.Children.map(this.props.children, function (th) {
+                return _react['default'].Children.map(this.props.children, function (th) {
                     if (typeof th.props.children === 'string') {
                         return th.props.children;
                     } else {
@@ -661,7 +694,7 @@
                         thClass += ' ' + sortClass;
                     }
 
-                    Ths.push(React.createElement(
+                    Ths.push(_react['default'].createElement(
                         _th.Th,
                         { className: thClass, key: index, onClick: this.handleClickTh.bind(this, column) },
                         column.label
@@ -671,16 +704,16 @@
                 // Manually transfer props
                 var props = (0, _libFilter_props_from.filterPropsFrom)(this.props);
 
-                return React.createElement(
+                return _react['default'].createElement(
                     'thead',
                     props,
-                    this.props.filtering === true ? React.createElement(_filterer.Filterer, {
+                    this.props.filtering === true ? _react['default'].createElement(_filterer.Filterer, {
                         colSpan: this.props.columns.length,
                         onFilter: this.props.onFilter,
                         placeholder: this.props.filterPlaceholder,
                         value: this.props.currentFilter
                     }) : null,
-                    React.createElement(
+                    _react['default'].createElement(
                         'tr',
                         { className: 'reactable-column-header' },
                         Ths
@@ -690,34 +723,34 @@
         }]);
 
         return Thead;
-    })();
+    })(_react['default'].Component);
 
     exports.Thead = Thead;
     ;
 });
 
 (function (global, factory) {
-    if (typeof define === "function" && define.amd) {
-        define(["exports"], factory);
-    } else if (typeof exports !== "undefined") {
-        factory(exports);
+    if (typeof define === 'function' && define.amd) {
+        define(['exports', 'react'], factory);
+    } else if (typeof exports !== 'undefined') {
+        factory(exports, require('react'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports);
+        factory(mod.exports, global.React);
         global.tfoot = mod.exports;
     }
-})(this, function (exports) {
-    "use strict";
+})(this, function (exports, _react) {
+    'use strict';
 
-    var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+    var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-    function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+    function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-    function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+    function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
     var Tfoot = (function (_React$Component) {
         _inherits(Tfoot, _React$Component);
@@ -725,44 +758,52 @@
         function Tfoot() {
             _classCallCheck(this, Tfoot);
 
-            _get(Object.getPrototypeOf(Tfoot.prototype), "constructor", this).apply(this, arguments);
+            _get(Object.getPrototypeOf(Tfoot.prototype), 'constructor', this).apply(this, arguments);
         }
 
         _createClass(Tfoot, [{
-            key: "render",
+            key: 'render',
             value: function render() {
-                return React.createElement("tfoot", this.props);
+                return _react['default'].createElement('tfoot', this.props);
             }
         }]);
 
         return Tfoot;
-    })(React.Component);
+    })(_react['default'].Component);
 
     exports.Tfoot = Tfoot;
 });
 
 (function (global, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['exports'], factory);
+        define(['exports', 'react'], factory);
     } else if (typeof exports !== 'undefined') {
-        factory(exports);
+        factory(exports, require('react'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports);
+        factory(mod.exports, global.React);
         global.paginator = mod.exports;
     }
-})(this, function (exports) {
+})(this, function (exports, _react) {
     'use strict';
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-    var Paginator = (function () {
+    function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+    var Paginator = (function (_React$Component) {
+        _inherits(Paginator, _React$Component);
+
         function Paginator() {
             _classCallCheck(this, Paginator);
+
+            _get(Object.getPrototypeOf(Paginator.prototype), 'constructor', this).apply(this, arguments);
         }
 
         _createClass(Paginator, [{
@@ -784,7 +825,7 @@
             key: 'renderPrevious',
             value: function renderPrevious() {
                 if (this.props.currentPage > 0) {
-                    return React.createElement(
+                    return _react['default'].createElement(
                         'a',
                         { className: 'reactable-previous-page', onClick: this.handlePrevious.bind(this) },
                         'Previous'
@@ -795,7 +836,7 @@
             key: 'renderNext',
             value: function renderNext() {
                 if (this.props.currentPage < this.props.numPages - 1) {
-                    return React.createElement(
+                    return _react['default'].createElement(
                         'a',
                         { className: 'reactable-next-page', onClick: this.handleNext.bind(this) },
                         'Next'
@@ -805,7 +846,7 @@
         }, {
             key: 'renderPageButton',
             value: function renderPageButton(className, pageNum) {
-                return React.createElement(
+                return _react['default'].createElement(
                     'a',
                     { className: className, key: pageNum, onClick: this.handlePageButton.bind(this, pageNum) },
                     pageNum + 1
@@ -855,13 +896,13 @@
                     pageButtons.splice(pageButtonLimit, pageButtons.length - pageButtonLimit);
                 }
 
-                return React.createElement(
+                return _react['default'].createElement(
                     'tbody',
                     { className: 'reactable-pagination' },
-                    React.createElement(
+                    _react['default'].createElement(
                         'tr',
                         null,
-                        React.createElement(
+                        _react['default'].createElement(
                             'td',
                             { colSpan: this.props.colSpan },
                             this.renderPrevious(),
@@ -874,7 +915,7 @@
         }]);
 
         return Paginator;
-    })();
+    })(_react['default'].Component);
 
     exports.Paginator = Paginator;
     ;
@@ -882,17 +923,17 @@
 
 (function (global, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['exports', './lib/filter_props_from', './lib/extract_data_from', './unsafe', './thead', './th', './tr', './tfoot', './paginator'], factory);
+        define(['exports', 'react', './lib/filter_props_from', './lib/extract_data_from', './unsafe', './thead', './th', './tr', './tfoot', './paginator'], factory);
     } else if (typeof exports !== 'undefined') {
-        factory(exports, require('./lib/filter_props_from'), require('./lib/extract_data_from'), require('./unsafe'), require('./thead'), require('./th'), require('./tr'), require('./tfoot'), require('./paginator'));
+        factory(exports, require('react'), require('./lib/filter_props_from'), require('./lib/extract_data_from'), require('./unsafe'), require('./thead'), require('./th'), require('./tr'), require('./tfoot'), require('./paginator'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.filter_props_from, global.extract_data_from, global.unsafe, global.thead, global.th, global.tr, global.tfoot, global.paginator);
+        factory(mod.exports, global.React, global.filter_props_from, global.extract_data_from, global.unsafe, global.thead, global.th, global.tr, global.tfoot, global.paginator);
         global.table = mod.exports;
     }
-})(this, function (exports, _libFilter_props_from, _libExtract_data_from, _unsafe, _thead, _th, _tr, _tfoot, _paginator) {
+})(this, function (exports, _react, _libFilter_props_from, _libExtract_data_from, _unsafe, _thead, _th, _tr, _tfoot, _paginator) {
     'use strict';
 
     var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -964,7 +1005,7 @@
 
                 // Transform any children back to a data array
                 if (typeof props.children !== 'undefined') {
-                    React.Children.forEach(props.children, (function (child) {
+                    _react['default'].Children.forEach(props.children, (function (child) {
                         if (typeof child === 'undefined' || child === null) {
                             return;
                         }
@@ -979,7 +1020,7 @@
                             case _tr.Tr:
                                 var childData = child.props.data || {};
 
-                                React.Children.forEach(child.props.children, function (descendant) {
+                                _react['default'].Children.forEach(child.props.children, function (descendant) {
                                     // TODO
                                     /* if (descendant.type.ConvenienceConstructor === Td) { */
                                     if (typeof descendant !== 'object' || descendant == null) {
@@ -1258,7 +1299,7 @@
                             }
                         }
 
-                        return React.createElement(_tr.Tr, _extends({ columns: columns, key: i, data: data }, props));
+                        return _react['default'].createElement(_tr.Tr, _extends({ columns: columns, key: i, data: data }, props));
                     }).bind(this)));
                 }
 
@@ -1303,10 +1344,10 @@
                 // Manually transfer props
                 var props = (0, _libFilter_props_from.filterPropsFrom)(this.props);
 
-                return React.createElement(
+                return _react['default'].createElement(
                     'table',
                     props,
-                    columns && columns.length > 0 ? React.createElement(_thead.Thead, { columns: columns,
+                    columns && columns.length > 0 ? _react['default'].createElement(_thead.Thead, { columns: columns,
                         filtering: filtering,
                         onFilter: function (filter) {
                             _this.setState({ filter: filter });
@@ -1317,12 +1358,12 @@
                         sortableColumns: this._sortable,
                         onSort: this.onSort.bind(this),
                         key: 'thead' }) : null,
-                    React.createElement(
+                    _react['default'].createElement(
                         'tbody',
                         { className: 'reactable-data', key: 'tbody' },
                         currentChildren
                     ),
-                    pagination === true ? React.createElement(_paginator.Paginator, { colSpan: columns.length,
+                    pagination === true ? _react['default'].createElement(_paginator.Paginator, { colSpan: columns.length,
                         pageButtonLimit: pageButtonLimit,
                         numPages: numPages,
                         currentPage: currentPage,
@@ -1336,7 +1377,7 @@
         }]);
 
         return Table;
-    })(React.Component);
+    })(_react['default'].Component);
 
     exports.Table = Table;
 
@@ -1349,21 +1390,21 @@
 
 (function (global, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['exports', './reactable/table', './reactable/tr', './reactable/td', './reactable/tfoot', './reactable/thead', './reactable/sort', './reactable/unsafe'], factory);
+        define(['exports', 'react', './reactable/table', './reactable/tr', './reactable/td', './reactable/tfoot', './reactable/thead', './reactable/sort', './reactable/unsafe'], factory);
     } else if (typeof exports !== 'undefined') {
-        factory(exports, require('./reactable/table'), require('./reactable/tr'), require('./reactable/td'), require('./reactable/tfoot'), require('./reactable/thead'), require('./reactable/sort'), require('./reactable/unsafe'));
+        factory(exports, require('react'), require('./reactable/table'), require('./reactable/tr'), require('./reactable/td'), require('./reactable/tfoot'), require('./reactable/thead'), require('./reactable/sort'), require('./reactable/unsafe'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.table, global.tr, global.td, global.tfoot, global.thead, global.sort, global.unsafe);
+        factory(mod.exports, global.React, global.table, global.tr, global.td, global.tfoot, global.thead, global.sort, global.unsafe);
         global.reactable = mod.exports;
     }
-})(this, function (exports, _reactableTable, _reactableTr, _reactableTd, _reactableTfoot, _reactableThead, _reactableSort, _reactableUnsafe) {
+})(this, function (exports, _react, _reactableTable, _reactableTr, _reactableTd, _reactableTfoot, _reactableThead, _reactableSort, _reactableUnsafe) {
     'use strict';
 
-    React.Children.children = function (children) {
-        return React.Children.map(children, function (x) {
+    _react['default'].Children.children = function (children) {
+        return _react['default'].Children.map(children, function (x) {
             return x;
         }) || [];
     };
