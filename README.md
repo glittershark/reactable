@@ -28,7 +28,7 @@ as of version 0.10.0 Reactable will only continue to support React
   - [Further Customization](#further-customization)
   - [Even More Customization](#even-more-customization)
   - [Additional node types](#additional-node-types)
-  - [Customizing Columns](#manually-specifying-columns)
+  - [Customizing Columns](#customizing-columns)
   - [Preventing escaping of HTML](#preventing-escaping-of-html)
   - [Pagination](#pagination)
   - [Sorting](#sorting)
