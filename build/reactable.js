@@ -685,7 +685,11 @@ window.React["default"] = window.React;
 
                     Ths.push(_react['default'].createElement(
                         _th.Th,
-                        { className: thClass, key: index, onClick: this.handleClickTh.bind(this, column) },
+                        { className: thClass,
+                            key: index,
+                            onClick: this.handleClickTh.bind(this, column),
+                            role: 'button',
+                            tabindex: '0' },
                         column.label
                     ));
                 }
