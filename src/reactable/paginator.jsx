@@ -1,7 +1,10 @@
 import React from 'react';
 
-export class Paginator extends React.Component {
+function pageHref(num) {
+    return `#page-${num + 1}`
+}
 
+export class Paginator extends React.Component {
     handlePrevious() {
         this.props.onPageChange(this.props.currentPage - 1)
     }
@@ -16,18 +19,32 @@ export class Paginator extends React.Component {
 
     renderPrevious() {
         if(this.props.currentPage > 0) {
-            return <a className='reactable-previous-page' onClick={this.handlePrevious.bind(this)}>Previous</a>
+            return <a className='reactable-previous-page'
+                      href={pageHref(this.props.currentPage - 1)}
+                      onClick={this.handlePrevious.bind(this)}>
+                        Previous
+                   </a>
         }
     }
 
     renderNext() {
         if(this.props.currentPage < this.props.numPages - 1) {
-            return <a className='reactable-next-page' onClick={this.handleNext.bind(this)}>Next</a>
+            return <a className='reactable-next-page'
+                      href={pageHref(this.props.currentPage + 1)}
+                      onClick={this.handleNext.bind(this)}>
+                      Next
+                   </a>
         }
     }
 
     renderPageButton(className, pageNum) {
-        return <a className={className} key={pageNum} onClick={this.handlePageButton.bind(this, pageNum)}>{pageNum + 1}</a>
+
+        return <a className={className}
+                  key={pageNum}
+                  href={pageHref(pageNum)}
+                  onClick={this.handlePageButton.bind(this, pageNum)}>
+                  {pageNum + 1}
+              </a>
     }
 
     render() {
