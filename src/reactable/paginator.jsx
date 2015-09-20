@@ -5,11 +5,13 @@ function pageHref(num) {
 }
 
 export class Paginator extends React.Component {
-    handlePrevious() {
+    handlePrevious(e) {
+        e.preventDefault()
         this.props.onPageChange(this.props.currentPage - 1)
     }
 
     handleNext() {
+        e.preventDefault()
         this.props.onPageChange(this.props.currentPage + 1);
     }
 
