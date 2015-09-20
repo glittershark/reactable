@@ -2,6 +2,7 @@ import React from 'react';
 import { Table } from './reactable/table';
 import { Tr } from './reactable/tr';
 import { Td } from './reactable/td';
+import { Th } from './reactable/th';
 import { Tfoot } from './reactable/tfoot';
 import { Thead } from './reactable/thead';
 import { Sort } from './reactable/sort';
@@ -41,7 +42,7 @@ if (!Array.prototype.find) {
     });
 }
 
-const Reactable = { Table, Tr, Td, Tfoot, Thead, Sort, unsafe };
+const Reactable = { Table, Tr, Td, Th, Tfoot, Thead, Sort, unsafe };
 
 export default Reactable;
 
