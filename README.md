@@ -28,7 +28,7 @@ as of version 0.10.0 Reactable will only continue to support React
   - [Further Customization](#further-customization)
   - [Even More Customization](#even-more-customization)
   - [Additional node types](#additional-node-types)
-  - [Manually specifying columns](#manually-specifying-columns)
+  - [Customizing Columns](#manually-specifying-columns)
   - [Preventing escaping of HTML](#preventing-escaping-of-html)
   - [Pagination](#pagination)
   - [Sorting](#sorting)
@@ -142,24 +142,68 @@ React.renderComponent(
 );
 ```
 
+### Customizing Columns
+
+To override inferring the column list from the attributes of the passed `data`
+objects, you can either:
+
+- Pass a `columns` array property to the `<Table>` component, which can be
+  either:
+  - An array of strings, in which case only the given properties will be included
+    as columns in the rendered table.
+  - An array of objects, each of which must have a `key` and `label` property.
+    The `key` property is the attribute of the row object from which to retrieve
+    value, and the `label` is the text to render in the column header row.
+- Define a `<Thead>` component as the **first child** of the `<Table>`, with
+  `<Th>` components as children (note the exclusion of a `<Tr>` here),
+  each of which should have a "column" property. The children of these `<Th>`
+  components (either strings or React components themselves) will be used to
+  render the table headers. For example:
+
+```jsx
+var Table = Reactable.Table,
+    Thead = Reactable.Thead,
+    Th = Reactable.Th,
+    Tr = Reactable.Tr,
+    Td = Reactable.Td;
+
+React.renderComponent(
+    <Table className="table" id="table">
+        <Thead>
+          <Th column="name">
+            <strong class="name-header">First Name, Last Name</strong>
+          </Th>
+          <Th column="age">
+            <em class="age-header">Age, years</em>
+          </Th>
+        </Thead>
+        <Tr>
+            <Td column="name" data="Griffin Smith">
+                <b>Griffin Smith</b>
+            </Td>
+            <Td column="age">18</Td>
+        </Tr>
+        <Tr>
+            <Td column="name">Lee Salminen</Td>
+            <Td column="age">23</Td>
+        </Tr>
+        <Tr>
+            <Td column="position">Developer</Td>
+            <Td column="age">28</Td>
+        </Tr>
+    </Table>,
+    document.getElementById('table')
+);
+```
+
+In this example, the `position` column will **not** be rendered.
+
 ### Additional node types
 
 Reactable also supports specifying a `<tfoot>` for your table, via the
 `Reactable.Tfoot` class. Per the HTML spec, there can only be one `<Tfoot>` per
 table and its only children should be React.DOM `<tr>` elements (**not**
 `<Reactable.Tr>` elements).
-
-### Manually specifying columns
-
-To override the automatic grabbing of the column list from the attributes of the
-passed `data` objects, you can pass a `columns` property to the `<Table>`
-component. This can be either:
-
-- An array of strings, in which case only the given properties will be included
-  as columns in the rendered table.
-- An array of objects, each of which must have a `key` and `label` property. The
-  `key` property is the attribute of the row object from which to retrieve
-  value, and the `label` is the text to render in the column header row.
 
 ### Preventing escaping of HTML
 
