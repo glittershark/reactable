@@ -4,14 +4,25 @@ import { Filterer } from './filterer';
 import { filterPropsFrom } from './lib/filter_props_from';
 
 export class Thead extends React.Component {
-    getColumns() {
-        return React.Children.map(this.props.children, function(th) {
+    static getColumns(component) {
+        // Can't use React.Children.map since that doesn't return a proper array
+        let columns = [];
+        React.Children.forEach(component.props.children, th => {
             if (typeof th.props.children === 'string') {
-                return th.props.children;
+                columns.push(th.props.children);
+            } else if (typeof th.props.column === 'string') {
+                columns.push({
+                    key: th.props.column,
+                    label: th.props.children
+                });
             } else {
-                throw new TypeError('<th> must have a string child');
+                throw new TypeError(
+                    '<th> must have either a "column" property or a string ' +
+                        'child');
             }
         });
+
+        return columns;
     }
 
     handleClickTh(column) {

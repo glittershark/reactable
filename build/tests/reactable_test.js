@@ -764,6 +764,39 @@
             });
         });
 
+        describe('specifying columns using a <Thead>', function () {
+            before(function () {
+                React.render(React.createElement(
+                    Reactable.Table,
+                    { id: 'table', data: [{ Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18' }, { Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>') }, { Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>') }] },
+                    React.createElement(
+                        Reactable.Thead,
+                        null,
+                        React.createElement(
+                            Reactable.Th,
+                            { column: 'Name', id: 'my-name' },
+                            React.createElement(
+                                'strong',
+                                null,
+                                'name'
+                            )
+                        )
+                    )
+                ), ReactableTestUtils.testNode());
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('renders only the columns in the Thead', function () {
+                expect($('#table tbody tr:first td')).to.exist;
+                expect($('#table thead tr:first th')).to.exist;
+            });
+
+            it('renders the contents of the Th', function () {
+                expect($('#table>thead>tr>th>strong')).to.exist;
+            });
+        });
+
         describe('unsafe() strings', function () {
             context('in the <Table> directly', function () {
                 before(function () {
