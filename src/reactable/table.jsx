@@ -303,12 +303,23 @@ export class Table extends React.Component {
         let columns;
         let userColumnsSpecified = false;
 
+        let firstChild = null;
+
         if (
             this.props.children &&
             this.props.children.length > 0 &&
             this.props.children[0].type === Thead
         ) {
-            columns = this.props.children[0].getColumns();
+            fistChild = this.props.children[0]
+        } else if (
+            typeof this.props.children !== 'undefined' &&
+            this.props.children.type === Thead
+        ) {
+            firstChild = this.props.children
+        }
+
+        if (firstChild !== null) {
+            columns = Thead.getColumns(firstChild);
         } else {
             columns = this.props.columns || [];
         }

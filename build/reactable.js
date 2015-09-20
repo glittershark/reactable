@@ -651,17 +651,6 @@ window.React["default"] = window.React;
         }
 
         _createClass(Thead, [{
-            key: 'getColumns',
-            value: function getColumns() {
-                return _react['default'].Children.map(this.props.children, function (th) {
-                    if (typeof th.props.children === 'string') {
-                        return th.props.children;
-                    } else {
-                        throw new TypeError('<th> must have a string child');
-                    }
-                });
-            }
-        }, {
             key: 'handleClickTh',
             value: function handleClickTh(column) {
                 this.props.onSort(column.key);
@@ -719,6 +708,26 @@ window.React["default"] = window.React;
                         Ths
                     )
                 );
+            }
+        }], [{
+            key: 'getColumns',
+            value: function getColumns(component) {
+                // Can't use React.Children.map since that doesn't return a proper array
+                var columns = [];
+                _react['default'].Children.forEach(component.props.children, function (th) {
+                    if (typeof th.props.children === 'string') {
+                        columns.push(th.props.children);
+                    } else if (typeof th.props.column === 'string') {
+                        columns.push({
+                            key: th.props.column,
+                            label: th.props.children
+                        });
+                    } else {
+                        throw new TypeError('<th> must have either a "column" property or a string ' + 'child');
+                    }
+                });
+
+                return columns;
             }
         }]);
 
@@ -1254,8 +1263,16 @@ window.React["default"] = window.React;
                 var columns = undefined;
                 var userColumnsSpecified = false;
 
+                var firstChild = null;
+
                 if (this.props.children && this.props.children.length > 0 && this.props.children[0].type === _thead.Thead) {
-                    columns = this.props.children[0].getColumns();
+                    fistChild = this.props.children[0];
+                } else if (typeof this.props.children !== 'undefined' && this.props.children.type === _thead.Thead) {
+                    firstChild = this.props.children;
+                }
+
+                if (firstChild !== null) {
+                    columns = _thead.Thead.getColumns(firstChild);
                 } else {
                     columns = this.props.columns || [];
                 }
