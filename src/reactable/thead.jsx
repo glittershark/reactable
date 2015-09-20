@@ -57,7 +57,11 @@ export class Thead extends React.Component {
             }
 
             Ths.push(
-                <Th className={thClass} key={index} onClick={this.handleClickTh.bind(this, column)}>
+                <Th className={thClass}
+                    key={index}
+                    onClick={this.handleClickTh.bind(this, column)}
+                    role="button"
+                    tabindex="0">
                     {column.label}
                 </Th>
             );

@@ -685,7 +685,11 @@ window.React["default"] = window.React;
 
                     Ths.push(_react['default'].createElement(
                         _th.Th,
-                        { className: thClass, key: index, onClick: this.handleClickTh.bind(this, column) },
+                        { className: thClass,
+                            key: index,
+                            onClick: this.handleClickTh.bind(this, column),
+                            role: 'button',
+                            tabindex: '0' },
                         column.label
                     ));
                 }
@@ -806,6 +810,10 @@ window.React["default"] = window.React;
 
     function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+    function pageHref(num) {
+        return '#page-' + (num + 1);
+    }
+
     var Paginator = (function (_React$Component) {
         _inherits(Paginator, _React$Component);
 
@@ -836,7 +844,9 @@ window.React["default"] = window.React;
                 if (this.props.currentPage > 0) {
                     return _react['default'].createElement(
                         'a',
-                        { className: 'reactable-previous-page', onClick: this.handlePrevious.bind(this) },
+                        { className: 'reactable-previous-page',
+                            href: pageHref(this.props.currentPage - 1),
+                            onClick: this.handlePrevious.bind(this) },
                         'Previous'
                     );
                 }
@@ -847,7 +857,9 @@ window.React["default"] = window.React;
                 if (this.props.currentPage < this.props.numPages - 1) {
                     return _react['default'].createElement(
                         'a',
-                        { className: 'reactable-next-page', onClick: this.handleNext.bind(this) },
+                        { className: 'reactable-next-page',
+                            href: pageHref(this.props.currentPage + 1),
+                            onClick: this.handleNext.bind(this) },
                         'Next'
                     );
                 }
@@ -855,9 +867,13 @@ window.React["default"] = window.React;
         }, {
             key: 'renderPageButton',
             value: function renderPageButton(className, pageNum) {
+
                 return _react['default'].createElement(
                     'a',
-                    { className: className, key: pageNum, onClick: this.handlePageButton.bind(this, pageNum) },
+                    { className: className,
+                        key: pageNum,
+                        href: pageHref(pageNum),
+                        onClick: this.handlePageButton.bind(this, pageNum) },
                     pageNum + 1
                 );
             }
