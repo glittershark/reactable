@@ -14,7 +14,8 @@
   "license": "MIT",
   "homepage": "https://github.com/glittershark/reactable",
   "scripts": {
-    "test": "./node_modules/grunt-cli/bin/grunt ci"
+    "test": "./node_modules/grunt-cli/bin/grunt ci",
+    "build": "./node_modules/grunt-cli/bin/grunt build"
   },
   "peerDependencies": {
     "react": "* || ^0.14.0-beta1"
