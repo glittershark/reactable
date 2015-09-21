@@ -37,32 +37,37 @@ as of version 0.10 (this version) Reactable will only continue to support React
   - [Sorting](#sorting)
   - [Filtering](#filtering)
 
-
 ## Installation
 
-**Using Bower:**
+### Using Bower
 
-~~~
+~~~sh
 bower install [--save] reactable
 ~~~
 
 Or, you can just download the raw file
-[here](https://github.com/glittershark/reactable/raw/master/build/reactable.js).
+[here][build-file].
 
 That file can be used either as an AMD module, as a CommonJS module in Node, or,
 if neither are supported, will register the Reactable object as a property of
 the `window` object.
 
-Keep in mind that Reactable depends on the latest version of React (0.11),
+Reactable also exposes a set of CommonJS modules for piece-by-piece use with
+Node, Webpack, Browserify, etc. These modules are located in the [`lib` folder
+at the root of this repositiory][lib-folder].
+
+Keep in mind that Reactable depends on the latest version of React (0.12),
 **with addons**. That can be downloaded [here][download]
 
+[build-file]: https://github.com/glittershark/reactable/raw/master/build/reactable.js
 [download]: http://facebook.github.io/react/downloads.html
+[lib-folder]: https://github.com/glittershark/reactable/tree/master/lib
 
 ## Usage
 
 The simplest example:
 
-~~~js
+~~~javascript
 var Table = Reactable.Table;
 React.renderComponent(
     <Table className="table" data={[
@@ -75,6 +80,7 @@ React.renderComponent(
 ~~~
 
 While pretty basic, this example demonstrates a couple things:
+
 - Columns in the data array can be in any order, and you can omit any you like
 - Regular React DOM attributes such as className will pass-through to the
   rendered `<table>`
@@ -87,7 +93,7 @@ also using the `data` prop, but this time containing only one javascript object.
 This approach can be freely combined with the `data` property on the `<Table>`,
 and is useful if you want to specify per-row attributes such as classes, like so:
 
-~~~js
+~~~javascript
 var Table = Reactable.Table,
     Tr = Reactable.Tr;
 
@@ -113,7 +119,7 @@ specified, the data used will default to the `Td`'s children.
 
 Example:
 
-~~~js
+~~~javascript
 var Table = Reactable.Table,
     Tr = Reactable.Tr,
     Td = Reactable.Td;
@@ -139,17 +145,68 @@ React.renderComponent(
 );
 ~~~
 
-### Manually specifying columns
+### Customizing Columns
 
-To override the automatic grabbing of the column list from the attributes of the
-passed `data` objects, you can pass a `columns` property to the `<Table>`
-component. This can be either:
+To override inferring the column list from the attributes of the passed `data`
+objects, you can either:
 
-- An array of strings, in which case only the given properties will be included
-  as columns in the rendered table.
-- An array of objects, each of which must have a `key` and `label` property. The
-  `key` property is the attribute of the row object from which to retrieve
-  value, and the `label` is the text to render in the column header row.
+- Pass a `columns` array property to the `<Table>` component, which can be
+  either:
+  - An array of strings, in which case only the given properties will be included
+    as columns in the rendered table.
+  - An array of objects, each of which must have a `key` and `label` property.
+    The `key` property is the attribute of the row object from which to retrieve
+    value, and the `label` is the text to render in the column header row.
+- Define a `<Thead>` component as the **first child** of the `<Table>`, with
+  `<Th>` components as children (note the exclusion of a `<Tr>` here),
+  each of which should have a "column" property. The children of these `<Th>`
+  components (either strings or React components themselves) will be used to
+  render the table headers. For example:
+
+~~~javascript
+var Table = Reactable.Table,
+    Thead = Reactable.Thead,
+    Th = Reactable.Th,
+    Tr = Reactable.Tr,
+    Td = Reactable.Td;
+
+React.renderComponent(
+    <Table className="table" id="table">
+        <Thead>
+          <Th column="name">
+            <strong className="name-header">First Name, Last Name</strong>
+          </Th>
+          <Th column="age">
+            <em className="age-header">Age, years</em>
+          </Th>
+        </Thead>
+        <Tr>
+            <Td column="name" data="Griffin Smith">
+                <b>Griffin Smith</b>
+            </Td>
+            <Td column="age">18</Td>
+        </Tr>
+        <Tr>
+            <Td column="name">Lee Salminen</Td>
+            <Td column="age">23</Td>
+        </Tr>
+        <Tr>
+            <Td column="position">Developer</Td>
+            <Td column="age">28</Td>
+        </Tr>
+    </Table>,
+    document.getElementById('table')
+);
+~~~
+
+In this example, the `position` column will **not** be rendered.
+
+### Additional node types
+
+Reactable also supports specifying a `<tfoot>` for your table, via the
+`Reactable.Tfoot` class. Per the HTML spec, there can only be one `<Tfoot>` per
+table and its only children should be React.DOM `<tr>` elements (**not**
+`<Reactable.Tr>` elements).
 
 ### Preventing escaping of HTML
 
@@ -158,7 +215,7 @@ individual cells as HTML, and you know your source data is safe, you can wrap
 strings in `Reactable.unsafe` to prevent their content from being escaped, like
 so:
 
-~~~js
+~~~javascript
 var Table = Reactable.Table,
     unsafe = Reactable.unsafe;
 
@@ -181,10 +238,12 @@ You can also pass in `unsafe` strings as column labels or in a `<Reactable.Th>`
 
 ### Pagination
 
-You can also use pagination, by just specifying an `itemsPerPage` argument to the
-`<Table>` component. For example:
+You can also use pagination, by just specifying an `itemsPerPage` argument to
+the `<Table>` component. Include an optional `pageButtonLimit` argument to
+customize the number of page buttons in the pagination, which defaults to 10.
+For example:
 
-~~~js
+~~~javascript
 <Table className="table" data={[
     { Name: 'Griffin Smith', Age: '18' },
     { Age: '23',  Name: 'Lee Salminen' },
@@ -194,7 +253,7 @@ You can also use pagination, by just specifying an `itemsPerPage` argument to th
     { Name: 'Another Test', Age: '26', Position: 'Developer' },
     { Name: 'Third Test', Age: '19', Position: 'Salesperson' },
     { Age: '23',  Name: 'End of this Page', Position: 'CEO' },
-]} itemsPerPage={4} />
+]} itemsPerPage={4} pageButtonLimit={5} />
 ~~~
 
 ### Sorting
@@ -217,9 +276,11 @@ We've pre-built some sort functions for you.
 To specify a custom sort function, use the following structure for the column
 object:
 
-~~~js
+~~~javascript
 
-{column: 'Column Name', sortFunction: function(a, b){} }
+{column: 'Column Name', sortFunction: function(a, b){
+    return a > b ? 1 : -1;
+}}
 ~~~
 
 You can also specify a default sort by passing in either a column name by
@@ -227,19 +288,18 @@ itself, or an object with a column and a `direction` paramenter of either `asc`
 or `desc`.  If no direction is specified, the default sort will be ascending.
 Example:
 
-~~~js
+~~~javascript
 
 {column: 'Column Name', direction: 'asc' }
 ~~~
 
 Combined example:
 
-~~~js
+~~~javascript
 <Table className="table" id="table" data={[
     { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
     { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
-    { Name: 'Ian Zhang', Age: '28', Position: 'De100 10074  100 10074    0     0  63660      0 --:--:-- --:--:-- --:--:-- 63759
-veloper'}
+    { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
 ]}
 sortable={[
     {
@@ -257,6 +317,36 @@ sortable={[
 ]}
 defaultSort={{column: 'Age', direction: 'desc'}}/>
 ~~~
+
+In case you are constructing your table without the data attribute, and the
+cells contain some additional HTML elements, you can use the value property
+on the Td element to define the value to sort for.
+
+In the following example we define two TDs, where the first contains some
+additional markup. We tell the Td to take "Griffin Smith" as value for data
+handling (filter or sort).
+
+~~~javascript
+var Table = Reactable.Table,
+    Tr = Reactable.Tr,
+    Td = Reactable.Td;
+
+React.renderComponent(
+    <Table className="table" id="table" sortable={true}>
+        <Tr>
+            <Td column="Name" value="Griffin Smith">
+                <div>
+                   <span>Some Text or Icon</span>
+                   <b>Griffin Smith</b>
+                </div>
+            </Td>
+            <Td column="Age">18</Td>
+        </Tr>
+    </Table>,
+    document.getElementById('table')
+);
+~~~
+
 ### Filtering
 
 You can do simple case-insensitive filtering by specifying a filterable property
@@ -266,24 +356,28 @@ class reactable-filter-input will be prepended to the thead of the table.
 
 Example:
 
-~~~js
+~~~javascript
 <Table className="table" id="table" data={[
     {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
     {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
-    {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter', 'Tag': 'old'},
+    {'State': 'Colorado',
+     'Description': 'new description that shouldn\'t match filter',
+     'Tag': 'old'},
     {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
 ]} filterable={['State', 'Tag']} />
 ~~~
 
-There is also a `filterBy()` function on the component itself which takes a 
+There is also a `filterBy()` function on the component itself which takes a
 single string and applies that as the filtered value. It can be used like so:
 
-~~~js
+~~~javascript
 var table = React.renderComponent(
   <Table className="table" id="table" data={[
       {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
       {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
-      {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter', 'Tag': 'old'},
+      {'State': 'Colorado',
+       'Description': 'new description that shouldn\'t match filter',
+       'Tag': 'old'},
       {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
   ]} filterable={['State', 'Tag']} />,
   document.getElementById('table')
