@@ -10,7 +10,7 @@ export class Paginator extends React.Component {
         this.props.onPageChange(this.props.currentPage - 1)
     }
 
-    handleNext() {
+    handleNext(e) {
         e.preventDefault()
         this.props.onPageChange(this.props.currentPage + 1);
     }
