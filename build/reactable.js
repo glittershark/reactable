@@ -839,7 +839,7 @@ window.React["default"] = window.React;
             }
         }, {
             key: 'handleNext',
-            value: function handleNext() {
+            value: function handleNext(e) {
                 e.preventDefault();
                 this.props.onPageChange(this.props.currentPage + 1);
             }
