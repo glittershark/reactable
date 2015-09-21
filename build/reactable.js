@@ -661,7 +661,6 @@ window.React["default"] = window.React;
         }, {
             key: 'render',
             value: function render() {
-
                 // Declare the list of Ths
                 var Ths = [];
                 for (var index = 0; index < this.props.columns.length; index++) {

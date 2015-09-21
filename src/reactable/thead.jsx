@@ -31,12 +31,11 @@ export class Thead extends React.Component {
     }
 
     render() {
-
         // Declare the list of Ths
         var Ths = [];
         for (var index = 0; index < this.props.columns.length; index++) {
             var column = this.props.columns[index];
-            var thClass = 'reactable-th-' + column.key.replace(/\s+/g, '-').toLowerCase()
+            var thClass = `reactable-th-${column.key.replace(/\s+/g, '-').toLowerCase()}`;
             var sortClass = '';
 
             if (this.props.sortableColumns[column.key]) {
@@ -54,7 +53,7 @@ export class Thead extends React.Component {
             }
 
             if (sortClass.length > 0) {
-              thClass += ' ' + sortClass
+              thClass += ` ${sortClass}`;
             }
 
             if (
