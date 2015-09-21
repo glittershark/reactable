@@ -697,7 +697,7 @@ window.React["default"] = window.React;
                             key: index,
                             onClick: this.handleClickTh.bind(this, column),
                             role: 'button',
-                            tabindex: '0' }),
+                            tabIndex: '0' }),
                         column.label
                     ));
                 }

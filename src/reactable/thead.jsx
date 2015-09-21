@@ -70,7 +70,7 @@ export class Thead extends React.Component {
                     key={index}
                     onClick={this.handleClickTh.bind(this, column)}
                     role="button"
-                    tabindex="0">
+                    tabIndex="0">
                     {column.label}
                 </Th>
             );
