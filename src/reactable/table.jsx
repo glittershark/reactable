@@ -310,7 +310,7 @@ export class Table extends React.Component {
             this.props.children.length > 0 &&
             this.props.children[0].type === Thead
         ) {
-            fistChild = this.props.children[0]
+            firstChild = this.props.children[0]
         } else if (
             typeof this.props.children !== 'undefined' &&
             this.props.children.type === Thead

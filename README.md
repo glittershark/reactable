@@ -171,10 +171,10 @@ React.renderComponent(
     <Table className="table" id="table">
         <Thead>
           <Th column="name">
-            <strong class="name-header">First Name, Last Name</strong>
+            <strong className="name-header">First Name, Last Name</strong>
           </Th>
           <Th column="age">
-            <em class="age-header">Age, years</em>
+            <em className="age-header">Age, years</em>
           </Th>
         </Thead>
         <Tr>

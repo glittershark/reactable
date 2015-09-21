@@ -825,12 +825,14 @@ window.React["default"] = window.React;
 
         _createClass(Paginator, [{
             key: 'handlePrevious',
-            value: function handlePrevious() {
+            value: function handlePrevious(e) {
+                e.preventDefault();
                 this.props.onPageChange(this.props.currentPage - 1);
             }
         }, {
             key: 'handleNext',
             value: function handleNext() {
+                e.preventDefault();
                 this.props.onPageChange(this.props.currentPage + 1);
             }
         }, {
@@ -1282,7 +1284,7 @@ window.React["default"] = window.React;
                 var firstChild = null;
 
                 if (this.props.children && this.props.children.length > 0 && this.props.children[0].type === _thead.Thead) {
-                    fistChild = this.props.children[0];
+                    firstChild = this.props.children[0];
                 } else if (typeof this.props.children !== 'undefined' && this.props.children.type === _thead.Thead) {
                     firstChild = this.props.children;
                 }
@@ -1423,17 +1425,17 @@ window.React["default"] = window.React;
 
 (function (global, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['exports', 'react', './reactable/table', './reactable/tr', './reactable/td', './reactable/tfoot', './reactable/thead', './reactable/sort', './reactable/unsafe'], factory);
+        define(['exports', 'react', './reactable/table', './reactable/tr', './reactable/td', './reactable/th', './reactable/tfoot', './reactable/thead', './reactable/sort', './reactable/unsafe'], factory);
     } else if (typeof exports !== 'undefined') {
-        factory(exports, require('react'), require('./reactable/table'), require('./reactable/tr'), require('./reactable/td'), require('./reactable/tfoot'), require('./reactable/thead'), require('./reactable/sort'), require('./reactable/unsafe'));
+        factory(exports, require('react'), require('./reactable/table'), require('./reactable/tr'), require('./reactable/td'), require('./reactable/th'), require('./reactable/tfoot'), require('./reactable/thead'), require('./reactable/sort'), require('./reactable/unsafe'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.React, global.table, global.tr, global.td, global.tfoot, global.thead, global.sort, global.unsafe);
+        factory(mod.exports, global.React, global.table, global.tr, global.td, global.th, global.tfoot, global.thead, global.sort, global.unsafe);
         global.reactable = mod.exports;
     }
-})(this, function (exports, _react, _reactableTable, _reactableTr, _reactableTd, _reactableTfoot, _reactableThead, _reactableSort, _reactableUnsafe) {
+})(this, function (exports, _react, _reactableTable, _reactableTr, _reactableTd, _reactableTh, _reactableTfoot, _reactableThead, _reactableSort, _reactableUnsafe) {
     'use strict';
 
     _react['default'].Children.children = function (children) {
@@ -1472,7 +1474,7 @@ window.React["default"] = window.React;
         });
     }
 
-    var Reactable = { Table: _reactableTable.Table, Tr: _reactableTr.Tr, Td: _reactableTd.Td, Tfoot: _reactableTfoot.Tfoot, Thead: _reactableThead.Thead, Sort: _reactableSort.Sort, unsafe: _reactableUnsafe.unsafe };
+    var Reactable = { Table: _reactableTable.Table, Tr: _reactableTr.Tr, Td: _reactableTd.Td, Th: _reactableTh.Th, Tfoot: _reactableTfoot.Tfoot, Thead: _reactableThead.Thead, Sort: _reactableSort.Sort, unsafe: _reactableUnsafe.unsafe };
 
     exports['default'] = Reactable;
 
