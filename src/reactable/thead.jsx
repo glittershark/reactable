@@ -60,7 +60,7 @@ export class Thead extends React.Component {
                 typeof(column.props) === 'object' &&
                 typeof(column.props.className) === 'string'
             ) {
-                className += ` ${column.props.className}`;
+                thClass += ` ${column.props.className}`;
             }
 
             Ths.push(
@@ -92,4 +92,3 @@ export class Thead extends React.Component {
         );
     }
 };
-

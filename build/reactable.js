@@ -686,7 +686,7 @@ window.React["default"] = window.React;
                     }
 
                     if (typeof column.props === 'object' && typeof column.props.className === 'string') {
-                        className += ' ' + column.props.className;
+                        thClass += ' ' + column.props.className;
                     }
 
                     Ths.push(_react['default'].createElement(
