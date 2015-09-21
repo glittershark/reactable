@@ -13,7 +13,8 @@ export class Thead extends React.Component {
             } else if (typeof th.props.column === 'string') {
                 columns.push({
                     key: th.props.column,
-                    label: th.props.children
+                    label: th.props.children,
+                    props: filterPropsFrom(th.props)
                 });
             } else {
                 throw new TypeError(
@@ -56,8 +57,16 @@ export class Thead extends React.Component {
               thClass += ' ' + sortClass
             }
 
+            if (
+                typeof(column.props) === 'object' &&
+                typeof(column.props.className) === 'string'
+            ) {
+                className += ` ${column.props.className}`;
+            }
+
             Ths.push(
-                <Th className={thClass}
+                <Th {...column.props}
+                    className={thClass}
                     key={index}
                     onClick={this.handleClickTh.bind(this, column)}
                     role="button"

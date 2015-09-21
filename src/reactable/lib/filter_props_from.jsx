@@ -1,4 +1,5 @@
 const internalProps = {
+    column: true,
     columns: true,
     sortable: true,
     filterable: true,

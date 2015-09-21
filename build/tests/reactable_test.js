@@ -795,6 +795,10 @@
             it('renders the contents of the Th', function () {
                 expect($('#table>thead>tr>th>strong')).to.exist;
             });
+
+            it('passes through the properties of the Th', function () {
+                expect($('#table>thead>tr>th')).to.have.id('my-name');
+            });
         });
 
         describe('unsafe() strings', function () {

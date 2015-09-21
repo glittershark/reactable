@@ -16,6 +16,7 @@ window.React["default"] = window.React;
 
     exports.filterPropsFrom = filterPropsFrom;
     var internalProps = {
+        column: true,
         columns: true,
         sortable: true,
         filterable: true,
@@ -633,6 +634,8 @@ window.React["default"] = window.React;
 })(this, function (exports, _react, _th, _filterer, _libFilter_props_from) {
     'use strict';
 
+    var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
@@ -683,13 +686,18 @@ window.React["default"] = window.React;
                         thClass += ' ' + sortClass;
                     }
 
+                    if (typeof column.props === 'object' && typeof column.props.className === 'string') {
+                        className += ' ' + column.props.className;
+                    }
+
                     Ths.push(_react['default'].createElement(
                         _th.Th,
-                        { className: thClass,
+                        _extends({}, column.props, {
+                            className: thClass,
                             key: index,
                             onClick: this.handleClickTh.bind(this, column),
                             role: 'button',
-                            tabindex: '0' },
+                            tabindex: '0' }),
                         column.label
                     ));
                 }
@@ -724,7 +732,8 @@ window.React["default"] = window.React;
                     } else if (typeof th.props.column === 'string') {
                         columns.push({
                             key: th.props.column,
-                            label: th.props.children
+                            label: th.props.children,
+                            props: (0, _libFilter_props_from.filterPropsFrom)(th.props)
                         });
                     } else {
                         throw new TypeError('<th> must have either a "column" property or a string ' + 'child');
