@@ -845,7 +845,8 @@ window.React["default"] = window.React;
             }
         }, {
             key: 'handlePageButton',
-            value: function handlePageButton(page) {
+            value: function handlePageButton(page, e) {
+                e.preventDefault();
                 this.props.onPageChange(page);
             }
         }, {
