@@ -417,6 +417,70 @@ describe('Reactable', function() {
         });
     });
 
+    describe('adding <CustomComponents>s to the <Table>', function() {
+        before(function() {
+            var CustomComponent = React.createClass({
+                displayName: "CustomComponent",
+                propTypes:{
+                    name: React.PropTypes.string,
+                    age: React.PropTypes.number,
+                    position: React.PropTypes.string
+                },
+                getData: function(){
+                    return {
+                        Name: this.props.name,
+                        Age: this.props.age,
+                        Position: this.props.position,
+                    }
+                },
+                render: function(){
+                    return (
+                      <Reactable.Tr>
+                          <Reactable.Td column="Name">{this.props.name}</Reactable.Td>
+                          <Reactable.Td column="Age">{this.props.age}</Reactable.Td>
+                          <Reactable.Td column="Position">{this.props.position}</Reactable.Td>
+                      </Reactable.Tr>
+                    );
+                }
+            });
+            React.render(
+                <Reactable.Table className="table" id="table">
+                    <CustomComponent name='Griffin Smith' age={18} />
+                    <CustomComponent name='Lee Salminen' age={23} />
+                    <CustomComponent age={28} position='Developer' />
+                </Reactable.Table>,
+                ReactableTestUtils.testNode()
+            );
+        });
+
+        after(ReactableTestUtils.resetTestEnvironment);
+
+        it('renders the table', function() {
+            expect($('table#table.table')).to.exist;
+        });
+
+        it('renders the column headers in the table', function() {
+            var headers = [];
+            $('thead th').each(function() {
+                headers.push($(this).text());
+            });
+
+            expect(headers).to.eql([ 'Name', 'Age', 'Position' ]);
+        });
+
+        it('renders the first row with the correct data', function() {
+            ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', '']);
+        });
+
+        it('renders the second row with the correct data', function() {
+            ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', '']);
+        });
+
+        it('renders the third row with the correct data', function() {
+            ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
+        });
+    });
+
     describe('passing through HTML props', function() {
         describe('adding <Tr>s with className to the <Table>', function() {
             before(function() {
