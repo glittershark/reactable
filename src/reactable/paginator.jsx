@@ -15,7 +15,8 @@ export class Paginator extends React.Component {
         this.props.onPageChange(this.props.currentPage + 1);
     }
 
-    handlePageButton(page) {
+    handlePageButton(page, e) {
+        e.preventDefault();
         this.props.onPageChange(page);
     }
 
