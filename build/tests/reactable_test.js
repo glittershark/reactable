@@ -626,21 +626,22 @@
                             React.createElement(
                                 Reactable.Td,
                                 { column: 'Name' },
-                                this.props.name
+                                this.props.name || ''
                             ),
                             React.createElement(
                                 Reactable.Td,
                                 { column: 'Age' },
-                                this.props.age
+                                this.props.age || ''
                             ),
                             React.createElement(
                                 Reactable.Td,
                                 { column: 'Position' },
-                                this.props.position
+                                this.props.position || ''
                             )
                         );
                     }
                 });
+
                 React.render(React.createElement(
                     Reactable.Table,
                     { className: 'table', id: 'table' },

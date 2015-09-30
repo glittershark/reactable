@@ -62,7 +62,17 @@ export class Table extends React.Component {
                     return;
                 }
 
-                switch (child.type) {
+                let reactableDescendant;
+                let test;
+
+                if ([Tfoot, Thead, Tr].indexOf(child.type) >= 0) {
+                    reactableDescendant = child
+                } else {
+                    reactableDescendant = (new child.type(child.props)).render()
+                    test = true
+                }
+
+                switch (reactableDescendant.type) {
                     case Tfoot:
                         if (typeof(tfoot) !== 'undefined') {
                             console.warn ('You can only have one <Tfoot>, but more than one was specified.' +
@@ -71,9 +81,9 @@ export class Table extends React.Component {
                         tfoot = child;
                     break;
                     case Tr:
-                        let childData = child.props.data || {};
+                        let childData = reactableDescendant.props.data || {};
 
-                        React.Children.forEach(child.props.children, function(descendant) {
+                        React.Children.forEach(reactableDescendant.props.children, function(descendant) {
                             // TODO
                             /* if (descendant.type.ConvenienceConstructor === Td) { */
                             if (
@@ -89,7 +99,7 @@ export class Table extends React.Component {
                                 } else if (typeof(descendant.props.children) !== 'undefined') {
                                     value = descendant.props.children;
                                 } else {
-                                    console.warn('exports.Td specified without ' +
+                                    console.warn('Td specified without ' +
                                                  'a `data` property or children, ' +
                                                  'ignoring');
                                     return;
@@ -108,7 +118,7 @@ export class Table extends React.Component {
 
                         data.push({
                             data: childData,
-                            props: filterPropsFrom(child.props),
+                            props: filterPropsFrom(reactableDescendant.props),
                             __reactableMeta: true
                         });
                     break;

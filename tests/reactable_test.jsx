@@ -429,13 +429,14 @@ describe('Reactable', function() {
                 render: function(){
                     return (
                       <Reactable.Tr>
-                          <Reactable.Td column="Name">{this.props.name}</Reactable.Td>
-                          <Reactable.Td column="Age">{this.props.age}</Reactable.Td>
-                          <Reactable.Td column="Position">{this.props.position}</Reactable.Td>
+                          <Reactable.Td column="Name">{this.props.name || ''}</Reactable.Td>
+                          <Reactable.Td column="Age">{this.props.age || ''}</Reactable.Td>
+                          <Reactable.Td column="Position">{this.props.position || ''}</Reactable.Td>
                       </Reactable.Tr>
                     );
                 }
             });
+
             React.render(
                 <Reactable.Table className="table" id="table">
                     <CustomComponent name='Griffin Smith' age={18} />
