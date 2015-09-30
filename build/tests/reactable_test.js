@@ -619,13 +619,6 @@
                         age: React.PropTypes.number,
                         position: React.PropTypes.string
                     },
-                    getData: function getData() {
-                        return {
-                            Name: this.props.name,
-                            Age: this.props.age,
-                            Position: this.props.position
-                        };
-                    },
                     render: function render() {
                         return React.createElement(
                             Reactable.Tr,
