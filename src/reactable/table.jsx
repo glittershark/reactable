@@ -68,7 +68,7 @@ export class Table extends React.Component {
                 if ([Tfoot, Thead, Tr].indexOf(child.type) >= 0) {
                     reactableDescendant = child
                 } else {
-                    reactableDescendant = (new child.type(child.props)).render()
+                    reactableDescendant = (new child.type(child.props, child._context)).render()
                     test = true
                 }
 
