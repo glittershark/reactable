@@ -1,4 +1,5 @@
 # Reactable 
+
 [![Build Status](https://travis-ci.org/glittershark/reactable.svg?branch=master)](https://travis-ci.org/glittershark/reactable)
 [![Code Climate](https://codeclimate.com/github/glittershark/reactable/badges/gpa.svg)](https://codeclimate.com/github/glittershark/reactable)
 
