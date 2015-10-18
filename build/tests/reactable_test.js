@@ -18,7 +18,7 @@
 
     var ReactableTestUtils = {
         resetTestEnvironment: function resetTestEnvironment() {
-            React.unmountComponentAtNode($('div#test-node')[0]);
+            ReactDOM.unmountComponentAtNode($('div#test-node')[0]);
             $('div#test-node').remove();
         },
 
@@ -50,7 +50,7 @@
     describe('Reactable', function () {
         describe('directly passing a data array', function () {
             before(function () {
-                React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Griffin Smith', Age: '18' }, { Age: '23', Name: 'Lee Salminen' }, { Age: '28', Position: 'Developer' }, { Name: 'Leonor Hyatt', Position: null }] }), ReactableTestUtils.testNode());
+                ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Griffin Smith', Age: '18' }, { Age: '23', Name: 'Lee Salminen' }, { Age: '28', Position: 'Developer' }, { Name: 'Leonor Hyatt', Position: null }] }), ReactableTestUtils.testNode());
             });
 
             after(ReactableTestUtils.resetTestEnvironment);
@@ -87,7 +87,7 @@
 
         describe('adding <Tr>s to the <Table>', function () {
             before(function () {
-                React.render(React.createElement(
+                ReactDOM.render(React.createElement(
                     Reactable.Table,
                     { className: 'table', id: 'table' },
                     React.createElement(Reactable.Tr, { data: { Name: 'Griffin Smith', Age: '18' } }),
@@ -127,7 +127,7 @@
         describe('adding <Td>s to the <Tr>s', function () {
             context('with only one <Td>', function () {
                 before(function () {
-                    React.render(React.createElement(
+                    ReactDOM.render(React.createElement(
                         Reactable.Table,
                         { className: 'table', id: 'table' },
                         React.createElement(
@@ -191,7 +191,7 @@
             context('with multiple <Td>s', function () {
                 context('with plain text', function () {
                     before(function () {
-                        React.render(React.createElement(
+                        ReactDOM.render(React.createElement(
                             Reactable.Table,
                             { className: 'table', id: 'table' },
                             React.createElement(
@@ -270,7 +270,7 @@
 
             context('with React.DOM nodes inside', function () {
                 before(function () {
-                    React.render(React.createElement(
+                    ReactDOM.render(React.createElement(
                         Reactable.Table,
                         { className: 'table', id: 'table' },
                         React.createElement(
@@ -372,7 +372,7 @@
 
             context('with null <Td>s', function () {
                 before(function () {
-                    React.render(React.createElement(
+                    ReactDOM.render(React.createElement(
                         Reactable.Table,
                         { className: 'table', id: 'table' },
                         React.createElement(
@@ -466,7 +466,7 @@
 
             context('with null <Tr>s', function () {
                 before(function () {
-                    React.render(React.createElement(
+                    ReactDOM.render(React.createElement(
                         Reactable.Table,
                         { className: 'table', id: 'table' },
                         React.createElement(
@@ -544,7 +544,7 @@
 
         describe('Adding a <Tfoot>', function () {
             before(function () {
-                React.render(React.createElement(
+                ReactDOM.render(React.createElement(
                     Reactable.Table,
                     { className: 'table', id: 'table', sortable: ['Name'], filterable: ['Name', 'Age'] },
                     React.createElement(Reactable.Tr, { className: 'rowClass1', data: { Name: 'Griffin Smith', Age: '18' } }),
@@ -613,7 +613,7 @@
         describe('passing through HTML props', function () {
             describe('adding <Tr>s with className to the <Table>', function () {
                 before(function () {
-                    React.render(React.createElement(
+                    ReactDOM.render(React.createElement(
                         Reactable.Table,
                         { className: 'table', id: 'table' },
                         React.createElement(Reactable.Tr, { className: 'rowClass1', data: { Name: 'Griffin Smith', Age: '18' } }),
@@ -652,7 +652,7 @@
 
             describe('adding <Td>s with classNames to the <Table>', function () {
                 before(function () {
-                    React.render(React.createElement(
+                    ReactDOM.render(React.createElement(
                         Reactable.Table,
                         { className: 'table', id: 'table' },
                         React.createElement(
@@ -719,7 +719,7 @@
         describe('specifying an array of columns', function () {
             describe('as strings', function () {
                 before(function () {
-                    React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Griffin Smith', Age: '18', HideThis: 'one' }, { Age: '23', Name: 'Lee Salminen', HideThis: 'two' }, { Age: '28', Position: 'Developer' }], columns: ['Name', 'Age'] }), ReactableTestUtils.testNode());
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Griffin Smith', Age: '18', HideThis: 'one' }, { Age: '23', Name: 'Lee Salminen', HideThis: 'two' }, { Age: '28', Position: 'Developer' }], columns: ['Name', 'Age'] }), ReactableTestUtils.testNode());
                 });
 
                 after(ReactableTestUtils.resetTestEnvironment);
@@ -740,7 +740,7 @@
 
             describe('as objects', function () {
                 before(function () {
-                    React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ name: 'Griffin Smith', age: '18', HideThis: 'one' }, { age: '23', name: 'Lee Salminen', HideThis: 'two' }, { age: '28', Position: 'Developer' }], columns: [{ key: 'name', label: 'Name' }, { key: 'age', label: 'Age' }] }), ReactableTestUtils.testNode());
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ name: 'Griffin Smith', age: '18', HideThis: 'one' }, { age: '23', name: 'Lee Salminen', HideThis: 'two' }, { age: '28', Position: 'Developer' }], columns: [{ key: 'name', label: 'Name' }, { key: 'age', label: 'Age' }] }), ReactableTestUtils.testNode());
                 });
 
                 after(ReactableTestUtils.resetTestEnvironment);
@@ -766,7 +766,7 @@
 
         describe('specifying columns using a <Thead>', function () {
             before(function () {
-                React.render(React.createElement(
+                ReactDOM.render(React.createElement(
                     Reactable.Table,
                     { id: 'table', data: [{ Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18' }, { Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>') }, { Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>') }] },
                     React.createElement(
@@ -804,7 +804,7 @@
         describe('unsafe() strings', function () {
             context('in the <Table> directly', function () {
                 before(function () {
-                    React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18' }, { Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>') }, { Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>') }], sortable: ['Name'] }), ReactableTestUtils.testNode());
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18' }, { Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>') }, { Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>') }], sortable: ['Name'] }), ReactableTestUtils.testNode());
                 });
 
                 after(ReactableTestUtils.resetTestEnvironment);
@@ -835,7 +835,7 @@
 
             context('in column labels', function () {
                 before(function () {
-                    React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Griffin Smith', Age: '18' }, { Age: '23', Name: 'Lee Salminen' }, { Age: '28', Position: 'Developer' }], columns: [{ key: 'Name', label: Reactable.unsafe('<strong>Name</strong>') }, { key: 'Age', label: Reactable.unsafe('<em>Age</em>') }, { key: 'Position', label: Reactable.unsafe('<small>Position</small>') }] }), ReactableTestUtils.testNode());
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Griffin Smith', Age: '18' }, { Age: '23', Name: 'Lee Salminen' }, { Age: '28', Position: 'Developer' }], columns: [{ key: 'Name', label: Reactable.unsafe('<strong>Name</strong>') }, { key: 'Age', label: Reactable.unsafe('<em>Age</em>') }, { key: 'Position', label: Reactable.unsafe('<small>Position</small>') }] }), ReactableTestUtils.testNode());
                 });
 
                 after(ReactableTestUtils.resetTestEnvironment);
@@ -852,7 +852,7 @@
 
             context('in the <Tr>s', function () {
                 before(function () {
-                    React.render(React.createElement(
+                    ReactDOM.render(React.createElement(
                         Reactable.Table,
                         { className: 'table', id: 'table' },
                         React.createElement(Reactable.Tr, { data: { Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18' } }),
@@ -880,7 +880,7 @@
 
             context('in the <Td>s', function () {
                 before(function () {
-                    React.render(React.createElement(
+                    ReactDOM.render(React.createElement(
                         Reactable.Table,
                         { className: 'table', id: 'table' },
                         React.createElement(
@@ -950,7 +950,7 @@
             describe('specifying pageButtonLimit', function () {
 
                 before(function () {
-                    React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Test Person' }, { 'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Test Person' }, { 'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Test Person' }, { 'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }], itemsPerPage: 2, pageButtonLimit: 8 }), ReactableTestUtils.testNode());
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Test Person' }, { 'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Test Person' }, { 'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Test Person' }, { 'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }], itemsPerPage: 2, pageButtonLimit: 8 }), ReactableTestUtils.testNode());
                 });
 
                 after(ReactableTestUtils.resetTestEnvironment);
@@ -962,7 +962,7 @@
             });
             describe('specifying itemsPerPage', function () {
                 before(function () {
-                    React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Test Person' }, { 'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }], itemsPerPage: 4 }), ReactableTestUtils.testNode());
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Test Person' }, { 'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }], itemsPerPage: 4 }), ReactableTestUtils.testNode());
                 });
 
                 after(ReactableTestUtils.resetTestEnvironment);
@@ -1035,7 +1035,7 @@
 
             describe('specifying more itemsPerPage than items', function () {
                 before(function () {
-                    React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Test Person' }, { 'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }], itemsPerPage: 20 }), ReactableTestUtils.testNode());
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Test Person' }, { 'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }], itemsPerPage: 20 }), ReactableTestUtils.testNode());
                 });
 
                 after(ReactableTestUtils.resetTestEnvironment);
@@ -1059,7 +1059,7 @@
 
             describe('not specifying itemsPerPage', function () {
                 before(function () {
-                    React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Test Person' }, { 'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }] }), ReactableTestUtils.testNode());
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Test Person' }, { 'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }] }), ReactableTestUtils.testNode());
                 });
 
                 after(ReactableTestUtils.resetTestEnvironment);
@@ -1071,7 +1071,7 @@
 
             describe('specifying 0 itemsPerPage', function () {
                 before(function () {
-                    React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Test Person' }, { 'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }], itemsPerPage: 0 }), ReactableTestUtils.testNode());
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Test Person' }, { 'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }], itemsPerPage: 0 }), ReactableTestUtils.testNode());
                 });
 
                 after(ReactableTestUtils.resetTestEnvironment);
@@ -1085,7 +1085,7 @@
         describe('sorting', function () {
             describe('no default sort', function () {
                 before(function () {
-                    React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Lee Salminen', Age: '23', Position: 'Programmer' }, { Name: 'Griffin Smith', Age: '18', Position: 'Engineer' }, { Name: 'Ian Zhang', Age: '28', Position: 'Developer' }],
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Lee Salminen', Age: '23', Position: 'Programmer' }, { Name: 'Griffin Smith', Age: '18', Position: 'Engineer' }, { Name: 'Ian Zhang', Age: '28', Position: 'Developer' }],
                         sortable: [{
                             column: 'Name',
                             sortFunction: function sortFunction(a, b) {
@@ -1170,7 +1170,7 @@
                 var component;
                 before(function () {
                     this.render = function () {
-                        React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Lee Salminen', Age: '23', Position: 'Programmer' }, { Name: 'Griffin Smith', Age: '18', Position: 'Engineer' }, { Name: 'Ian Zhang', Age: '28', Position: 'Developer' }],
+                        ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Lee Salminen', Age: '23', Position: 'Programmer' }, { Name: 'Griffin Smith', Age: '18', Position: 'Engineer' }, { Name: 'Ian Zhang', Age: '28', Position: 'Developer' }],
                             sortable: true }), ReactableTestUtils.testNode());
                     };
 
@@ -1262,7 +1262,7 @@
 
             describe('default sort', function () {
                 before(function () {
-                    React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Lee Salminen', Age: '23', Position: 'Programmer' }, { Name: 'Griffin Smith', Age: '18', Position: 'Engineer' }, { Name: 'Ian Zhang', Age: '28', Position: 'Developer' }],
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Lee Salminen', Age: '23', Position: 'Programmer' }, { Name: 'Griffin Smith', Age: '18', Position: 'Engineer' }, { Name: 'Ian Zhang', Age: '28', Position: 'Developer' }],
                         sortable: [{
                             column: 'Name',
                             sortFunction: function sortFunction(a, b) {
@@ -1287,7 +1287,7 @@
 
             describe('default sort no direction specified', function () {
                 before(function () {
-                    React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Lee Salminen', Age: '23', Position: 'Programmer' }, { Name: 'Griffin Smith', Age: '18', Position: 'Engineer' }, { Name: 'Ian Zhang', Age: '28', Position: 'Developer' }],
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Lee Salminen', Age: '23', Position: 'Programmer' }, { Name: 'Griffin Smith', Age: '18', Position: 'Engineer' }, { Name: 'Ian Zhang', Age: '28', Position: 'Developer' }],
                         sortable: [{
                             column: 'Name',
                             sortFunction: function sortFunction(a, b) {
@@ -1312,7 +1312,7 @@
 
             describe('unsortable column', function () {
                 before(function () {
-                    React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Lee Salminen', Age: '23', Position: 'Programmer' }, { Name: 'Griffin Smith', Age: '18', Position: 'Engineer' }, { Name: 'Ian Zhang', Age: '28', Position: 'Developer' }],
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Lee Salminen', Age: '23', Position: 'Programmer' }, { Name: 'Griffin Smith', Age: '18', Position: 'Engineer' }, { Name: 'Ian Zhang', Age: '28', Position: 'Developer' }],
                         sortable: ['Age', 'Position'] }), ReactableTestUtils.testNode());
                 });
 
@@ -1331,7 +1331,7 @@
             [Reactable.Sort.Numeric, Reactable.Sort.NumericInteger].forEach(function (method) {
                 describe('numeric sort', function () {
                     before(function () {
-                        React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Count: '23' }, { Count: '18' }, { Count: '28' }, { Count: '1.23' }, { Count: 'a' }, { Count: 'z' }, { Count: '123' }],
+                        ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Count: '23' }, { Count: '18' }, { Count: '28' }, { Count: '1.23' }, { Count: 'a' }, { Count: 'z' }, { Count: '123' }],
                             columns: [{ key: 'Count', sortable: method }] }), ReactableTestUtils.testNode());
                     });
 
@@ -1356,7 +1356,7 @@
 
             describe('numeric sort with Tr and Td specified', function () {
                 before(function () {
-                    React.render(React.createElement(
+                    ReactDOM.render(React.createElement(
                         Reactable.Table,
                         {
                             className: 'table',
@@ -1448,7 +1448,7 @@
 
             describe('numeric sort with Tr and Td specified and custom value', function () {
                 before(function () {
-                    React.render(React.createElement(
+                    ReactDOM.render(React.createElement(
                         Reactable.Table,
                         {
                             className: 'table',
@@ -1540,7 +1540,7 @@
 
             describe('currency sort', function () {
                 before(function () {
-                    React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Price: '1.25' }, { Price: '$1.01' }, { Price: '1' }, { Price: '$10,000' }, { Price: '$10,500' }, { Price: '$10' }, { Price: 'a' }, { Price: 'z' }, { Price: '$2' }, { Price: '$.5' }, { Price: '$0.60' }, { Price: '.1' }],
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Price: '1.25' }, { Price: '$1.01' }, { Price: '1' }, { Price: '$10,000' }, { Price: '$10,500' }, { Price: '$10' }, { Price: 'a' }, { Price: 'z' }, { Price: '$2' }, { Price: '$.5' }, { Price: '$0.60' }, { Price: '.1' }],
                         columns: [{ key: 'Price', sortable: Reactable.Sort.Currency }] }), ReactableTestUtils.testNode());
                 });
 
@@ -1569,7 +1569,7 @@
 
             describe('date sort', function () {
                 before(function () {
-                    React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Date': '1/1/2014 11:00 AM' }, { 'Date': '1/1/2013 11:00 AM' }, { 'Date': '1/1/2014 4:30 PM' }, { 'Date': '4/3/2013' }, { 'Date': 'a' }, { 'Date': 'z' }],
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Date': '1/1/2014 11:00 AM' }, { 'Date': '1/1/2013 11:00 AM' }, { 'Date': '1/1/2014 4:30 PM' }, { 'Date': '4/3/2013' }, { 'Date': 'a' }, { 'Date': 'z' }],
                         columns: [{ key: 'Date', sortable: Reactable.Sort.Date }] }), ReactableTestUtils.testNode());
                 });
 
@@ -1592,7 +1592,7 @@
 
             describe('case insensitive sorting', function () {
                 before(function () {
-                    React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Name': 'Lee Salminen' }, { 'Name': 'Griffin Smith' }, { 'Name': 'Ian Zhang' }, { 'Name': 'lee Salminen' }, { 'Name': 'griffin smith' }, { 'Name': 'Ian zhang' }],
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Name': 'Lee Salminen' }, { 'Name': 'Griffin Smith' }, { 'Name': 'Ian Zhang' }, { 'Name': 'lee Salminen' }, { 'Name': 'griffin smith' }, { 'Name': 'Ian zhang' }],
                         columns: [{ key: 'Name', sortable: Reactable.Sort.CaseInsensitive }] }), ReactableTestUtils.testNode());
                 });
 
@@ -1615,7 +1615,7 @@
 
             describe('custom sort with React Components', function () {
                 before(function () {
-                    React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Rank': React.createElement(
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Rank': React.createElement(
                                 'span',
                                 { className: '3' },
                                 'Third'
@@ -1655,7 +1655,7 @@
             describe('filtering with javascript objects for data', function () {
                 var data = [{ name: "Lee SomeoneElse", age: 18 }, { name: "Lee Salminen", age: 23 }, { name: "No Age", age: null }];
                 before(function () {
-                    React.render(React.createElement(
+                    ReactDOM.render(React.createElement(
                         Reactable.Table,
                         { className: 'table', id: 'table',
                             filterable: ['Name', 'Age'] },
@@ -1695,7 +1695,7 @@
 
             describe('basic case-insensitive filtering', function () {
                 before(function () {
-                    this.component = React.render(React.createElement(
+                    this.component = ReactDOM.render(React.createElement(
                         Reactable.Table,
                         { className: 'table', id: 'table',
                             filterable: ['State', 'Tag'],
@@ -1818,7 +1818,7 @@
 
             context('filtering and pagination together', function () {
                 before(function () {
-                    React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'State': 'New York', 'Description': 'this is some text', 'Tag': 'new' }, { 'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old' }, { 'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter',
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'State': 'New York', 'Description': 'this is some text', 'Tag': 'new' }, { 'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old' }, { 'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter',
                             'Tag': 'old' }, { 'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed' }],
                         filterable: ['State', 'Tag'],
                         columns: ['State', 'Description', 'Tag'],
@@ -1865,7 +1865,7 @@
 
         describe('directly passing a data array with non-string data', function () {
             before(function () {
-                React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Griffin Smith', Age: 18 }, { Age: 23, Name: { toString: function toString() {
+                ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Griffin Smith', Age: 18 }, { Age: 23, Name: { toString: function toString() {
                                 return 'Lee Salminen';
                             } } }, { Age: 28.45, Position: 'Developer' }] }), ReactableTestUtils.testNode());
             });
@@ -1904,9 +1904,9 @@
                 this.testNode1 = $('<div>').attr('id', 'test-node-1');
                 this.testNode2 = $('<div>').attr('id', 'test-node-2');
 
-                React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table1', data: [{ Name: 'Griffin Smith', Age: '18' }, { Age: '23', Name: 'Lee Salminen' }, { Age: '28', Position: 'Developer' }] }), this.testNode1[0]);
+                ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table1', data: [{ Name: 'Griffin Smith', Age: '18' }, { Age: '23', Name: 'Lee Salminen' }, { Age: '28', Position: 'Developer' }] }), this.testNode1[0]);
 
-                React.render(React.createElement(Reactable.Table, { className: 'table', id: 'table2', data: [{ Moniker: 'Griffin Smith', Elderliness: '18' }, { Elderliness: '23', Moniker: 'Lee Salminen' }, { Elderliness: '28', Title: 'Developer' }] }), this.testNode2[0]);
+                ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table2', data: [{ Moniker: 'Griffin Smith', Elderliness: '18' }, { Elderliness: '23', Moniker: 'Lee Salminen' }, { Elderliness: '28', Title: 'Developer' }] }), this.testNode2[0]);
             });
 
             after(function () {
@@ -1936,7 +1936,7 @@
             before(function () {
                 this.clicked = false;
 
-                React.render(React.createElement(
+                ReactDOM.render(React.createElement(
                     Reactable.Table,
                     { className: 'table', id: 'table' },
                     React.createElement(

@@ -1,8 +1,9 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 export class FiltererInput extends React.Component {
     onChange() {
-        this.props.onFilter(React.findDOMNode(this).value);
+        this.props.onFilter(ReactDOM.findDOMNode(this).value);
     }
 
     render() {
