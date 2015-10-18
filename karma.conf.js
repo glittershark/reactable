@@ -13,6 +13,7 @@ module.exports = function(config) {
         'bower_components/es5-shim/es5-shim.js',
         'bower_components/jquery/dist/jquery.js',
         'bower_components/react/react-with-addons.js',
+        'bower_components/react/react-dom.js',
         'bower_components/chai/chai.js',
         'bower_components/chai-jquery/chai-jquery.js',
         'build/reactable.js',
