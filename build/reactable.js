@@ -1358,7 +1358,7 @@ window.ReactDOM["default"] = window.ReactDOM;
 
                 // Determine if we render the filter box
                 var filtering = false;
-                if (this.props.filterable && Array.isArray(this.props.filterable) && this.props.filterable.length > 0) {
+                if (this.props.filterable && Array.isArray(this.props.filterable) && this.props.filterable.length > 0 && !this.props.hideFilterInput) {
                     filtering = true;
                 }
 
@@ -1432,7 +1432,8 @@ window.ReactDOM["default"] = window.ReactDOM;
         sortBy: false,
         defaultSort: false,
         itemsPerPage: 0,
-        filterBy: ''
+        filterBy: '',
+        hideFilterInput: false
     };
 });
 

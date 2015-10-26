@@ -1712,6 +1712,37 @@ describe('Reactable', function() {
             });
         });
 
+        context('filtering with prop and hiding filter input', function() {
+          before(function() {
+            this.component = ReactDOM.render(
+              <Reactable.Table className="table" id="table"
+                filterable={['State', 'Tag']}
+                filterPlaceholder="Filter Results"
+                filterBy="new"
+                hideFilterInput
+                columns={['State', 'Description', 'Tag']}>
+                <Reactable.Tr>
+                  <Reactable.Td column='State'>New York</Reactable.Td>
+                  <Reactable.Td column='Description'>this is some text</Reactable.Td>
+                  <Reactable.Td column='Tag'>new</Reactable.Td>
+                </Reactable.Tr>
+                <Reactable.Tr>
+                  <Reactable.Td column='State'>New Mexico</Reactable.Td>
+                  <Reactable.Td column='Description'>lorem ipsum</Reactable.Td>
+                  <Reactable.Td column='Tag'>old</Reactable.Td>
+                </Reactable.Tr>
+              </Reactable.Table>,
+              ReactableTestUtils.testNode()
+            );
+          });
+
+          after(ReactableTestUtils.resetTestEnvironment);
+
+          it('does not render the filter input box', function() {
+            expect($('#table thead tr.reactable-filterer input.reactable-filter-input').length).to.equal(0);
+          });
+        });
+
         context('filtering and pagination together', function(){
             before(function() {
                 ReactDOM.render(

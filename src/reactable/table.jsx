@@ -382,7 +382,8 @@ export class Table extends React.Component {
         if (
             this.props.filterable &&
                 Array.isArray(this.props.filterable) &&
-                    this.props.filterable.length > 0
+                    this.props.filterable.length > 0 &&
+                        !this.props.hideFilterInput
         ) {
             filtering = true;
         }
@@ -455,5 +456,6 @@ Table.defaultProps = {
     sortBy: false,
     defaultSort: false,
     itemsPerPage: 0,
-    filterBy: ''
+    filterBy: '',
+    hideFilterInput: false
 };
