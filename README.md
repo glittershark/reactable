@@ -386,5 +386,23 @@ var table = React.renderComponent(
 table.filterBy('new');
 ```
 
-This can be useful if you want to roll your own filtering input field outside of
-Reactable.
+You can also pass in a `filterBy` prop to control the filtering outside of the
+`Table` component:
+
+```jsx
+var table = React.render(
+  <Table className="table" id="table" data={[
+      {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
+      {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
+      {'State': 'Colorado',
+       'Description': 'new description that shouldn\'t match filter',
+       'Tag': 'old'},
+      {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
+  ]} filterable={['State', 'Tag']}
+  filterBy="new" />,
+  document.getElementById('table')
+);
+```
+
+These methods can be useful if you want to roll your own filtering input field
+outside of Reactable.

@@ -204,12 +204,14 @@ export class Table extends React.Component {
     componentWillMount() {
         this.initialize(this.props);
         this.sortByCurrentSort();
+        this.filterBy(this.props.filterBy);
     }
 
     componentWillReceiveProps(nextProps) {
         this.initialize(nextProps);
         this.updateCurrentSort(nextProps.sortBy);
         this.sortByCurrentSort();
+        this.filterBy(nextProps.filterBy);
     }
 
     applyFilter(filter, children) {
@@ -453,4 +455,5 @@ Table.defaultProps = {
     sortBy: false,
     defaultSort: false,
     itemsPerPage: 0,
+    filterBy: ''
 };
