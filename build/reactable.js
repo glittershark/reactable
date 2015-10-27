@@ -1191,6 +1191,7 @@ window.ReactDOM["default"] = window.ReactDOM;
             value: function componentWillMount() {
                 this.initialize(this.props);
                 this.sortByCurrentSort();
+                this.filterBy(this.props.filterBy);
             }
         }, {
             key: 'componentWillReceiveProps',
@@ -1198,6 +1199,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                 this.initialize(nextProps);
                 this.updateCurrentSort(nextProps.sortBy);
                 this.sortByCurrentSort();
+                this.filterBy(nextProps.filterBy);
             }
         }, {
             key: 'applyFilter',
@@ -1356,7 +1358,7 @@ window.ReactDOM["default"] = window.ReactDOM;
 
                 // Determine if we render the filter box
                 var filtering = false;
-                if (this.props.filterable && Array.isArray(this.props.filterable) && this.props.filterable.length > 0) {
+                if (this.props.filterable && Array.isArray(this.props.filterable) && this.props.filterable.length > 0 && !this.props.hideFilterInput) {
                     filtering = true;
                 }
 
@@ -1429,7 +1431,9 @@ window.ReactDOM["default"] = window.ReactDOM;
     Table.defaultProps = {
         sortBy: false,
         defaultSort: false,
-        itemsPerPage: 0
+        itemsPerPage: 0,
+        filterBy: '',
+        hideFilterInput: false
     };
 });
 
