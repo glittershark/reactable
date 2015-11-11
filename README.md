@@ -425,3 +425,19 @@ var table = React.render(
 
 These can be useful if you want to roll your own filtering input field
 outside of Reactable.
+
+### Empty Data Sets
+
+If the table is initialized without any `<Tr>`s or with an empty array for
+`data`, you can display text in the body of the table by passing a string
+for the optional `noDataText` prop:
+
+```jsx
+var table = React.render(
+  <Table
+    className="table"
+    id="table" data={[]}
+    noDataText="No matching records found." />,
+  document.getElementById('table')
+);
+```
