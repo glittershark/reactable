@@ -2151,5 +2151,142 @@
                 expect(this.clicked).to.eq(true);
             });
         });
+
+        describe('table with no data', function () {
+            context('when noDataText prop is null', function () {
+                before(function () {
+                    this.component = ReactDOM.render(React.createElement(Reactable.Table, { data: [], columns: ['State', 'Description', 'Tag'] }), ReactableTestUtils.testNode());
+                });
+
+                after(ReactableTestUtils.resetTestEnvironment);
+
+                it('does not render the reactable-no-data element', function () {
+                    expect($('.reactable-no-data').length).to.eq(0);
+                });
+            });
+
+            context('when initialized without <Tr>s', function () {
+                before(function () {
+                    this.component = ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', columns: ['State', 'Description', 'Tag'], noDataText: 'No matching records found.' }), ReactableTestUtils.testNode());
+                });
+
+                after(ReactableTestUtils.resetTestEnvironment);
+
+                it('shows the "no data" message', function () {
+                    var $text = $('.reactable-no-data').text();
+                    expect($text).to.eq('No matching records found.');
+                });
+            });
+
+            context('when filtered without any matches', function () {
+                before(function () {
+                    this.component = ReactDOM.render(React.createElement(
+                        Reactable.Table,
+                        { className: 'table', id: 'table',
+                            filterable: ['State', 'Tag'],
+                            filterPlaceholder: 'Filter Results',
+                            filterBy: 'xxxxx',
+                            noDataText: 'No matching records found.',
+                            columns: ['State', 'Description', 'Tag'] },
+                        React.createElement(
+                            Reactable.Tr,
+                            null,
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'State' },
+                                'New York'
+                            ),
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'Description' },
+                                'this is some text'
+                            ),
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'Tag' },
+                                'new'
+                            )
+                        ),
+                        React.createElement(
+                            Reactable.Tr,
+                            null,
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'State' },
+                                'New Mexico'
+                            ),
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'Description' },
+                                'lorem ipsum'
+                            ),
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'Tag' },
+                                'old'
+                            )
+                        ),
+                        React.createElement(
+                            Reactable.Tr,
+                            null,
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'State' },
+                                'Colorado'
+                            ),
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'Description' },
+                                'new description that shouldnt match filter'
+                            ),
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'Tag' },
+                                'old'
+                            )
+                        ),
+                        React.createElement(
+                            Reactable.Tr,
+                            null,
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'State' },
+                                'Alaska'
+                            ),
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'Description' },
+                                'bacon'
+                            ),
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'Tag' },
+                                'renewed'
+                            )
+                        )
+                    ), ReactableTestUtils.testNode());
+                });
+
+                after(ReactableTestUtils.resetTestEnvironment);
+
+                it('shows the "no data" message', function () {
+                    var text = $('.reactable-no-data').text();
+                    expect(text).to.eq('No matching records found.');
+                });
+            });
+
+            context('when initialized with an empty array for `data` prop', function () {
+                before(function () {
+                    this.component = ReactDOM.render(React.createElement(Reactable.Table, { data: [], className: 'table', id: 'table', columns: ['State', 'Description', 'Tag'], noDataText: 'No matching records found.' }), ReactableTestUtils.testNode());
+                });
+
+                after(ReactableTestUtils.resetTestEnvironment);
+
+                it('shows the "no data" message', function () {
+                    var $text = $('.reactable-no-data').text();
+                    expect($text).to.eq('No matching records found.');
+                });
+            });
+        });
     });
 });

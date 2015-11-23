@@ -298,6 +298,10 @@ export class Table extends React.Component {
         // Set the current sort and pass it to the sort function
         this.setState({ currentSort: currentSort });
         this.sortByCurrentSort();
+
+        if (this.props.onSort) {
+            this.props.onSort(currentSort)
+        }
     }
 
     render() {
