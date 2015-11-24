@@ -8,7 +8,8 @@ const internalProps = {
     itemsPerPage: true,
     childNode: true,
     data: true,
-    children: true
+    children: true,
+    noDataText: 'No matches.'
 };
 
 export function filterPropsFrom(baseProps) {

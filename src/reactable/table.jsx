@@ -417,6 +417,8 @@ export class Table extends React.Component {
         // Manually transfer props
         let props = filterPropsFrom(this.props);
 
+        let noDataText = (this.props.noDataText ? <span className="reactable-no-data">{this.props.noDataText}</span> : null);
+
         return <table {...props}>
             {columns && columns.length > 0 ?
              <Thead columns={columns}
@@ -432,7 +434,7 @@ export class Table extends React.Component {
                  key="thead"/>
              : null}
             <tbody className="reactable-data" key="tbody">
-                {currentChildren}
+                {currentChildren.length > 0 ? currentChildren : noDataText}
             </tbody>
             {pagination === true ?
              <Paginator colSpan={columns.length}
