@@ -420,7 +420,7 @@ export class Table extends React.Component {
         // Manually transfer props
         let props = filterPropsFrom(this.props);
 
-        let noDataText = this.props.noDataText ? <span className="reactable-no-data">{this.props.noDataText}</span> : null;
+        let noDataText = this.props.noDataText ? <tr className="reactable-no-data"><td colSpan={columns.length}>{this.props.noDataText}</td></tr> : null;
 
         return <table {...props}>
             {columns && columns.length > 0 ?
