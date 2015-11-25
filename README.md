@@ -66,7 +66,7 @@ The simplest example:
 
 ```jsx
 var Table = Reactable.Table;
-React.renderComponent(
+React.render(
     <Table className="table" data={[
         { Name: 'Griffin Smith', Age: 18 },
         { Age: 23,  Name: 'Lee Salminen' },
@@ -94,7 +94,7 @@ and is useful if you want to specify per-row attributes such as classes, like so
 var Table = Reactable.Table,
     Tr = Reactable.Tr;
 
-React.renderComponent(
+React.render(
     <Table className="table" data={[
         { name: 'Row one', content: 'These are regular data rows' },
         { name: 'Row two', content: 'They work like above' },
@@ -121,7 +121,7 @@ var Table = Reactable.Table,
     Tr = Reactable.Tr,
     Td = Reactable.Td;
 
-React.renderComponent(
+React.render(
     <Table className="table" id="table">
         <Tr>
             <Td column="Name" data="Griffin Smith">
@@ -167,7 +167,7 @@ var Table = Reactable.Table,
     Tr = Reactable.Tr,
     Td = Reactable.Td;
 
-React.renderComponent(
+React.render(
     <Table className="table" id="table">
         <Thead>
           <Th column="name">
@@ -216,7 +216,7 @@ so:
 var Table = Reactable.Table,
     unsafe = Reactable.unsafe;
 
-React.renderComponent(
+React.render(
     <Table className="table" id="table" data={[
         {
             'Name': unsafe('<b>Griffin Smith</b>'),
@@ -328,7 +328,7 @@ var Table = Reactable.Table,
     Tr = Reactable.Tr,
     Td = Reactable.Td;
 
-React.renderComponent(
+React.render(
     <Table className="table" id="table" sortable={true}>
         <Tr>
             <Td column="Name" value="Griffin Smith">
@@ -368,7 +368,7 @@ There is also a `filterBy()` function on the component itself which takes a
 single string and applies that as the filtered value. It can be used like so:
 
 ```jsx
-var table = React.renderComponent(
+var table = React.render(
   <Table className="table" id="table" data={[
       {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
       {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
