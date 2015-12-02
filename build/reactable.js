@@ -1285,6 +1285,25 @@ window.ReactDOM["default"] = window.ReactDOM;
                 this.sortByCurrentSort();
             }
         }, {
+            key: 'visibleItems',
+            value: function visibleItems() {
+                return this.currentChildren.map(function (item) {
+                    var _item$props = item.props;
+                    var i = _item$props.i;
+                    var id = _item$props.id;
+
+                    var iOrId = i != null ? i : id;
+                    var idOrKey = iOrId != null ? iOrId : item.key;
+                    var data = { id: idOrKey };
+
+                    Object.keys(item.props.data).forEach(function (key) {
+                        data[key] = item.props.data[key].value;
+                    });
+
+                    return data;
+                });
+            }
+        }, {
             key: 'render',
             value: function render() {
                 var _this = this;
@@ -1391,6 +1410,18 @@ window.ReactDOM["default"] = window.ReactDOM;
                 // Manually transfer props
                 var props = (0, _libFilter_props_from.filterPropsFrom)(this.props);
 
+                var noDataText = this.props.noDataText ? _react['default'].createElement(
+                    'tr',
+                    { className: 'reactable-no-data' },
+                    _react['default'].createElement(
+                        'td',
+                        { colSpan: columns.length },
+                        this.props.noDataText
+                    )
+                ) : null;
+
+                this.currentChildren = currentChildren;
+
                 return _react['default'].createElement(
                     'table',
                     props,
@@ -1408,7 +1439,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                     _react['default'].createElement(
                         'tbody',
                         { className: 'reactable-data', key: 'tbody' },
-                        currentChildren
+                        currentChildren.length > 0 ? currentChildren : noDataText
                     ),
                     pagination === true ? _react['default'].createElement(_paginator.Paginator, { colSpan: columns.length,
                         pageButtonLimit: pageButtonLimit,

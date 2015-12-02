@@ -13,6 +13,16 @@
 })(this, function (exports) {
     'use strict';
 
+    var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+    var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+    var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+    function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+    function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
     var ReactTestUtils = React.addons.TestUtils;
     var expect = chai.expect;
 
@@ -2149,6 +2159,257 @@
 
             it('calls the callbacks on click', function () {
                 expect(this.clicked).to.eq(true);
+            });
+        });
+
+        describe('table with no data', function () {
+            context('when noDataText prop is null', function () {
+                before(function () {
+                    this.component = ReactDOM.render(React.createElement(Reactable.Table, { data: [], columns: ['State', 'Description', 'Tag'] }), ReactableTestUtils.testNode());
+                });
+
+                after(ReactableTestUtils.resetTestEnvironment);
+
+                it('does not render the reactable-no-data element', function () {
+                    expect($('.reactable-no-data').length).to.eq(0);
+                });
+            });
+
+            context('when initialized without <Tr>s', function () {
+                before(function () {
+                    this.component = ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', columns: ['State', 'Description', 'Tag'], noDataText: 'No matching records found.' }), ReactableTestUtils.testNode());
+                });
+
+                after(ReactableTestUtils.resetTestEnvironment);
+
+                it('shows the "no data" message', function () {
+                    var $text = $('.reactable-no-data').text();
+                    expect($text).to.eq('No matching records found.');
+                });
+            });
+
+            context('when filtered without any matches', function () {
+                before(function () {
+                    this.component = ReactDOM.render(React.createElement(
+                        Reactable.Table,
+                        { className: 'table', id: 'table',
+                            filterable: ['State', 'Tag'],
+                            filterPlaceholder: 'Filter Results',
+                            filterBy: 'xxxxx',
+                            noDataText: 'No matching records found.',
+                            columns: ['State', 'Description', 'Tag'] },
+                        React.createElement(
+                            Reactable.Tr,
+                            null,
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'State' },
+                                'New York'
+                            ),
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'Description' },
+                                'this is some text'
+                            ),
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'Tag' },
+                                'new'
+                            )
+                        ),
+                        React.createElement(
+                            Reactable.Tr,
+                            null,
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'State' },
+                                'New Mexico'
+                            ),
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'Description' },
+                                'lorem ipsum'
+                            ),
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'Tag' },
+                                'old'
+                            )
+                        ),
+                        React.createElement(
+                            Reactable.Tr,
+                            null,
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'State' },
+                                'Colorado'
+                            ),
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'Description' },
+                                'new description that shouldnt match filter'
+                            ),
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'Tag' },
+                                'old'
+                            )
+                        ),
+                        React.createElement(
+                            Reactable.Tr,
+                            null,
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'State' },
+                                'Alaska'
+                            ),
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'Description' },
+                                'bacon'
+                            ),
+                            React.createElement(
+                                Reactable.Td,
+                                { column: 'Tag' },
+                                'renewed'
+                            )
+                        )
+                    ), ReactableTestUtils.testNode());
+                });
+
+                after(ReactableTestUtils.resetTestEnvironment);
+
+                it('shows the "no data" message', function () {
+                    var text = $('.reactable-no-data').text();
+                    expect(text).to.eq('No matching records found.');
+                });
+            });
+
+            context('when initialized with an empty array for `data` prop', function () {
+                before(function () {
+                    this.component = ReactDOM.render(React.createElement(Reactable.Table, { data: [], className: 'table', id: 'table', columns: ['State', 'Description', 'Tag'], noDataText: 'No matching records found.' }), ReactableTestUtils.testNode());
+                });
+
+                after(ReactableTestUtils.resetTestEnvironment);
+
+                it('shows the "no data" message', function () {
+                    var $text = $('.reactable-no-data').text();
+                    expect($text).to.eq('No matching records found.');
+                });
+            });
+        });
+
+        describe('visibleItems()', function () {
+            var _Reactable = Reactable;
+            var Table = _Reactable.Table;
+            var Thead = _Reactable.Thead;
+            var Tr = _Reactable.Tr;
+            var Th = _Reactable.Th;
+            var Td = _Reactable.Td;
+
+            var data = [{ name: "Lee SomeoneElse", age: 18 }, { name: "Lee Salminen", age: 23 }, { name: "No Age", age: null }];
+
+            var Tester = (function (_React$Component) {
+                _inherits(Tester, _React$Component);
+
+                function Tester() {
+                    _classCallCheck(this, Tester);
+
+                    _get(Object.getPrototypeOf(Tester.prototype), 'constructor', this).apply(this, arguments);
+                }
+
+                _createClass(Tester, [{
+                    key: 'componentDidMount',
+                    value: function componentDidMount() {
+                        this.props.run && this.props.run(this);
+                    }
+                }, {
+                    key: 'render',
+                    value: function render() {
+                        return React.createElement(
+                            Table,
+                            _extends({ ref: 'table', className: 'table', id: 'table',
+                                filterable: ['Name', 'Age'] }, this.props),
+                            React.createElement(
+                                Thead,
+                                null,
+                                React.createElement(
+                                    Th,
+                                    { column: 'Name' },
+                                    'The Name'
+                                ),
+                                React.createElement(
+                                    Th,
+                                    { column: 'Age' },
+                                    'The Age'
+                                )
+                            ),
+                            data.map(function (item, i) {
+                                return React.createElement(
+                                    Tr,
+                                    { key: i, i: i < 2 ? i : null },
+                                    React.createElement(Td, { column: 'Name', data: item.name }),
+                                    React.createElement(Td, { column: 'Age', data: item.age })
+                                );
+                            }),
+                            React.createElement(
+                                Tr,
+                                { i: true },
+                                React.createElement(Td, { column: 'Name', data: "hi" }),
+                                React.createElement(Td, { column: 'Age', data: 5 })
+                            ),
+                            React.createElement(
+                                Tr,
+                                { id: "id" },
+                                React.createElement(Td, { column: 'Name', data: "hi" }),
+                                React.createElement(Td, { column: 'Age', data: 7 })
+                            )
+                        );
+                    }
+                }]);
+
+                return Tester;
+            })(React.Component);
+
+            var doTest = function doTest(runMe) {
+                var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+                return ReactDOM.render(React.createElement(Tester, _extends({ run: runMe }, options)), ReactableTestUtils.testNode());
+            };
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('works', function () {
+                doTest(function (me) {
+                    var items = me.refs.table.visibleItems();
+                    expect(items.length).to.eql(5);
+                    expect(items[0].Age).to.eql(18);
+                });
+            });
+            it('works when filtered', function () {
+                doTest(function (me) {
+                    var items = me.refs.table.visibleItems();
+                    expect(items.length).to.eql(2);
+                    expect(items[1].Age).to.eql(23);
+                }, { filterBy: 'lee' });
+            });
+            it('works when paged', function () {
+                doTest(function (me) {
+                    var items = me.refs.table.visibleItems();
+                    expect(items.length).to.eql(1);
+                    expect(items[0].Age).to.eql(18);
+                }, { itemsPerPage: 1 });
+            });
+            it('has keys', function () {
+                doTest(function (me) {
+                    var items = me.refs.table.visibleItems();
+                    expect(items[1].id).to.eql(1);
+                    // id is not defined and key is a string
+                    expect(items[2].id).to.eql("2");
+                    // Falsy ids still count
+                    expect(items[0].id).to.eql(0);
+                    expect(items[3].id).to.eql(true);
+                    expect(items[4].id).to.eql("id");
+                });
             });
         });
     });
