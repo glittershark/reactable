@@ -300,6 +300,21 @@ export class Table extends React.Component {
         this.sortByCurrentSort();
     }
 
+    visibleItems() {
+        return this.currentChildren.map(item => {
+            const {i, id} = item.props;
+            const iOrId = i != null ? i : id;
+            const idOrKey = iOrId != null ? iOrId : item.key;
+            const data = {id: idOrKey};
+
+            Object.keys(item.props.data).forEach(key => {
+                data[key] = item.props.data[key].value;
+            });
+
+            return data;
+        })
+    }
+
     render() {
         let children = [];
         let columns;
@@ -421,6 +436,8 @@ export class Table extends React.Component {
         let props = filterPropsFrom(this.props);
 
         let noDataText = this.props.noDataText ? <tr className="reactable-no-data"><td colSpan={columns.length}>{this.props.noDataText}</td></tr> : null;
+
+        this.currentChildren = currentChildren;
 
         return <table {...props}>
             {columns && columns.length > 0 ?

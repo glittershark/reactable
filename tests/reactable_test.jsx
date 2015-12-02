@@ -2010,4 +2010,83 @@ describe('Reactable', function() {
         });
       });
     })
+
+    describe('visibleItems()', () => {
+        const {Table, Thead, Tr, Th, Td} = Reactable;
+        const data = [{name:"Lee SomeoneElse", age:18},{name:"Lee Salminen", age:23},{name:"No Age", age:null}];
+        class Tester extends React.Component {
+            componentDidMount() {
+                this.props.run && this.props.run(this)
+            }
+            render() {
+                return (
+                    <Table ref="table" className="table" id="table"
+                        filterable={['Name', 'Age']} {...this.props}>
+                        <Thead>
+                            <Th column="Name">The Name</Th>
+                            <Th column="Age">The Age</Th>
+                        </Thead>
+                        {data.map((item, i) =>
+                            <Tr key={i} i={i < 2 ? i : null}>
+                                <Td column="Name" data={item.name}/>
+                                <Td column="Age" data={item.age}/>
+                            </Tr>
+                        )}
+                        <Tr i={true}>
+                            <Td column="Name" data={"hi"}/>
+                            <Td column="Age" data={5}/>
+                        </Tr>
+                        <Tr id={"id"}>
+                            <Td column="Name" data={"hi"}/>
+                            <Td column="Age" data={7}/>
+                        </Tr>
+                    </Table>
+                )
+            }
+        }
+        const doTest = (runMe, options = {}) => (
+            ReactDOM.render(
+                <Tester run={runMe} {...options}/>,
+                ReactableTestUtils.testNode()
+            )
+        )
+
+        after(ReactableTestUtils.resetTestEnvironment);
+
+        it('works', () => {
+            doTest(me => {
+                const items = me.refs.table.visibleItems()
+                expect(items.length).to.eql(5)
+                expect(items[0].Age).to.eql(18)
+            })
+        });
+        it('works when filtered', () => {
+            doTest(me => {
+                const items = me.refs.table.visibleItems()
+                expect(items.length).to.eql(2)
+                expect(items[1].Age).to.eql(23)
+            }, {filterBy: 'lee'})
+        });
+        it('works when paged', () => {
+            doTest(me => {
+                const items = me.refs.table.visibleItems()
+                expect(items.length).to.eql(1)
+                expect(items[0].Age).to.eql(18)
+            }, {itemsPerPage: 1})
+        });
+        it('has keys', () => {
+            doTest(me => {
+                const items = me.refs.table.visibleItems()
+                expect(items[1].id).to.eql(1)
+                // id is not defined and key is a string
+                expect(items[2].id).to.eql("2")
+                // Falsy ids still count
+                expect(items[0].id).to.eql(0)
+                expect(items[3].id).to.eql(true)
+                expect(items[4].id).to.eql("id")
+            })
+        });
+    });
+
+
 });
