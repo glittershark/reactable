@@ -438,3 +438,52 @@ var table = ReactDOM.render(
   document.getElementById('table')
 );
 ```
+
+### Events
+
+If you want to have follow up actions or state updates to come after a table sort
+you can use the prop `onSort` to provide a callback that will return a `currentSort`
+object. This by default will be null and not fire a callback.
+
+The `currentSort` object contains the column name and direction :
+
+```JSON
+{
+  column: 'Name',
+  direction: -1
+}
+```
+
+in JSX this looks like
+
+```jsx
+
+callback(currentSort) {
+  console.log('Column name: ', currentSort.column);
+},
+
+render() {
+  return (
+    <Table className="table" id="table" data={[
+        { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
+        { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
+        { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
+    ]}
+    sortable={[
+        {
+            column: 'Name',
+            sortFunction: function(a, b){
+                // Sort by last name
+                var nameA = a.split(' ');
+                var nameB = b.split(' ');
+                return nameA[1].localeCompare(nameB[1]);
+            }
+        },
+        'Age',
+        'Position'
+    ]}
+    defaultSort={{column: 'Age', direction: 'desc'}}
+    onSort={ this.callBack }/>
+  );
+}
+```

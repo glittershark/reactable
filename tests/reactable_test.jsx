@@ -1533,6 +1533,44 @@ describe('Reactable', function() {
                 ReactableTestUtils.expectRowText(2, ['Third']);
             });
         });
+    
+        describe('sorts and calls onSort callback via props', function(){
+            var sortColumn = null;
+
+            var callback = function(sortObject){
+                sortColumn = sortObject.column;
+            }
+
+            before(function() {
+                ReactDOM.render(
+                    <Reactable.Table className="table" id="table" data={[
+                        {'Rank': <span className="3">Third</span>},
+                        {'Rank': <span className="1">First</span>},
+                        {'Rank': <span className="2">Second</span>},
+                        ]}
+                        columns={[{
+                            key: 'Rank', sortable: function (a, b) {
+                                // sort based on classname
+                                return a.props.className.localeCompare(b.props.className);
+                            }
+                        }]} 
+                        onSort={ callback }/>,
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+            after(function() {
+                ReactableTestUtils.resetTestEnvironment();
+            });
+
+            it('returns currentSort object to callback for utilization', function(){
+                var sortHeader = $('#table thead tr.reactable-column-header th')[0];
+                ReactTestUtils.Simulate.click(sortHeader);
+
+                expect(sortColumn).to.equal('Rank');
+            });
+        });
+
     });
 
     describe('filtering', function() {

@@ -1283,6 +1283,10 @@ window.ReactDOM["default"] = window.ReactDOM;
                 // Set the current sort and pass it to the sort function
                 this.setState({ currentSort: currentSort });
                 this.sortByCurrentSort();
+
+                if (this.props.onSort) {
+                    this.props.onSort(currentSort);
+                }
             }
         }, {
             key: 'render',
@@ -1391,6 +1395,16 @@ window.ReactDOM["default"] = window.ReactDOM;
                 // Manually transfer props
                 var props = (0, _libFilter_props_from.filterPropsFrom)(this.props);
 
+                var noDataText = this.props.noDataText ? _react['default'].createElement(
+                    'tr',
+                    { className: 'reactable-no-data' },
+                    _react['default'].createElement(
+                        'td',
+                        { colSpan: columns.length },
+                        this.props.noDataText
+                    )
+                ) : null;
+
                 return _react['default'].createElement(
                     'table',
                     props,
@@ -1408,7 +1422,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                     _react['default'].createElement(
                         'tbody',
                         { className: 'reactable-data', key: 'tbody' },
-                        currentChildren
+                        currentChildren.length > 0 ? currentChildren : noDataText
                     ),
                     pagination === true ? _react['default'].createElement(_paginator.Paginator, { colSpan: columns.length,
                         pageButtonLimit: pageButtonLimit,
