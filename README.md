@@ -33,6 +33,8 @@ this the faster we can get to 1.0!
   - [Pagination](#pagination)
   - [Sorting](#sorting)
   - [Filtering](#filtering)
+  - [Empty Data Sets](#empty-data-sets)
+  - [Events](#events)
 
 ## Installation
 
@@ -441,49 +443,15 @@ var table = ReactDOM.render(
 
 ### Events
 
-If you want to have follow up actions or state updates to come after a table sort
-you can use the prop `onSort` to provide a callback that will return a `currentSort`
-object. This by default will be null and not fire a callback.
+You can pass an `onSort` prop to a `<Reactable.Table>` to provide an event
+handler for when the sorting in the table changes.
 
-The `currentSort` object contains the column name and direction :
+This handler will be passed an object that contains the column name that is
+being sorted by, and the direction it is being sorted;
 
 ```JSON
 {
   column: 'Name',
   direction: -1
-}
-```
-
-in JSX this looks like
-
-```jsx
-
-callback(currentSort) {
-  console.log('Column name: ', currentSort.column);
-},
-
-render() {
-  return (
-    <Table className="table" id="table" data={[
-        { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
-        { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
-        { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
-    ]}
-    sortable={[
-        {
-            column: 'Name',
-            sortFunction: function(a, b){
-                // Sort by last name
-                var nameA = a.split(' ');
-                var nameB = b.split(' ');
-                return nameA[1].localeCompare(nameB[1]);
-            }
-        },
-        'Age',
-        'Position'
-    ]}
-    defaultSort={{column: 'Age', direction: 'desc'}}
-    onSort={ this.callBack }/>
-  );
 }
 ```
