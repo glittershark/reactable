@@ -215,6 +215,7 @@ export class Table extends React.Component {
     }
 
     applyFilter(filter, children) {
+      if(typeof(filter) === 'string'){
         // Helper function to apply filter text to a list of table rows
         filter = filter.toLowerCase();
         let matchedChildren = [];
@@ -236,7 +237,42 @@ export class Table extends React.Component {
         }
 
         return matchedChildren;
+    } else {
+      let cols = Object.keys(filter)
+      filter = cols.map(key => filter[key])
+      filter = filter.toString().toLowerCase();
+
+      let matchedChildren = [];
+      let filterColumn = cols.toString()
+
+      for (let i = 0; i < children.length; i++) {
+          let data = children[i].props.data;
+
+          if (
+              typeof(data[filterColumn]) !== 'undefined' &&
+                  extractDataFrom(data, filterColumn).toString().toLowerCase().indexOf(filter) > -1
+          ) {
+              matchedChildren.push(children[i]);
+              break;
+          }
+      }
+
+      return matchedChildren;
     }
+  }
+
+  onFilter(filter) {
+      if( typeof(filter) === 'string' && filter.indexOf(':') != -1) {
+        let filterObj = {}
+        filter = filter.split(':')
+        let col = filter[0].trim()
+        let val = filter[1].trim()
+        filterObj[col] = val
+        filter = filterObj
+      }
+
+    this.setState({ filter: filter });
+  }
 
     sortByCurrentSort() {
         // Apply a sort function according to the current sort in the state.
@@ -430,9 +466,7 @@ export class Table extends React.Component {
             {columns && columns.length > 0 ?
              <Thead columns={columns}
                  filtering={filtering}
-                 onFilter={filter => {
-                     this.setState({ filter: filter });
-                 }}
+                 onFilter={this.onFilter.bind(this)}
                  filterPlaceholder={this.props.filterPlaceholder}
                  currentFilter={this.state.filter}
                  sort={this.state.currentSort}
