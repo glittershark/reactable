@@ -131,4 +131,3 @@ module.exports = function(grunt) {
     grunt.registerTask('build', ['babel:common', 'buildBrowser']);
     grunt.registerTask('default', ['build', 'watch:build']);
 };
-
