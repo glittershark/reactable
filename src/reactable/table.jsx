@@ -214,28 +214,73 @@ export class Table extends React.Component {
         this.filterBy(nextProps.filterBy);
     }
 
-    applyFilter(filter, children) {
+    applyFilter (filter, children) {
+      if(typeof(filter) === 'string') {
         // Helper function to apply filter text to a list of table rows
         filter = filter.toLowerCase();
         let matchedChildren = [];
 
         for (let i = 0; i < children.length; i++) {
-            let data = children[i].props.data;
+          let data = children[i].props.data;
 
-            for (let j = 0; j < this.props.filterable.length; j++) {
-                let filterColumn = this.props.filterable[j];
+          for (let j = 0; j < this.props.filterable.length; j++) {
+            let filterColumn = this.props.filterable[j];
 
-                if (
-                    typeof(data[filterColumn]) !== 'undefined' &&
-                        extractDataFrom(data, filterColumn).toString().toLowerCase().indexOf(filter) > -1
-                ) {
-                    matchedChildren.push(children[i]);
-                    break;
-                }
+            if (typeof(data[filterColumn]) !== 'undefined' && extractDataFrom(data, filterColumn).toString().toLowerCase().indexOf(filter) > -1) {
+              matchedChildren.push(children[i]);
+              break;
             }
+          }
         }
 
         return matchedChildren;
+      } else {
+
+        let filterCount = Object
+          .keys(filter)
+          .length
+        let matchedChildren = []
+
+        for (let filterColumn in filter) {
+          let val = filter[filterColumn].toLowerCase()
+          for (let i = 0; i < children.length; i++) {
+            let data = children[i].props.data;
+            if (typeof(data[filterColumn]) !== 'undefined' && extractDataFrom(data, filterColumn).toString().toLowerCase().indexOf(val) > -1) {
+              matchedChildren.push(children[i]);
+            }
+          }
+        }
+
+        if (filterCount > 1) {
+          let result = []
+          return matchedChildren.map(function (children) {
+            let occurrences = matchedChildren.filter(function (value) {
+              return value.key === children.key;
+            }).length
+            if (occurrences == filterCount) {return children}
+          })
+        } else {return matchedChildren;}
+      }
+    }
+
+    onFilter(filters, enterKey) {
+      let input
+      let filterObj = {}
+        if( typeof(filters) === 'string' && filters.indexOf(':') != -1 && enterKey) {
+          input = filters.trim()
+            let col, val
+            let splitFilters = input.split(',')
+              splitFilters.forEach(function(f){
+                let filter = f.split(':')
+
+                if(filter[0]) { col = filter[0].trim() }
+                if(filter[1]) { val = filter[1].trim() }
+                filterObj[col] = val
+            })
+            this.setState({ filter: filterObj });
+        } else {
+          this.setState({ filter: filters });
+        }
     }
 
     sortByCurrentSort() {
@@ -430,9 +475,7 @@ export class Table extends React.Component {
             {columns && columns.length > 0 ?
              <Thead columns={columns}
                  filtering={filtering}
-                 onFilter={filter => {
-                     this.setState({ filter: filter });
-                 }}
+                 onFilter={this.onFilter.bind(this)}
                  filterPlaceholder={this.props.filterPlaceholder}
                  currentFilter={this.state.filter}
                  sort={this.state.currentSort}
