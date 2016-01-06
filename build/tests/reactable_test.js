@@ -1654,7 +1654,6 @@
                 var sortColumn = null;
 
                 var callback = function callback(sortObject) {
-                    console.log(sortObject);
                     sortColumn = sortObject.column;
                 };
 
@@ -1689,7 +1688,6 @@
                     var sortHeader = $('#table thead tr.reactable-column-header th')[0];
                     ReactTestUtils.Simulate.click(sortHeader);
 
-                    console.log(sortColumn);
                     expect(sortColumn).to.equal('Rank');
                 });
             });

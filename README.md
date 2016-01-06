@@ -346,6 +346,26 @@ ReactDOM.render(
 );
 ```
 
+If you want to have the default sort on click to be descending there is an
+option to default first click sort direction to descending via
+`defaultSortDescending`. This is a boolean flag that will reverse the
+default click behavior of column heads.
+
+```jsx
+
+<Table className="table" id="table" data={[
+    { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
+    { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
+    { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
+]}
+sortable={[
+    'Age',
+    'Position'
+]}
+defaultSort={{column: 'Age', direction: 'desc'}}
+defaultSortDescending
+```
+
 ### Filtering
 
 You can do simple case-insensitive filtering by specifying a filterable property
