@@ -1659,6 +1659,48 @@
                     ReactableTestUtils.expectRowText(2, ['Third']);
                 });
             });
+
+            describe('sorts and calls onSort callback via props', function () {
+                var sortColumn = null;
+
+                var callback = function callback(sortObject) {
+                    sortColumn = sortObject.column;
+                };
+
+                before(function () {
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Rank': React.createElement(
+                                'span',
+                                { className: '3' },
+                                'Third'
+                            ) }, { 'Rank': React.createElement(
+                                'span',
+                                { className: '1' },
+                                'First'
+                            ) }, { 'Rank': React.createElement(
+                                'span',
+                                { className: '2' },
+                                'Second'
+                            ) }],
+                        columns: [{
+                            key: 'Rank', sortable: function sortable(a, b) {
+                                // sort based on classname
+                                return a.props.className.localeCompare(b.props.className);
+                            }
+                        }],
+                        onSort: callback }), ReactableTestUtils.testNode());
+                });
+
+                after(function () {
+                    ReactableTestUtils.resetTestEnvironment();
+                });
+
+                it('returns currentSort object to callback for utilization', function () {
+                    var sortHeader = $('#table thead tr.reactable-column-header th')[0];
+                    ReactTestUtils.Simulate.click(sortHeader);
+
+                    expect(sortColumn).to.equal('Rank');
+                });
+            });
         });
 
         describe('filtering', function () {

@@ -1283,6 +1283,10 @@ window.ReactDOM["default"] = window.ReactDOM;
                 // Set the current sort and pass it to the sort function
                 this.setState({ currentSort: currentSort });
                 this.sortByCurrentSort();
+
+                if (typeof this.props.onSort === 'function') {
+                    this.props.onSort(currentSort);
+                }
             }
         }, {
             key: 'visibleItems',

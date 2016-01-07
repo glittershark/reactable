@@ -33,6 +33,8 @@ this the faster we can get to 1.0!
   - [Pagination](#pagination)
   - [Sorting](#sorting)
   - [Filtering](#filtering)
+  - [Empty Data Sets](#empty-data-sets)
+  - [Events](#events)
 
 ## Installation
 
@@ -437,4 +439,19 @@ var table = ReactDOM.render(
     noDataText="No matching records found." />,
   document.getElementById('table')
 );
+```
+
+### Events
+
+You can pass an `onSort` prop to a `<Reactable.Table>` to provide an event
+handler for when the sorting in the table changes.
+
+This handler will be passed an object that contains the column name that is
+being sorted by, and the direction it is being sorted;
+
+```JSON
+{
+  column: 'Name',
+  direction: -1
+}
 ```
