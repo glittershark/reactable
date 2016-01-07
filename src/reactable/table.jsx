@@ -461,7 +461,7 @@ export class Table extends React.Component {
                 {currentChildren.length > 0 ? currentChildren : noDataText}
             </tbody>
             {pagination === true ?
-             <Paginator colSpan={columns.length}
+             <Paginator locale={props.locale} colSpan={columns.length}
                  pageButtonLimit={pageButtonLimit}
                  numPages={numPages}
                  currentPage={currentPage}
@@ -479,5 +479,6 @@ Table.defaultProps = {
     sortBy: false,
     defaultSort: false,
     itemsPerPage: 0,
-    hideFilterInput: false
+    hideFilterInput: false,
+    locale: 'en'
 };
