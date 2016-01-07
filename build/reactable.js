@@ -1463,7 +1463,6 @@ window.ReactDOM["default"] = window.ReactDOM;
         sortBy: false,
         defaultSort: false,
         itemsPerPage: 0,
-        filterBy: '',
         hideFilterInput: false
     };
 });
