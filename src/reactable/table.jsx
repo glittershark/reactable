@@ -475,6 +475,5 @@ Table.defaultProps = {
     sortBy: false,
     defaultSort: false,
     itemsPerPage: 0,
-    filterBy: '',
     hideFilterInput: false
 };
