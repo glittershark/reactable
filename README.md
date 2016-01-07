@@ -346,6 +346,24 @@ ReactDOM.render(
 );
 ```
 
+There is also an boolean `defaultSortDescending` option to default the sorting
+of a column to descending when clicked:
+
+```jsx
+
+<Table className="table" id="table" data={[
+    { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
+    { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
+    { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
+]}
+sortable={[
+    'Age',
+    'Position'
+]}
+defaultSort={{column: 'Age', direction: 'desc'}}
+defaultSortDescending
+```
+
 ### Filtering
 
 You can do simple case-insensitive filtering by specifying a filterable property
