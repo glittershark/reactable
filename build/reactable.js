@@ -1191,7 +1191,7 @@ window.ReactDOM["default"] = window.ReactDOM;
             value: function componentWillMount() {
                 this.initialize(this.props);
                 this.sortByCurrentSort();
-                this.filterBy(this.props.filterBy);
+                this.filterBy(this.props.filterBy != null ? this.props.filterBy : this.state.filter);
             }
         }, {
             key: 'componentWillReceiveProps',
@@ -1199,7 +1199,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                 this.initialize(nextProps);
                 this.updateCurrentSort(nextProps.sortBy);
                 this.sortByCurrentSort();
-                this.filterBy(nextProps.filterBy);
+                this.filterBy(nextProps.filterBy != null ? nextProps.filterBy : this.state.filter);
             }
         }, {
             key: 'applyFilter',
@@ -1403,7 +1403,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                         currentPage = numPages - 1;
                     }
 
-                    pagination = true;
+                    pagination = numPages > 1;
                     currentChildren = filteredChildren.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
                 }
 
