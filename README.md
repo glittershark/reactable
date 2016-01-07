@@ -346,10 +346,8 @@ ReactDOM.render(
 );
 ```
 
-If you want to have the default sort on click to be descending there is an
-option to default first click sort direction to descending via
-`defaultSortDescending`. This is a boolean flag that will reverse the
-default click behavior of column heads.
+There is also an boolean `defaultSortDescending` option to default the sorting
+of a column to descending when clicked:
 
 ```jsx
 
