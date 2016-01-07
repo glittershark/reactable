@@ -425,7 +425,7 @@ export class Table extends React.Component {
                 currentPage = numPages - 1;
             }
 
-            pagination = true;
+            pagination = numPages > 1;
             currentChildren = filteredChildren.slice(
                 currentPage * itemsPerPage,
                 (currentPage + 1) * itemsPerPage
