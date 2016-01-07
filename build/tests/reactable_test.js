@@ -1285,6 +1285,44 @@
                 });
             });
 
+            describe('sort descending by default flag', function () {
+                before(function () {
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Lee Salminen', Age: '23', Position: 'Programmer' }, { Name: 'Griffin Smith', Age: '18', Position: 'Engineer' }, { Name: 'Ian Zhang', Age: '28', Position: 'Developer' }],
+                        sortable: [{
+                            column: 'Name',
+                            sortFunction: function sortFunction(a, b) {
+                                // Sort by last name
+                                var nameA = a.split(' ');
+                                var nameB = b.split(' ');
+
+                                return nameA[1].localeCompare(nameB[1]);
+                            }
+                        }, 'Age', 'Position'],
+                        defaultSort: { column: 'Age' },
+                        defaultSortDescending: true }), ReactableTestUtils.testNode());
+                });
+
+                after(ReactableTestUtils.resetTestEnvironment);
+
+                it('renders all rows sorted by default column age descending', function () {
+                    ReactableTestUtils.expectRowText(0, ['Ian Zhang', '28', 'Developer']);
+                    ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', 'Programmer']);
+                    ReactableTestUtils.expectRowText(2, ['Griffin Smith', '18', 'Engineer']);
+                });
+
+                it('sorts by the age column in ascending order', function () {
+                    var positionHeader = $('#table thead tr.reactable-column-header th')[1];
+                    ReactTestUtils.Simulate.click(positionHeader);
+
+                    ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', 'Engineer']);
+                    ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', 'Programmer']);
+                    ReactableTestUtils.expectRowText(2, ['Ian Zhang', '28', 'Developer']);
+
+                    // Make sure the headers have the right classes
+                    expect($(positionHeader)).to.have['class']('reactable-header-sort-asc');
+                });
+            });
+
             describe('default sort no direction specified', function () {
                 before(function () {
                     ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ Name: 'Lee Salminen', Age: '23', Position: 'Programmer' }, { Name: 'Griffin Smith', Age: '18', Position: 'Engineer' }, { Name: 'Ian Zhang', Age: '28', Position: 'Developer' }],
