@@ -7,6 +7,8 @@ import { Th } from './th';
 import { Tr } from './tr';
 import { Tfoot } from './tfoot';
 import { Paginator } from './paginator';
+import { PaginatorInbox } from './PaginatorInbox';
+import { FiltererInput } from './filterer';
 
 export class Table extends React.Component {
     constructor(props) {
@@ -398,13 +400,19 @@ export class Table extends React.Component {
 
         // Determine if we render the filter box
         let filtering = false;
+        let filterType = "default";
         if (
             this.props.filterable &&
+                this.props.filterType !== "top" &&
                 Array.isArray(this.props.filterable) &&
                     this.props.filterable.length > 0 &&
                         !this.props.hideFilterInput
         ) {
             filtering = true;
+        }
+
+        if (this.props.filterType === "top") {
+            filterType = "top"
         }
 
         // Apply filters
@@ -415,6 +423,7 @@ export class Table extends React.Component {
 
         // Determine pagination properties and which columns to display
         let itemsPerPage = 0;
+        let pagiPosition = this.props.pagiPosition || 'bottom';
         let pagination = false;
         let numPages;
         let currentPage = this.state.currentPage;
@@ -442,36 +451,64 @@ export class Table extends React.Component {
         let noDataText = this.props.noDataText ? <tr className="reactable-no-data"><td colSpan={columns.length}>{this.props.noDataText}</td></tr> : null;
 
         this.currentChildren = currentChildren;
-
-        return <table {...props}>
-            {columns && columns.length > 0 ?
-             <Thead columns={columns}
-                 filtering={filtering}
-                 onFilter={filter => {
-                     this.setState({ filter: filter });
-                 }}
-                 filterPlaceholder={this.props.filterPlaceholder}
-                 currentFilter={this.state.filter}
-                 sort={this.state.currentSort}
-                 sortableColumns={this._sortable}
-                 onSort={this.onSort.bind(this)}
-                 key="thead"/>
-             : null}
-            <tbody className="reactable-data" key="tbody">
-                {currentChildren.length > 0 ? currentChildren : noDataText}
-            </tbody>
-            {pagination === true ?
-             <Paginator locale={props.locale} colSpan={columns.length}
-                 pageButtonLimit={pageButtonLimit}
-                 numPages={numPages}
-                 currentPage={currentPage}
-                 onPageChange={page => {
-                     this.setState({ currentPage: page });
-                 }}
-                 key="paginator"/>
-             : null}
-            {this.tfoot}
-        </table>;
+        return <div>
+            <div className="topDesign">
+                {this.props.customElemL}
+                {filterType === 'top' &&
+                    <FiltererInput
+                        filtering={filtering}
+                        onFilter={filter => {
+                            this.setState({ filter: filter });
+                        }}
+                        placeholder={this.props.filterPlaceholder}
+                        currentFilter={this.state.filter}
+                    />
+                }
+                {pagination && (pagiPosition === 'top') ?
+                     <PaginatorInbox
+                        itemsPerPage={itemsPerPage}
+                        itemsNumber={this.props.children[1].length}
+                        locale={props.locale}
+                        colSpan={columns.length}
+                        numPages={numPages}
+                        currentPage={currentPage}
+                        onPageChange={page => {
+                            this.setState({ currentPage: page });
+                        }}
+                        key="paginator"/> : null
+                }
+                {this.props.customElemR}
+            </div>
+            <table {...props}>
+                {columns && columns.length > 0 ?
+                 <Thead columns={columns}
+                     filtering={filtering}
+                     onFilter={filter => {
+                         this.setState({ filter: filter });
+                     }}
+                     filterPlaceholder={this.props.filterPlaceholder}
+                     currentFilter={this.state.filter}
+                     sort={this.state.currentSort}
+                     sortableColumns={this._sortable}
+                     onSort={this.onSort.bind(this)}
+                     key="thead"/>
+                 : null}
+                <tbody className="reactable-data" key="tbody">
+                    {currentChildren.length > 0 ? currentChildren : noDataText}
+                </tbody>
+                {pagination && (pagiPosition === 'bottom') ?
+                 <Paginator locale={props.locale} colSpan={columns.length}
+                     pageButtonLimit={pageButtonLimit}
+                     numPages={numPages}
+                     currentPage={currentPage}
+                     onPageChange={page => {
+                         this.setState({ currentPage: page });
+                     }}
+                     key="paginator"/>
+                 : null}
+                {this.tfoot}
+            </table>
+        </div>
     }
 }
 
