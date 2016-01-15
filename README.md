@@ -461,8 +461,8 @@ var table = ReactDOM.render(
 
 ### Events
 
-You can pass functions to the following props of `<Reactable.Table>` to provide event
-handlers.
+You can pass functions to the following props of `<Reactable.Table>` to provide
+event handlers.
 
 #### onSort
 
@@ -482,8 +482,5 @@ being sorted by, and the direction it is being sorted:
 
 Called every time the filtering changes.
 
-Handler arguments:
-
-Name | Type | Description
---- | --- | ---
-`filter` | *string* | Text that's being used for filtering
+This handler will be passed a string containing the text that's being used for
+filtering.
