@@ -21,27 +21,38 @@ export class Paginator extends React.Component {
     }
 
     renderPrevious() {
+        const previousBtn = {
+            nl: "Vorige",
+            fr: "Précédente",
+            en: "Previous",
+        }
+        const {locale} = this.props
         if(this.props.currentPage > 0) {
             return <a className='reactable-previous-page'
                       href={pageHref(this.props.currentPage - 1)}
                       onClick={this.handlePrevious.bind(this)}>
-                        Previous
+                      {previousBtn[locale] || previousBtn.en}
                    </a>
         }
     }
 
     renderNext() {
+        const nextBtn = {
+            nl: "Volgende",
+            fr: "Suivante",
+            en: "Next",
+        }
+        const {locale} = this.props
         if(this.props.currentPage < this.props.numPages - 1) {
             return <a className='reactable-next-page'
                       href={pageHref(this.props.currentPage + 1)}
                       onClick={this.handleNext.bind(this)}>
-                      Next
+                      {nextBtn[locale] || nextBtn.en}
                    </a>
         }
     }
 
     renderPageButton(className, pageNum) {
-
         return <a className={className}
                   key={pageNum}
                   href={pageHref(pageNum)}
@@ -91,7 +102,6 @@ export class Paginator extends React.Component {
         if((numPages - currentPage) > upperHalf) {
             pageButtons.splice(pageButtonLimit, pageButtons.length - pageButtonLimit);
         }
-
         return (
             <tbody className="reactable-pagination">
                 <tr>
@@ -105,4 +115,3 @@ export class Paginator extends React.Component {
         );
     }
 };
-

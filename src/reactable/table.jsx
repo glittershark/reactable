@@ -206,14 +206,14 @@ export class Table extends React.Component {
     componentWillMount() {
         this.initialize(this.props);
         this.sortByCurrentSort();
-        this.filterBy(this.props.filterBy);
+        this.filterBy(this.props.filterBy != null ? this.props.filterBy : this.state.filter);
     }
 
     componentWillReceiveProps(nextProps) {
         this.initialize(nextProps);
         this.updateCurrentSort(nextProps.sortBy);
         this.sortByCurrentSort();
-        this.filterBy(nextProps.filterBy);
+        this.filterBy(nextProps.filterBy != null ? nextProps.filterBy : this.state.filter);
     }
 
     applyFilter(filter, children) {
@@ -304,6 +304,21 @@ export class Table extends React.Component {
         if (typeof(this.props.onSort) === 'function') {
             this.props.onSort(currentSort);
         }
+    }
+
+    visibleItems() {
+        return this.currentChildren.map(item => {
+            const {i, id} = item.props;
+            const iOrId = i != null ? i : id;
+            const idOrKey = iOrId != null ? iOrId : item.key;
+            const data = {id: idOrKey};
+
+            Object.keys(item.props.data).forEach(key => {
+                data[key] = item.props.data[key].value;
+            });
+
+            return data;
+        })
     }
 
     render() {
@@ -416,7 +431,7 @@ export class Table extends React.Component {
                 currentPage = numPages - 1;
             }
 
-            pagination = true;
+            pagination = numPages > 1;
             currentChildren = filteredChildren.slice(
                 currentPage * itemsPerPage,
                 (currentPage + 1) * itemsPerPage
@@ -427,6 +442,8 @@ export class Table extends React.Component {
         let props = filterPropsFrom(this.props);
 
         let noDataText = this.props.noDataText ? <tr className="reactable-no-data"><td colSpan={columns.length}>{this.props.noDataText}</td></tr> : null;
+
+        this.currentChildren = currentChildren;
 
         return <table {...props}>
             {columns && columns.length > 0 ?
@@ -449,7 +466,7 @@ export class Table extends React.Component {
                 {currentChildren.length > 0 ? currentChildren : noDataText}
             </tbody>
             {pagination === true ?
-             <Paginator colSpan={columns.length}
+             <Paginator locale={props.locale} colSpan={columns.length}
                  pageButtonLimit={pageButtonLimit}
                  numPages={numPages}
                  currentPage={currentPage}
@@ -468,6 +485,6 @@ Table.defaultProps = {
     defaultSort: false,
     defaultSortDescending: false,
     itemsPerPage: 0,
-    filterBy: '',
-    hideFilterInput: false
+    hideFilterInput: false,
+    locale: 'en'
 };
