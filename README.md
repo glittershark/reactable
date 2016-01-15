@@ -461,15 +461,29 @@ var table = ReactDOM.render(
 
 ### Events
 
-You can pass an `onSort` prop to a `<Reactable.Table>` to provide an event
-handler for when the sorting in the table changes.
+You can pass functions to the following props of `<Reactable.Table>` to provide event
+handlers.
+
+#### onSort
+
+Called when the sorting in the table changes.
 
 This handler will be passed an object that contains the column name that is
-being sorted by, and the direction it is being sorted;
+being sorted by, and the direction it is being sorted:
 
-```JSON
+```js
 {
   column: 'Name',
   direction: -1
 }
 ```
+
+#### onFilter
+
+Called every time the filtering changes.
+
+Handler arguments:
+
+Name | Type | Description
+--- | --- | ---
+`filter` | *string* | Text that's being used for filtering

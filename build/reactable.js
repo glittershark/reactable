@@ -1414,6 +1414,9 @@ window.ReactDOM["default"] = window.ReactDOM;
                         filtering: filtering,
                         onFilter: function (filter) {
                             _this.setState({ filter: filter });
+                            if (_this.props.onFilter) {
+                                _this.props.onFilter(filter);
+                            }
                         },
                         filterPlaceholder: this.props.filterPlaceholder,
                         currentFilter: this.state.filter,
