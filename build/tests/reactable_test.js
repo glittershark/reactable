@@ -1734,11 +1734,16 @@
         describe('filtering', function () {
             describe('filtering with javascript objects for data', function () {
                 var data = [{ name: "Lee SomeoneElse", age: 18 }, { name: "Lee Salminen", age: 23 }, { name: "No Age", age: null }];
+                var filterBy;
+                var onFilter = function onFilter(filter) {
+                    filterBy = filter;
+                };
                 before(function () {
                     ReactDOM.render(React.createElement(
                         Reactable.Table,
                         { className: 'table', id: 'table',
-                            filterable: ['Name', 'Age'] },
+                            filterable: ['Name', 'Age'],
+                            onFilter: onFilter },
                         React.createElement(
                             Reactable.Tr,
                             null,
@@ -1770,6 +1775,15 @@
 
                     ReactableTestUtils.expectRowText(0, ['Lee SomeoneElse', '18']);
                     ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23']);
+                });
+                it('calls onFilter event handler', function () {
+                    var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
+                    var textToSearch = 'lee';
+
+                    $filter.val(textToSearch);
+                    React.addons.TestUtils.Simulate.keyUp($filter[0]);
+
+                    expect(filterBy).to.equal(textToSearch);
                 });
             });
 
