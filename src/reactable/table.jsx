@@ -321,6 +321,12 @@ export class Table extends React.Component {
         })
     }
 
+    scrollToTop() {
+        if(document.querySelectorAll('table').length < 2) {
+            document.querySelector('table tr:first-child').scrollIntoView()
+        }
+    }
+
     render() {
         let children = [];
         let columns;
@@ -479,7 +485,6 @@ export class Table extends React.Component {
                 }
                 {this.props.customElemR}
             </div>
-            <table {...props}>
                 {columns && columns.length > 0 ?
                  <Thead columns={columns}
                      filtering={filtering}
@@ -503,6 +508,7 @@ export class Table extends React.Component {
                      currentPage={currentPage}
                      onPageChange={page => {
                          this.setState({ currentPage: page });
+                         this.scrollToTop()
                      }}
                      key="paginator"/>
                  : null}
