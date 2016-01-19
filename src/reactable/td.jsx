@@ -10,10 +10,17 @@ export class Td extends React.Component {
         }
     }
 
+    handleContextMenu(e){
+        if (typeof this.props.handleContextMenu === 'function') {
+            return this.props.handleContextMenu(e, this);
+        }
+    }
+
     render() {
         var tdProps = {
             className: this.props.className,
-            onClick: this.handleClick.bind(this)
+            onClick: this.handleClick.bind(this),
+            onContextMenu: this.handleContextMenu.bind(this)
         };
 
         // Attach any properties on the column to this Td object to allow things like custom event handlers
