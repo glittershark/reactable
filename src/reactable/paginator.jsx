@@ -1,4 +1,5 @@
 import React from 'react';
+import { BtnPaginator } from './btnPaginator';
 
 function pageHref(num) {
     return `#page-${num + 1}`
@@ -75,9 +76,7 @@ export class Paginator extends React.Component {
         }
 
         let pageButtons = [];
-        let pageButtonLimit = this.props.pageButtonLimit;
-        let currentPage = this.props.currentPage;
-        let numPages = this.props.numPages;
+        const {locale, bottomPaginationElem, onPageChange, itemsNumber, itemsPerPage, bottomPagination, pageButtonLimit, currentPage, numPages} = this.props;
         let lowerHalf = Math.round( pageButtonLimit / 2 );
         let upperHalf = (pageButtonLimit - lowerHalf);
 
@@ -104,13 +103,32 @@ export class Paginator extends React.Component {
         }
         return (
             <tbody className="reactable-pagination">
-                <tr>
-                    <td colSpan={this.props.colSpan}>
-                        {this.renderPrevious()}
-                        {pageButtons}
-                        {this.renderNext()}
-                    </td>
-                </tr>
+                {bottomPagination ?
+                    <tr className="reactable-btnPagination">
+                        <td colSpan={this.props.colSpan}>
+                            <div className="reactable-bottomDesign">
+                                {bottomPaginationElem.left}
+                                <BtnPaginator
+                                    locale={locale}
+                                    itemsPerPage={itemsPerPage}
+                                    itemsNumber={itemsNumber}
+                                    numPages={numPages}
+                                    currentPage={currentPage}
+                                    onPageChange={onPageChange}
+                                    key="paginator"
+                                />
+                                {bottomPaginationElem.right}
+                            </div>
+                        </td>
+                    </tr> :
+                    <tr>
+                        <td colSpan={this.props.colSpan}>
+                            {this.renderPrevious()}
+                            {pageButtons}
+                            {this.renderNext()}
+                        </td>
+                    </tr>
+                }
             </tbody>
         );
     }

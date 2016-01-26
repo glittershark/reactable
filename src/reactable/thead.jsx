@@ -3,6 +3,9 @@ import { Th } from './th';
 import { Filterer } from './filterer';
 import { filterPropsFrom } from './lib/filter_props_from';
 
+import { BtnPaginator } from './btnPaginator';
+import { FiltererInput } from './filterer';
+
 export class Thead extends React.Component {
     static getColumns(component) {
         // Can't use React.Children.map since that doesn't return a proper array
@@ -77,7 +80,6 @@ export class Thead extends React.Component {
 
         // Manually transfer props
         var props = filterPropsFrom(this.props);
-
         return (
             <thead {...props}>
                 {this.props.filtering === true ?
@@ -86,7 +88,32 @@ export class Thead extends React.Component {
                         onFilter={this.props.onFilter}
                         placeholder={this.props.filterPlaceholder}
                         value={this.props.currentFilter}
-                    /> : null}
+                    /> : null
+                }
+                {this.props.topPagination ?
+                    <tr className="reactable-btnPagination">
+                        <td colSpan={this.props.columns.length}>
+                            <div className="reactable-topDesign">
+                                {this.props.topPaginationElem.left}
+                                <FiltererInput
+                                    onFilter={this.props.onFilter}
+                                    placeholder={this.props.filterPlaceholder}
+                                    value={this.props.currentFilter}
+                                />
+                                <BtnPaginator
+                                    locale={this.props.locale}
+                                    itemsPerPage={this.props.itemsPerPage}
+                                    itemsNumber={this.props.itemsNumber}
+                                    numPages={this.props.numPages}
+                                    currentPage={this.props.currentPage}
+                                    onPageChange={this.props.onPageChange}
+                                    key="paginator"
+                                />
+                                {this.props.topPaginationElem.right}
+                            </div>
+                        </td>
+                    </tr> : null
+                }
                 <tr className="reactable-column-header">{Ths}</tr>
             </thead>
         );

@@ -319,6 +319,12 @@ export class Table extends React.Component {
         })
     }
 
+    scrollToTop() {
+        if (this.tableEl) {
+            this.tableEl.scrollIntoView();
+        }
+    }
+
     render() {
         let children = [];
         let columns;
@@ -400,6 +406,7 @@ export class Table extends React.Component {
         let filtering = false;
         if (
             this.props.filterable &&
+                !this.props.topPagination &&
                 Array.isArray(this.props.filterable) &&
                     this.props.filterable.length > 0 &&
                         !this.props.hideFilterInput
@@ -416,6 +423,8 @@ export class Table extends React.Component {
         // Determine pagination properties and which columns to display
         let itemsPerPage = 0;
         let pagination = false;
+        let topPagination = this.props.topPagination || false;
+        let bottomPagination = this.props.bottomPagination || false;
         let numPages;
         let currentPage = this.state.currentPage;
         let pageButtonLimit = this.props.pageButtonLimit || 10;
@@ -442,36 +451,60 @@ export class Table extends React.Component {
         let noDataText = this.props.noDataText ? <tr className="reactable-no-data"><td colSpan={columns.length}>{this.props.noDataText}</td></tr> : null;
 
         this.currentChildren = currentChildren;
-
-        return <table {...props}>
+        return <table ref={t => this.tableEl = t}>
             {columns && columns.length > 0 ?
-             <Thead columns={columns}
-                 filtering={filtering}
-                 onFilter={filter => {
-                     this.setState({ filter: filter });
-                 }}
-                 filterPlaceholder={this.props.filterPlaceholder}
-                 currentFilter={this.state.filter}
-                 sort={this.state.currentSort}
-                 sortableColumns={this._sortable}
-                 onSort={this.onSort.bind(this)}
-                 key="thead"/>
-             : null}
+                <Thead columns={columns}
+                    topPagination={topPagination}
+                    itemsNumber={filteredChildren.length}
+                    itemsPerPage={itemsPerPage}
+                    numPages={numPages}
+                    currentPage={currentPage}
+                    topPaginationElem={{
+                        left: this.props.topPaginationElemL,
+                        right: this.props.topPaginationElemR,
+                    }}
+                    filtering={filtering}
+                    onFilter={filter => {
+                        this.setState({ filter: filter });
+                    }}
+                    onPageChange={page => {
+                        this.setState({ currentPage: page });
+                        this.scrollToTop();
+                    }}
+                    filterPlaceholder={this.props.filterPlaceholder}
+                    currentFilter={this.state.filter}
+                    sort={this.state.currentSort}
+                    sortableColumns={this._sortable}
+                    onSort={this.onSort.bind(this)}
+                    key="thead"
+                    locale={props.locale}
+                /> : null
+            }
             <tbody className="reactable-data" key="tbody">
                 {currentChildren.length > 0 ? currentChildren : noDataText}
             </tbody>
-            {pagination === true ?
-             <Paginator locale={props.locale} colSpan={columns.length}
-                 pageButtonLimit={pageButtonLimit}
-                 numPages={numPages}
-                 currentPage={currentPage}
-                 onPageChange={page => {
-                     this.setState({ currentPage: page });
-                 }}
-                 key="paginator"/>
-             : null}
+            {pagination ?
+                <Paginator bottomPagination={bottomPagination}
+                    itemsNumber={filteredChildren.length}
+                    itemsPerPage={itemsPerPage}
+                    locale={props.locale}
+                    colSpan={columns.length}
+                    pageButtonLimit={pageButtonLimit}
+                    numPages={numPages}
+                    currentPage={currentPage}
+                    bottomPaginationElem={{
+                        left: this.props.bottomPaginationElemL,
+                        right: this.props.bottomPaginationElemR,
+                    }}
+                    onPageChange={page => {
+                        this.setState({ currentPage: page });
+                        this.scrollToTop()
+                    }}
+                    key="paginator"
+                /> : null
+            }
             {this.tfoot}
-        </table>;
+        </table>
     }
 }
 
