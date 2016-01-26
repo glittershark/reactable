@@ -45,6 +45,7 @@ module.exports = function(grunt) {
                     'tmp/reactable/unsafe.js': 'src/reactable/unsafe.jsx',
                     'tmp/reactable/th.js': 'src/reactable/th.jsx',
                     'tmp/reactable/paginator.js': 'src/reactable/paginator.jsx',
+                    'tmp/reactable/btnPaginator.js': 'src/reactable/btnPaginator.jsx',
                     'tmp/reactable/table.js': 'src/reactable/table.jsx',
 
                     'tmp/reactable.js': 'src/reactable.jsx',
@@ -69,6 +70,7 @@ module.exports = function(grunt) {
                     'lib/reactable/unsafe.js': 'src/reactable/unsafe.jsx',
                     'lib/reactable/th.js': 'src/reactable/th.jsx',
                     'lib/reactable/paginator.js': 'src/reactable/paginator.jsx',
+                    'lib/reactable/btnPaginator.js': 'src/reactable/btnPaginator.jsx',
                     'lib/reactable/table.js': 'src/reactable/table.jsx',
 
                     'lib/reactable.js': 'src/reactable.jsx',
@@ -94,6 +96,7 @@ module.exports = function(grunt) {
                     'tmp/reactable/th.js',
                     'tmp/reactable/thead.js',
                     'tmp/reactable/tfoot.js',
+                    'tmp/reactable/btnPaginator.js',
                     'tmp/reactable/paginator.js',
                     'tmp/reactable/table.js',
                     'tmp/reactable.js'
@@ -131,4 +134,3 @@ module.exports = function(grunt) {
     grunt.registerTask('build', ['babel:common', 'buildBrowser']);
     grunt.registerTask('default', ['build', 'watch:build']);
 };
-

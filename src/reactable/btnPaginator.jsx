@@ -4,29 +4,43 @@ function pageHref(num) {
     return `#page-${num + 1}`
 }
 
-export class PaginatorInbox extends React.Component {
+const tr = {
+    of: {
+        nl: "van",
+        fr: "de",
+        de: "von",
+        en: "of",
+    }
+}
+
+export class BtnPaginator extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handlePrevious = this.handlePrevious.bind(this);
+        this.handleNext = this.handleNext.bind(this);
+    }
     handlePrevious(e) {
-        e.preventDefault()
+        e.preventDefault();
         this.props.onPageChange(this.props.currentPage - 1)
     }
 
     handleNext(e) {
-        e.preventDefault()
+        e.preventDefault();
         this.props.onPageChange(this.props.currentPage + 1);
     }
 
     renderPrevious() {
-        return <a className={`reactable-previous-page ${this.props.currentPage === 0 ? "disabled" : null}`}
+        return <button className={`reactable-previous-page ${this.props.currentPage === 0 ? "disabled" : null}`}
                   href={pageHref(this.props.currentPage - 1)}
-                  onClick={this.handlePrevious.bind(this)}>
-               </a>
+                  onClick={this.handlePrevious}>
+               </button>
     }
 
     renderNext() {
-        return <a className={`reactable-next-page ${this.props.currentPage + 1 === this.props.numPages ? "disabled" : null}`}
+        return <button className={`reactable-next-page ${this.props.currentPage + 1 === this.props.numPages ? "disabled" : null}`}
                   href={pageHref(this.props.currentPage + 1)}
-                  onClick={this.handleNext.bind(this)}>
-               </a>
+                  onClick={this.handleNext}>
+               </button>
     }
 
 	calcRange() {
@@ -38,30 +52,21 @@ export class PaginatorInbox extends React.Component {
 	}
 
 	renderCounter() {
-		const {itemsNumber} = this.props
+		const {itemsNumber, locale} = this.props
 		return <div className="counter">
-			<span>{this.calcRange()}</span>
-			<span> van </span>
-			<span>{itemsNumber}</span>
+			{this.calcRange()} {tr.of[locale]} {itemsNumber}
 		</div>
 	}
 
     render() {
-        if (typeof this.props.colSpan === 'undefined') {
-            throw new TypeError('Must pass a colSpan argument to Paginator');
-        }
-
-        if (typeof this.props.numPages === 'undefined') {
-            throw new TypeError('Must pass a non-zero numPages argument to Paginator');
-        }
 
         if (typeof this.props.currentPage === 'undefined') {
             throw new TypeError('Must pass a currentPage argument to Paginator');
         }
         return (
-			<div className="pagesSwitcher">
+			<div className="reactable-pagesSwitcher">
 				{this.renderCounter()}
-				<div className="pageBtns">
+				<div className="reactable-pageBtns">
 					{this.renderPrevious()}
 					{this.renderNext()}
 				</div>
