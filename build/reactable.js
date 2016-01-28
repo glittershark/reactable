@@ -1435,6 +1435,9 @@ window.ReactDOM["default"] = window.ReactDOM;
                         currentPage: currentPage,
                         onPageChange: function (page) {
                             _this.setState({ currentPage: page });
+                            if (_this.props.onPageChange) {
+                                _this.props.onPageChange(page);
+                            }
                         },
                         key: 'paginator' }) : null,
                     this.tfoot
