@@ -889,7 +889,7 @@ window.ReactDOM["default"] = window.ReactDOM;
         }, {
             key: "renderPrevious",
             value: function renderPrevious() {
-                return _react["default"].createElement("button", { className: "reactable-previous-page " + (this.props.currentPage === 0 ? "disabled" : null),
+                return _react["default"].createElement("button", { className: "reactable-previous-page " + (this.props.currentPage <= 0 ? "disabled" : null),
                     href: pageHref(this.props.currentPage - 1),
                     onClick: this.handlePrevious });
             }
@@ -908,7 +908,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                 var itemsNumber = _props.itemsNumber;
                 var itemsPerPage = _props.itemsPerPage;
 
-                var fromVal = currentPage * itemsPerPage + 1;
+                var fromVal = currentPage === -1 ? 0 : currentPage * itemsPerPage + 1;
                 var toValTmp = (currentPage + 1) * itemsPerPage;
                 var toVal = toValTmp < itemsNumber ? toValTmp : itemsNumber;
                 return fromVal + " - " + toVal;

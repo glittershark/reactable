@@ -30,7 +30,7 @@ export class BtnPaginator extends React.Component {
     }
 
     renderPrevious() {
-        return <button className={`reactable-previous-page ${this.props.currentPage === 0 ? "disabled" : null}`}
+        return <button className={`reactable-previous-page ${this.props.currentPage <= 0 ? "disabled" : null}`}
                   href={pageHref(this.props.currentPage - 1)}
                   onClick={this.handlePrevious}>
                </button>
@@ -45,7 +45,7 @@ export class BtnPaginator extends React.Component {
 
 	calcRange() {
 		const {currentPage, itemsNumber, itemsPerPage} = this.props
-		const fromVal = currentPage * itemsPerPage + 1
+		const fromVal = currentPage === -1 ? 0 : currentPage * itemsPerPage + 1
 		const toValTmp = ((currentPage + 1) * itemsPerPage)
 		const toVal = toValTmp < itemsNumber ? toValTmp : itemsNumber
 		return `${fromVal} - ${toVal}`
