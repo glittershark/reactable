@@ -484,3 +484,9 @@ Called every time the filtering changes.
 
 This handler will be passed a string containing the text that's being used for
 filtering.
+
+#### onPageChange
+
+Called every time the page changes.
+
+This handler will be passed a number representing the current page, zero based.

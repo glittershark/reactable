@@ -455,6 +455,9 @@ export class Table extends React.Component {
                  currentPage={currentPage}
                  onPageChange={page => {
                      this.setState({ currentPage: page });
+                     if (this.props.onPageChange) {
+                        this.props.onPageChange(page)
+                     }
                  }}
                  key="paginator"/>
              : null}
