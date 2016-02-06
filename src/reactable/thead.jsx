@@ -8,18 +8,33 @@ export class Thead extends React.Component {
         // Can't use React.Children.map since that doesn't return a proper array
         let columns = [];
         React.Children.forEach(component.props.children, th => {
-            if (typeof th.props.children === 'string') {
-                columns.push(th.props.children);
-            } else if (typeof th.props.column === 'string') {
-                columns.push({
-                    key: th.props.column,
-                    label: th.props.children,
-                    props: filterPropsFrom(th.props)
-                });
-            } else {
+            var column = {};
+            if (typeof th.props !== 'undefined') {
+                column.props = filterPropsFrom(th.props);
+
+                // use the content as the label & key
+                if (typeof th.props.children !== 'undefined') {
+                    column.label = th.props.children;
+                    column.key = column.label;
+                }
+
+                // the key in the column attribute supersedes the one defined previously
+                if (typeof th.props.column === 'string') {
+                    column.key = th.props.column;
+
+                    // in case we don't have a label yet
+                    if (typeof column.label === 'undefined') {
+                        column.label = column.key;
+                    }
+                }
+            }
+
+            if (typeof column.key === 'undefined') {
                 throw new TypeError(
                     '<th> must have either a "column" property or a string ' +
-                        'child');
+                    'child');
+            } else {
+                columns.push(column);
             }
         });
 
