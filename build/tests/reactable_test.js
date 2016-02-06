@@ -765,39 +765,74 @@
         });
 
         describe('specifying columns using a <Thead>', function () {
-            before(function () {
-                ReactDOM.render(React.createElement(
-                    Reactable.Table,
-                    { id: 'table', data: [{ Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18' }, { Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>') }, { Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>') }] },
-                    React.createElement(
-                        Reactable.Thead,
-                        null,
+            describe('and an element for the column title', function () {
+                before(function () {
+                    ReactDOM.render(React.createElement(
+                        Reactable.Table,
+                        { id: 'table', data: [{ Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18' }, { Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>') }, { Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>') }] },
                         React.createElement(
-                            Reactable.Th,
-                            { column: 'Name', id: 'my-name' },
+                            Reactable.Thead,
+                            null,
                             React.createElement(
-                                'strong',
-                                null,
+                                Reactable.Th,
+                                { column: 'Name', id: 'my-name' },
+                                React.createElement(
+                                    'strong',
+                                    null,
+                                    'name'
+                                )
+                            )
+                        )
+                    ), ReactableTestUtils.testNode());
+                });
+
+                after(ReactableTestUtils.resetTestEnvironment);
+
+                it('renders only the columns in the Thead', function () {
+                    expect($('#table tbody tr:first td')).to.exist;
+                    expect($('#table thead tr:first th')).to.exist;
+                });
+
+                it('renders the contents of the Th', function () {
+                    expect($('#table>thead>tr>th>strong')).to.exist;
+                });
+
+                it('passes through the properties of the Th', function () {
+                    expect($('#table>thead>tr>th')).to.have.id('my-name');
+                });
+            });
+
+            describe('and a string for the column title', function () {
+                before(function () {
+                    ReactDOM.render(React.createElement(
+                        Reactable.Table,
+                        { id: 'table', data: [{ Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18' }, { Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>') }, { Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>') }] },
+                        React.createElement(
+                            Reactable.Thead,
+                            null,
+                            React.createElement(
+                                Reactable.Th,
+                                { column: 'Name', id: 'my-name' },
                                 'name'
                             )
                         )
-                    )
-                ), ReactableTestUtils.testNode());
-            });
+                    ), ReactableTestUtils.testNode());
+                });
 
-            after(ReactableTestUtils.resetTestEnvironment);
+                after(ReactableTestUtils.resetTestEnvironment);
 
-            it('renders only the columns in the Thead', function () {
-                expect($('#table tbody tr:first td')).to.exist;
-                expect($('#table thead tr:first th')).to.exist;
-            });
+                it('renders only the columns in the Thead', function () {
+                    expect($('#table tbody tr:first td')).to.exist;
+                    expect($('#table thead tr:first th')).to.exist;
+                });
 
-            it('renders the contents of the Th', function () {
-                expect($('#table>thead>tr>th>strong')).to.exist;
-            });
+                it('renders the contents of the Th', function () {
+                    expect($('#table>thead>tr>th')).to.exist;
+                });
 
-            it('passes through the properties of the Th', function () {
-                expect($('#table>thead>tr>th')).to.have.id('my-name');
+                it('passes through the properties of the Th', function () {
+                    expect($('#table>thead>tr>th')).to.have.id('my-name');
+                });
             });
         });
 
@@ -1078,6 +1113,30 @@
 
                 it('renders all rows', function () {
                     expect($('#table tbody.reactable-data tr').length).to.equal(9);
+                });
+            });
+
+            describe('onPageChange hook', function () {
+                var currentPage = undefined;
+                var callback = function callback(page) {
+                    currentPage = page;
+                };
+                before(function () {
+                    ReactDOM.render(React.createElement(Reactable.Table, { className: 'table', id: 'table', data: [{ 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18' }, { 'Age': '23', 'Name': 'Test Person' }, { 'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer' }, { 'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer' }, { 'Age': '23', 'Name': 'Lee Salminen' }, { 'Age': '28', 'Position': 'Developer' }], itemsPerPage: 4, onPageChange: callback }), ReactableTestUtils.testNode());
+                });
+
+                after(ReactableTestUtils.resetTestEnvironment);
+
+                it('emits the number of the currently selected page (zero based) when onPageChange event is triggered', function () {
+                    var page1 = $('#table tbody.reactable-pagination a.reactable-page-button')[0];
+                    var page2 = $('#table tbody.reactable-pagination a.reactable-page-button')[1];
+                    var page3 = $('#table tbody.reactable-pagination a.reactable-page-button')[2];
+                    ReactTestUtils.Simulate.click(page2);
+                    expect(currentPage).to.equal(1);
+                    ReactTestUtils.Simulate.click(page1);
+                    expect(currentPage).to.equal(0);
+                    ReactTestUtils.Simulate.click(page3);
+                    expect(currentPage).to.equal(2);
                 });
             });
         });

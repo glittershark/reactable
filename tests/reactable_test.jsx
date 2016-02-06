@@ -561,38 +561,77 @@ describe('Reactable', function() {
     });
 
     describe('specifying columns using a <Thead>', function() {
-        before(function() {
-            ReactDOM.render(
-                <Reactable.Table id="table" data={[
+        describe('and an element for the column title', function() {
+            before(function() {
+                ReactDOM.render(
+                    <Reactable.Table id="table" data={[
                     { Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
                     { Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')},
                     { Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')},
                 ]}>
-                    <Reactable.Thead>
-                        <Reactable.Th column="Name" id="my-name">
-                            <strong>name</strong>
-                        </Reactable.Th>
-                    </Reactable.Thead>
-                </Reactable.Table>,
-                ReactableTestUtils.testNode()
-            );
+                        <Reactable.Thead>
+                            <Reactable.Th column="Name" id="my-name">
+                                <strong>name</strong>
+                            </Reactable.Th>
+                        </Reactable.Thead>
+                    </Reactable.Table>,
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('renders only the columns in the Thead', function() {
+                expect($('#table tbody tr:first td')).to.exist;
+                expect($('#table thead tr:first th')).to.exist;
+            });
+
+            it('renders the contents of the Th', function() {
+                expect($('#table>thead>tr>th>strong')).to.exist;
+            });
+
+            it('passes through the properties of the Th', function() {
+                expect($('#table>thead>tr>th')).to.have.id('my-name')
+            });
+
         });
 
-        after(ReactableTestUtils.resetTestEnvironment);
+        describe('and a string for the column title', function() {
+            before(function() {
+                ReactDOM.render(
+                    <Reactable.Table id="table" data={[
+                    { Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
+                    { Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')},
+                    { Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')},
+                ]}>
+                        <Reactable.Thead>
+                            <Reactable.Th column="Name" id="my-name">
+                                name
+                            </Reactable.Th>
+                        </Reactable.Thead>
+                    </Reactable.Table>,
+                    ReactableTestUtils.testNode()
+                );
+            });
 
-        it('renders only the columns in the Thead', function() {
-            expect($('#table tbody tr:first td')).to.exist;
-            expect($('#table thead tr:first th')).to.exist;
-        });
+            after(ReactableTestUtils.resetTestEnvironment);
 
-        it('renders the contents of the Th', function() {
-            expect($('#table>thead>tr>th>strong')).to.exist;
-        });
+            it('renders only the columns in the Thead', function() {
+                expect($('#table tbody tr:first td')).to.exist;
+                expect($('#table thead tr:first th')).to.exist;
+            });
 
-        it('passes through the properties of the Th', function() {
-            expect($('#table>thead>tr>th')).to.have.id('my-name')
-        });
+            it('renders the contents of the Th', function() {
+                expect($('#table>thead>tr>th')).to.exist;
+            });
+
+            it('passes through the properties of the Th', function() {
+                expect($('#table>thead>tr>th')).to.have.id('my-name')
+            });
+
+        })
     });
+
 
     describe('unsafe() strings', function() {
         context('in the <Table> directly', function() {
