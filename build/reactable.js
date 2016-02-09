@@ -726,22 +726,34 @@ window.ReactDOM["default"] = window.ReactDOM;
                             _react['default'].createElement(
                                 'div',
                                 { className: 'reactable-topDesign' },
-                                this.props.topPaginationElem.left,
-                                _react['default'].createElement(_filterer.FiltererInput, {
-                                    onFilter: this.props.onFilter,
-                                    placeholder: this.props.filterPlaceholder,
-                                    value: this.props.currentFilter
-                                }),
-                                _react['default'].createElement(_btnPaginator.BtnPaginator, {
-                                    locale: this.props.locale,
-                                    itemsPerPage: this.props.itemsPerPage,
-                                    itemsNumber: this.props.itemsNumber,
-                                    numPages: this.props.numPages,
-                                    currentPage: this.props.currentPage,
-                                    onPageChange: this.props.onPageChange,
-                                    key: 'paginator'
-                                }),
-                                this.props.topPaginationElem.right
+                                _react['default'].createElement(
+                                    'div',
+                                    { className: 'reactable-leftElem' },
+                                    this.props.topPaginationElem.left
+                                ),
+                                _react['default'].createElement(
+                                    'div',
+                                    { className: 'reactable-mainElem' },
+                                    _react['default'].createElement(_filterer.FiltererInput, {
+                                        onFilter: this.props.onFilter,
+                                        placeholder: this.props.filterPlaceholder,
+                                        value: this.props.currentFilter
+                                    }),
+                                    _react['default'].createElement(_btnPaginator.BtnPaginator, {
+                                        locale: this.props.locale,
+                                        itemsPerPage: this.props.itemsPerPage,
+                                        itemsNumber: this.props.itemsNumber,
+                                        numPages: this.props.numPages,
+                                        currentPage: this.props.currentPage,
+                                        onPageChange: this.props.onPageChange,
+                                        key: 'paginator'
+                                    })
+                                ),
+                                _react['default'].createElement(
+                                    'div',
+                                    { className: 'reactable-rightElem' },
+                                    this.props.topPaginationElem.right
+                                )
                             )
                         )
                     ) : null,
@@ -1135,17 +1147,29 @@ window.ReactDOM["default"] = window.ReactDOM;
                             _react['default'].createElement(
                                 'div',
                                 { className: 'reactable-bottomDesign' },
-                                bottomPaginationElem.left,
-                                _react['default'].createElement(_btnPaginator.BtnPaginator, {
-                                    locale: locale,
-                                    itemsPerPage: itemsPerPage,
-                                    itemsNumber: itemsNumber,
-                                    numPages: numPages,
-                                    currentPage: currentPage,
-                                    onPageChange: onPageChange,
-                                    key: 'paginator'
-                                }),
-                                bottomPaginationElem.right
+                                _react['default'].createElement(
+                                    'div',
+                                    { className: 'reactable-leftElem' },
+                                    bottomPaginationElem.left
+                                ),
+                                _react['default'].createElement(
+                                    'div',
+                                    { className: 'reactable-mainElem' },
+                                    _react['default'].createElement(_btnPaginator.BtnPaginator, {
+                                        locale: locale,
+                                        itemsPerPage: itemsPerPage,
+                                        itemsNumber: itemsNumber,
+                                        numPages: numPages,
+                                        currentPage: currentPage,
+                                        onPageChange: onPageChange,
+                                        key: 'paginator'
+                                    })
+                                ),
+                                _react['default'].createElement(
+                                    'div',
+                                    { className: 'reactable-rightElem' },
+                                    bottomPaginationElem.right
+                                )
                             )
                         )
                     ) : _react['default'].createElement(

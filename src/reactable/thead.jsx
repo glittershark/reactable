@@ -94,22 +94,28 @@ export class Thead extends React.Component {
                     <tr className="reactable-btnPagination">
                         <td colSpan={this.props.columns.length}>
                             <div className="reactable-topDesign">
-                                {this.props.topPaginationElem.left}
-                                <FiltererInput
-                                    onFilter={this.props.onFilter}
-                                    placeholder={this.props.filterPlaceholder}
-                                    value={this.props.currentFilter}
-                                />
-                                <BtnPaginator
-                                    locale={this.props.locale}
-                                    itemsPerPage={this.props.itemsPerPage}
-                                    itemsNumber={this.props.itemsNumber}
-                                    numPages={this.props.numPages}
-                                    currentPage={this.props.currentPage}
-                                    onPageChange={this.props.onPageChange}
-                                    key="paginator"
-                                />
-                                {this.props.topPaginationElem.right}
+                                <div className="reactable-leftElem">
+                                    {this.props.topPaginationElem.left}
+                                </div>
+                                <div className="reactable-mainElem">
+                                    <FiltererInput
+                                        onFilter={this.props.onFilter}
+                                        placeholder={this.props.filterPlaceholder}
+                                        value={this.props.currentFilter}
+                                    />
+                                    <BtnPaginator
+                                        locale={this.props.locale}
+                                        itemsPerPage={this.props.itemsPerPage}
+                                        itemsNumber={this.props.itemsNumber}
+                                        numPages={this.props.numPages}
+                                        currentPage={this.props.currentPage}
+                                        onPageChange={this.props.onPageChange}
+                                        key="paginator"
+                                    />
+                                </div>
+                                <div className="reactable-rightElem">
+                                    {this.props.topPaginationElem.right}
+                                </div>
                             </div>
                         </td>
                     </tr> : null
