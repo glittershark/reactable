@@ -200,10 +200,10 @@ window.ReactDOM["default"] = window.ReactDOM;
 });
 
 (function (global, factory) {
-    if (typeof define === 'function' && define.amd) {
-        define(['exports', 'react'], factory);
-    } else if (typeof exports !== 'undefined') {
-        factory(exports, require('react'));
+    if (typeof define === "function" && define.amd) {
+        define(["exports", "react"], factory);
+    } else if (typeof exports !== "undefined") {
+        factory(exports, require("react"));
     } else {
         var mod = {
             exports: {}
@@ -212,15 +212,15 @@ window.ReactDOM["default"] = window.ReactDOM;
         global.filterer = mod.exports;
     }
 })(this, function (exports, _react) {
-    'use strict';
+    "use strict";
 
-    var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+    var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-    function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+    function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-    function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+    function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
     var FiltererInput = (function (_React$Component) {
         _inherits(FiltererInput, _React$Component);
@@ -228,30 +228,43 @@ window.ReactDOM["default"] = window.ReactDOM;
         function FiltererInput() {
             _classCallCheck(this, FiltererInput);
 
-            _get(Object.getPrototypeOf(FiltererInput.prototype), 'constructor', this).apply(this, arguments);
+            _get(Object.getPrototypeOf(FiltererInput.prototype), "constructor", this).apply(this, arguments);
         }
 
         _createClass(FiltererInput, [{
-            key: 'render',
+            key: "render",
             value: function render() {
                 var _props = this.props;
                 var onFilter = _props.onFilter;
+                var onClean = _props.onClean;
+                var filterCleanBtn = _props.filterCleanBtn;
                 var placeholder = _props.placeholder;
                 var value = _props.value;
 
-                return _react['default'].createElement('input', {
-                    className: 'reactable-filter-input',
-                    placeholder: placeholder,
-                    value: value,
-                    onChange: function (ev) {
-                        return onFilter(ev.target.value);
-                    }
-                });
+                return _react["default"].createElement(
+                    "div",
+                    { className: "reactable-filter-input-container" },
+                    _react["default"].createElement("input", {
+                        className: "reactable-filter-input",
+                        placeholder: placeholder,
+                        value: value,
+                        onChange: function (ev) {
+                            return onFilter(ev.target.value);
+                        }
+                    }),
+                    filterCleanBtn && _react["default"].createElement(
+                        "div",
+                        { onClick: function () {
+                                return onClean();
+                            }, className: "reactable-btn-clean" },
+                        "×"
+                    )
+                );
             }
         }]);
 
         return FiltererInput;
-    })(_react['default'].Component);
+    })(_react["default"].Component);
 
     exports.FiltererInput = FiltererInput;
     ;
@@ -262,23 +275,24 @@ window.ReactDOM["default"] = window.ReactDOM;
         function Filterer() {
             _classCallCheck(this, Filterer);
 
-            _get(Object.getPrototypeOf(Filterer.prototype), 'constructor', this).apply(this, arguments);
+            _get(Object.getPrototypeOf(Filterer.prototype), "constructor", this).apply(this, arguments);
         }
 
         _createClass(Filterer, [{
-            key: 'render',
+            key: "render",
             value: function render() {
                 if (typeof this.props.colSpan === 'undefined') {
                     throw new TypeError('Must pass a colSpan argument to Filterer');
                 }
-
-                return _react['default'].createElement(
-                    'tr',
-                    { className: 'reactable-filterer' },
-                    _react['default'].createElement(
-                        'td',
+                return _react["default"].createElement(
+                    "tr",
+                    { className: "reactable-filterer" },
+                    _react["default"].createElement(
+                        "td",
                         { colSpan: this.props.colSpan },
-                        _react['default'].createElement(FiltererInput, {
+                        _react["default"].createElement(FiltererInput, {
+                            filterCleanBtn: this.props.filterCleanBtn,
+                            onClean: this.props.onClean,
                             onFilter: this.props.onFilter,
                             value: this.props.value,
                             placeholder: this.props.placeholder
@@ -289,7 +303,7 @@ window.ReactDOM["default"] = window.ReactDOM;
         }]);
 
         return Filterer;
-    })(_react['default'].Component);
+    })(_react["default"].Component);
 
     exports.Filterer = Filterer;
     ;
@@ -666,20 +680,39 @@ window.ReactDOM["default"] = window.ReactDOM;
         }, {
             key: 'render',
             value: function render() {
+                var _props = this.props;
+                var sort = _props.sort;
+                var sortableColumns = _props.sortableColumns;
+                var filtering = _props.filtering;
+                var columns = _props.columns;
+                var onFilter = _props.onFilter;
+                var onClean = _props.onClean;
+                var filterPlaceholder = _props.filterPlaceholder;
+                var currentFilter = _props.currentFilter;
+                var topPagination = _props.topPagination;
+                var filterCleanBtn = _props.filterCleanBtn;
+                var locale = _props.locale;
+                var itemsPerPage = _props.itemsPerPage;
+                var itemsNumber = _props.itemsNumber;
+                var numPages = _props.numPages;
+                var currentPage = _props.currentPage;
+                var onPageChange = _props.onPageChange;
+                var topPaginationElem = _props.topPaginationElem;
+
                 // Declare the list of Ths
                 var Ths = [];
-                for (var index = 0; index < this.props.columns.length; index++) {
-                    var column = this.props.columns[index];
+                for (var index = 0; index < columns.length; index++) {
+                    var column = columns[index];
                     var thClass = 'reactable-th-' + column.key.replace(/\s+/g, '-').toLowerCase();
                     var sortClass = '';
 
-                    if (this.props.sortableColumns[column.key]) {
+                    if (sortableColumns[column.key]) {
                         sortClass += 'reactable-header-sortable ';
                     }
 
-                    if (this.props.sort.column === column.key) {
+                    if (sort.column === column.key) {
                         sortClass += 'reactable-header-sort';
-                        if (this.props.sort.direction === 1) {
+                        if (sort.direction === 1) {
                             sortClass += '-asc';
                         } else {
                             sortClass += '-desc';
@@ -708,51 +741,54 @@ window.ReactDOM["default"] = window.ReactDOM;
 
                 // Manually transfer props
                 var props = (0, _libFilter_props_from.filterPropsFrom)(this.props);
+
                 return _react['default'].createElement(
                     'thead',
                     props,
-                    this.props.filtering === true ? _react['default'].createElement(_filterer.Filterer, {
-                        colSpan: this.props.columns.length,
-                        onFilter: this.props.onFilter,
-                        placeholder: this.props.filterPlaceholder,
-                        value: this.props.currentFilter
+                    filtering === true ? _react['default'].createElement(_filterer.Filterer, {
+                        colSpan: columns.length,
+                        onFilter: onFilter,
+                        placeholder: filterPlaceholder,
+                        value: currentFilter
                     }) : null,
-                    this.props.topPagination ? _react['default'].createElement(
+                    topPagination ? _react['default'].createElement(
                         'tr',
                         { className: 'reactable-btnPagination' },
                         _react['default'].createElement(
                             'td',
-                            { colSpan: this.props.columns.length },
+                            { colSpan: columns.length },
                             _react['default'].createElement(
                                 'div',
                                 { className: 'reactable-topDesign' },
                                 _react['default'].createElement(
                                     'div',
                                     { className: 'reactable-leftElem' },
-                                    this.props.topPaginationElem.left
+                                    topPaginationElem.left
                                 ),
                                 _react['default'].createElement(
                                     'div',
                                     { className: 'reactable-mainElem' },
                                     _react['default'].createElement(_filterer.FiltererInput, {
-                                        onFilter: this.props.onFilter,
-                                        placeholder: this.props.filterPlaceholder,
-                                        value: this.props.currentFilter
+                                        filterCleanBtn: filterCleanBtn,
+                                        onClean: onClean,
+                                        onFilter: onFilter,
+                                        placeholder: filterPlaceholder,
+                                        value: currentFilter
                                     }),
                                     _react['default'].createElement(_btnPaginator.BtnPaginator, {
-                                        locale: this.props.locale,
-                                        itemsPerPage: this.props.itemsPerPage,
-                                        itemsNumber: this.props.itemsNumber,
-                                        numPages: this.props.numPages,
-                                        currentPage: this.props.currentPage,
-                                        onPageChange: this.props.onPageChange,
+                                        locale: locale,
+                                        itemsPerPage: itemsPerPage,
+                                        itemsNumber: itemsNumber,
+                                        numPages: numPages,
+                                        currentPage: currentPage,
+                                        onPageChange: onPageChange,
                                         key: 'paginator'
                                     })
                                 ),
                                 _react['default'].createElement(
                                     'div',
                                     { className: 'reactable-rightElem' },
-                                    this.props.topPaginationElem.right
+                                    topPaginationElem.right
                                 )
                             )
                         )
@@ -1629,6 +1665,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                 }
 
                 // Apply filters
+                var filterCleanBtn = this.props.filterCleanBtn && this.state.filter;
                 var filteredChildren = children;
                 if (this.state.filter !== '') {
                     filteredChildren = this.applyFilter(this.state.filter, filteredChildren);
@@ -1688,6 +1725,10 @@ window.ReactDOM["default"] = window.ReactDOM;
                         filtering: filtering,
                         onFilter: function (filter) {
                             _this.setState({ filter: filter });
+                        },
+                        filterCleanBtn: filterCleanBtn,
+                        onClean: function (filter) {
+                            _this.setState({ filter: '' });
                         },
                         onPageChange: function (page) {
                             _this.setState({ currentPage: page });

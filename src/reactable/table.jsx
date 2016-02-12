@@ -415,6 +415,7 @@ export class Table extends React.Component {
         }
 
         // Apply filters
+        const filterCleanBtn = this.props.filterCleanBtn && this.state.filter;
         let filteredChildren = children;
         if (this.state.filter !== '') {
             filteredChildren = this.applyFilter(this.state.filter, filteredChildren);
@@ -466,6 +467,10 @@ export class Table extends React.Component {
                     filtering={filtering}
                     onFilter={filter => {
                         this.setState({ filter: filter });
+                    }}
+                    filterCleanBtn={filterCleanBtn}
+                    onClean={filter => {
+                        this.setState({ filter: '' });
                     }}
                     onPageChange={page => {
                         this.setState({ currentPage: page });
