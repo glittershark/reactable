@@ -1563,17 +1563,18 @@ window.ReactDOM["default"] = window.ReactDOM;
         }, {
             key: 'visibleItems',
             value: function visibleItems() {
-                return this.currentChildren.map(function (item) {
-                    var _item$props = item.props;
-                    var i = _item$props.i;
-                    var id = _item$props.id;
+                return this.currentChildren.map(function (row) {
+                    var _row$props = row.props;
+                    var i = _row$props.i;
+                    var id = _row$props.id;
 
                     var iOrId = i != null ? i : id;
-                    var idOrKey = iOrId != null ? iOrId : item.key;
+                    var idOrKey = iOrId != null ? iOrId : row.key;
                     var data = { id: idOrKey };
 
-                    Object.keys(item.props.data).forEach(function (key) {
-                        data[key] = item.props.data[key].value;
+                    Object.keys(row.props.data).forEach(function (key) {
+                        var col = row.props.data[key];
+                        data[key] = col.props.value != null ? col.props.value : col.value;
                     });
 
                     return data;
