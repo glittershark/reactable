@@ -474,6 +474,8 @@ export class Table extends React.Component {
                         this.setState({ filter: '' });
                     }}
                     onPageChange={page => {
+                        const {onPageChange} = this.props;
+                        onPageChange && onPageChange(page);
                         this.setState({ currentPage: page });
                         this.scrollToTop();
                     }}

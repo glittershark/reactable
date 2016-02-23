@@ -1732,6 +1732,9 @@ window.ReactDOM["default"] = window.ReactDOM;
                             _this.setState({ filter: '' });
                         },
                         onPageChange: function (page) {
+                            var onPageChange = _this.props.onPageChange;
+
+                            onPageChange && onPageChange(page);
                             _this.setState({ currentPage: page });
                             _this.scrollToTop();
                         },
