@@ -1123,6 +1123,30 @@ describe('Reactable', function() {
                 // Make sure the headers have the right classes
                 expect($(nameHeader)).to.have.class('reactable-header-sort-desc');
             });
+
+            it('sorts by last name in ascending order by enter keydown', function(){
+                var nameHeader = $('#table thead tr.reactable-column-header th')[0];
+                ReactTestUtils.Simulate.keyDown(nameHeader, {keyCode: 13});
+
+                ReactableTestUtils.expectRowText(0, ['Lee Salminen', '23', 'Programmer']);
+                ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', 'Engineer']);
+                ReactableTestUtils.expectRowText(2, ['Ian Zhang', '28', 'Developer']);
+
+                // Make sure the headers have the right classes
+                expect($(nameHeader)).to.have.class('reactable-header-sort-asc');
+            });
+
+            it('does not sort on non-enter keydown', function(){
+                var nameHeader = $('#table thead tr.reactable-column-header th')[0];
+                ReactTestUtils.Simulate.keyDown(nameHeader, {keyCode: 10});
+
+                ReactableTestUtils.expectRowText(0, ['Lee Salminen', '23', 'Programmer']);
+                ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', 'Engineer']);
+                ReactableTestUtils.expectRowText(2, ['Ian Zhang', '28', 'Developer']);
+
+                // Make sure the headers have the right classes
+                expect($(nameHeader)).to.have.class('reactable-header-sort-asc');
+            });
         });
 
         describe('passing `true` to sortable', function() {
@@ -1658,7 +1682,7 @@ describe('Reactable', function() {
                 ReactableTestUtils.expectRowText(2, ['Third']);
             });
         });
-    
+
         describe('sorts and calls onSort callback via props', function(){
             var sortColumn = null;
 
@@ -1678,7 +1702,7 @@ describe('Reactable', function() {
                                 // sort based on classname
                                 return a.props.className.localeCompare(b.props.className);
                             }
-                        }]} 
+                        }]}
                         onSort={ callback }/>,
                     ReactableTestUtils.testNode()
                 );

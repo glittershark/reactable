@@ -45,6 +45,12 @@ export class Thead extends React.Component {
         this.props.onSort(column.key);
     }
 
+    handleKeyDownTh(column, event) {
+      if (event.keyCode === 13) {
+        this.props.onSort(column.key);
+      }
+    }
+
     render() {
         // Declare the list of Ths
         var Ths = [];
@@ -83,6 +89,7 @@ export class Thead extends React.Component {
                     className={thClass}
                     key={index}
                     onClick={this.handleClickTh.bind(this, column)}
+                    onKeyDown={this.handleKeyDownTh.bind(this, column)}
                     role="button"
                     tabIndex="0">
                     {column.label}
