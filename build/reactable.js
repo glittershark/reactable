@@ -660,6 +660,13 @@ window.ReactDOM["default"] = window.ReactDOM;
                 this.props.onSort(column.key);
             }
         }, {
+            key: 'handleKeyDownTh',
+            value: function handleKeyDownTh(column, event) {
+                if (event.keyCode === 13) {
+                    this.props.onSort(column.key);
+                }
+            }
+        }, {
             key: 'render',
             value: function render() {
                 // Declare the list of Ths
@@ -696,6 +703,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                             className: thClass,
                             key: index,
                             onClick: this.handleClickTh.bind(this, column),
+                            onKeyDown: this.handleKeyDownTh.bind(this, column),
                             role: 'button',
                             tabIndex: '0' }),
                         column.label
