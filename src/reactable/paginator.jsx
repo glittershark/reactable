@@ -107,17 +107,23 @@ export class Paginator extends React.Component {
                     <tr className="reactable-btnPagination">
                         <td colSpan={this.props.colSpan}>
                             <div className="reactable-bottomDesign">
-                                {bottomPaginationElem.left}
-                                <BtnPaginator
-                                    locale={locale}
-                                    itemsPerPage={itemsPerPage}
-                                    itemsNumber={itemsNumber}
-                                    numPages={numPages}
-                                    currentPage={currentPage}
-                                    onPageChange={onPageChange}
-                                    key="paginator"
-                                />
-                                {bottomPaginationElem.right}
+                                <div className="reactable-leftElem">
+                                    {bottomPaginationElem.left}
+                                </div>
+                                <div className="reactable-mainElem">
+                                    <BtnPaginator
+                                        locale={locale}
+                                        itemsPerPage={itemsPerPage}
+                                        itemsNumber={itemsNumber}
+                                        numPages={numPages}
+                                        currentPage={currentPage}
+                                        onPageChange={onPageChange}
+                                        key="paginator"
+                                    />
+                                </div>
+                                <div className="reactable-rightElem">
+                                    {bottomPaginationElem.right}
+                                </div>
                             </div>
                         </td>
                     </tr> :

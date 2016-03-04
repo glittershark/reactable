@@ -302,14 +302,15 @@ export class Table extends React.Component {
     }
 
     visibleItems() {
-        return this.currentChildren.map(item => {
-            const {i, id} = item.props;
+        return this.currentChildren.map(row => {
+            const {i, id} = row.props;
             const iOrId = i != null ? i : id;
-            const idOrKey = iOrId != null ? iOrId : item.key;
+            const idOrKey = iOrId != null ? iOrId : row.key;
             const data = {id: idOrKey};
 
-            Object.keys(item.props.data).forEach(key => {
-                data[key] = item.props.data[key].value;
+            Object.keys(row.props.data).forEach(key => {
+                const col = row.props.data[key];
+                data[key] = col.props.value != null ? col.props.value : col.value;
             });
 
             return data;
@@ -412,6 +413,7 @@ export class Table extends React.Component {
         }
 
         // Apply filters
+        const filterCleanBtn = this.props.filterCleanBtn && this.state.filter;
         let filteredChildren = children;
         if (this.state.filter !== '') {
             filteredChildren = this.applyFilter(this.state.filter, filteredChildren);
@@ -464,7 +466,13 @@ export class Table extends React.Component {
                     onFilter={filter => {
                         this.setState({ filter: filter });
                     }}
+                    filterCleanBtn={filterCleanBtn}
+                    onClean={filter => {
+                        this.setState({ filter: '' });
+                    }}
                     onPageChange={page => {
+                        const {onPageChange} = this.props;
+                        onPageChange && onPageChange(page);
                         this.setState({ currentPage: page });
                         this.scrollToTop();
                     }}
