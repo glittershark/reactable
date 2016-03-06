@@ -1136,11 +1136,11 @@ window.ReactDOM["default"] = window.ReactDOM;
             }
         }, {
             key: 'initializeSorts',
-            value: function initializeSorts() {
+            value: function initializeSorts(props) {
                 this._sortable = {};
                 // Transform sortable properties into a more friendly list
-                for (var i in this.props.sortable) {
-                    var column = this.props.sortable[i];
+                for (var i in props.sortable) {
+                    var column = props.sortable[i];
                     var columnName = undefined,
                         sortFunction = undefined;
 
