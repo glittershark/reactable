@@ -1720,6 +1720,67 @@ describe('Reactable', function() {
             });
         });
 
+        describe('Keep sorting works after props changed', function() {
+            before(function() {
+                var ParentComponent = React.createClass({
+                    getInitialState: function() {
+                        return {
+                            sortable: [{
+                                column: 'Count',
+                                sortFunction: Reactable.Sort.NumericInteger
+                            }],
+                            data: [
+                                { Count: '23'},
+                                { Count: '18'},
+                                { Count: '28'}
+                            ]
+                        };
+                    },
+
+                    handleChange(event) {
+                        this.setState({
+                            sortable: [{
+                                column: 'Population',
+                                sortFunction: Reactable.Sort.NumericInteger
+                            }],
+                            data: [
+                                { Population: '113'},
+                                { Population: '112'},
+                                { Population: '44'}
+                            ]
+                        });
+                    },
+
+                    render: function() {
+                        return (
+                            <div>
+                            <input type="checkbox" ref="dataChangeTrigger" id="dataChangeTrigger" onChange={this.handleChange}/>
+                            <Reactable.Table className="table" id="table" sortable={this.state.sortable} data={this.state.data} >
+                            </Reactable.Table>
+                            </div>
+                        );
+                    }
+                })
+
+                this.component = ReactDOM.render(React.createElement(ParentComponent), ReactableTestUtils.testNode());
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('sorting works well after you change data', function() {
+                ReactTestUtils.Simulate.click($('th')[0]);
+                ReactableTestUtils.expectRowText(0, ['18']);
+                ReactableTestUtils.expectRowText(1, ['23']);
+                ReactableTestUtils.expectRowText(2, ['28']);
+                var node = this.component.refs.dataChangeTrigger;
+                ReactTestUtils.Simulate.change(dataChangeTrigger);
+
+                ReactTestUtils.Simulate.click($('th')[0]);
+                ReactableTestUtils.expectRowText(0, ['44']);
+                ReactableTestUtils.expectRowText(1, ['112']);
+                ReactableTestUtils.expectRowText(2, ['113']);
+            });
+        });
     });
 
     describe('filtering', function() {
