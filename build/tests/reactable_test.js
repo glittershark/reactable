@@ -716,6 +716,36 @@
             });
         });
 
+        describe('adding <Td> with style by JSON to the <Table>', function () {
+            before(function () {
+
+                ReactDOM.render(React.createElement(
+                    Reactable.Table,
+                    { className: 'table', id: 'table' },
+                    React.createElement(
+                        Reactable.Tr,
+                        null,
+                        React.createElement(
+                            Reactable.Td,
+                            { column: 'Name', className: 'name-1', style: '{"width":"100px"}' },
+                            'Griffin Smith'
+                        ),
+                        React.createElement(
+                            Reactable.Td,
+                            { column: 'Age' },
+                            '18'
+                        )
+                    )
+                ), ReactableTestUtils.testNode());
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('renders the first column with the width', function () {
+                expect($('td.name-1')).to.have.attr('style').match(/width/);
+            });
+        });
+
         describe('specifying an array of columns', function () {
             describe('as strings', function () {
                 before(function () {

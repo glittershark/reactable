@@ -494,6 +494,31 @@ describe('Reactable', function() {
             });
         });
     });
+    
+     describe('adding <Td> with style by JSON to the <Table>', function() {
+            before(function () {
+                
+                ReactDOM.render(
+                    <Reactable.Table className="table" id="table">
+                        <Reactable.Tr>
+                            <Reactable.Td column="Name" className="name-1" style='{"width":"100px"}'>Griffin Smith</Reactable.Td>
+                            <Reactable.Td column="Age">18</Reactable.Td>
+                        </Reactable.Tr>
+                       
+                    </Reactable.Table>,
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('renders the first column with the width', function() {
+                expect($('td.name-1')).to.have.attr('style').match(/width/);
+            });
+
+          
+       
+    });
 
     describe('specifying an array of columns', function() {
         describe('as strings', function() {
