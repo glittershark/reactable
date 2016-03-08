@@ -55,8 +55,8 @@ Reactable also exposes a set of CommonJS modules for piece-by-piece use with
 Node, Webpack, Browserify, etc. These modules are located in the [`lib` folder
 at the root of this repositiory][lib-folder].
 
-Keep in mind that Reactable depends on the latest version of React (0.12),
-**with addons**. That can be downloaded [here][download]
+Keep in mind that Reactable depends on the latest version of React (0.14), which
+can be downloaded [here][download]
 
 [build-file]: https://github.com/glittershark/reactable/raw/master/build/reactable.js
 [download]: http://facebook.github.io/react/downloads.html
