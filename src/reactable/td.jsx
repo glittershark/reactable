@@ -17,12 +17,7 @@ export class Td extends React.Component {
         };
         
         if(typeof(this.props.style) !== 'undefined'){
-            try{
-                tdProps.style = JSON.parse(this.props.style);   
-            }catch(err){
-                throw 'style need to set by JSON.';
-            }
-                  
+            tdProps.style = this.props.style;        
         }
 
         // Attach any properties on the column to this Td object to allow things like custom event handlers

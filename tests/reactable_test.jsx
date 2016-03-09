@@ -497,11 +497,11 @@ describe('Reactable', function() {
     
      describe('adding <Td> with style by JSON to the <Table>', function() {
             before(function () {
-                
+                var tdStyle = {width:"100px"};
                 ReactDOM.render(
                     <Reactable.Table className="table" id="table">
                         <Reactable.Tr>
-                            <Reactable.Td column="Name" className="name-1" style='{"width":"100px"}'>Griffin Smith</Reactable.Td>
+                            <Reactable.Td column="Name" className="name-1" style={tdStyle}>Griffin Smith</Reactable.Td>
                             <Reactable.Td column="Age">18</Reactable.Td>
                         </Reactable.Tr>
                        

@@ -718,7 +718,7 @@
 
         describe('adding <Td> with style by JSON to the <Table>', function () {
             before(function () {
-
+                var tdStyle = { width: "100px" };
                 ReactDOM.render(React.createElement(
                     Reactable.Table,
                     { className: 'table', id: 'table' },
@@ -727,7 +727,7 @@
                         null,
                         React.createElement(
                             Reactable.Td,
-                            { column: 'Name', className: 'name-1', style: '{"width":"100px"}' },
+                            { column: 'Name', className: 'name-1', style: tdStyle },
                             'Griffin Smith'
                         ),
                         React.createElement(
