@@ -13,7 +13,7 @@ export class Thead extends React.Component {
                 column.props = filterPropsFrom(th.props);
 
                 // use the content as the label & key
-                if (typeof th.props.children !== 'undefined') {
+                if (typeof th.props.children === 'string') {
                     column.label = th.props.children;
                     column.key = column.label;
                 }

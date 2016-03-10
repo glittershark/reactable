@@ -740,7 +740,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                         column.props = (0, _libFilter_props_from.filterPropsFrom)(th.props);
 
                         // use the content as the label & key
-                        if (typeof th.props.children !== 'undefined') {
+                        if (typeof th.props.children === 'string') {
                             column.label = th.props.children;
                             column.key = column.label;
                         }
