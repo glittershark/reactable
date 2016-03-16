@@ -121,14 +121,16 @@ export class Thead extends React.Component {
                                 <div className="reactable-leftElem">
                                     {topPaginationElem.left}
                                 </div>
-                                <div className="reactable-mainElem">
-                                    <FiltererInput
-                                        filterCleanBtn={filterCleanBtn}
-                                        onClean={onClean}
-                                        onFilter={onFilter}
-                                        placeholder={filterPlaceholder}
-                                        value={currentFilter}
-                                    />
+                                <div className={filtering ? 'reactable-mainElem' : 'reactable-mainElem no-filter'}>
+                                    {filtering &&
+                                        <FiltererInput
+                                            filterCleanBtn={filterCleanBtn}
+                                            onClean={onClean}
+                                            onFilter={onFilter}
+                                            placeholder={filterPlaceholder}
+                                            value={currentFilter}
+                                        />
+                                    }
                                     <BtnPaginator
                                         locale={locale}
                                         itemsPerPage={itemsPerPage}
