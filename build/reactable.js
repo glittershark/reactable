@@ -678,6 +678,13 @@ window.ReactDOM["default"] = window.ReactDOM;
                 this.props.onSort(column.key);
             }
         }, {
+            key: 'handleKeyDownTh',
+            value: function handleKeyDownTh(column, event) {
+                if (event.keyCode === 13) {
+                    this.props.onSort(column.key);
+                }
+            }
+        }, {
             key: 'render',
             value: function render() {
                 var _props = this.props;
@@ -733,6 +740,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                             className: thClass,
                             key: index,
                             onClick: this.handleClickTh.bind(this, column),
+                            onKeyDown: this.handleKeyDownTh.bind(this, column),
                             role: 'button',
                             tabIndex: '0' }),
                         column.label
@@ -806,16 +814,31 @@ window.ReactDOM["default"] = window.ReactDOM;
                 // Can't use React.Children.map since that doesn't return a proper array
                 var columns = [];
                 _react['default'].Children.forEach(component.props.children, function (th) {
-                    if (typeof th.props.children === 'string') {
-                        columns.push(th.props.children);
-                    } else if (typeof th.props.column === 'string') {
-                        columns.push({
-                            key: th.props.column,
-                            label: th.props.children,
-                            props: (0, _libFilter_props_from.filterPropsFrom)(th.props)
-                        });
-                    } else {
+                    var column = {};
+                    if (typeof th.props !== 'undefined') {
+                        column.props = (0, _libFilter_props_from.filterPropsFrom)(th.props);
+
+                        // use the content as the label & key
+                        if (typeof th.props.children !== 'undefined') {
+                            column.label = th.props.children;
+                            column.key = column.label;
+                        }
+
+                        // the key in the column attribute supersedes the one defined previously
+                        if (typeof th.props.column === 'string') {
+                            column.key = th.props.column;
+
+                            // in case we don't have a label yet
+                            if (typeof column.label === 'undefined') {
+                                column.label = column.key;
+                            }
+                        }
+                    }
+
+                    if (typeof column.key === 'undefined') {
                         throw new TypeError('<th> must have either a "column" property or a string ' + 'child');
+                    } else {
+                        columns.push(column);
                     }
                 });
 
@@ -1267,7 +1290,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                 currentPage: 0,
                 currentSort: {
                     column: null,
-                    direction: 1
+                    direction: this.props.defaultSortDescending ? -1 : 1
                 },
                 filter: ''
             };
@@ -1433,15 +1456,17 @@ window.ReactDOM["default"] = window.ReactDOM;
                         } else if (column.direction === -1 || column.direction === 'desc') {
                             sortDirection = -1;
                         } else {
-                            console.warn('Invalid default sort specified.  Defaulting to ascending');
-                            sortDirection = 1;
+                            var defaultDirection = this.props.defaultSortDescending ? 'descending' : 'ascending';
+
+                            console.warn('Invalid default sort specified. Defaulting to ' + defaultDirection);
+                            sortDirection = this.props.defaultSortDescending ? -1 : 1;
                         }
                     } else {
-                        sortDirection = 1;
+                        sortDirection = this.props.defaultSortDescending ? -1 : 1;
                     }
                 } else {
                     columnName = column;
-                    sortDirection = 1;
+                    sortDirection = this.props.defaultSortDescending ? -1 : 1;
                 }
 
                 return {
@@ -1548,7 +1573,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                     currentSort.direction *= -1;
                 } else {
                     currentSort.column = column;
-                    currentSort.direction = 1;
+                    currentSort.direction = this.props.defaultSortDescending ? -1 : 1;
                 }
 
                 // Set the current sort and pass it to the sort function
@@ -1725,6 +1750,9 @@ window.ReactDOM["default"] = window.ReactDOM;
                         filtering: filtering,
                         onFilter: function (filter) {
                             _this.setState({ filter: filter });
+                            if (_this.props.onFilter) {
+                                _this.props.onFilter(filter);
+                            }
                         },
                         filterCleanBtn: filterCleanBtn,
                         onClean: function (filter) {
@@ -1781,6 +1809,7 @@ window.ReactDOM["default"] = window.ReactDOM;
     Table.defaultProps = {
         sortBy: false,
         defaultSort: false,
+        defaultSortDescending: false,
         itemsPerPage: 0,
         hideFilterInput: false,
         locale: 'en'
