@@ -112,6 +112,10 @@ export class Table extends React.Component {
                             __reactableMeta: true
                         });
                     break;
+                    
+                    default:
+                        console.warn ('The only possible children of <Table>, are <Thead>, <Tr>, ' +
+                                      'or one <Tfoot>.');
                 }
             }.bind(this));
         }
