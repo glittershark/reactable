@@ -360,7 +360,7 @@ describe('Reactable', function() {
     describe('Adding a <Tfoot>', function() {
         before(function() {
             ReactDOM.render(
-                <Reactable.Table className="table" id="table" sortable={['Name']} filterable={['Name', 'Age']}>
+                <Reactable.Table className="table" id="table" sortable={['Name']} filterable={['Name', 'Age']} filterClassName="new-class" >
                     <Reactable.Tr className="rowClass1" data={{ Name: 'Griffin Smith', Age: '18'}}/>
                     <Reactable.Tr className="rowClass2" data={{ Age: '23', Name: 'Lee Salminen'}}/>
                     <Reactable.Tr className="rowClass3" data={{ Age: '28', Position: 'Developer'}}/>
@@ -409,6 +409,10 @@ describe('Reactable', function() {
 
                 $filter.val('griffin');
                 ReactTestUtils.Simulate.keyUp($filter[0]);
+            });
+
+            it('adds the filterClassName to the filterer', function() {
+                expect($('.reactable-filter-input').hasClass('new-class')).to.eq(true)
             });
 
             it('leaves the tfoot alone', function() {
