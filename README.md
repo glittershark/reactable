@@ -255,6 +255,9 @@ For example:
 ]} itemsPerPage={4} pageButtonLimit={5} />
 ```
 
+You can also change the default text on the buttons by including the
+`previousPageLabel` and `nextPageLabel` props.
+
 ### Sorting
 
 To enable sorting on all columns, just specify `sortable={true}` on the
