@@ -463,6 +463,8 @@ export class Table extends React.Component {
                         this.props.onPageChange(page)
                      }
                  }}
+                 previousPageLabel={this.props.previousPageLabel}
+                 nextPageLabel={this.props.nextPageLabel}
                  key="paginator"/>
              : null}
             {this.tfoot}

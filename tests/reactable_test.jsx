@@ -852,7 +852,7 @@ describe('Reactable', function() {
                         {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
                         {'Age': '23', 'Name': 'Lee Salminen'},
                         {'Age': '28', 'Position': 'Developer'},
-                    ]} itemsPerPage={4} />,
+                    ]} itemsPerPage={4} previousPageLabel={'<<'} nextPageLabel={'>>'}/>,
                     ReactableTestUtils.testNode()
                 );
             });
@@ -885,6 +885,7 @@ describe('Reactable', function() {
             it('shows next button', function(){
                 var nextButton = $('#table tbody.reactable-pagination a.reactable-next-page');
                 expect(nextButton.length).to.equal(1);
+                expect(nextButton[0].text).to.equal('>>');
             });
 
             describe('clicking page buttons', function() {
@@ -921,6 +922,7 @@ describe('Reactable', function() {
                 it('shows previous button', function(){
                     var previousButton = $('#table tbody.reactable-pagination a.reactable-previous-page');
                     expect(previousButton.length).to.equal(1);
+                    expect(previousButton[0].text).to.equal('<<');
                 });
             });
         });
