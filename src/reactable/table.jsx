@@ -133,11 +133,11 @@ export class Table extends React.Component {
         this.initializeSorts(props);
     }
 
-    initializeSorts() {
+    initializeSorts(props) {
         this._sortable = {};
         // Transform sortable properties into a more friendly list
-        for (let i in this.props.sortable) {
-            let column = this.props.sortable[i];
+        for (let i in props.sortable) {
+            let column = props.sortable[i];
             let columnName, sortFunction;
 
             if (column instanceof Object) {
