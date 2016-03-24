@@ -443,6 +443,10 @@ window.ReactDOM["default"] = window.ReactDOM;
                     onClick: this.handleClick.bind(this)
                 };
 
+                if (typeof this.props.style !== 'undefined') {
+                    tdProps.style = this.props.style;
+                }
+
                 // Attach any properties on the column to this Td object to allow things like custom event handlers
                 if (typeof this.props.column === 'object') {
                     for (var key in this.props.column) {
@@ -882,7 +886,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                         { className: 'reactable-previous-page',
                             href: pageHref(this.props.currentPage - 1),
                             onClick: this.handlePrevious.bind(this) },
-                        'Previous'
+                        this.props.previousPageLabel || 'Previous'
                     );
                 }
             }
@@ -895,7 +899,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                         { className: 'reactable-next-page',
                             href: pageHref(this.props.currentPage + 1),
                             onClick: this.handleNext.bind(this) },
-                        'Next'
+                        this.props.nextPageLabel || 'Next'
                     );
                 }
             }
@@ -1113,6 +1117,9 @@ window.ReactDOM["default"] = window.ReactDOM;
                                     __reactableMeta: true
                                 });
                                 break;
+
+                            default:
+                                console.warn('The only possible children of <Table>, are <Thead>, <Tr>, ' + 'or one <Tfoot>.');
                         }
                     }).bind(this));
                 }
@@ -1462,6 +1469,8 @@ window.ReactDOM["default"] = window.ReactDOM;
                                 _this.props.onPageChange(page);
                             }
                         },
+                        previousPageLabel: this.props.previousPageLabel,
+                        nextPageLabel: this.props.nextPageLabel,
                         key: 'paginator' }) : null,
                     this.tfoot
                 );

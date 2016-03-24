@@ -25,7 +25,7 @@ export class Paginator extends React.Component {
             return <a className='reactable-previous-page'
                       href={pageHref(this.props.currentPage - 1)}
                       onClick={this.handlePrevious.bind(this)}>
-                        Previous
+                        {this.props.previousPageLabel || 'Previous'}
                    </a>
         }
     }
@@ -35,7 +35,7 @@ export class Paginator extends React.Component {
             return <a className='reactable-next-page'
                       href={pageHref(this.props.currentPage + 1)}
                       onClick={this.handleNext.bind(this)}>
-                      Next
+                      {this.props.nextPageLabel || 'Next'}
                    </a>
         }
     }
