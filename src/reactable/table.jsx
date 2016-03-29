@@ -63,6 +63,8 @@ export class Table extends React.Component {
                 }
 
                 switch (child.type) {
+                    case Thead:
+                    break;
                     case Tfoot:
                         if (typeof(tfoot) !== 'undefined') {
                             console.warn ('You can only have one <Tfoot>, but more than one was specified.' +
@@ -112,9 +114,9 @@ export class Table extends React.Component {
                             __reactableMeta: true
                         });
                     break;
-                    
+
                     default:
-                        console.warn ('The only possible children of <Table>, are <Thead>, <Tr>, ' +
+                        console.warn ('The only possible children of <Table> are <Thead>, <Tr>, ' +
                                       'or one <Tfoot>.');
                 }
             }.bind(this));
