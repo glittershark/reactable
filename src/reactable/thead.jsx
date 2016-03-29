@@ -77,6 +77,11 @@ export class Thead extends React.Component {
               thClass += ` ${sortClass}`;
             }
 
+
+            if (column.className) {
+                thClass += ` ${column.className}`;
+            }
+
             if (
                 typeof(column.props) === 'object' &&
                 typeof(column.props.className) === 'string'

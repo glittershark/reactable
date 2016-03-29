@@ -553,7 +553,7 @@ describe('Reactable', function() {
                         { age: '23', name: 'Lee Salminen', HideThis: 'two'},
                         { age: '28', Position: 'Developer'},
                     ]} columns={[
-                        { key: 'name', label: 'Name' },
+                        { key: 'name', label: 'Name', className: 'aCustomClass' },
                         { key: 'age', label: 'Age' }
                     ]}/>,
                     ReactableTestUtils.testNode()
@@ -578,6 +578,12 @@ describe('Reactable', function() {
                 expect($(columns[0])).to.have.class('reactable-th-name');
                 expect($(columns[1])).to.have.class('reactable-th-age');
             });
+
+            it('adds custom column class name to header', function() {
+                var columns = $('tr.reactable-column-header th');
+                expect($(columns[0])).to.have.class('aCustomClass');
+            });
+
         });
     });
 
