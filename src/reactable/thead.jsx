@@ -106,13 +106,13 @@ export class Thead extends React.Component {
         var props = filterPropsFrom(this.props);
         return (
             <thead {...props}>
-                {filtering === true ?
+                {!topPagination && filtering &&
                     <Filterer
                         colSpan={columns.length}
                         onFilter={onFilter}
                         placeholder={filterPlaceholder}
                         value={currentFilter}
-                    /> : null
+                    />
                 }
                 {topPagination ?
                     <tr className="reactable-btnPagination">
