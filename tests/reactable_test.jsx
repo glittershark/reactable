@@ -494,7 +494,7 @@ describe('Reactable', function() {
             });
         });
     });
-    
+
     describe('adding <Td> with style to the <Table>', function() {
         before(function () {
             var tdStyle = {width:"100px"};
@@ -503,7 +503,7 @@ describe('Reactable', function() {
                     <Reactable.Tr>
                         <Reactable.Td column="Name" className="name-1" style={tdStyle}>Griffin Smith</Reactable.Td>
                         <Reactable.Td column="Age">18</Reactable.Td>
-                    </Reactable.Tr>       
+                    </Reactable.Tr>
                 </Reactable.Table>,
                 ReactableTestUtils.testNode()
             );
@@ -513,7 +513,7 @@ describe('Reactable', function() {
 
         it('renders the first column with the width', function() {
             expect($('td.name-1')).to.have.attr('style').match(/width/);
-        });  
+        });
     });
 
     describe('specifying an array of columns', function() {
@@ -1603,6 +1603,51 @@ describe('Reactable', function() {
                 ReactableTestUtils.expectRowText(7, ['$10']);
                 ReactableTestUtils.expectRowText(8, ['$10,000']);
                 ReactableTestUtils.expectRowText(9, ['$10,500']);
+                ReactableTestUtils.expectRowText(10, ['a']);
+                ReactableTestUtils.expectRowText(11, ['z']);
+            });
+        });
+
+        describe('yen sort', function(){
+            before(function() {
+                ReactDOM.render(
+                    <Reactable.Table className="table" id="table" data={[
+                        { Price: '1.25'},
+                        { Price: '¥1.01'},
+                        { Price: '1'},
+                        { Price: '¥10,000'},
+                        { Price: '¥10,500'},
+                        { Price: '¥10'},
+                        { Price: 'a'},
+                        { Price: 'z'},
+                        { Price: '¥2'},
+                        { Price: '¥.5'},
+                        { Price: '¥0.60'},
+                        { Price: '.1'},
+                    ]}
+                    columns={[{ key: 'Price', sortable: Reactable.Sort.Currency }]} />,
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+            after(function() {
+                ReactableTestUtils.resetTestEnvironment();
+            });
+
+            it('sorts columns numerically. parsing out currency symbols', function(){
+                var sortHeader = $('#table thead tr.reactable-column-header th')[0];
+                ReactTestUtils.Simulate.click(sortHeader);
+
+                ReactableTestUtils.expectRowText(0, ['.1']);
+                ReactableTestUtils.expectRowText(1, ['¥.5']);
+                ReactableTestUtils.expectRowText(2, ['¥0.60']);
+                ReactableTestUtils.expectRowText(3, ['1']);
+                ReactableTestUtils.expectRowText(4, ['¥1.01']);
+                ReactableTestUtils.expectRowText(5, ['1.25']);
+                ReactableTestUtils.expectRowText(6, ['¥2']);
+                ReactableTestUtils.expectRowText(7, ['¥10']);
+                ReactableTestUtils.expectRowText(8, ['¥10,000']);
+                ReactableTestUtils.expectRowText(9, ['¥10,500']);
                 ReactableTestUtils.expectRowText(10, ['a']);
                 ReactableTestUtils.expectRowText(11, ['z']);
             });

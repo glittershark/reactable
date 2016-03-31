@@ -344,14 +344,8 @@ window.ReactDOM["default"] = window.ReactDOM;
 
         Currency: function Currency(a, b) {
             // Parse out dollar signs, then do a regular numeric sort
-            // TODO: handle non-American currency
-
-            if (a[0] === '$') {
-                a = a.substring(1);
-            }
-            if (b[0] === '$') {
-                b = b.substring(1);
-            }
+            a = a.replace(/[^0-9\.\-\,]+/g, '');
+            b = b.replace(/[^0-9\.\-\,]+/g, '');
 
             return exports.Sort.Numeric(a, b);
         },
@@ -1075,6 +1069,8 @@ window.ReactDOM["default"] = window.ReactDOM;
                         }
 
                         switch (child.type) {
+                            case _thead.Thead:
+                                break;
                             case _tfoot.Tfoot:
                                 if (typeof tfoot !== 'undefined') {
                                     console.warn('You can only have one <Tfoot>, but more than one was specified.' + 'Ignoring all but the last one');
@@ -1119,7 +1115,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                                 break;
 
                             default:
-                                console.warn('The only possible children of <Table>, are <Thead>, <Tr>, ' + 'or one <Tfoot>.');
+                                console.warn('The only possible children of <Table> are <Thead>, <Tr>, ' + 'or one <Tfoot>.');
                         }
                     }).bind(this));
                 }
