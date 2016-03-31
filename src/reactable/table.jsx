@@ -16,7 +16,7 @@ export class Table extends React.Component {
             currentPage: 0,
             currentSort: {
                 column: null,
-                direction: 1
+                direction: this.props.defaultSortDescending ? -1 : 1
             },
             filter: ''
         };
@@ -172,15 +172,17 @@ export class Table extends React.Component {
                 } else if (column.direction === -1 || column.direction === 'desc') {
                     sortDirection = -1;
                 } else {
-                    console.warn('Invalid default sort specified.  Defaulting to ascending');
-                    sortDirection = 1;
+                    let defaultDirection = this.props.defaultSortDescending ? 'descending' : 'ascending';
+
+                    console.warn('Invalid default sort specified. Defaulting to ' + defaultDirection );
+                    sortDirection = this.props.defaultSortDescending ? -1 : 1;
                 }
             } else {
-                sortDirection = 1;
+                sortDirection = this.props.defaultSortDescending ? -1 : 1;
             }
         } else {
             columnName      = column;
-            sortDirection   = 1;
+            sortDirection   = this.props.defaultSortDescending ? -1 : 1;
         }
 
         return {
@@ -289,7 +291,7 @@ export class Table extends React.Component {
             currentSort.direction *= -1;
         } else {
             currentSort.column = column;
-            currentSort.direction = 1;
+            currentSort.direction = this.props.defaultSortDescending ? -1 : 1;
         }
 
         // Set the current sort and pass it to the sort function
@@ -516,6 +518,7 @@ export class Table extends React.Component {
 Table.defaultProps = {
     sortBy: false,
     defaultSort: false,
+    defaultSortDescending: false,
     itemsPerPage: 0,
     hideFilterInput: false,
     locale: 'en'
