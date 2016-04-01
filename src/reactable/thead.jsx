@@ -15,20 +15,21 @@ export class Thead extends React.Component {
             if (typeof th.props !== 'undefined') {
                 column.props = filterPropsFrom(th.props);
 
-                // use the content as the label & key
-                if (typeof th.props.children !== 'undefined') {
-                    column.label = th.props.children;
-                    column.key = column.label;
+                //set the label depending on the props
+                if (typeof th.props.label !== 'undefined'){
+                    column.label = th.props.label
+                } else if (typeof th.props.children !== 'undefined'){
+                    column.label = th.props.children
+                } else if (typeof th.props.column === 'string') {
+                    column.label = th.props.column;
                 }
 
                 // the key in the column attribute supersedes the one defined previously
                 if (typeof th.props.column === 'string') {
                     column.key = th.props.column;
-
-                    // in case we don't have a label yet
-                    if (typeof column.label === 'undefined') {
-                        column.label = column.key;
-                    }
+                } else {
+                    // use the content as the key
+                    column.key = th.props.children;
                 }
             }
 
