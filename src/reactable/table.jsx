@@ -405,11 +405,10 @@ export class Table extends React.Component {
         // Determine if we render the filter box
         let filtering = false;
         if (
-            this.props.filterable &&
-                !this.props.topPagination &&
-                Array.isArray(this.props.filterable) &&
-                    this.props.filterable.length > 0 &&
-                        !this.props.hideFilterInput
+            Array.isArray(this.props.filterable) &&
+            this.props.filterable.length > 0 &&
+            !this.props.hideFilterInput
+
         ) {
             filtering = true;
         }
