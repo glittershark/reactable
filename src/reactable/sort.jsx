@@ -36,14 +36,8 @@ export var Sort = {
 
     Currency(a, b) {
         // Parse out dollar signs, then do a regular numeric sort
-        // TODO: handle non-American currency
-
-        if (a[0] === '$') {
-            a = a.substring(1);
-        }
-        if (b[0] === '$') {
-            b = b.substring(1);
-        }
+        a = a.replace(/[^0-9\.\-\,]+/g, '');
+        b = b.replace(/[^0-9\.\-\,]+/g, '');
 
         return exports.Sort.Numeric(a, b);
     },
