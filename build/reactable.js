@@ -284,6 +284,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                 if (typeof this.props.colSpan === 'undefined') {
                     throw new TypeError('Must pass a colSpan argument to Filterer');
                 }
+
                 return _react["default"].createElement(
                     "tr",
                     { className: "reactable-filterer" },
@@ -460,6 +461,10 @@ window.ReactDOM["default"] = window.ReactDOM;
                     className: this.props.className,
                     onClick: this.handleClick.bind(this)
                 };
+
+                if (typeof this.props.style !== 'undefined') {
+                    tdProps.style = this.props.style;
+                }
 
                 // Attach any properties on the column to this Td object to allow things like custom event handlers
                 if (typeof this.props.column === 'object') {
@@ -749,16 +754,15 @@ window.ReactDOM["default"] = window.ReactDOM;
 
                 // Manually transfer props
                 var props = (0, _libFilter_props_from.filterPropsFrom)(this.props);
-
                 return _react['default'].createElement(
                     'thead',
                     props,
-                    filtering === true ? _react['default'].createElement(_filterer.Filterer, {
+                    !topPagination && filtering && _react['default'].createElement(_filterer.Filterer, {
                         colSpan: columns.length,
                         onFilter: onFilter,
                         placeholder: filterPlaceholder,
                         value: currentFilter
-                    }) : null,
+                    }),
                     topPagination ? _react['default'].createElement(
                         'tr',
                         { className: 'reactable-btnPagination' },
@@ -775,8 +779,8 @@ window.ReactDOM["default"] = window.ReactDOM;
                                 ),
                                 _react['default'].createElement(
                                     'div',
-                                    { className: 'reactable-mainElem' },
-                                    _react['default'].createElement(_filterer.FiltererInput, {
+                                    { className: filtering ? 'reactable-mainElem' : 'reactable-mainElem no-filter' },
+                                    filtering && _react['default'].createElement(_filterer.FiltererInput, {
                                         filterCleanBtn: filterCleanBtn,
                                         onClean: onClean,
                                         onFilter: onFilter,
@@ -818,20 +822,21 @@ window.ReactDOM["default"] = window.ReactDOM;
                     if (typeof th.props !== 'undefined') {
                         column.props = (0, _libFilter_props_from.filterPropsFrom)(th.props);
 
-                        // use the content as the label & key
-                        if (typeof th.props.children !== 'undefined') {
+                        //set the label depending on the props
+                        if (typeof th.props.label !== 'undefined') {
+                            column.label = th.props.label;
+                        } else if (typeof th.props.children !== 'undefined') {
                             column.label = th.props.children;
-                            column.key = column.label;
+                        } else if (typeof th.props.column === 'string') {
+                            column.label = th.props.column;
                         }
 
                         // the key in the column attribute supersedes the one defined previously
                         if (typeof th.props.column === 'string') {
                             column.key = th.props.column;
-
-                            // in case we don't have a label yet
-                            if (typeof column.label === 'undefined') {
-                                column.label = column.key;
-                            }
+                        } else {
+                            // use the content as the key
+                            column.key = th.props.children;
                         }
                     }
 
@@ -1685,7 +1690,7 @@ window.ReactDOM["default"] = window.ReactDOM;
 
                 // Determine if we render the filter box
                 var filtering = false;
-                if (this.props.filterable && !this.props.topPagination && Array.isArray(this.props.filterable) && this.props.filterable.length > 0 && !this.props.hideFilterInput) {
+                if (Array.isArray(this.props.filterable) && this.props.filterable.length > 0 && !this.props.hideFilterInput) {
                     filtering = true;
                 }
 
@@ -1750,9 +1755,6 @@ window.ReactDOM["default"] = window.ReactDOM;
                         filtering: filtering,
                         onFilter: function (filter) {
                             _this.setState({ filter: filter });
-                            if (_this.props.onFilter) {
-                                _this.props.onFilter(filter);
-                            }
                         },
                         filterCleanBtn: filterCleanBtn,
                         onClean: function (filter) {
