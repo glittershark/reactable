@@ -133,6 +133,36 @@ export class Table extends React.Component {
         this.tfoot = tfoot;
 
         this.initializeSorts(props);
+        this.initializeFilters(props);
+    }
+
+    initializeFilters() {
+        this._filterable = {};
+        // Transform filterable properties into a more friendly list
+        for (let i in this.props.filterable) {
+            let column = this.props.filterable[i];
+            let columnName, filterFunction;
+
+            if (column instanceof Object) {
+                if (typeof(column.column) !== 'undefined') {
+                    columnName = column.column;
+                } else {
+                    console.warn('Filterable column specified without column name');
+                    continue;
+                }
+
+                if (typeof(column.filterFunction) === 'function') {
+                    filterFunction = column.filterFunction;
+                } else {
+                    filterFunction = 'default';
+                }
+            } else {
+                columnName = column;
+                filterFunction = 'default';
+            }
+
+            this._filterable[columnName] = filterFunction;
+        }
     }
 
     initializeSorts() {
@@ -230,15 +260,21 @@ export class Table extends React.Component {
         for (let i = 0; i < children.length; i++) {
             let data = children[i].props.data;
 
-            for (let j = 0; j < this.props.filterable.length; j++) {
-                let filterColumn = this.props.filterable[j];
-
-                if (
-                    typeof(data[filterColumn]) !== 'undefined' &&
-                        extractDataFrom(data, filterColumn).toString().toLowerCase().indexOf(filter) > -1
-                ) {
-                    matchedChildren.push(children[i]);
-                    break;
+            for (let filterColumn in this._filterable) {
+                if (typeof(data[filterColumn]) !== 'undefined') {
+                    // Default filter
+                    if (typeof(this._filterable[filterColumn]) === 'undefined' || this._filterable[filterColumn]=== 'default') {
+                        if (extractDataFrom(data, filterColumn).toString().toLowerCase().indexOf(filter) > -1) {
+                            matchedChildren.push(children[i]);
+                            break;
+                        }
+                    } else {
+                        // Apply custom filter
+                        if (this._filterable[filterColumn](extractDataFrom(data, filterColumn).toString(), filter)) {
+                            matchedChildren.push(children[i]);
+                            break;
+                        }
+                    }
                 }
             }
         }

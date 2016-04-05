@@ -2070,6 +2070,168 @@ describe('Reactable', function() {
                 expect(activePage).to.have.text('1');
             });
         });
+
+        context('with custom filter', function() {
+            before(function() {
+                this.component = ReactDOM.render(
+                    <Reactable.Table className="table" id="table"
+                        filterable={[
+                            {
+                                column: 'Tag',
+                                filterFunction: function(contents, filter) {
+                                    // return true if tag contains 'x' and the filter
+                                    return (
+                                        typeof(contents) !== 'undefined' && typeof(filter) !== 'undefined' &&
+                                          contents.indexOf('x') > -1 && contents.indexOf(filter) > -1
+                                    );
+                                },
+                            },
+                            'State'
+                        ]}
+                        filterPlaceholder="Filter Results"
+                        columns={['State', 'Description', 'Tag']}>
+                        <Reactable.Tr>
+                            <Reactable.Td column='State'>New York</Reactable.Td>
+                            <Reactable.Td column='Description'>this is some text</Reactable.Td>
+                            <Reactable.Td column='Tag'>new</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column='State'>New Mexico</Reactable.Td>
+                            <Reactable.Td column='Description'>lorem ipsum</Reactable.Td>
+                            <Reactable.Td column='Tag'>old x</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column='State'>Colorado</Reactable.Td>
+                            <Reactable.Td column='Description'>lol</Reactable.Td>
+                            <Reactable.Td column='Tag'>renewed x</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column='State'>Alaska</Reactable.Td>
+                            <Reactable.Td column='Description'>bacon</Reactable.Td>
+                            <Reactable.Td column='Tag'>new</Reactable.Td>
+                        </Reactable.Tr>
+                    </Reactable.Table>,
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            context('from the filterer field', function() {
+                it('filters case insensitive on specified columns', function() {
+                    var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
+
+                    $filter.val('l');
+                    React.addons.TestUtils.Simulate.keyUp($filter[0]);
+
+                    ReactableTestUtils.expectRowText(0, ['New Mexico', 'lorem ipsum', 'old x']);
+                    ReactableTestUtils.expectRowText(1, ['Colorado', 'lol', 'renewed x']);
+                    ReactableTestUtils.expectRowText(2, ['Alaska', 'bacon', 'new']);
+                });
+
+                it('filter placeholder is set', function(){
+                    var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
+                    expect($filter.attr("placeholder")).to.equal('Filter Results');
+                })
+            });
+
+            context('from the function', function() {
+                before(function() {
+                    this.component.filterBy('l');
+                });
+
+                it('applies the filtering', function() {
+                    ReactableTestUtils.expectRowText(0, ['New Mexico', 'lorem ipsum', 'old x']);
+                    ReactableTestUtils.expectRowText(1, ['Colorado', 'lol', 'renewed x']);
+                    ReactableTestUtils.expectRowText(2, ['Alaska', 'bacon', 'new']);
+                });
+
+                it('updates the value of the filterer', function() {
+                    var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
+                    expect($filter).to.have.value('l');
+                });
+            });
+
+            context('from filterBy prop', function() {
+                before(function() {
+                  ReactableTestUtils.resetTestEnvironment();
+
+                  var ParentComponent = React.createClass({
+                    getInitialState: function() {
+                      return {customFilterText: 'l'}
+                    },
+
+                    handleChange(event) {
+                      this.setState({customFilterText: event.target.value});
+                    },
+
+                    render: function() {
+                      return (
+                        <div>
+                          <input type="text" ref="customFilterInput" id="customFilterInput" value={this.state.customFilterText} onChange={this.handleChange}/>
+                          <Reactable.Table className="table" id="table"
+                              filterable={[
+                                  {
+                                      column: 'Tag',
+                                      filterFunction: function(contents, filter) {
+                                          // return true if tag contains 'x' and the filter
+                                          return (
+                                              typeof(contents) !== 'undefined' && typeof(filter) !== 'undefined' &&
+                                                contents.indexOf('x') > -1 && contents.indexOf(filter) > -1
+                                          );
+                                      },
+                                  },
+                                  'State'
+                              ]}
+                              filterPlaceholder="Filter Results"
+                              filterBy={this.state.customFilterText}
+                              columns={['State', 'Description', 'Tag']}>
+                              <Reactable.Tr>
+                                  <Reactable.Td column='State'>Alaska</Reactable.Td>
+                                  <Reactable.Td column='Description'>bacon</Reactable.Td>
+                                  <Reactable.Td column='Tag'>new</Reactable.Td>
+                              </Reactable.Tr>
+                              <Reactable.Tr>
+                                  <Reactable.Td column='State'>New York</Reactable.Td>
+                                  <Reactable.Td column='Description'>this is some text</Reactable.Td>
+                                  <Reactable.Td column='Tag'>new</Reactable.Td>
+                              </Reactable.Tr>
+                              <Reactable.Tr>
+                                  <Reactable.Td column='State'>New Mexico</Reactable.Td>
+                                  <Reactable.Td column='Description'>lorem ipsum</Reactable.Td>
+                                  <Reactable.Td column='Tag'>old x</Reactable.Td>
+                              </Reactable.Tr>
+                              <Reactable.Tr>
+                                  <Reactable.Td column='State'>Colorado</Reactable.Td>
+                                  <Reactable.Td column='Description'>lol</Reactable.Td>
+                                  <Reactable.Td column='Tag'>renewed x</Reactable.Td>
+                              </Reactable.Tr>
+                          </Reactable.Table>
+                        </div>
+                      );
+                    }
+                  })
+
+                  this.component = ReactDOM.render(React.createElement(ParentComponent), ReactableTestUtils.testNode());
+                });
+
+                it('filters using the custom filter on specified columns', function() {
+                  ReactableTestUtils.expectRowText(0, ['Alaska', 'bacon', 'new']);
+                  ReactableTestUtils.expectRowText(1, ['New Mexico', 'lorem ipsum', 'old x']);
+                  ReactableTestUtils.expectRowText(2, ['Colorado', 'lol', 'renewed x']);
+                  var $builtInFilter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
+                  expect($builtInFilter).to.have.value('l');
+
+                  // Simulate changing input on parent component and re-rendering Reactable.Table with new props.
+                  var node = this.component.refs.customFilterInput;
+                  node.value = 'exico';
+                  ReactTestUtils.Simulate.change(customFilterInput);
+
+                  ReactableTestUtils.expectRowText(0, ['New Mexico', 'lorem ipsum', 'old x']);
+                  expect($builtInFilter).to.have.value('exico');
+                });
+            });
+        });
     });
 
     describe('directly passing a data array with non-string data', function() {

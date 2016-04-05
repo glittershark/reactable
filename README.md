@@ -446,6 +446,32 @@ var table = ReactDOM.render(
 These can be useful if you want to roll your own filtering input field
 outside of Reactable.
 
+You can also provide your own custom filtering functions:
+
+```jsx
+<Table className="table" id="table" data={[
+    {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
+    {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
+    {'State': 'Colorado',
+     'Description': 'new description that shouldn\'t match filter',
+     'Tag': 'old'},
+    {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
+]}
+filterable={[
+    {
+        column: 'State',
+        filterFunction: function(contents, filter) {
+            // case-sensitive filtering
+            return (contents.indexOf(filter) > -1);
+        }
+    },
+    'Tag'
+]} />
+```
+
+Your filter function must return a boolean. Refraining from specifying a custom
+filter function will default to case-insensitive filtering.
+
 ### Empty Data Sets
 
 If the table is initialized without any `<Tr>`s or with an empty array for
