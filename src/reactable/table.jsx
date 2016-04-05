@@ -213,6 +213,40 @@ export class Table extends React.Component {
         this.filterBy(nextProps.filterBy != null ? nextProps.filterBy : this.state.filter);
     }
 
+    componentDidUpdate() {
+        this.diffChildren()
+    }
+
+    componentDidMount() {
+        this.diffChildren()
+    }
+
+    diffChildren() {
+        const {onVisibleChange} = this.props
+        const {lastChildren, lastIds, currentChildren} = this
+        if (!onVisibleChange || !currentChildren) {return}
+
+        if (lastChildren === currentChildren) {return}
+        const currentIds = this.childrenToData(currentChildren, true)
+
+        let same
+        if (lastIds && lastIds.length === currentIds.length) {
+            same = true
+            for (let i = 0; i < currentIds.length; i++) {
+                if (lastIds[i] !== currentIds[i]) {
+                    same = false
+                    break
+                }
+            }
+        }
+
+        this.lastIds = currentIds
+        this.lastChildren = currentChildren
+        if (!same) {
+            onVisibleChange(currentIds)
+        }
+    }
+
     applyFilter(filter, children) {
         // Helper function to apply filter text to a list of table rows
         filter = filter.toLowerCase();
@@ -303,13 +337,17 @@ export class Table extends React.Component {
         }
     }
 
-    visibleItems() {
-        return this.currentChildren.map(row => {
+    childrenToData(children, onlyIds) {
+        return children.map(row => {
             const {i, id} = row.props;
             const iOrId = i != null ? i : id;
             const idOrKey = iOrId != null ? iOrId : row.key;
-            const data = {id: idOrKey};
 
+            if (onlyIds) {
+                return idOrKey
+            }
+
+            const data = {id: idOrKey};
             Object.keys(row.props.data).forEach(key => {
                 const col = row.props.data[key];
                 data[key] = col.props.value != null ? col.props.value : col.value;
@@ -317,6 +355,9 @@ export class Table extends React.Component {
 
             return data;
         })
+    }
+    visibleItems(onlyIds) {
+        return this.childrenToData(onlyIds)
     }
 
     scrollToTop() {
