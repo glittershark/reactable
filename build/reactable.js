@@ -1503,6 +1503,50 @@ window.ReactDOM["default"] = window.ReactDOM;
                 this.filterBy(nextProps.filterBy != null ? nextProps.filterBy : this.state.filter);
             }
         }, {
+            key: 'componentDidUpdate',
+            value: function componentDidUpdate() {
+                this.diffChildren();
+            }
+        }, {
+            key: 'componentDidMount',
+            value: function componentDidMount() {
+                this.diffChildren();
+            }
+        }, {
+            key: 'diffChildren',
+            value: function diffChildren() {
+                var onVisibleChange = this.props.onVisibleChange;
+                var lastChildren = this.lastChildren;
+                var lastIds = this.lastIds;
+                var currentChildren = this.currentChildren;
+
+                if (!onVisibleChange || !currentChildren) {
+                    return;
+                }
+
+                if (lastChildren === currentChildren) {
+                    return;
+                }
+                var currentIds = this.childrenToData(currentChildren, true);
+
+                var same = undefined;
+                if (lastIds && lastIds.length === currentIds.length) {
+                    same = true;
+                    for (var i = 0; i < currentIds.length; i++) {
+                        if (lastIds[i] !== currentIds[i]) {
+                            same = false;
+                            break;
+                        }
+                    }
+                }
+
+                this.lastIds = currentIds;
+                this.lastChildren = currentChildren;
+                if (!same) {
+                    onVisibleChange(currentIds);
+                }
+            }
+        }, {
             key: 'applyFilter',
             value: function applyFilter(filter, children) {
                 // Helper function to apply filter text to a list of table rows
@@ -1590,17 +1634,21 @@ window.ReactDOM["default"] = window.ReactDOM;
                 }
             }
         }, {
-            key: 'visibleItems',
-            value: function visibleItems() {
-                return this.currentChildren.map(function (row) {
+            key: 'childrenToData',
+            value: function childrenToData(children, onlyIds) {
+                return children.map(function (row) {
                     var _row$props = row.props;
                     var i = _row$props.i;
                     var id = _row$props.id;
 
                     var iOrId = i != null ? i : id;
                     var idOrKey = iOrId != null ? iOrId : row.key;
-                    var data = { id: idOrKey };
 
+                    if (onlyIds) {
+                        return idOrKey;
+                    }
+
+                    var data = { id: idOrKey };
                     Object.keys(row.props.data).forEach(function (key) {
                         var col = row.props.data[key];
                         data[key] = col.props.value != null ? col.props.value : col.value;
@@ -1608,6 +1656,11 @@ window.ReactDOM["default"] = window.ReactDOM;
 
                     return data;
                 });
+            }
+        }, {
+            key: 'visibleItems',
+            value: function visibleItems(onlyIds) {
+                return this.childrenToData(onlyIds);
             }
         }, {
             key: 'scrollToTop',
