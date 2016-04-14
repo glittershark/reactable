@@ -1136,6 +1136,38 @@ window.ReactDOM["default"] = window.ReactDOM;
                 this.tfoot = tfoot;
 
                 this.initializeSorts(props);
+                this.initializeFilters(props);
+            }
+        }, {
+            key: 'initializeFilters',
+            value: function initializeFilters() {
+                this._filterable = {};
+                // Transform filterable properties into a more friendly list
+                for (var i in this.props.filterable) {
+                    var column = this.props.filterable[i];
+                    var columnName = undefined,
+                        filterFunction = undefined;
+
+                    if (column instanceof Object) {
+                        if (typeof column.column !== 'undefined') {
+                            columnName = column.column;
+                        } else {
+                            console.warn('Filterable column specified without column name');
+                            continue;
+                        }
+
+                        if (typeof column.filterFunction === 'function') {
+                            filterFunction = column.filterFunction;
+                        } else {
+                            filterFunction = 'default';
+                        }
+                    } else {
+                        columnName = column;
+                        filterFunction = 'default';
+                    }
+
+                    this._filterable[columnName] = filterFunction;
+                }
             }
         }, {
             key: 'initializeSorts',
@@ -1239,12 +1271,21 @@ window.ReactDOM["default"] = window.ReactDOM;
                 for (var i = 0; i < children.length; i++) {
                     var data = children[i].props.data;
 
-                    for (var j = 0; j < this.props.filterable.length; j++) {
-                        var filterColumn = this.props.filterable[j];
-
-                        if (typeof data[filterColumn] !== 'undefined' && (0, _libExtract_data_from.extractDataFrom)(data, filterColumn).toString().toLowerCase().indexOf(filter) > -1) {
-                            matchedChildren.push(children[i]);
-                            break;
+                    for (var filterColumn in this._filterable) {
+                        if (typeof data[filterColumn] !== 'undefined') {
+                            // Default filter
+                            if (typeof this._filterable[filterColumn] === 'undefined' || this._filterable[filterColumn] === 'default') {
+                                if ((0, _libExtract_data_from.extractDataFrom)(data, filterColumn).toString().toLowerCase().indexOf(filter) > -1) {
+                                    matchedChildren.push(children[i]);
+                                    break;
+                                }
+                            } else {
+                                // Apply custom filter
+                                if (this._filterable[filterColumn]((0, _libExtract_data_from.extractDataFrom)(data, filterColumn).toString(), filter)) {
+                                    matchedChildren.push(children[i]);
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
