@@ -44,6 +44,12 @@ this the faster we can get to 1.0!
 bower install [--save] reactable
 ```
 
+### Using NPM
+
+```sh
+npm install [--save] reactable
+```
+
 Or, you can just download the raw file
 [here][build-file].
 
