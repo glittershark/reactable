@@ -54,6 +54,12 @@ export class Thead extends React.Component {
         this.props.onSort(column.key);
       }
     }
+    
+    scrollIntoView() {
+      if (this.domEl && this.domEl.offsetParent === null) {
+            this.domEl.scrollIntoView();
+        }
+    }
 
     render() {
         const {sort, sortableColumns, filtering, columns, onFilter, onClean, filterPlaceholder, currentFilter, topPagination, filterCleanBtn, locale, itemsPerPage, itemsNumber, numPages, currentPage, onPageChange, topPaginationElem} = this.props;
@@ -106,7 +112,7 @@ export class Thead extends React.Component {
         // Manually transfer props
         var props = filterPropsFrom(this.props);
         return (
-            <thead {...props}>
+            <thead {...{...props, ref: (el => this.domEl = el)}}>
                 {!topPagination && filtering &&
                     <Filterer
                         colSpan={columns.length}
