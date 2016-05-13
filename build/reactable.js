@@ -690,8 +690,17 @@ window.ReactDOM["default"] = window.ReactDOM;
                 }
             }
         }, {
+            key: 'scrollIntoView',
+            value: function scrollIntoView() {
+                if (this.domEl && this.domEl.offsetParent === null) {
+                    this.domEl.scrollIntoView();
+                }
+            }
+        }, {
             key: 'render',
             value: function render() {
+                var _this = this;
+
                 var _props = this.props;
                 var sort = _props.sort;
                 var sortableColumns = _props.sortableColumns;
@@ -756,7 +765,9 @@ window.ReactDOM["default"] = window.ReactDOM;
                 var props = (0, _libFilter_props_from.filterPropsFrom)(this.props);
                 return _react['default'].createElement(
                     'thead',
-                    props,
+                    _extends({}, props, { ref: function ref(el) {
+                            return _this.domEl = el;
+                        } }),
                     !topPagination && filtering && _react['default'].createElement(_filterer.Filterer, {
                         colSpan: columns.length,
                         onFilter: onFilter,
@@ -1665,8 +1676,8 @@ window.ReactDOM["default"] = window.ReactDOM;
         }, {
             key: 'scrollToTop',
             value: function scrollToTop() {
-                if (this.tableEl) {
-                    this.tableEl.scrollIntoView();
+                if (this.headEl) {
+                    this.headEl.scrollIntoView();
                 }
             }
         }, {
@@ -1792,10 +1803,12 @@ window.ReactDOM["default"] = window.ReactDOM;
                 this.currentChildren = currentChildren;
                 return _react['default'].createElement(
                     'table',
-                    { ref: function (t) {
-                            return _this.tableEl = t;
-                        } },
-                    columns && columns.length > 0 ? _react['default'].createElement(_thead.Thead, { columns: columns,
+                    null,
+                    columns && columns.length > 0 ? _react['default'].createElement(_thead.Thead, {
+                        ref: function (t) {
+                            return _this.headEl = t;
+                        },
+                        columns: columns,
                         topPagination: topPagination,
                         itemsNumber: filteredChildren.length,
                         itemsPerPage: itemsPerPage,
