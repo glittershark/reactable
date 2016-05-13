@@ -361,8 +361,8 @@ export class Table extends React.Component {
     }
 
     scrollToTop() {
-        if (this.tableEl) {
-            this.tableEl.scrollIntoView();
+        if (this.headEl) {
+            this.headEl.scrollIntoView();
         }
     }
 
@@ -492,9 +492,11 @@ export class Table extends React.Component {
         let noDataText = this.props.noDataText ? <tr className="reactable-no-data"><td colSpan={columns.length}>{this.props.noDataText}</td></tr> : null;
 
         this.currentChildren = currentChildren;
-        return <table ref={t => this.tableEl = t}>
+        return <table>
             {columns && columns.length > 0 ?
-                <Thead columns={columns}
+                <Thead 
+                    ref={t => this.headEl = t}
+                    columns={columns}
                     topPagination={topPagination}
                     itemsNumber={filteredChildren.length}
                     itemsPerPage={itemsPerPage}
