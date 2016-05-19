@@ -21,6 +21,7 @@ window.ReactDOM["default"] = window.ReactDOM;
         columns: true,
         sortable: true,
         filterable: true,
+        filterClassName: true,
         sortBy: true,
         defaultSort: true,
         itemsPerPage: true,
@@ -240,7 +241,7 @@ window.ReactDOM["default"] = window.ReactDOM;
             key: 'render',
             value: function render() {
                 return _react['default'].createElement('input', { type: 'text',
-                    className: 'reactable-filter-input',
+                    className: this.props.className,
                     placeholder: this.props.placeholder,
                     value: this.props.value,
                     onKeyUp: this.onChange.bind(this),
@@ -278,7 +279,8 @@ window.ReactDOM["default"] = window.ReactDOM;
                         { colSpan: this.props.colSpan },
                         _react['default'].createElement(FiltererInput, { onFilter: this.props.onFilter,
                             value: this.props.value,
-                            placeholder: this.props.placeholder })
+                            placeholder: this.props.placeholder,
+                            className: this.props.className ? 'reactable-filter-input ' + this.props.className : 'reactable-filter-input' })
                     )
                 );
             }
@@ -718,7 +720,8 @@ window.ReactDOM["default"] = window.ReactDOM;
                         colSpan: this.props.columns.length,
                         onFilter: this.props.onFilter,
                         placeholder: this.props.filterPlaceholder,
-                        value: this.props.currentFilter
+                        value: this.props.currentFilter,
+                        className: this.props.filterClassName
                     }) : null,
                     _react['default'].createElement(
                         'tr',
@@ -1486,6 +1489,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                             }
                         },
                         filterPlaceholder: this.props.filterPlaceholder,
+                        filterClassName: this.props.filterClassName,
                         currentFilter: this.state.filter,
                         sort: this.state.currentSort,
                         sortableColumns: this._sortable,

@@ -108,6 +108,7 @@ export class Thead extends React.Component {
                         onFilter={this.props.onFilter}
                         placeholder={this.props.filterPlaceholder}
                         value={this.props.currentFilter}
+                        className={this.props.filterClassName}
                     /> : null}
                 <tr className="reactable-column-header">{Ths}</tr>
             </thead>

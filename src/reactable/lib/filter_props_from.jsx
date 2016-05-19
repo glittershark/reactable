@@ -3,6 +3,7 @@ const internalProps = {
     columns: true,
     sortable: true,
     filterable: true,
+    filterClassName: true,
     sortBy: true,
     defaultSort: true,
     itemsPerPage: true,

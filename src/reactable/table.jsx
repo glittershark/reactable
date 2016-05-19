@@ -481,6 +481,7 @@ export class Table extends React.Component {
                      }
                  }}
                  filterPlaceholder={this.props.filterPlaceholder}
+                 filterClassName={this.props.filterClassName}
                  currentFilter={this.state.filter}
                  sort={this.state.currentSort}
                  sortableColumns={this._sortable}
