@@ -1055,6 +1055,51 @@ describe('Reactable', function() {
                 expect(currentPage).to.equal(2);
             });
         });
+
+        describe('update currentPage via a prop passed to table', function() {
+            before(function() {
+
+              var ParentComponent = React.createClass({
+                getInitialState: function() {
+                  return {currentPage: 4}
+                },
+
+                render () {
+                  return ( 
+                    <Reactable.Table className="table" id="table" data={[
+                        {'Name': 'Griffin Smith', 'Age': '18'},
+                        {'Age': '23', 'Name': 'Lee Salminen'},
+                        {'Age': '28', 'Position': 'Developer'},
+                        {'Name': 'Griffin Smith', 'Age': '18'},
+                        {'Age': '23', 'Name': 'Test Person'},
+                        {'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer'},
+                        {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
+                        {'Age': '23', 'Name': 'Lee Salminen'},
+                        {'Age': '28', 'Position': 'Developer'},
+                    ]} itemsPerPage={2} currentPage={this.state.currentPage} />
+                  );
+                }
+              })
+              this.component = ReactDOM.render(React.createElement(ParentComponent), ReactableTestUtils.testNode());
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('set default currentPage', function() {
+                let activePage = $('#table tbody.reactable-pagination ' +
+                    'a.reactable-page-button.reactable-current-page');
+                expect(activePage.length).to.equal(1);
+                expect(activePage).to.have.text('5');
+            });
+
+            it('update currentPage using props', function() {
+                this.component.setState({currentPage: 2})
+                let activePage = $('#table tbody.reactable-pagination ' +
+                    'a.reactable-page-button.reactable-current-page')
+                expect(activePage.length).to.equal(1);
+                expect(activePage).to.have.text('3');
+            });
+        });
     });
 
     describe('sorting', function(){
