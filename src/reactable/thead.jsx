@@ -58,9 +58,11 @@ export class Thead extends React.Component {
             var column = this.props.columns[index];
             var thClass = `reactable-th-${column.key.replace(/\s+/g, '-').toLowerCase()}`;
             var sortClass = '';
+            var thRole = null;
 
             if (this.props.sortableColumns[column.key]) {
                 sortClass += 'reactable-header-sortable ';
+                thRole = 'button';
             }
 
             if (this.props.sort.column === column.key) {
@@ -90,7 +92,7 @@ export class Thead extends React.Component {
                     key={index}
                     onClick={this.handleClickTh.bind(this, column)}
                     onKeyDown={this.handleKeyDownTh.bind(this, column)}
-                    role="button"
+                    role={thRole}
                     tabIndex="0">
                     {column.label}
                 </Th>
