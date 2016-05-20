@@ -13,7 +13,7 @@ export class Table extends React.Component {
         super(props);
 
         this.state = {
-            currentPage: 0,
+            currentPage: this.props.currentPage ? this.props.currentPage : 0,
             currentSort: {
                 column: null,
                 direction: this.props.defaultSortDescending ? -1 : 1
@@ -239,6 +239,12 @@ export class Table extends React.Component {
         }
     }
 
+    updateCurrentPage(nextPage) {
+        if (nextPage !== this.state.currentPage) {
+            this.setState({ currentPage: nextPage});
+        }
+    }
+
     componentWillMount() {
         this.initialize(this.props);
         this.sortByCurrentSort();
@@ -247,6 +253,7 @@ export class Table extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.initialize(nextProps);
+        this.updateCurrentPage(nextProps.currentPage)
         this.updateCurrentSort(nextProps.sortBy);
         this.sortByCurrentSort();
         this.filterBy(nextProps.filterBy);
