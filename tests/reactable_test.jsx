@@ -1056,7 +1056,7 @@ describe('Reactable', function() {
             });
         });
 
-        describe('update currentPage via a prop passed to table', function() {
+        describe('updating the currentPage via a prop passed to the table', function() {
             before(function() {
 
               var ParentComponent = React.createClass({
@@ -1065,7 +1065,7 @@ describe('Reactable', function() {
                 },
 
                 render () {
-                  return ( 
+                  return (
                     <Reactable.Table className="table" id="table" data={[
                         {'Name': 'Griffin Smith', 'Age': '18'},
                         {'Age': '23', 'Name': 'Lee Salminen'},
@@ -1085,14 +1085,14 @@ describe('Reactable', function() {
 
             after(ReactableTestUtils.resetTestEnvironment);
 
-            it('set default currentPage', function() {
+            it('allows setting the default currentPage', function() {
                 let activePage = $('#table tbody.reactable-pagination ' +
                     'a.reactable-page-button.reactable-current-page');
                 expect(activePage.length).to.equal(1);
                 expect(activePage).to.have.text('5');
             });
 
-            it('update currentPage using props', function() {
+            it('allows updating currentPage using props', function() {
                 this.component.setState({currentPage: 2})
                 let activePage = $('#table tbody.reactable-pagination ' +
                     'a.reactable-page-button.reactable-current-page')
