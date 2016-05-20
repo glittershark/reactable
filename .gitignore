@@ -26,3 +26,5 @@ node_modules
 
 tmp/*
 ^tmp/.keep
+
+build/tests
