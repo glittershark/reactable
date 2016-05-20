@@ -1444,7 +1444,6 @@ describe('Reactable', function() {
             });
         });
 
-
         describe('unsortable column', function(){
             before(function() {
                 ReactDOM.render(
@@ -1471,6 +1470,11 @@ describe('Reactable', function() {
                 ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', 'Engineer']);
                 ReactableTestUtils.expectRowText(2, ['Ian Zhang', '28', 'Developer']);
             });
+
+            it("doesn't give non-sortable headers a role=button", function() {
+                var nameHeader = $('#table thead tr.reactable-column-header th:first');
+                expect($(nameHeader)).to.not.have.attr('role', 'button');
+            })
         });
 
         [Reactable.Sort.Numeric, Reactable.Sort.NumericInteger].forEach(function(method) {
