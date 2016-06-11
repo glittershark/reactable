@@ -33,6 +33,26 @@ var ReactableTestUtils = {
 };
 
 describe('Reactable', function() {
+    describe("with null children", function(){
+        before(function () {
+            ReactDOM.render(
+                <Reactable.Table className="table" id="table">
+                    {null}
+                    {null}
+                    {null}
+                </Reactable.Table>,
+                ReactableTestUtils.testNode()
+            );
+        });
+
+        after(ReactableTestUtils.resetTestEnvironment);
+
+        it('renders the table', function() {
+            expect($('table#table.table')).to.exist;
+        });
+
+    });
+
     describe('directly passing a data array', function() {
         before(function() {
             ReactDOM.render(

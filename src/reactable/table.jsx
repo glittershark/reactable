@@ -362,17 +362,19 @@ export class Table extends React.Component {
 
         let firstChild = null;
 
-        if (
-            this.props.children &&
-            this.props.children.length > 0 &&
-            this.props.children[0].type === Thead
-        ) {
-            firstChild = this.props.children[0]
-        } else if (
-            typeof this.props.children !== 'undefined' &&
-            this.props.children.type === Thead
-        ) {
-            firstChild = this.props.children
+
+        if (this.props.children) {
+            if (
+                this.props.children.length > 0 &&
+                this.props.children[0] &&
+                this.props.children[0].type === Thead
+            ) {
+                firstChild = this.props.children[0]
+            } else if (
+                this.props.children.type === Thead
+            ) {
+                firstChild = this.props.children
+            }
         }
 
         if (firstChild !== null) {
