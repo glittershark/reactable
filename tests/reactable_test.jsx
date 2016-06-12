@@ -2451,7 +2451,6 @@ describe('Reactable', function() {
                 </Reactable.Table>,
                 ReactableTestUtils.testNode()
             );
-
             ReactTestUtils.Simulate.click($('td')[0])
         });
 
@@ -2460,6 +2459,33 @@ describe('Reactable', function() {
         it('calls the callbacks on click', function() {
             expect(this.clicked).to.eq(true);
         });
+    });
+
+    describe('onContextMenu callbacks on <Td> elements', function(){
+        before(function() {
+            this.rightClicked = false
+
+            ReactDOM.render(
+                <Reactable.Table className="table" id="table">
+                    <Reactable.Tr>
+                        <Reactable.Td column="Name" onContextMenu={function() {
+                            this.rightClicked = true;
+                        }.bind(this)}>
+                            <b>Griffin Smith</b>
+                        </Reactable.Td>
+                    </Reactable.Tr>
+                </Reactable.Table>,
+                ReactableTestUtils.testNode()
+            );
+            ReactTestUtils.Simulate.contextMenu($('td')[0])
+        });
+
+        after(ReactableTestUtils.resetTestEnvironment);
+
+        it('calls the callbacks on right click', function() {
+            expect(this.rightClicked).to.eq(true);
+        });
+
     });
 
     describe('table with no data', () => {
