@@ -1378,6 +1378,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                 var children = [];
                 var columns = undefined;
                 var userColumnsSpecified = false;
+                var showHeaders = typeof this.props.hideTableHeader === 'undefined';
 
                 var firstChild = null;
 
@@ -1489,10 +1490,9 @@ window.ReactDOM["default"] = window.ReactDOM;
                     )
                 ) : null;
 
-                return _react['default'].createElement(
-                    'table',
-                    props,
-                    columns && columns.length > 0 ? _react['default'].createElement(_thead.Thead, { columns: columns,
+                var tableHeader = null;
+                if (columns && columns.length > 0 && showHeaders) {
+                    tableHeader = _react['default'].createElement(_thead.Thead, { columns: columns,
                         filtering: filtering,
                         onFilter: function (filter) {
                             _this.setState({ filter: filter });
@@ -1506,7 +1506,12 @@ window.ReactDOM["default"] = window.ReactDOM;
                         sort: this.state.currentSort,
                         sortableColumns: this._sortable,
                         onSort: this.onSort.bind(this),
-                        key: 'thead' }) : null,
+                        key: 'thead' });
+                }
+                return _react['default'].createElement(
+                    'table',
+                    props,
+                    tableHeader,
                     _react['default'].createElement(
                         'tbody',
                         { className: 'reactable-data', key: 'tbody' },

@@ -677,6 +677,46 @@ describe('Reactable', function() {
         })
     });
 
+    describe('table headers', function() {
+        describe("with hideTableHeader prop on <Table>", function() {
+            before(function () {
+                ReactDOM.render(
+                    <Reactable.Table className="table" id="table" data={[
+                    { Name: 'Griffin Smith', Age: '18'},
+                    { Age: '23', Name: 'Lee Salminen'},
+                    { Age: '28', Position: 'Developer'},
+                    { Name: 'Leonor Hyatt', Position: null}
+                ]} hideTableHeader />,
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+
+            it('renders the table', function() {
+                expect($('table#table.table')).to.exist;
+            });
+
+            it('renders the first row with the correct data', function() {
+                ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', '']);
+            });
+
+            it('renders the second row with the correct data', function() {
+                ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', '']);
+            });
+
+            it('renders the third row with the correct data', function() {
+                ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
+            });
+
+            it('does not show a <Thead>', function() {
+                expect($('#table thead')).not.to.exist;
+            });
+        });
+
+
+    });
 
     describe('unsafe() strings', function() {
         context('in the <Table> directly', function() {

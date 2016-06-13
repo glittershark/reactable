@@ -359,6 +359,7 @@ export class Table extends React.Component {
         let children = [];
         let columns;
         let userColumnsSpecified = false;
+        let showHeaders = typeof this.props.hideTableHeader === 'undefined';
 
         let firstChild = null;
 
@@ -479,24 +480,28 @@ export class Table extends React.Component {
 
         let noDataText = this.props.noDataText ? <tr className="reactable-no-data"><td colSpan={columns.length}>{this.props.noDataText}</td></tr> : null;
 
-        return <table {...props}>
-            {columns && columns.length > 0 ?
-             <Thead columns={columns}
-                 filtering={filtering}
-                 onFilter={filter => {
+        var tableHeader = null;
+        if (columns && columns.length > 0 && showHeaders) {
+            tableHeader = (
+                <Thead columns={columns}
+                       filtering={filtering}
+                       onFilter={filter => {
                      this.setState({ filter: filter });
                      if (this.props.onFilter) {
                         this.props.onFilter(filter)
                      }
                  }}
-                 filterPlaceholder={this.props.filterPlaceholder}
-                 filterClassName={this.props.filterClassName}
-                 currentFilter={this.state.filter}
-                 sort={this.state.currentSort}
-                 sortableColumns={this._sortable}
-                 onSort={this.onSort.bind(this)}
-                 key="thead"/>
-             : null}
+                       filterPlaceholder={this.props.filterPlaceholder}
+                       filterClassName={this.props.filterClassName}
+                       currentFilter={this.state.filter}
+                       sort={this.state.currentSort}
+                       sortableColumns={this._sortable}
+                       onSort={this.onSort.bind(this)}
+                       key="thead"/>
+            )
+        }
+        return <table {...props}>
+            {tableHeader}
             <tbody className="reactable-data" key="tbody">
                 {currentChildren.length > 0 ? currentChildren : noDataText}
             </tbody>
