@@ -2,52 +2,42 @@ import React from 'react';
 import { isReactComponent } from './lib/is_react_component';
 import { stringable } from './lib/stringable';
 import { isUnsafe } from './unsafe';
+import { filterPropsFrom } from './lib/filter_props_from';
 
 export class Td extends React.Component {
-    handleClick(e){
-        if (typeof this.props.handleClick === 'function') {
-            return this.props.handleClick(e, this);
-        }
+    stringifyIfNotReactComponent(object) {
+      if(!isReactComponent(object) && stringable(object) && typeof(object) !== 'undefined') {
+        return object.toString()
+      }
+      return null;
     }
 
     render() {
-        var tdProps = {
-            className: this.props.className,
-            onClick: this.handleClick.bind(this)
-        };
-        
-        if(typeof(this.props.style) !== 'undefined'){
-            tdProps.style = this.props.style;        
-        }
-
         // Attach any properties on the column to this Td object to allow things like custom event handlers
+        var mergedProps = filterPropsFrom(this.props);
         if (typeof(this.props.column) === 'object') {
             for (var key in this.props.column) {
                 if (key !== 'key' && key !== 'name') {
-                    tdProps[key] = this.props.column[key];
+                    mergedProps[key] = this.props.column[key];
                 }
             }
         }
+        // handleClick aliases onClick event
+        mergedProps.onClick = this.props.handleClick;
 
-        var data = this.props.data;
+        var stringifiedChildProps;
 
-        if (typeof(this.props.children) !== 'undefined') {
-            if (isReactComponent(this.props.children)) {
-                data = this.props.children;
-            } else if (
-                typeof(this.props.data) === 'undefined' &&
-                    stringable(this.props.children)
-            ) {
-                data = this.props.children.toString();
-            }
-
-            if (isUnsafe(this.props.children)) {
-                tdProps.dangerouslySetInnerHTML = { __html: this.props.children.toString() };
-            } else {
-                tdProps.children = data;
-            }
+        if (typeof(this.props.data) === 'undefined') {
+          stringifiedChildProps = this.stringifyIfNotReactComponent(this.props.children)
         }
 
-        return <td {...tdProps} />;
+        if (isUnsafe(this.props.children)) {
+            return <td {...mergedProps}
+                dangerouslySetInnerHTML={{__html: this.props.children.toString()}}/>
+        } else {
+          return <td {...mergedProps}>
+                {stringifiedChildProps || this.props.children}
+            </td>;
+        }
     }
 };
