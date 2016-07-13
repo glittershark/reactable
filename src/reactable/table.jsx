@@ -240,7 +240,7 @@ export class Table extends React.Component {
     }
 
     updateCurrentPage(nextPage) {
-        if (nextPage !== this.state.currentPage) {
+        if (typeof(nextPage) !== 'undefined' && nextPage !== this.state.currentPage) {
             this.setState({ currentPage: nextPage});
         }
     }

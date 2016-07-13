@@ -1250,7 +1250,7 @@ window.ReactDOM["default"] = window.ReactDOM;
         }, {
             key: 'updateCurrentPage',
             value: function updateCurrentPage(nextPage) {
-                if (nextPage !== this.state.currentPage) {
+                if (typeof nextPage !== 'undefined' && nextPage !== this.state.currentPage) {
                     this.setState({ currentPage: nextPage });
                 }
             }
