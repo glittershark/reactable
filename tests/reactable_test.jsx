@@ -2580,4 +2580,35 @@ describe('Reactable', function() {
         });
       });
     })
+
+    describe('receive props with no currentPage', () => {
+        let parent;
+
+        before(function () {
+            //create a wrapper component so we can update its state and trigger componentWillReceiveProps in the table
+            var TestParent = React.createFactory(React.createClass({
+                render() {
+                    return (<Reactable.Table className="table" id="table" ref="table">
+                        <Reactable.Tr>
+                            <Reactable.Td column="Name">
+                                <b>Griffin Smith</b>
+                            </Reactable.Td>
+                        </Reactable.Tr>
+                    </Reactable.Table>);
+                }
+            }));
+
+            parent = ReactDOM.render(TestParent(), ReactableTestUtils.testNode());
+        });
+
+        after(ReactableTestUtils.resetTestEnvironment);
+
+        it('keeps the same currentPage and does not set it to undefined', function() {
+            const preUpdateCurrentPage  = parent.refs.table.state.currentPage;
+            parent.setState({testState: "this state update will trigger componentWillReceiveProps in the Reactable.Table"});
+            const postUpdateCurrentPage  = parent.refs.table.state.currentPage;
+            expect(postUpdateCurrentPage).to.not.eq(undefined);
+            expect(postUpdateCurrentPage).to.eq(preUpdateCurrentPage);
+        });
+    });
 });
