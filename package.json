@@ -45,5 +45,8 @@
     "react",
     "table",
     "data-tables"
-  ]
+  ],
+  "dependencies": {
+    "react-dom": "^15.2.1"
+  }
 }

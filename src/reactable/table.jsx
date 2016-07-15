@@ -424,7 +424,13 @@ export class Table extends React.Component {
                 }
 
                 return (
-                    <Tr columns={columns} key={i} data={data} {...props} />
+                  <Tr
+                    columns={columns}
+                    key={i}
+                    data={data}
+                    {...props}
+                    customRender={this.props.customRender}
+                  />
                 );
             }.bind(this)));
         }
@@ -531,5 +537,6 @@ Table.defaultProps = {
     defaultSortDescending: false,
     itemsPerPage: 0,
     filterBy: '',
-    hideFilterInput: false
+    hideFilterInput: false,
+    customRender: {},
 };
