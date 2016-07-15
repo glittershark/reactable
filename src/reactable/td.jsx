@@ -34,6 +34,12 @@ export class Td extends React.Component {
         if (isUnsafe(this.props.children)) {
             return <td {...mergedProps}
                 dangerouslySetInnerHTML={{__html: this.props.children.toString()}}/>
+        } else if (this.props.customRender[this.props.column.key]) {
+          return (
+            <td {...mergedProps}>
+              {this.props.customRender[this.props.column.key](this.props.children)}
+            </td>
+          );
         } else {
           return <td {...mergedProps}>
                 {stringifiedChildProps || this.props.children}

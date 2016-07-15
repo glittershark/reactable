@@ -458,6 +458,12 @@ window.ReactDOM["default"] = window.ReactDOM;
                 if ((0, _unsafe.isUnsafe)(this.props.children)) {
                     return _react['default'].createElement('td', _extends({}, mergedProps, {
                         dangerouslySetInnerHTML: { __html: this.props.children.toString() } }));
+                } else if (this.props.customRender[this.props.column.key]) {
+                    return _react['default'].createElement(
+                        'td',
+                        mergedProps,
+                        this.props.customRender[this.props.column.key](this.props.children)
+                    );
                 } else {
                     return _react['default'].createElement(
                         'td',
@@ -531,7 +537,11 @@ window.ReactDOM["default"] = window.ReactDOM;
 
                             return _react['default'].createElement(
                                 _td.Td,
-                                _extends({ column: column, key: column.key }, props),
+                                _extends({
+                                    customRender: this.props.customRender,
+                                    column: column,
+                                    key: column.key
+                                }, props),
                                 value
                             );
                         } else {
@@ -1431,7 +1441,13 @@ window.ReactDOM["default"] = window.ReactDOM;
                             }
                         }
 
-                        return _react['default'].createElement(_tr.Tr, _extends({ columns: columns, key: i, data: data }, props));
+                        return _react['default'].createElement(_tr.Tr, _extends({
+                            columns: columns,
+                            key: i,
+                            data: data
+                        }, props, {
+                            customRender: this.props.customRender
+                        }));
                     }).bind(this)));
                 }
 
@@ -1542,7 +1558,8 @@ window.ReactDOM["default"] = window.ReactDOM;
         defaultSortDescending: false,
         itemsPerPage: 0,
         filterBy: '',
-        hideFilterInput: false
+        hideFilterInput: false,
+        customRender: {}
     };
 });
 
