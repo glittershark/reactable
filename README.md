@@ -150,6 +150,41 @@ ReactDOM.render(
 );
 ```
 
+### Customizing <td/> rendering
+If you want to bring your own renderer for a data field you can pass it to
+`customRender`.
+
+Example:
+
+```jsx
+var Table = Reactable.Table;
+
+ReactDOM.render(
+    <Table
+      className="table"
+      id="table"
+      data={[
+        {
+            name: 'Gabriel Rubens',
+            github: 'grsabreu',
+        },
+        {
+            name: 'Guilherme Decampo',
+            github: 'guilhermedecampo',
+        },
+      ]}
+      customerRender={{
+        // Pass the new of the field you want to provide
+        // the custom renderer.
+        github: value => (
+          <a href={value}>{value}</a>
+        ),
+      }}
+    />,
+    document.getElementById('table')
+);
+```
+
 ### Customizing Columns
 
 To override inferring the column list from the attributes of the passed `data`
