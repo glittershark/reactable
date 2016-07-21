@@ -500,7 +500,8 @@ export class Table extends React.Component {
                        key="thead"/>
             )
         }
-        return <table {...props}>
+        const { defaultSortDescending, filterBy, hideFilterInput, ...htmlAllowed } = props
+        return <table {...htmlAllowed}>
             {tableHeader}
             <tbody className="reactable-data" key="tbody">
                 {currentChildren.length > 0 ? currentChildren : noDataText}
