@@ -102,8 +102,9 @@ export class Thead extends React.Component {
         // Manually transfer props
         var props = filterPropsFrom(this.props);
 
+        var { filtering, onFilter, filterPlaceholder, currentFilter, sort, sortableColumns, onSort, ...htmlAllowed } = props
         return (
-            <thead {...props}>
+            <thead {...htmlAllowed}>
                 {this.props.filtering === true ?
                     <Filterer
                         colSpan={this.props.columns.length}
