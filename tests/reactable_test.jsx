@@ -1419,6 +1419,62 @@ describe('Reactable', function() {
             });
         });
 
+        describe('sorting after updating columns and sortable props', () => {
+            let parent;
+
+            before(function () {
+                var TestParent = React.createFactory(React.createClass({
+                    getInitialState: function() {
+                        return ({
+                            data: [
+                                {Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
+                                {Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
+                                {Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
+                            ],
+                            sortable: ['Name', 'Age', 'Position'],
+                            defaultSort: 'Position'
+                        });
+                    },
+
+                    render: function() {
+                        return (
+                            <Reactable.Table
+                                className="table"
+                                id="table"
+                                data={this.state.data}
+                                sortable={this.state.sortable}
+                                defaultSort={this.state.defaultSort}
+                            />
+                        )
+                    }
+                }));
+
+                parent = ReactDOM.render(TestParent(), ReactableTestUtils.testNode());
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('sorts on new column after receiving new props', function() {
+                const newData = [
+                    { Name: 'Lee Salminen', Age: '23', newColumn: 'Programmer'},
+                    { Name: 'Griffin Smith', Age: '18', newColumn: 'Engineer'},
+                    { Name: 'Ian Zhang', Age: '28', newColumn: 'Developer'}
+                ]
+                const newSortable = ['Name', 'Age', 'newColumn']
+                const newDefaultSort = 'newColumn'
+                parent.setState({data: newData, sortable: newSortable, defaultSort: newDefaultSort});
+                var positionHeader = $('#table thead tr.reactable-column-header th')[2];
+                ReactTestUtils.Simulate.click(positionHeader);
+
+                ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', 'Engineer']);
+                ReactableTestUtils.expectRowText(2, ['Lee Salminen', '23', 'Programmer']);
+                ReactableTestUtils.expectRowText(0, ['Ian Zhang', '28', 'Developer']);
+
+                // Make sure the headers have the right classes
+                expect($(positionHeader)).to.have.class('reactable-header-sort-asc');
+            });
+        });
+
         describe('sort descending by default flag', function(){
             before(function() {
                 ReactDOM.render(

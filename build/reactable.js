@@ -1141,11 +1141,11 @@ window.ReactDOM["default"] = window.ReactDOM;
             }
         }, {
             key: 'initializeFilters',
-            value: function initializeFilters() {
+            value: function initializeFilters(props) {
                 this._filterable = {};
                 // Transform filterable properties into a more friendly list
-                for (var i in this.props.filterable) {
-                    var column = this.props.filterable[i];
+                for (var i in props.filterable) {
+                    var column = props.filterable[i];
                     var columnName = undefined,
                         filterFunction = undefined;
 
@@ -1172,11 +1172,11 @@ window.ReactDOM["default"] = window.ReactDOM;
             }
         }, {
             key: 'initializeSorts',
-            value: function initializeSorts() {
+            value: function initializeSorts(props) {
                 this._sortable = {};
                 // Transform sortable properties into a more friendly list
-                for (var i in this.props.sortable) {
-                    var column = this.props.sortable[i];
+                for (var i in props.sortable) {
+                    var column = props.sortable[i];
                     var columnName = undefined,
                         sortFunction = undefined;
 
