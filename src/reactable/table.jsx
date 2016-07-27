@@ -230,12 +230,20 @@ export class Table extends React.Component {
         };
     }
 
-    updateCurrentSort(sortBy) {
+    updateCurrentSort(sortBy, defaultSort) {
+        var currentSort = null;
         if (sortBy !== false &&
             sortBy.column !== this.state.currentSort.column &&
                 sortBy.direction !== this.state.currentSort.direction) {
+            currentSort = sortBy;
+        }
 
-            this.setState({ currentSort: this.getCurrentSort(sortBy) });
+        else if (sortBy == false && defaultSort != undefined) {
+            currentSort = defaultSort;
+        }
+
+        if (currentSort) {
+            this.setState({currentSort: this.getCurrentSort(currentSort)});
         }
     }
 
@@ -254,7 +262,7 @@ export class Table extends React.Component {
     componentWillReceiveProps(nextProps) {
         this.initialize(nextProps);
         this.updateCurrentPage(nextProps.currentPage)
-        this.updateCurrentSort(nextProps.sortBy);
+        this.updateCurrentSort(nextProps.sortBy, nextProps.defaultSort);
         this.sortByCurrentSort();
         this.filterBy(nextProps.filterBy);
     }

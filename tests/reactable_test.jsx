@@ -1464,14 +1464,15 @@ describe('Reactable', function() {
                 const newDefaultSort = 'newColumn'
                 parent.setState({data: newData, sortable: newSortable, defaultSort: newDefaultSort});
                 var positionHeader = $('#table thead tr.reactable-column-header th')[2];
+                expect($(positionHeader)).to.have.class('reactable-header-sort-asc');
                 ReactTestUtils.Simulate.click(positionHeader);
 
                 ReactableTestUtils.expectRowText(1, ['Griffin Smith', '18', 'Engineer']);
-                ReactableTestUtils.expectRowText(2, ['Lee Salminen', '23', 'Programmer']);
-                ReactableTestUtils.expectRowText(0, ['Ian Zhang', '28', 'Developer']);
+                ReactableTestUtils.expectRowText(0, ['Lee Salminen', '23', 'Programmer']);
+                ReactableTestUtils.expectRowText(2, ['Ian Zhang', '28', 'Developer']);
 
                 // Make sure the headers have the right classes
-                expect($(positionHeader)).to.have.class('reactable-header-sort-asc');
+                expect($(positionHeader)).to.have.class('reactable-header-sort-desc');
             });
         });
 
