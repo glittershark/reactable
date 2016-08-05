@@ -500,7 +500,7 @@ export class Table extends React.Component {
                        key="thead"/>
             )
         }
-        return <table {...props}>
+        return <table className={this.props.className}>
             {tableHeader}
             <tbody className="reactable-data" key="tbody">
                 {currentChildren.length > 0 ? currentChildren : noDataText}

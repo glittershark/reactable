@@ -103,7 +103,7 @@ export class Thead extends React.Component {
         var props = filterPropsFrom(this.props);
 
         return (
-            <thead {...props}>
+            <thead>
                 {this.props.filtering === true ?
                     <Filterer
                         colSpan={this.props.columns.length}

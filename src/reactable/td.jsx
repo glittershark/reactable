@@ -32,10 +32,10 @@ export class Td extends React.Component {
         }
 
         if (isUnsafe(this.props.children)) {
-            return <td {...mergedProps}
+            return <td className={mergedProps.className}
                 dangerouslySetInnerHTML={{__html: this.props.children.toString()}}/>
         } else {
-          return <td {...mergedProps}>
+          return <td className={mergedProps.className}>
                 {stringifiedChildProps || this.props.children}
             </td>;
         }
