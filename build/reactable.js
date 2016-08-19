@@ -26,7 +26,23 @@ window.ReactDOM["default"] = window.ReactDOM;
         itemsPerPage: true,
         childNode: true,
         data: true,
-        children: true
+        children: true,
+        topPagination: true,
+        itemsNumber: true,
+        numPages: true,
+        currentPage: true,
+        topPaginationElem: true,
+        filtering: true,
+        onFilter: true,
+        filterCleanBtn: true,
+        onClean: true,
+        onPageChange: true,
+        filterPlaceholder: true,
+        currentFilter: true,
+        sort: true,
+        sortableColumns: true,
+        onSort: true,
+        locale: true
     };
 
     function filterPropsFrom(baseProps) {
@@ -468,10 +484,8 @@ window.ReactDOM["default"] = window.ReactDOM;
 
                 // Attach any properties on the column to this Td object to allow things like custom event handlers
                 if (typeof this.props.column === 'object') {
-                    for (var key in this.props.column) {
-                        if (key !== 'key' && key !== 'name') {
-                            tdProps[key] = this.props.column[key];
-                        }
+                    for (var key in this.props.column.props) {
+                        tdProps[key] = this.props.column[key];
                     }
                 }
 
@@ -1018,11 +1032,15 @@ window.ReactDOM["default"] = window.ReactDOM;
                 return _react["default"].createElement(
                     "div",
                     { className: "counter" },
-                    this.calcRange(),
-                    " ",
-                    tr.of[locale],
-                    " ",
-                    itemsNumber
+                    _react["default"].createElement(
+                        "span",
+                        null,
+                        this.calcRange(),
+                        " ",
+                        tr.of[locale],
+                        " ",
+                        itemsNumber
+                    )
                 );
             }
         }, {
@@ -1839,7 +1857,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                         sortableColumns: this._sortable,
                         onSort: this.onSort.bind(this),
                         key: 'thead',
-                        locale: props.locale
+                        locale: this.props.locale
                     }) : null,
                     _react['default'].createElement(
                         'tbody',
@@ -1849,7 +1867,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                     pagination ? _react['default'].createElement(_paginator.Paginator, { bottomPagination: bottomPagination,
                         itemsNumber: filteredChildren.length,
                         itemsPerPage: itemsPerPage,
-                        locale: props.locale,
+                        locale: this.props.locale,
                         colSpan: columns.length,
                         pageButtonLimit: pageButtonLimit,
                         numPages: numPages,
