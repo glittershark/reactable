@@ -494,7 +494,7 @@ export class Table extends React.Component {
         this.currentChildren = currentChildren;
         return <table>
             {columns && columns.length > 0 ?
-                <Thead 
+                <Thead
                     ref={t => this.headEl = t}
                     columns={columns}
                     topPagination={topPagination}
@@ -526,7 +526,7 @@ export class Table extends React.Component {
                     sortableColumns={this._sortable}
                     onSort={this.onSort.bind(this)}
                     key="thead"
-                    locale={props.locale}
+                    locale={this.props.locale}
                 /> : null
             }
             <tbody className="reactable-data" key="tbody">
@@ -536,7 +536,7 @@ export class Table extends React.Component {
                 <Paginator bottomPagination={bottomPagination}
                     itemsNumber={filteredChildren.length}
                     itemsPerPage={itemsPerPage}
-                    locale={props.locale}
+                    locale={this.props.locale}
                     colSpan={columns.length}
                     pageButtonLimit={pageButtonLimit}
                     numPages={numPages}
