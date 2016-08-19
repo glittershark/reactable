@@ -22,10 +22,8 @@ export class Td extends React.Component {
 
         // Attach any properties on the column to this Td object to allow things like custom event handlers
         if (typeof(this.props.column) === 'object') {
-            for (var key in this.props.column) {
-                if (key !== 'key' && key !== 'name') {
-                    tdProps[key] = this.props.column[key];
-                }
+            for (var key in this.props.column.props) {
+                tdProps[key] = this.props.column[key];
             }
         }
 

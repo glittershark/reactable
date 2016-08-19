@@ -8,7 +8,23 @@ const internalProps = {
     itemsPerPage: true,
     childNode: true,
     data: true,
-    children: true
+    children: true,
+    topPagination: true,
+    itemsNumber: true,
+    numPages: true,
+    currentPage: true,
+    topPaginationElem: true,
+    filtering: true,
+    onFilter: true,
+    filterCleanBtn: true,
+    onClean: true,
+    onPageChange: true,
+    filterPlaceholder: true,
+    currentFilter: true,
+    sort: true,
+    sortableColumns: true,
+    onSort: true,
+    locale: true,
 };
 
 export function filterPropsFrom(baseProps) {
@@ -22,4 +38,3 @@ export function filterPropsFrom(baseProps) {
 
     return props;
 }
-
