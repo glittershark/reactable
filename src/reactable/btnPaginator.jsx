@@ -58,7 +58,7 @@ export class BtnPaginator extends React.Component {
 	renderCounter() {
 		const {itemsNumber, locale} = this.props
 		return <div className="counter">
-			{this.calcRange()} {tr.of[locale]} {itemsNumber}
+			<span>{this.calcRange()} {tr.of[locale]} {itemsNumber}</span>
 		</div>
 	}
 
