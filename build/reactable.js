@@ -21,10 +21,23 @@ window.ReactDOM["default"] = window.ReactDOM;
         columns: true,
         sortable: true,
         filterable: true,
+        filtering: true,
+        onFilter: true,
+        filterPlaceholder: true,
         filterClassName: true,
+        currentFilter: true,
+        sort: true,
         sortBy: true,
+        sortableColumns: true,
+        onSort: true,
         defaultSort: true,
+        defaultSortDescending: true,
         itemsPerPage: true,
+        filterBy: true,
+        hideFilterInput: true,
+        noDataText: true,
+        currentPage: true,
+        pageButtonLimit: true,
         childNode: true,
         data: true,
         children: true
@@ -1094,7 +1107,11 @@ window.ReactDOM["default"] = window.ReactDOM;
                                         } else if (typeof descendant.props.children !== 'undefined') {
                                             value = descendant.props.children;
                                         } else {
-                                            console.warn('exports.Td specified without ' + 'a `data` property or children, ' + 'ignoring');
+                                            var warning = 'exports.Td specified without ' + 'a `data` property or children, ' + 'ignoring';
+                                            if (typeof descendant.props.column !== 'undefined') {
+                                                warning += '. See definition for column \'' + descendant.props.column + '\'.';
+                                            }
+                                            console.warn(warning);
                                             return;
                                         }
 
