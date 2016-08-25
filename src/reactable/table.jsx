@@ -1,6 +1,8 @@
 import React from 'react';
 import { filterPropsFrom } from './lib/filter_props_from';
 import { extractDataFrom } from './lib/extract_data_from';
+import { determineRowSpan } from './lib/determine_row_span';
+import { extend } from './lib/extend';
 import { isUnsafe } from './unsafe';
 import { Thead } from './thead';
 import { Th } from './th';
@@ -26,6 +28,11 @@ export class Table extends React.Component {
             let sortingColumn = props.sortBy || props.defaultSort;
             this.state.currentSort = this.getCurrentSort(sortingColumn);
         }
+
+
+        // used for generating a key for a <Tr> that will change <Td> counts -- avoids jitters in the update
+        this.cloneIndex = 0;
+        this.renderNoDataComponent = this.renderNoDataComponent.bind(this);
     }
 
     filterBy(filter) {
@@ -91,14 +98,18 @@ export class Table extends React.Component {
                                 } else if (typeof(descendant.props.children) !== 'undefined') {
                                     value = descendant.props.children;
                                 } else {
-                                    console.warn('exports.Td specified without ' +
-                                                 'a `data` property or children, ' +
-                                                 'ignoring');
+                                    var warning = 'exports.Td specified without ' +
+                                        'a `data` property or children, ignoring';
+                                    if (typeof (descendant.props.column) !== 'undefined') {
+                                        warning += `. See definition for column '${descendant.props.column}'.`;
+                                    }
+                                    console.warn(warning);
                                     return;
                                 }
 
                                 childData[descendant.props.column] = {
                                     value: value,
+                                    component: descendant.type,
                                     props: filterPropsFrom(descendant.props),
                                     __reactableMeta: true
                                 };
@@ -253,7 +264,7 @@ export class Table extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.initialize(nextProps);
-        this.updateCurrentPage(nextProps.currentPage)
+        this.updateCurrentPage(nextProps.currentPage);
         this.updateCurrentSort(nextProps.sortBy);
         this.sortByCurrentSort();
         this.filterBy(nextProps.filterBy);
@@ -262,31 +273,164 @@ export class Table extends React.Component {
     applyFilter(filter, children) {
         // Helper function to apply filter text to a list of table rows
         filter = filter.toLowerCase();
-        let matchedChildren = [];
+
+        /**
+         * We face two problems when trying to filter with rowSpan:
+         *  1) what happens when the row that specifies the <Td> with the row span is filtered out?
+         *       move the rowSpan definition to the next visible row and adjust the rowSpan value to exclude
+         *                 all the filtered out rows (e.g. if we have a rowSpan=5 and the 1st and 5th row are filtered
+         *                 out, the rowSpan property & value shifts to row 2 and rowSpan now becomes 3)
+         *
+         *  2) what happens when the row/cell that specifies the rowSpan matches the text:
+         *       immediately include all the subsequent rows the that the <Td> spans in the result list.
+         *
+         */
+
+
+        let matchedChildren = {}; // row index => the matched data
+
+        // houses the rowSpan definition for each row/columnName combo (e.g. [0]['Name'] provides the rowSpan definition
+        //  for the item at row 0 in the 'Name' column
+        var rowSpanReferences  = {};
+
+        // the current rowSpan definition for each column, columnName => rowSpan definition
+        var currentRowSpanState = {};
 
         for (let i = 0; i < children.length; i++) {
-            let data = children[i].props.data;
+            let child = children[i];
+            let data = child.props.data;
 
+            // look at each column in this row and see if there are rowSpan properties
+            Object.keys(data).forEach(k => {
+                if (typeof k !== 'undefined' && typeof data[k] !== 'undefined') {
+                    var state = currentRowSpanState[k];
+
+                    // check if we've exhausted our specified number of rows for this column
+                    if (typeof state !== 'undefined') {
+                        let rowSpanEnd = state.startsAt + state.rowSpan - 1;
+                        if (i >= rowSpanEnd) {
+                            delete currentRowSpanState[k];
+                        }
+                    }
+
+                    let rowSpan = determineRowSpan(child, k);
+                    // we don't want to waste our time with single rows, only keep a state if we have >1
+                    if (rowSpan > 1) {
+                        state = {
+                            rowSpan: rowSpan,
+                            startsAt: i,
+                            component: child,
+                            columnName: k
+                        };
+                        currentRowSpanState[k] = state;
+
+                        // store the reference to the rowSpanDefinition for all columns it's relevant to
+                        let rowSpanEnd = i + rowSpan;
+                        for (var idx = i; idx < rowSpanEnd && idx < children.length; idx++) {
+                            if (typeof rowSpanReferences[idx] === 'undefined') {
+                                rowSpanReferences[idx] = {};
+                            }
+                            rowSpanReferences[idx][k] = state;
+                        }
+                    }
+
+                }
+            });
+
+            // 2) look through all 'filterable' columns for this row and see if we can find the filterBy text
             for (let filterColumn in this._filterable) {
                 if (typeof(data[filterColumn]) !== 'undefined') {
                     // Default filter
                     if (typeof(this._filterable[filterColumn]) === 'undefined' || this._filterable[filterColumn]=== 'default') {
+
                         if (extractDataFrom(data, filterColumn).toString().toLowerCase().indexOf(filter) > -1) {
-                            matchedChildren.push(children[i]);
+
+                            // upon a filter text match, we include the cell that matched and all the rows that
+                            //  the cell spans
+                            let rowSpan = determineRowSpan(child, filterColumn);
+                            let rowSpanEnd = i + rowSpan;
+
+                            for (var idx = i; idx < rowSpanEnd && idx < children.length; idx++) {
+                                var otherChild = children[idx];
+                                matchedChildren[idx] = otherChild;
+
+                                // we no longer need to handle rowSpan for the other rows
+                                if (typeof rowSpanReferences[idx] !== 'undefined') {
+                                    delete rowSpanReferences[idx][filterColumn]
+                                }
+                            }
+
+                            // we've rendered all the rows this cell spans, we no longer need to maintain state
+                            delete currentRowSpanState[filterColumn];
+
                             break;
                         }
+
                     } else {
                         // Apply custom filter
                         if (this._filterable[filterColumn](extractDataFrom(data, filterColumn).toString(), filter)) {
-                            matchedChildren.push(children[i]);
+                            matchedChildren[i] = child;
                             break;
                         }
                     }
                 }
+
             }
+
         }
 
-        return matchedChildren;
+
+        // Now that we know which results will be displayed, we can calculate a rowSpan that will encompass
+        //  only the visible rows.
+        // Iterate through the matched children and check if there are rowSpan modifications they need to make. Hint: we
+        //  stored all row/col combos needing a modification in rowSpanReferences
+        var resultingChildren = Object.keys(matchedChildren).map((rowIndex => {
+            let definitions = rowSpanReferences[rowIndex];
+            if (typeof definitions !== 'undefined') {
+
+                // the child we will clone and give a new <Td>
+                let child = matchedChildren[rowIndex];
+
+                // we'll be recreating this <Tr> with a rowSpan property carried over from the <Tr> with the rowSpan
+                var newData = extend({}, child.props.data);
+                var newProps = extend({}, child.props);
+                newProps.data = newData;
+
+                Object.keys(definitions).forEach(columnName => {
+                    let definition = definitions[columnName];
+                    // the tr with the rowSpan property
+                    let tr = definition.component;
+
+                    // this child was a part of a rowSpan
+                    let rowSpanEnd = definition.startsAt + definition.rowSpan;
+                    var remainingRowSpan = rowSpanEnd - rowIndex;
+
+                    // if the rows that we're supposed to span did not match the filter text, we need to reduce the remainingRowSpan
+                    for (var idx = rowIndex; idx < rowSpanEnd; idx++) {
+                        if (typeof matchedChildren[idx] === 'undefined') {
+                            remainingRowSpan--;
+                        }
+                    }
+
+                    // clone the data for the column to avoid altering the original props (e.g. don't want to change the rowSpan on original Td)
+                    newProps.data[columnName] = extend({}, tr.props.data[columnName]);
+                    newProps.data[columnName].props = extend({}, newProps.data[columnName].props);
+                    newProps.data[columnName].props.rowSpan = remainingRowSpan;
+
+                });
+
+                // new key to avoid jitters, we want a brand new component
+                newProps.key = "cloned-"+(this.cloneIndex++);
+                newProps.renderState = child.props.renderState;
+
+                return React.cloneElement(child, newProps);
+
+            } else {
+                return matchedChildren[rowIndex];
+            }
+        }).bind(this));
+
+        return resultingChildren;
     }
 
     sortByCurrentSort() {
@@ -298,37 +442,137 @@ export class Table extends React.Component {
             return;
         }
 
-        this.data.sort(function(a, b){
-            let keyA = extractDataFrom(a, currentSort.column);
-            keyA = isUnsafe(keyA) ? keyA.toString() : keyA || '';
-            let keyB = extractDataFrom(b, currentSort.column);
-            keyB = isUnsafe(keyB) ? keyB.toString() : keyB || '';
 
-            // Default sort
-            if (
-                typeof(this._sortable[currentSort.column]) === 'undefined' ||
-                    this._sortable[currentSort.column] === 'default'
-            ) {
+        // we'll be splitting each set of data into buckets, then sorting them. A 'set' is defined as rows sharing a
+        //  <Td> with a rowSpan
+        var singles = []; // rows without any rowSpans
+        var buckets = {
+        };
+        var bucketIndex = 0;
 
-                // Reverse direction if we're doing a reverse sort
-                if (keyA < keyB) {
-                    return -1 * currentSort.direction;
-                }
+        // helps us keep track of where we are in the last rowSpan we saw
+        var currentRowSpan = null;
 
-                if (keyA > keyB) {
-                    return 1 * currentSort.direction;
-                }
+        for (var idx = 0; idx < this.data.length; idx++) {
+            let obj = this.data[idx];
 
-                return 0;
-            } else {
-                // Reverse columns if we're doing a reverse sort
-                if (currentSort.direction === 1) {
-                    return this._sortable[currentSort.column](keyA, keyB);
-                } else {
-                    return this._sortable[currentSort.column](keyB, keyA);
+            // check if rowSpan is completed
+            if (currentRowSpan != null) {
+                let rowSpanEnd = currentRowSpan.startsAt + currentRowSpan.rowSpan;
+                if (rowSpanEnd <= idx) {
+                    bucketIndex++;
+                    currentRowSpan = null;
                 }
             }
-        }.bind(this));
+
+            // make sure the bucket is defined
+            if (typeof buckets[bucketIndex] === 'undefined') {
+                buckets[bucketIndex] = [];
+            }
+
+            if (typeof obj.data !== 'undefined') {
+                // find the column with the next biggest rowSpan
+                let rowSpanOfSortColumn = determineRowSpan(obj.data, currentSort.column);
+
+                if (rowSpanOfSortColumn !== 1) {
+                    // not supported
+                    console.warn("Cannot sort by column '"+currentSort.column+"', sorting by columns that have cells with rowSpan is currently not supported. See https://github.com/glittershark/reactable/issues/84");
+                    return;
+                }
+
+                for (var col in obj.data) {
+
+                    if (col === currentSort.column) {
+                        // ignore the sort column
+                        continue;
+                    }
+
+                    let rowSpanCurrentCol = determineRowSpan(obj.data, col);
+
+                    // if the rowSpan we found is less than the current debt but greater than the rowSpan of our column,
+                    //      we will use that number
+                    if (rowSpanCurrentCol > rowSpanOfSortColumn && (currentRowSpan == null || currentRowSpan.rowSpan > rowSpanCurrentCol)) {
+                        currentRowSpan = {
+                            startsAt: idx,
+                            rowSpan: rowSpanCurrentCol
+                        }
+                    }
+                }
+
+            }
+
+
+            if (currentRowSpan == null) {
+                singles.push(obj)
+            } else {
+                buckets[bucketIndex].push(obj);
+            }
+        }
+
+        // run a sort on each bucket
+        buckets = Object.keys(buckets).map(dataSet => {
+            return buckets[dataSet].sort(this.sortFunction.bind(this));
+        });
+        buckets.push(singles.sort(this.sortFunction.bind(this)));
+
+        // flatten
+        this.data = buckets.reduce((a,current) => {
+            // look for row spans and put the definition of the <Td> on the top row after sort
+            if (current.length > 0) {
+                for (var idx = 0; idx < current.length; idx++) {
+                    let obj = current[idx];
+
+                    for (var col in obj.data) {
+                        let rowSpan = determineRowSpan(obj.data, col);
+                        let currentPosition = idx % rowSpan;
+                        let newRowSpanIdx = idx - currentPosition;
+
+                        if (idx !== newRowSpanIdx) {
+                            // need to push the rowSpan property & values to the top row
+                            current[newRowSpanIdx].data[col] = extend({}, obj.data[col]);
+                            delete obj.data[col];
+                        }
+                    }
+                }
+            }
+            return a.concat(current);
+        }, []);
+
+    }
+
+    sortFunction(a, b) {
+        let currentSort = this.state.currentSort;
+
+        let keyA = extractDataFrom(a, currentSort.column);
+        keyA = isUnsafe(keyA) ? keyA.toString() : keyA || '';
+        let keyB = extractDataFrom(b, currentSort.column);
+        keyB = isUnsafe(keyB) ? keyB.toString() : keyB || '';
+
+        // Default sort
+        if (
+            typeof(this._sortable[currentSort.column]) === 'undefined' ||
+            this._sortable[currentSort.column] === 'default'
+        ) {
+
+            // Reverse direction if we're doing a reverse sort
+            if (keyA < keyB) {
+                return -1 * currentSort.direction;
+            }
+
+            if (keyA > keyB) {
+                return 1 * currentSort.direction;
+            }
+
+            return 0;
+        } else {
+            // Reverse columns if we're doing a reverse sort
+            if (currentSort.direction === 1) {
+                return this._sortable[currentSort.column](keyA, keyB);
+            } else {
+                return this._sortable[currentSort.column](keyB, keyA);
+            }
+
+        }
     }
 
     onSort(column) {
@@ -352,6 +596,17 @@ export class Table extends React.Component {
 
         if (typeof(this.props.onSort) === 'function') {
             this.props.onSort(currentSort);
+        }
+    }
+
+    renderNoDataComponent(columns) {
+        let noDataFunc = this.props.noDataComponent;
+        if (typeof noDataFunc === 'function') {
+            return noDataFunc(columns);
+        } else if (this.props.noDataText) {
+            return <tr className="reactable-no-data"><td colSpan={columns.length}>{this.props.noDataText}</td></tr>;
+        } else {
+            return null;
         }
     }
 
@@ -391,6 +646,7 @@ export class Table extends React.Component {
 
         // Build up table rows
         if (this.data && typeof this.data.map === 'function') {
+            var renderState = {};
             // Build up the columns array
             children = children.concat(this.data.map(function(rawData, i) {
                 let data = rawData;
@@ -424,7 +680,7 @@ export class Table extends React.Component {
                 }
 
                 return (
-                    <Tr columns={columns} key={i} data={data} {...props} />
+                    <Tr columns={columns} key={i} data={data} {...props} renderState={renderState}/>
                 );
             }.bind(this)));
         }
@@ -476,9 +732,7 @@ export class Table extends React.Component {
         }
 
         // Manually transfer props
-        let props = filterPropsFrom(this.props);
-
-        let noDataText = this.props.noDataText ? <tr className="reactable-no-data"><td colSpan={columns.length}>{this.props.noDataText}</td></tr> : null;
+        let { noDataComponent, ...props } = filterPropsFrom(this.props);
 
         var tableHeader = null;
         if (columns && columns.length > 0 && showHeaders) {
@@ -503,7 +757,7 @@ export class Table extends React.Component {
         return <table {...props}>
             {tableHeader}
             <tbody className="reactable-data" key="tbody">
-                {currentChildren.length > 0 ? currentChildren : noDataText}
+                {currentChildren.length > 0 ? currentChildren : this.renderNoDataComponent(columns)}
             </tbody>
             {pagination === true ?
              <Paginator colSpan={columns.length}
@@ -532,4 +786,15 @@ Table.defaultProps = {
     itemsPerPage: 0,
     filterBy: '',
     hideFilterInput: false
+};
+
+Table.propTypes = {
+    sortBy: React.PropTypes.bool,
+    itemsPerPage: React.PropTypes.number,               // number of items to display per page
+    filterable: React.PropTypes.array,                  // columns to look at when applying the filter specified by filterBy
+    filterBy: React.PropTypes.string,                   // text to filter the results by (see filterable)
+    hideFilterInput: React.PropTypes.bool,              // Whether the default input field for the search/filter should be hidden or not
+    hideTableHeader: React.PropTypes.bool,              // Whether the table header should be hidden or not
+    noDataText: React.PropTypes.string,                 // Text to be displayed in the event there is no data to show
+    noDataComponent: React.PropTypes.func               // function called to provide a component to display in the event there is no data to show (supercedes noDataText)
 };
