@@ -91,9 +91,12 @@ export class Table extends React.Component {
                                 } else if (typeof(descendant.props.children) !== 'undefined') {
                                     value = descendant.props.children;
                                 } else {
-                                    console.warn('exports.Td specified without ' +
-                                                 'a `data` property or children, ' +
-                                                 'ignoring');
+                                    var warning = 'exports.Td specified without ' +
+                                        'a `data` property or children, ignoring';
+                                    if (typeof (descendant.props.column) !== 'undefined') {
+                                        warning += `. See definition for column '${descendant.props.column}'.`;
+                                    }
+                                    console.warn(warning);
                                     return;
                                 }
 
