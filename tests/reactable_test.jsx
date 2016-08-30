@@ -2619,7 +2619,54 @@ describe('Reactable', function() {
           expect(text).to.eq('No matching records found.');
         });
       });
+      context('when filtered without any matches', () => {
+          before(function() {
+            let noDataComponent = (columns) => {
+                return <tr><td colSpan={columns.length}>Showing custom NoData component.</td></tr>
+            };
 
+            this.component = ReactDOM.render(
+                <Reactable.Table className="table" id="table"
+                                 filterable={['State', 'Tag']}
+                                 filterPlaceholder="Filter Results"
+                                 filterBy='xxxxx'
+                                 noDataComponent={noDataComponent}
+                                 noDataText="No matching records found."
+                                 columns={['State', 'Description', 'Tag']}>
+                    <Reactable.Tr>
+                        <Reactable.Td column='State'>New York</Reactable.Td>
+                        <Reactable.Td column='Description'>this is some text</Reactable.Td>
+                        <Reactable.Td column='Tag'>new</Reactable.Td>
+                    </Reactable.Tr>
+                    <Reactable.Tr>
+                        <Reactable.Td column='State'>New Mexico</Reactable.Td>
+                        <Reactable.Td column='Description'>lorem ipsum</Reactable.Td>
+                        <Reactable.Td column='Tag'>old</Reactable.Td>
+                    </Reactable.Tr>
+                    <Reactable.Tr>
+                        <Reactable.Td column='State'>Colorado</Reactable.Td>
+                        <Reactable.Td column='Description'>
+                            new description that shouldnt match filter
+                        </Reactable.Td>
+                        <Reactable.Td column='Tag'>old</Reactable.Td>
+                    </Reactable.Tr>
+                    <Reactable.Tr>
+                        <Reactable.Td column='State'>Alaska</Reactable.Td>
+                        <Reactable.Td column='Description'>bacon</Reactable.Td>
+                        <Reactable.Td column='Tag'>renewed</Reactable.Td>
+                    </Reactable.Tr>
+                </Reactable.Table>,
+                ReactableTestUtils.testNode()
+            );
+          });
+
+          after(ReactableTestUtils.resetTestEnvironment);
+
+          it('shows the "no data" message from the component function', () => {
+              var text = $('table > tbody > tr').text();
+              expect(text).to.eq('Showing custom NoData component.');
+          });
+      });
       context('when initialized with an empty array for `data` prop', () => {
         before(function() {
             this.component = ReactDOM.render(

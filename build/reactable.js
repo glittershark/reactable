@@ -21,10 +21,23 @@ window.ReactDOM["default"] = window.ReactDOM;
         columns: true,
         sortable: true,
         filterable: true,
+        filtering: true,
+        onFilter: true,
+        filterPlaceholder: true,
         filterClassName: true,
+        currentFilter: true,
+        sort: true,
         sortBy: true,
+        sortableColumns: true,
+        onSort: true,
         defaultSort: true,
+        defaultSortDescending: true,
         itemsPerPage: true,
+        filterBy: true,
+        hideFilterInput: true,
+        noDataText: true,
+        currentPage: true,
+        pageButtonLimit: true,
         childNode: true,
         data: true,
         children: true
@@ -1027,6 +1040,8 @@ window.ReactDOM["default"] = window.ReactDOM;
                 var sortingColumn = props.sortBy || props.defaultSort;
                 this.state.currentSort = this.getCurrentSort(sortingColumn);
             }
+
+            this.renderNoDataComponent = this.renderNoDataComponent.bind(this);
         }
 
         _createClass(Table, [{
@@ -1094,7 +1109,11 @@ window.ReactDOM["default"] = window.ReactDOM;
                                         } else if (typeof descendant.props.children !== 'undefined') {
                                             value = descendant.props.children;
                                         } else {
-                                            console.warn('exports.Td specified without ' + 'a `data` property or children, ' + 'ignoring');
+                                            var warning = 'exports.Td specified without ' + 'a `data` property or children, ' + 'ignoring';
+                                            if (typeof descendant.props.column !== 'undefined') {
+                                                warning += '. See definition for column \'' + descendant.props.column + '\'.';
+                                            }
+                                            console.warn(warning);
                                             return;
                                         }
 
@@ -1334,9 +1353,9 @@ window.ReactDOM["default"] = window.ReactDOM;
                     } else {
                         // Reverse columns if we're doing a reverse sort
                         if (currentSort.direction === 1) {
-                            return this._sortable[currentSort.column](keyA, keyB);
+                            return this._sortable[currentSort.column](keyA, keyB, a, b);
                         } else {
-                            return this._sortable[currentSort.column](keyB, keyA);
+                            return this._sortable[currentSort.column](keyB, keyA, b, a);
                         }
                     }
                 }).bind(this));
@@ -1364,6 +1383,26 @@ window.ReactDOM["default"] = window.ReactDOM;
 
                 if (typeof this.props.onSort === 'function') {
                     this.props.onSort(currentSort);
+                }
+            }
+        }, {
+            key: 'renderNoDataComponent',
+            value: function renderNoDataComponent(columns) {
+                var noDataFunc = this.props.noDataComponent;
+                if (typeof noDataFunc === 'function') {
+                    return noDataFunc(columns);
+                } else if (this.props.noDataText) {
+                    return _react['default'].createElement(
+                        'tr',
+                        { className: 'reactable-no-data' },
+                        _react['default'].createElement(
+                            'td',
+                            { colSpan: columns.length },
+                            this.props.noDataText
+                        )
+                    );
+                } else {
+                    return null;
                 }
             }
         }, {
@@ -1476,16 +1515,6 @@ window.ReactDOM["default"] = window.ReactDOM;
                 // Manually transfer props
                 var props = (0, _libFilter_props_from.filterPropsFrom)(this.props);
 
-                var noDataText = this.props.noDataText ? _react['default'].createElement(
-                    'tr',
-                    { className: 'reactable-no-data' },
-                    _react['default'].createElement(
-                        'td',
-                        { colSpan: columns.length },
-                        this.props.noDataText
-                    )
-                ) : null;
-
                 var tableHeader = null;
                 if (columns && columns.length > 0 && showHeaders) {
                     tableHeader = _react['default'].createElement(_thead.Thead, { columns: columns,
@@ -1511,7 +1540,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                     _react['default'].createElement(
                         'tbody',
                         { className: 'reactable-data', key: 'tbody' },
-                        currentChildren.length > 0 ? currentChildren : noDataText
+                        currentChildren.length > 0 ? currentChildren : this.renderNoDataComponent(columns)
                     ),
                     pagination === true ? _react['default'].createElement(_paginator.Paginator, { colSpan: columns.length,
                         pageButtonLimit: pageButtonLimit,
@@ -1543,6 +1572,17 @@ window.ReactDOM["default"] = window.ReactDOM;
         itemsPerPage: 0,
         filterBy: '',
         hideFilterInput: false
+    };
+
+    Table.propTypes = {
+        sortBy: _react['default'].PropTypes.bool,
+        itemsPerPage: _react['default'].PropTypes.number, // number of items to display per page
+        filterable: _react['default'].PropTypes.array, // columns to look at when applying the filter specified by filterBy
+        filterBy: _react['default'].PropTypes.string, // text to filter the results by (see filterable)
+        hideFilterInput: _react['default'].PropTypes.bool, // Whether the default input field for the search/filter should be hidden or not
+        hideTableHeader: _react['default'].PropTypes.bool, // Whether the table header should be hidden or not
+        noDataText: _react['default'].PropTypes.string, // Text to be displayed in the event there is no data to show
+        noDataComponent: _react['default'].PropTypes.func // function called to provide a component to display in the event there is no data to show (supercedes noDataText)
     };
 });
 
