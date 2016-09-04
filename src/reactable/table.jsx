@@ -518,7 +518,12 @@ export class Table extends React.Component {
                         this.props.onPageChange(page)
                      }
                  }}
-                 onItemsPerPageChange={itemsPerPage => this.setState({ itemsPerPage })}
+                 onItemsPerPageChange={itemsPerPage => {
+                     this.setState({ itemsPerPage });
+                     if (this.props.onItemsPerPageChange) {
+                         this.props.onItemsPerPageChange(itemsPerPage);
+                     }
+                }}
                  previousPageLabel={this.props.previousPageLabel}
                  nextPageLabel={this.props.nextPageLabel}
                  key="paginator"/>

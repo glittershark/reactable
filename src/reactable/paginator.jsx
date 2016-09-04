@@ -132,13 +132,14 @@ export class Paginator extends React.Component {
 
 function RowSelector(props) {
     let options = props.options.map((opt, i) => {
-        if (opt === 'all') return <option key={i} value={Number.MAX_SAFE_INTEGER} selected={isSelected}>all</option>;
-        let isSelected = opt === props.selected;
-        return <option key={i} value={opt} selected={isSelected}>{opt}</option>;
+        if (opt === 'all') return <option key={i} value={Number.MAX_SAFE_INTEGER}>all</option>;
+        return <option key={i} value={opt}>{opt}</option>;
     });
 
     return (
-        <select onChange={e => props.onItemsPerPageChange(parseInt(e.target.value, 10))} >
+        <select
+            defaultValue={props.selected}
+            onChange={e => props.onItemsPerPageChange(parseInt(e.target.value, 10))} >
             {options}
         </select>
     );

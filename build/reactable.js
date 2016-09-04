@@ -1016,20 +1016,21 @@ window.ReactDOM["default"] = window.ReactDOM;
         var options = props.options.map(function (opt, i) {
             if (opt === 'all') return _react['default'].createElement(
                 'option',
-                { key: i, value: Number.MAX_SAFE_INTEGER, selected: isSelected },
+                { key: i, value: Number.MAX_SAFE_INTEGER },
                 'all'
             );
-            var isSelected = opt === props.selected;
             return _react['default'].createElement(
                 'option',
-                { key: i, value: opt, selected: isSelected },
+                { key: i, value: opt },
                 opt
             );
         });
 
         return _react['default'].createElement(
             'select',
-            { onChange: function (e) {
+            {
+                defaultValue: props.selected,
+                onChange: function (e) {
                     return props.onItemsPerPageChange(parseInt(e.target.value, 10));
                 } },
             options
@@ -1583,7 +1584,10 @@ window.ReactDOM["default"] = window.ReactDOM;
                             }
                         },
                         onItemsPerPageChange: function (itemsPerPage) {
-                            return _this.setState({ itemsPerPage: itemsPerPage });
+                            _this.setState({ itemsPerPage: itemsPerPage });
+                            if (_this.props.onItemsPerPageChange) {
+                                _this.props.onItemsPerPageChange(itemsPerPage);
+                            }
                         },
                         previousPageLabel: this.props.previousPageLabel,
                         nextPageLabel: this.props.nextPageLabel,
