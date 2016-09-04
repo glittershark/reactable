@@ -21,10 +21,23 @@ window.ReactDOM["default"] = window.ReactDOM;
         columns: true,
         sortable: true,
         filterable: true,
+        filtering: true,
+        onFilter: true,
+        filterPlaceholder: true,
         filterClassName: true,
+        currentFilter: true,
+        sort: true,
         sortBy: true,
+        sortableColumns: true,
+        onSort: true,
         defaultSort: true,
+        defaultSortDescending: true,
         itemsPerPage: true,
+        filterBy: true,
+        hideFilterInput: true,
+        noDataText: true,
+        currentPage: true,
+        pageButtonLimit: true,
         childNode: true,
         data: true,
         children: true
@@ -848,10 +861,17 @@ window.ReactDOM["default"] = window.ReactDOM;
     var Paginator = (function (_React$Component) {
         _inherits(Paginator, _React$Component);
 
-        function Paginator() {
+        function Paginator(props) {
             _classCallCheck(this, Paginator);
 
-            _get(Object.getPrototypeOf(Paginator.prototype), 'constructor', this).apply(this, arguments);
+            _get(Object.getPrototypeOf(Paginator.prototype), 'constructor', this).call(this, props);
+
+            if (this.props.rowOptions) {
+                this.rowOptions = this.props.rowOptions.split(',').map(function (option) {
+                    if (option === 'all') return 'all';
+                    return parseInt(option, 10);
+                });
+            }
         }
 
         _createClass(Paginator, [{
@@ -964,9 +984,22 @@ window.ReactDOM["default"] = window.ReactDOM;
                         _react['default'].createElement(
                             'td',
                             { colSpan: this.props.colSpan },
-                            this.renderPrevious(),
-                            pageButtons,
-                            this.renderNext()
+                            this.rowOptions ? _react['default'].createElement(
+                                'span',
+                                { className: 'row-selector' },
+                                _react['default'].createElement(RowSelector, {
+                                    options: this.rowOptions,
+                                    selected: this.props.itemsPerPage,
+                                    onItemsPerPageChange: this.props.onItemsPerPageChange }),
+                                'rows per page.'
+                            ) : null,
+                            numPages > 1 ? _react['default'].createElement(
+                                'span',
+                                { className: 'pagination-buttons' },
+                                this.renderPrevious(),
+                                pageButtons,
+                                this.renderNext()
+                            ) : null
                         )
                     )
                 );
@@ -978,6 +1011,30 @@ window.ReactDOM["default"] = window.ReactDOM;
 
     exports.Paginator = Paginator;
     ;
+
+    function RowSelector(props) {
+        var options = props.options.map(function (opt, i) {
+            if (opt === 'all') return _react['default'].createElement(
+                'option',
+                { key: i, value: Number.MAX_SAFE_INTEGER, selected: isSelected },
+                'all'
+            );
+            var isSelected = opt === props.selected;
+            return _react['default'].createElement(
+                'option',
+                { key: i, value: opt, selected: isSelected },
+                opt
+            );
+        });
+
+        return _react['default'].createElement(
+            'select',
+            { onChange: function (e) {
+                    return props.onItemsPerPageChange(parseInt(e.target.value, 10));
+                } },
+            options
+        );
+    }
 });
 
 (function (global, factory) {
@@ -1019,6 +1076,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                     column: null,
                     direction: this.props.defaultSortDescending ? -1 : 1
                 },
+                itemsPerPage: this.props.itemsPerPage || 0,
                 filter: ''
             };
 
@@ -1454,7 +1512,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                 }
 
                 // Determine pagination properties and which columns to display
-                var itemsPerPage = 0;
+                var itemsPerPage = this.state.itemsPerPage;
                 var pagination = false;
                 var numPages = undefined;
                 var currentPage = this.state.currentPage;
@@ -1462,7 +1520,6 @@ window.ReactDOM["default"] = window.ReactDOM;
 
                 var currentChildren = filteredChildren;
                 if (this.props.itemsPerPage > 0) {
-                    itemsPerPage = this.props.itemsPerPage;
                     numPages = Math.ceil(filteredChildren.length / itemsPerPage);
 
                     if (currentPage > numPages - 1) {
@@ -1517,11 +1574,16 @@ window.ReactDOM["default"] = window.ReactDOM;
                         pageButtonLimit: pageButtonLimit,
                         numPages: numPages,
                         currentPage: currentPage,
+                        rowOptions: this.props.rowOptions,
+                        itemsPerPage: itemsPerPage,
                         onPageChange: function (page) {
                             _this.setState({ currentPage: page });
                             if (_this.props.onPageChange) {
                                 _this.props.onPageChange(page);
                             }
+                        },
+                        onItemsPerPageChange: function (itemsPerPage) {
+                            return _this.setState({ itemsPerPage: itemsPerPage });
                         },
                         previousPageLabel: this.props.previousPageLabel,
                         nextPageLabel: this.props.nextPageLabel,
