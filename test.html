@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script src="https://fb.me/react-0.13.3.js"></script>
-        <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
+        <script src="http://fb.me/react-0.14.0.js"></script>
+        <script src="http://fb.me/react-dom-0.14.0.js"></script>
+        <script src="http://fb.me/JSXTransformer-0.13.3.js"></script>
         <script src="build/reactable.js" type="text/javascript"></script>
         <script type="text/jsx">
             /** @jsx React.DOM */ 
@@ -13,12 +14,12 @@
                 Td = Reactable.Td,
                 unsafe = Reactable.unsafe;
 
-            React.render(
+            ReactDOM.render(
                 <Table className="table" id="table" data={[
                     { Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
                     { Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')},
                     { Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')},
-                ]} sortable={['Name']} />,
+                ]} sortable={['Name']} itemsPerPage={2} pageButtonLimit={5} rowOptions="1,2,all" />,
                 document.getElementById('test-div')
             );
         </script>

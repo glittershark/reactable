@@ -18,6 +18,7 @@ export class Table extends React.Component {
                 column: null,
                 direction: this.props.defaultSortDescending ? -1 : 1
             },
+            itemsPerPage: this.props.itemsPerPage || 0,
             filter: ''
         };
 
@@ -453,7 +454,7 @@ export class Table extends React.Component {
         }
 
         // Determine pagination properties and which columns to display
-        let itemsPerPage = 0;
+        let itemsPerPage = this.state.itemsPerPage;
         let pagination = false;
         let numPages;
         let currentPage = this.state.currentPage;
@@ -461,7 +462,6 @@ export class Table extends React.Component {
 
         let currentChildren = filteredChildren;
         if (this.props.itemsPerPage > 0) {
-            itemsPerPage = this.props.itemsPerPage;
             numPages = Math.ceil(filteredChildren.length / itemsPerPage);
 
             if (currentPage > numPages - 1) {
@@ -510,12 +510,20 @@ export class Table extends React.Component {
                  pageButtonLimit={pageButtonLimit}
                  numPages={numPages}
                  currentPage={currentPage}
+                 rowOptions={this.props.rowOptions}
+                 itemsPerPage={itemsPerPage}
                  onPageChange={page => {
                      this.setState({ currentPage: page });
                      if (this.props.onPageChange) {
                         this.props.onPageChange(page)
                      }
                  }}
+                 onItemsPerPageChange={itemsPerPage => {
+                     this.setState({ itemsPerPage });
+                     if (this.props.onItemsPerPageChange) {
+                         this.props.onItemsPerPageChange(itemsPerPage);
+                     }
+                }}
                  previousPageLabel={this.props.previousPageLabel}
                  nextPageLabel={this.props.nextPageLabel}
                  key="paginator"/>

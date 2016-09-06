@@ -5,6 +5,17 @@ function pageHref(num) {
 }
 
 export class Paginator extends React.Component {
+    constructor(props) {
+        super(props);
+
+        if (this.props.rowOptions) {
+            this.rowOptions = this.props.rowOptions.split(',').map(option => {
+                if (option === 'all') return 'all';
+                return parseInt(option, 10);
+            });
+        }
+    }
+
     handlePrevious(e) {
         e.preventDefault()
         this.props.onPageChange(this.props.currentPage - 1)
@@ -96,9 +107,22 @@ export class Paginator extends React.Component {
             <tbody className="reactable-pagination">
                 <tr>
                     <td colSpan={this.props.colSpan}>
-                        {this.renderPrevious()}
-                        {pageButtons}
-                        {this.renderNext()}
+                        {this.rowOptions ?
+                            <span className="row-selector">
+                                <RowSelector
+                                    options={this.rowOptions}
+                                    selected={this.props.itemsPerPage}
+                                    onItemsPerPageChange={this.props.onItemsPerPageChange} />
+                                rows per page.
+                            </span>
+                            : null}
+                        {numPages > 1 ?
+                            <span className="pagination-buttons">
+                                {this.renderPrevious()}
+                                {pageButtons}
+                                {this.renderNext()}
+                            </span>
+                            : null}
                     </td>
                 </tr>
             </tbody>
@@ -106,3 +130,17 @@ export class Paginator extends React.Component {
     }
 };
 
+function RowSelector(props) {
+    let options = props.options.map((opt, i) => {
+        if (opt === 'all') return <option key={i} value={Number.MAX_SAFE_INTEGER}>all</option>;
+        return <option key={i} value={opt}>{opt}</option>;
+    });
+
+    return (
+        <select
+            defaultValue={props.selected}
+            onChange={e => props.onItemsPerPageChange(parseInt(e.target.value, 10))} >
+            {options}
+        </select>
+    );
+}
