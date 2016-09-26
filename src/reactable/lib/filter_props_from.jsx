@@ -1,4 +1,5 @@
 const internalProps = {
+    hideTableHeader: true,
     column: true,
     columns: true,
     sortable: true,
@@ -19,6 +20,9 @@ const internalProps = {
     hideFilterInput: true,
     noDataText: true,
     currentPage: true,
+    onPageChange: true,
+    previousPageLabel: true,
+    nextPageLabel: true,
     pageButtonLimit: true,
     childNode: true,
     data: true,
