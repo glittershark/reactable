@@ -14,10 +14,9 @@ export class Tr extends React.Component {
         ) {
             if (typeof(children.concat) === 'undefined') { console.log(children); }
 
-            children = children.concat(this.props.columns.map(function(column, i) {
+            children = children.concat(this.props.columns.map(function({ props = {}, ...column}, i) {
                 if (this.props.data.hasOwnProperty(column.key)) {
                     var value = this.props.data[column.key];
-                    var props = {};
 
                     if (
                         typeof(value) !== 'undefined' &&
