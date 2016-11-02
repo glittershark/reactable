@@ -475,6 +475,12 @@ window.ReactDOM["default"] = window.ReactDOM;
                 if ((0, _unsafe.isUnsafe)(this.props.children)) {
                     return _react['default'].createElement('td', _extends({}, mergedProps, {
                         dangerouslySetInnerHTML: { __html: this.props.children.toString() } }));
+                } else if (typeof this.props.formatter !== 'undefined') {
+                    return _react['default'].createElement(
+                        'td',
+                        mergedProps,
+                        _react['default'].createElement(this.props.formatter, _extends({}, mergedProps, { text: this.props.children }))
+                    );
                 } else {
                     return _react['default'].createElement(
                         'td',
@@ -537,6 +543,9 @@ window.ReactDOM["default"] = window.ReactDOM;
                     }
 
                     children = children.concat(this.props.columns.map((function (column, i) {
+
+                        var formatter = this.props.columnFormatters ? this.props.columnFormatters[column.key] : undefined;
+
                         if (this.props.data.hasOwnProperty(column.key)) {
                             var value = this.props.data[column.key];
                             var props = {};
@@ -548,11 +557,11 @@ window.ReactDOM["default"] = window.ReactDOM;
 
                             return _react['default'].createElement(
                                 _td.Td,
-                                _extends({ column: column, key: column.key }, props),
+                                _extends({ column: column, formatter: formatter, key: column.key }, props),
                                 value
                             );
                         } else {
-                            return _react['default'].createElement(_td.Td, { column: column, key: column.key });
+                            return _react['default'].createElement(_td.Td, { column: column, formatter: formatter, key: column.key });
                         }
                     }).bind(this)));
                 }
@@ -1448,7 +1457,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                             }
                         }
 
-                        return _react['default'].createElement(_tr.Tr, _extends({ columns: columns, key: i, data: data }, props));
+                        return _react['default'].createElement(_tr.Tr, _extends({ columns: columns, key: i, data: data, columnFormatters: this.props.columnFormatters }, props));
                     }).bind(this)));
                 }
 

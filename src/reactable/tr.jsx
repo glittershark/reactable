@@ -14,7 +14,11 @@ export class Tr extends React.Component {
         ) {
             if (typeof(children.concat) === 'undefined') { console.log(children); }
 
+
             children = children.concat(this.props.columns.map(function(column, i) {
+
+                const formatter = (this.props.columnFormatters) ? this.props.columnFormatters[column.key] : undefined;
+
                 if (this.props.data.hasOwnProperty(column.key)) {
                     var value = this.props.data[column.key];
                     var props = {};
@@ -28,9 +32,10 @@ export class Tr extends React.Component {
                         value = value.value;
                     }
 
-                    return <Td column={column} key={column.key} {...props}>{value}</Td>;
+
+                    return <Td column={column} formatter={formatter} key={column.key} {...props}>{value}</Td>;
                 } else {
-                    return <Td column={column} key={column.key} />;
+                    return <Td column={column} formatter={formatter} key={column.key} />;
                 }
             }.bind(this)));
         }

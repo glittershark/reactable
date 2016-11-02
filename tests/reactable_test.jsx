@@ -98,6 +98,61 @@ describe('Reactable', function() {
         });
     });
 
+
+    describe('directly passing a data array and columnFormatters', function() {
+        before(function() {
+
+            // class Cell extends React.Component {
+            //     render() {
+            //         if (this.props.text) {
+            //             return <button className="testButton" onClick={this.handleClick.bind(this)}>{this.props.text}</button>;
+            //         } else {
+            //             return null;
+            //         }
+            //     }
+            // }
+
+            var Cell = React.createClass({
+               render(){
+                   if (this.props.text) {
+                       return <button className="testButton">{this.props.text}</button>;
+                   } else {
+                       return null;
+                   }
+               }
+
+            });
+
+            ReactDOM.render(
+                <Reactable.Table className="table" id="table" data={[
+                    { Name: 'Griffin Smith', Age: '18'},
+                    { Age: '23', Name: 'Lee Salminen'},
+                    { Age: '30', Position: 'Developer'},
+                    { Name: <i>Leonor Hyatt</i>, Position: null}
+                ]} columnFormatters={{Name:Cell}}/>,
+                ReactableTestUtils.testNode()
+            );
+        });
+
+        after(ReactableTestUtils.resetTestEnvironment);
+
+        it('uses component to render cells in a column', function() {
+            expect($('.testButton').size()).to.equal(3);
+        });
+
+
+        it('handles absence of corresponding data property', function() {
+            ReactableTestUtils.expectRowText(2, ['', '30', 'Developer']);
+        });
+
+        it('handles jsx in data', function() {
+            expect($('td button i').text()).to.equal('Leonor Hyatt');
+        });
+
+    });
+
+
+
     describe('adding <Tr>s to the <Table>', function() {
         before(function() {
             ReactDOM.render(
