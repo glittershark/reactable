@@ -424,7 +424,7 @@ export class Table extends React.Component {
                 }
 
                 return (
-                    <Tr columns={columns} key={i} data={data} {...props} />
+                    <Tr columns={columns} key={i} data={data} columnFormatters={this.props.columnFormatters} {...props} />
                 );
             }.bind(this)));
         }

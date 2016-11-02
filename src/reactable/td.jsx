@@ -34,6 +34,8 @@ export class Td extends React.Component {
         if (isUnsafe(this.props.children)) {
             return <td {...mergedProps}
                 dangerouslySetInnerHTML={{__html: this.props.children.toString()}}/>
+        } else if (typeof this.props.formatter !== 'undefined') {
+           return <td {...mergedProps}><this.props.formatter {...mergedProps} text={this.props.children} /></td>;
         } else {
           return <td {...mergedProps}>
                 {stringifiedChildProps || this.props.children}
