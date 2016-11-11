@@ -461,6 +461,212 @@ describe('Reactable', function() {
         });
     });
 
+    describe('using rowSpan', function() {
+        before(function() {
+            this.component = ReactDOM.render(
+                <Reactable.Table className="table" id="table"
+                                 filterable={['Category', 'Position', 'Number', 'Salary']}
+                                 sortable={["Salary", "Position", "Number"]}
+                                 columns={['Category', 'Position', 'Number', 'Salary']}>
+                    <Reactable.Tr>
+                        <Reactable.Td column='Category' rowSpan="6">Engineer</Reactable.Td>
+                        <Reactable.Td column='Position' rowSpan="3">Software</Reactable.Td>
+                        <Reactable.Td column='Number'>1</Reactable.Td>
+                        <Reactable.Td column='Salary'>$50,000</Reactable.Td>
+                    </Reactable.Tr>
+                    <Reactable.Tr>
+                        <Reactable.Td column='Number'>3</Reactable.Td>
+                        <Reactable.Td column='Salary'>$150,000</Reactable.Td>
+                    </Reactable.Tr>
+                    <Reactable.Tr>
+                        <Reactable.Td column='Number'>2</Reactable.Td>
+                        <Reactable.Td column='Salary'>$100,000</Reactable.Td>
+                    </Reactable.Tr>
+                    <Reactable.Tr>
+                        <Reactable.Td column='Position' rowSpan="3">Mechanical</Reactable.Td>
+                        <Reactable.Td column='Number'>1</Reactable.Td>
+                        <Reactable.Td column='Salary'>$50,000</Reactable.Td>
+                    </Reactable.Tr>
+                    <Reactable.Tr>
+                        <Reactable.Td column='Number'>2</Reactable.Td>
+                        <Reactable.Td column='Salary'>$100,000</Reactable.Td>
+                    </Reactable.Tr>
+                    <Reactable.Tr>
+                        <Reactable.Td column='Number'>3</Reactable.Td>
+                        <Reactable.Td column='Salary'>$150,000</Reactable.Td>
+                    </Reactable.Tr>
+                    <Reactable.Tr>
+                        <Reactable.Td column='Category'>Other</Reactable.Td>
+                        <Reactable.Td column='Position'>Third Job</Reactable.Td>
+                        <Reactable.Td column='Number'>1</Reactable.Td>
+                        <Reactable.Td column='Salary'>$30,000</Reactable.Td>
+                    </Reactable.Tr>
+                    <Reactable.Tr>
+                        <Reactable.Td column='Category' rowSpan="2">Finance</Reactable.Td>
+                        <Reactable.Td column='Position'>Accountant</Reactable.Td>
+                        <Reactable.Td column='Number'>2</Reactable.Td>
+                        <Reactable.Td column='Salary'>$40,000</Reactable.Td>
+                    </Reactable.Tr>
+                    <Reactable.Tr>
+                        <Reactable.Td column='Position'>Investor</Reactable.Td>
+                        <Reactable.Td column='Number'>2</Reactable.Td>
+                        <Reactable.Td column='Salary'>$45,000</Reactable.Td>
+                    </Reactable.Tr>
+                    <Reactable.Tr>
+                        <Reactable.Td column='Category'>HR</Reactable.Td>
+                        <Reactable.Td column='Position'>Benefits Manager</Reactable.Td>
+                        <Reactable.Td column='Number'>3</Reactable.Td>
+                        <Reactable.Td column='Salary'>$50,000</Reactable.Td>
+                    </Reactable.Tr>
+                </Reactable.Table>,
+                ReactableTestUtils.testNode()
+            );
+        });
+
+        after(ReactableTestUtils.resetTestEnvironment);
+
+        describe('filtering with rowSpan props', function() {
+
+            describe("on a cell that has the rowSpan", function(){
+                it("should display all the rows the Td spans", function() {
+                    this.component.filterBy("Software");
+                    ReactableTestUtils.expectRowText(0, ['Engineer', 'Software', '1', '$50,000']);
+                    ReactableTestUtils.expectRowText(1, ['3', '$150,000']);
+                    ReactableTestUtils.expectRowText(2, ['2', '$100,000']);
+
+                })
+            });
+
+            describe("to filter out only the Td with a rowSpan prop", function(){
+                it("should transfer the data to the next visible row", function() {
+                    this.component.filterBy("$1");
+                    ReactableTestUtils.expectRowText(0, ['Engineer', 'Software', '3', '$150,000']);
+                    ReactableTestUtils.expectRowText(1, ['2', '$100,000']);
+                    ReactableTestUtils.expectRowText(2, ['Mechanical', '2', '$100,000']);
+                    ReactableTestUtils.expectRowText(3, ['3', '$150,000']);
+                });
+            });
+
+            describe("to filter out an entire rowSpan", function(){
+                it("should still display the column with the larger rowSpan", function() {
+                    this.component.filterBy("Mech");
+                    ReactableTestUtils.expectRowText(0, ['Engineer', 'Mechanical', '1', '$50,000']);
+                    ReactableTestUtils.expectRowText(1, ['2', '$100,000']);
+                    ReactableTestUtils.expectRowText(2, ['3', '$150,000']);
+                });
+            });
+
+            describe("to filter out the Td with a rowSpan prop and a row after the next available row", function(){
+                it("should adjust the rowSpan property not to exceed past the original rowSpan definition", function() {
+
+                    // this is the scenario where filtering by "$100,000" should give that row a rowSpan of 1 because $150,000 is also filtered out
+                        this.component.filterBy("$100,000");
+                    ReactableTestUtils.expectRowText(0, ['Engineer', 'Software', '2', '$100,000']);
+                    ReactableTestUtils.expectRowText(1, ['Mechanical', '2', '$100,000']);
+                });
+            });
+
+            describe("and filtering out a td with the rowSpan", function(){
+                it("should still display the data in the rows not filtered out", function() {
+                    this.component.filterBy("3");
+                    ReactableTestUtils.expectRowText(0, ['Engineer', 'Software', '3', '$150,000']);
+                    ReactableTestUtils.expectRowText(1, ['Mechanical', '3', '$150,000']);
+                })
+            });
+
+            describe("and filtering to find the Td without a rowSpan", function(){
+                it("should apply the filter", function() {
+                    this.component.filterBy("Third Job");
+                    ReactableTestUtils.expectRowText(0, ['Other', 'Third Job', '1', '$30,000']);
+                })
+            });
+
+            describe("multiple times", function() {
+                it("should not cause duplicate the Td with the rowSpan", function(){
+                    // this test enforces that a different key be used on the Tr when a Td is cloned as it is no longer
+                    //       a simple update
+                    this.component.filterBy("$");
+                    ReactableTestUtils.expectRowText(0, ['Engineer', 'Software', '1', '$50,000']);
+                    ReactableTestUtils.expectRowText(1, [                        '3', '$150,000']);
+                    ReactableTestUtils.expectRowText(2, [                        '2', '$100,000']);
+
+                    ReactableTestUtils.expectRowText(3, [ 'Mechanical', '1', '$50,000']);
+                    ReactableTestUtils.expectRowText(4, [               '2', '$100,000']);
+                    ReactableTestUtils.expectRowText(5, [               '3', '$150,000']);
+
+                    this.component.filterBy("$5");
+                    ReactableTestUtils.expectRowText(0, ['Engineer', 'Software',   '1', '$50,000']);
+                    ReactableTestUtils.expectRowText(1, [            'Mechanical', '1', '$50,000']);
+
+                    this.component.filterBy("$");
+                    ReactableTestUtils.expectRowText(0, ['Engineer', 'Software', '1', '$50,000']);
+                    ReactableTestUtils.expectRowText(1, [                        '3', '$150,000']);
+                    ReactableTestUtils.expectRowText(2, [                        '2', '$100,000']);
+
+                    ReactableTestUtils.expectRowText(3, [ 'Mechanical', '1', '$50,000']);
+                    ReactableTestUtils.expectRowText(4, [               '2', '$100,000']);
+                    ReactableTestUtils.expectRowText(5, [               '3', '$150,000']);
+                })
+            })
+        });
+        describe('sorting with rowSpan props', function() {
+            describe("on a column that doesn't have a rowSpan", function(){
+                it("should sort the column within the smallest rowSpan", function() {
+                    // i.e. if a cell has no rowSpan define but is part of a row that has a rowSpan of 2 and a rowSpan of 4,
+                    //  the column must sort within a rowSpan of 2, the smallest rowSpan
+
+
+                    var numberHeader = $('#table thead tr.reactable-column-header th')[2];
+                    ReactTestUtils.Simulate.click(numberHeader);
+
+                    ReactableTestUtils.expectRowText(0, ['Engineer', 'Software', '1', '$50,000']);
+                    ReactableTestUtils.expectRowText(1, [                        '2', '$100,000']);
+                    ReactableTestUtils.expectRowText(2, [                        '3', '$150,000']);
+
+                    ReactableTestUtils.expectRowText(3, [ 'Mechanical', '1', '$50,000']);
+                    ReactableTestUtils.expectRowText(4, [               '2', '$100,000']);
+                    ReactableTestUtils.expectRowText(5, [               '3', '$150,000']);
+
+
+                    // flip
+                    ReactTestUtils.Simulate.click(numberHeader);
+
+                    ReactableTestUtils.expectRowText(0, ['Engineer', 'Software', '3', '$150,000']);
+                    ReactableTestUtils.expectRowText(1, [                        '2', '$100,000']);
+                    ReactableTestUtils.expectRowText(2, [                        '1', '$50,000']);
+
+                    ReactableTestUtils.expectRowText(3, [ 'Mechanical', '3', '$150,000']);
+                    ReactableTestUtils.expectRowText(4, [               '2', '$100,000']);
+                    ReactableTestUtils.expectRowText(5, [               '1', '$50,000']);
+
+
+
+                });
+
+                it("should move cells with rowSpan=1 (or no rowSpan) and sort them all at the bottom of the table", function() {
+                    // i.e. if a cell has no rowSpan define but is part of a row that has a rowSpan of 2 and a rowSpan of 4,
+                    //  the column must sort within a rowSpan of 2, the smallest rowSpan
+
+                    var numberHeader = $('#table thead tr.reactable-column-header th')[2];
+                    ReactTestUtils.Simulate.click(numberHeader);
+
+                    ReactableTestUtils.expectRowText(6, [ 'Finance', 'Accountant', '2', '$40,000']);
+                    ReactableTestUtils.expectRowText(7, [            'Investor', '2',  '$45,000']);
+                    ReactableTestUtils.expectRowText(8, [ 'Other', 'Third Job', '1', '$30,000']);
+                    ReactableTestUtils.expectRowText(9, [ 'HR', 'Benefits Manager', '3', '$50,000']);
+
+                    // flip
+                    ReactTestUtils.Simulate.click(numberHeader);
+
+                    ReactableTestUtils.expectRowText(8, [ 'HR', 'Benefits Manager', '3', '$50,000']);
+                    ReactableTestUtils.expectRowText(9, [ 'Other', 'Third Job', '1', '$30,000']);
+
+
+                })
+            });
+        });
+    });
+
     describe('passing through HTML props', function() {
         describe('adding <Tr>s with className to the <Table>', function() {
             before(function() {
@@ -2399,7 +2605,7 @@ describe('Reactable', function() {
                         </div>
                       );
                     }
-                  })
+                  });
 
                   this.component = ReactDOM.render(React.createElement(ParentComponent), ReactableTestUtils.testNode());
                 });
