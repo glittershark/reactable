@@ -375,6 +375,26 @@ describe('Reactable', function() {
                 ReactableTestUtils.expectRowText(1, ['', '28', 'Developer']);
             });
         });
+
+        context("when one of the <Th>s is null", function(){
+            before(function () {
+                ReactDOM.render(
+                    <Reactable.Table className="table" id="table">
+                      <Reactable.Thead>
+                        <Reactable.Th>Test</Reactable.Th>
+                        {null}
+                      </Reactable.Thead>
+                    </Reactable.Table>,
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+          after(ReactableTestUtils.resetTestEnvironment);
+
+          it('renders the table', function() {
+              expect($('table#table.table')).to.exist;
+          });
+        });
     });
 
     describe('Adding a <Tfoot>', function() {
