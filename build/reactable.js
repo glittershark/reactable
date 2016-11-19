@@ -758,6 +758,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                 var columns = [];
                 _react['default'].Children.forEach(component.props.children, function (th) {
                     var column = {};
+                    if (!th) return;
                     if (typeof th.props !== 'undefined') {
                         column.props = (0, _libFilter_props_from.filterPropsFrom)(th.props);
 

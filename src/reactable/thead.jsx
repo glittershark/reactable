@@ -9,6 +9,7 @@ export class Thead extends React.Component {
         let columns = [];
         React.Children.forEach(component.props.children, th => {
             var column = {};
+            if (!th) return;
             if (typeof th.props !== 'undefined') {
                 column.props = filterPropsFrom(th.props);
 
