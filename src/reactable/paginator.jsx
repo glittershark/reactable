@@ -91,6 +91,11 @@ export class Paginator extends React.Component {
         if((numPages - currentPage) > upperHalf) {
             pageButtons.splice(pageButtonLimit, pageButtons.length - pageButtonLimit);
         }
+        
+        if(numPages > 10 && (numPages - currentPage) > lowerHalf) { //For showing like: 1,2,3...104 pages, can be incorrect, please fix it if it wrong
+            let className = "reactable-page-button";
+            pageButtons.push(' ... ' + this.renderPageButton(className, numPages))
+        }
 
         return (
             <tbody className="reactable-pagination">
