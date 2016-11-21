@@ -27,6 +27,8 @@ const internalProps = {
     childNode: true,
     data: true,
     children: true
+    previousPageLabel: true,
+    nextPageLabel: true
 };
 
 export function filterPropsFrom(baseProps) {
