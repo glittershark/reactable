@@ -458,6 +458,7 @@ export class Table extends React.Component {
         let numPages;
         let currentPage = this.state.currentPage;
         let pageButtonLimit = this.props.pageButtonLimit || 10;
+        let keepButtonsNumber = this.props.keepButtonsNumber || false;
 
         let currentChildren = filteredChildren;
         if (this.props.itemsPerPage > 0) {
@@ -508,6 +509,7 @@ export class Table extends React.Component {
             {pagination === true ?
              <Paginator colSpan={columns.length}
                  pageButtonLimit={pageButtonLimit}
+                 keepButtonsNumber={keepButtonsNumber}
                  numPages={numPages}
                  currentPage={currentPage}
                  onPageChange={page => {
