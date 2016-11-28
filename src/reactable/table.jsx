@@ -13,7 +13,7 @@ export class Table extends React.Component {
         super(props);
 
         this.state = {
-            currentPage: this.props.currentPage ? this.props.currentPage : 0,
+            currentPage: this.props.currentPage,
             currentSort: {
                 column: null,
                 direction: this.props.defaultSortDescending ? -1 : 1
@@ -531,5 +531,6 @@ Table.defaultProps = {
     defaultSortDescending: false,
     itemsPerPage: 0,
     filterBy: '',
-    hideFilterInput: false
+    hideFilterInput: false,
+    currentPage: 0
 };
