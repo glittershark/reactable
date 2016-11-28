@@ -27,7 +27,16 @@ export class Tr extends React.Component {
                         value = value.value;
                     }
 
-                    return <Td column={column} key={column.key} {...props}>{value}</Td>;
+                    return (
+                      <Td
+                        customRender={this.props.customRender}
+                        column={column}
+                        key={column.key}
+                        {...props}
+                      >
+                        {value}
+                      </Td>
+                    );
                 } else {
                     return <Td column={column} key={column.key} />;
                 }
