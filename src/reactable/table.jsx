@@ -323,9 +323,9 @@ export class Table extends React.Component {
             } else {
                 // Reverse columns if we're doing a reverse sort
                 if (currentSort.direction === 1) {
-                    return this._sortable[currentSort.column](keyA, keyB);
+                    return this._sortable[currentSort.column](keyA, keyB, currentSort.direction);
                 } else {
-                    return this._sortable[currentSort.column](keyB, keyA);
+                    return this._sortable[currentSort.column](keyB, keyA, currentSort.direction);
                 }
             }
         }.bind(this));
