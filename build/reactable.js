@@ -1370,9 +1370,9 @@ window.ReactDOM["default"] = window.ReactDOM;
                     } else {
                         // Reverse columns if we're doing a reverse sort
                         if (currentSort.direction === 1) {
-                            return this._sortable[currentSort.column](keyA, keyB);
+                            return this._sortable[currentSort.column](keyA, keyB, a, b);
                         } else {
-                            return this._sortable[currentSort.column](keyB, keyA);
+                            return this._sortable[currentSort.column](keyB, keyA, b, a);
                         }
                     }
                 }).bind(this));
