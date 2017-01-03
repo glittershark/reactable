@@ -488,7 +488,7 @@ export class Table extends React.Component {
                        onFilter={filter => {
                      this.setState({ filter: filter });
                      if (this.props.onFilter) {
-                        this.props.onFilter(filter)
+                        this.props.onFilter(filter, filteredChildren)
                      }
                  }}
                        filterPlaceholder={this.props.filterPlaceholder}

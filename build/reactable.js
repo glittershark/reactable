@@ -1517,7 +1517,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                         onFilter: function (filter) {
                             _this.setState({ filter: filter });
                             if (_this.props.onFilter) {
-                                _this.props.onFilter(filter);
+                                _this.props.onFilter(filter, filteredChildren);
                             }
                         },
                         filterPlaceholder: this.props.filterPlaceholder,

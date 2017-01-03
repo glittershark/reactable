@@ -1983,8 +1983,10 @@ describe('Reactable', function() {
         describe('filtering with javascript objects for data', function(){
             var data = [{name:"Lee SomeoneElse", age:18},{name:"Lee Salminen", age:23},{name:"No Age", age:null}]
             var filterBy
-            var onFilter = function (filter) {
+			var matchingRows
+            var onFilter = function (filter, matches) {
                 filterBy = filter
+				matchingRows = matches
             }
             before(function () {
                 ReactDOM.render(
@@ -2027,6 +2029,7 @@ describe('Reactable', function() {
                 React.addons.TestUtils.Simulate.keyUp($filter[0]);
 
                 expect(filterBy).to.equal(textToSearch);
+				expect(matchingRows.length).to.equal(2);
             });
         });
 
