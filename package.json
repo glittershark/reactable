@@ -2,7 +2,7 @@
   "name": "reactable",
   "version": "0.14.1",
   "description": "Fast, flexible, simple data tables in React",
-  "main": "./lib/reactable.js",
+  "main": "./src/reactable.jsx",
   "repository": {
     "type": "git",
     "url": "https://github.com/glittershark/reactable.git"
