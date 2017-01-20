@@ -485,6 +485,7 @@ export class Table extends React.Component {
             tableHeader = (
                 <Thead columns={columns}
                        filtering={filtering}
+                       className={this.props.headerClassName}
                        onFilter={filter => {
                      this.setState({ filter: filter });
                      if (this.props.onFilter) {
