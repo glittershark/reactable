@@ -8,6 +8,7 @@ const internalProps = {
     onFilter: true,
     filterPlaceholder: true,
     filterClassName: true,
+    headerClassName: true,
     currentFilter: true,
     sort: true,
     sortBy: true,
