@@ -30,6 +30,7 @@ window.ReactDOM["default"] = window.ReactDOM;
         sort: true,
         sortBy: true,
         sortableColumns: true,
+        defaultSortFunction: true,
         onSort: true,
         defaultSort: true,
         defaultSortDescending: true,
@@ -1337,32 +1338,29 @@ window.ReactDOM["default"] = window.ReactDOM;
                 }
 
                 this.data.sort((function (a, b) {
-                    var keyA = (0, _libExtract_data_from.extractDataFrom)(a, currentSort.column);
+                    var keyA = (0, _libExtract_data_from.extractDataFrom)(currentSort.direction === 1 ? a : b, currentSort.column);
                     keyA = (0, _unsafe.isUnsafe)(keyA) ? keyA.toString() : keyA || '';
-                    var keyB = (0, _libExtract_data_from.extractDataFrom)(b, currentSort.column);
+                    var keyB = (0, _libExtract_data_from.extractDataFrom)(currentSort.direction === 1 ? b : a, currentSort.column);
                     keyB = (0, _unsafe.isUnsafe)(keyB) ? keyB.toString() : keyB || '';
 
-                    // Default sort
                     if (typeof this._sortable[currentSort.column] === 'undefined' || this._sortable[currentSort.column] === 'default') {
+                        if (typeof this.props.defaultSortFunction !== 'undefined') {
+                            return this.props.defaultSortFunction(keyA, keyB);
+                        }
 
-                        // Reverse direction if we're doing a reverse sort
+                        // Default sort
                         if (keyA < keyB) {
-                            return -1 * currentSort.direction;
+                            return -1;
                         }
 
                         if (keyA > keyB) {
-                            return 1 * currentSort.direction;
+                            return 1;
                         }
 
                         return 0;
-                    } else {
-                        // Reverse columns if we're doing a reverse sort
-                        if (currentSort.direction === 1) {
-                            return this._sortable[currentSort.column](keyA, keyB);
-                        } else {
-                            return this._sortable[currentSort.column](keyB, keyA);
-                        }
                     }
+
+                    return this._sortable[currentSort.column](keyA, keyB);
                 }).bind(this));
             }
         }, {

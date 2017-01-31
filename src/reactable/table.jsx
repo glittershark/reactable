@@ -299,35 +299,32 @@ export class Table extends React.Component {
         }
 
         this.data.sort(function(a, b){
-            let keyA = extractDataFrom(a, currentSort.column);
+            let keyA = extractDataFrom(currentSort.direction === 1 ? a : b, currentSort.column);
             keyA = isUnsafe(keyA) ? keyA.toString() : keyA || '';
-            let keyB = extractDataFrom(b, currentSort.column);
+            let keyB = extractDataFrom(currentSort.direction === 1 ? b : a, currentSort.column);
             keyB = isUnsafe(keyB) ? keyB.toString() : keyB || '';
 
-            // Default sort
             if (
                 typeof(this._sortable[currentSort.column]) === 'undefined' ||
                     this._sortable[currentSort.column] === 'default'
             ) {
+                if (typeof this.props.defaultSortFunction !== 'undefined') {
+                  return this.props.defaultSortFunction(keyA, keyB);
+                }
 
-                // Reverse direction if we're doing a reverse sort
+                // Default sort
                 if (keyA < keyB) {
-                    return -1 * currentSort.direction;
+                    return -1;
                 }
 
                 if (keyA > keyB) {
-                    return 1 * currentSort.direction;
+                    return 1;
                 }
 
                 return 0;
-            } else {
-                // Reverse columns if we're doing a reverse sort
-                if (currentSort.direction === 1) {
-                    return this._sortable[currentSort.column](keyA, keyB);
-                } else {
-                    return this._sortable[currentSort.column](keyB, keyA);
-                }
             }
+
+            return this._sortable[currentSort.column](keyA, keyB);
         }.bind(this));
     }
 

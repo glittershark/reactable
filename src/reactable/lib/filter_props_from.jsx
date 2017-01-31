@@ -12,6 +12,7 @@ const internalProps = {
     sort: true,
     sortBy: true,
     sortableColumns: true,
+    defaultSortFunction: true,
     onSort: true,
     defaultSort: true,
     defaultSortDescending: true,
