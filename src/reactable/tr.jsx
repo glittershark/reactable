@@ -14,24 +14,44 @@ export class Tr extends React.Component {
         ) {
             if (typeof(children.concat) === 'undefined') { console.log(children); }
 
-            children = children.concat(this.props.columns.map(function({ props = {}, ...column}, i) {
-                if (this.props.data.hasOwnProperty(column.key)) {
-                    var value = this.props.data[column.key];
+            var columnsFromProps = [];
+            var columnsToSkip = 0;
+            this.props.columns.forEach(function({ props = {}, ...column}, i) {
+                var component = null;
 
-                    if (
-                        typeof(value) !== 'undefined' &&
+                if (columnsToSkip <= 0) {
+
+                    if (this.props.data.hasOwnProperty(column.key)) {
+                        var value = this.props.data[column.key];
+
+                        if (
+                            typeof(value) !== 'undefined' &&
                             value !== null &&
-                                value.__reactableMeta === true
-                    ) {
-                        props = value.props;
-                        value = value.value;
+                            value.__reactableMeta === true
+                        ) {
+                            props = value.props;
+                            value = value.value;
+                        }
+
+                        var colSpan = props.colSpan || 1;
+
+                        // we will use 1 column (ourself), no need to skip that
+                        columnsToSkip = colSpan - 1;
+
+                        component = <Td column={column} key={column.key} {...props}>{value}</Td>;
+                    } else {
+                        component = <Td column={column} key={column.key}/>;
                     }
 
-                    return <Td column={column} key={column.key} {...props}>{value}</Td>;
+                    if (component !== null) {
+                        columnsFromProps.push(component)
+                    }
                 } else {
-                    return <Td column={column} key={column.key} />;
+                    columnsToSkip--;
                 }
-            }.bind(this)));
+            }.bind(this));
+
+            children = children.concat(columnsFromProps);
         }
 
         // Manually transfer props

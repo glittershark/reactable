@@ -461,6 +461,93 @@ describe('Reactable', function() {
         });
     });
 
+    describe('using colSpan', function() {
+        describe('basic colSpan', function() {
+            before(function() {
+                ReactDOM.render(
+                    React.createElement(Reactable.Table, {className: "table", id: "table"},
+                        React.createElement(Reactable.Tr, {data: { Name: 'Griffin Smith', Age: '18'}}),
+                        React.createElement(Reactable.Tr, {data: { Age: '23', Name: 'Lee Salminen'}}),
+                        React.createElement(Reactable.Tr, {data: { Age: '28', Position: 'Developer'}}),
+                        React.createElement(Reactable.Tr, null,
+                            React.createElement(Reactable.Td, {column: "Name", colSpan: "3"}, "This summary spans 3 cols")
+                        )
+                    ),
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('renders the table', function() {
+                expect($('table#table.table')).to.exist;
+            });
+
+            it('renders the column headers in the table', function() {
+                var headers = [];
+                $('thead th').each(function() {
+                    headers.push($(this).text());
+                });
+
+                expect(headers).to.eql([ 'Name', 'Age', 'Position' ]);
+            });
+
+            it('renders the first row with the correct data', function() {
+                ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', '']);
+            });
+
+            it('renders the second row with the correct data', function() {
+                ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', '']);
+            });
+
+            it('renders the third row with the correct data', function() {
+                ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
+            });
+
+            it('renders the fourth row with the correct data', function() {
+                ReactableTestUtils.expectRowText(3, ['This summary spans 3 cols']);
+            });
+        });
+
+        describe('filtering with colSpan', function() {
+            before(function() {
+                this.component = React.render(
+                    React.createElement(Reactable.Table, {filterable: ['Name'], className: "table", id: "table"},
+                        React.createElement(Reactable.Tr, {data: { Name: 'Griffin Smith', Age: '18'}}),
+                        React.createElement(Reactable.Tr, {data: { Age: '23', Name: 'Lee Salminen'}}),
+                        React.createElement(Reactable.Tr, {data: { Age: '28', Position: 'Developer'}}),
+                        React.createElement(Reactable.Tr, null,
+                            React.createElement(Reactable.Td, {column: "Name", colSpan: "3"}, "This summary spans 3 cols")
+                        )
+                    ),
+                    ReactableTestUtils.testNode()
+                );
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            context('select colspan value', function() {
+                before(function() {
+                    this.component.filterBy('summary');
+                });
+
+                it('applies the filtering', function() {
+                    ReactableTestUtils.expectRowText(0, ['This summary spans 3 cols']);
+                });
+            });
+
+            context('select value from other row', function() {
+                before(function() {
+                    this.component.filterBy('Griffin');
+                });
+
+                it('applies the filtering', function() {
+                    ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', '']);
+                });
+            });
+        });
+    });
+
     describe('passing through HTML props', function() {
         describe('adding <Tr>s with className to the <Table>', function() {
             before(function() {
