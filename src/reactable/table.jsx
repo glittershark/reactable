@@ -137,10 +137,12 @@ export class Table extends React.Component {
     }
 
     initializeFilters(props) {
-        this._filterable = {};
-        // Transform filterable properties into a more friendly list
-        for (let i in props.filterable) {
-            let column = props.filterable[i];
+        this._filterableColumns = {};
+        this._filterRows = props.filterRows;
+        this._filterRowFunction = props.filterRowFunction;
+        // Transform filterableColumns properties into a more friendly list
+        for (let i in props.filterableColumns) {
+            let column = props.filterableColumns[i];
             let columnName, filterFunction;
 
             if (column instanceof Object) {
@@ -161,7 +163,7 @@ export class Table extends React.Component {
                 filterFunction = 'default';
             }
 
-            this._filterable[columnName] = filterFunction;
+            this._filterableColumns[columnName] = filterFunction;
         }
     }
 
@@ -266,20 +268,55 @@ export class Table extends React.Component {
 
         for (let i = 0; i < children.length; i++) {
             let data = children[i].props.data;
+            let rowValuesObject = {};
+            let rowValuesArray = [];
 
-            for (let filterColumn in this._filterable) {
-                if (typeof(data[filterColumn]) !== 'undefined') {
-                    // Default filter
-                    if (typeof(this._filterable[filterColumn]) === 'undefined' || this._filterable[filterColumn]=== 'default') {
-                        if (extractDataFrom(data, filterColumn).toString().toLowerCase().indexOf(filter) > -1) {
-                            matchedChildren.push(children[i]);
-                            break;
-                        }
-                    } else {
-                        // Apply custom filter
-                        if (this._filterable[filterColumn](extractDataFrom(data, filterColumn).toString(), filter)) {
-                            matchedChildren.push(children[i]);
-                            break;
+            let columns = data;
+
+            if (this.props.filterableColumns &&
+                Array.isArray(this.props.filterableColumns) &&
+                    this.props.filterableColumns.length > 0) {
+                columns = this._filterableColumns;
+            }
+
+            // Extract row values from data into an Array and Object
+            for(let column in columns) {
+                if (typeof data[column] !== 'undefined') {
+                    let extractedValue = extractDataFrom(data, column);
+                    rowValuesArray.push(extractedValue);
+                    rowValuesObject[column] = extractedValue;
+                }
+            }
+
+            if (this._filterRows) {
+                // Filter Rows
+                if (typeof this._filterRowFunction === 'undefined') {
+                    // Apply default filter
+                    if (rowValuesArray.toString().toLowerCase().indexOf(filter) > -1) {
+                        matchedChildren.push(children[i]);
+                    }
+                } else {
+                    // Apply custom row function
+                    if (this._filterRowFunction(rowValuesArray, filter)) {
+                        matchedChildren.push(children[i]);
+                    }
+                }
+            } else {
+                // Filter columns
+                for (let filterColumn in this._filterableColumns) {
+                    if (typeof(data[filterColumn]) !== 'undefined') {
+                        // Default filter
+                        if (typeof(this._filterableColumns[filterColumn]) === 'undefined' || this._filterableColumns[filterColumn]=== 'default') {
+                            if (extractDataFrom(data, filterColumn).toString().toLowerCase().indexOf(filter) > -1) {
+                                matchedChildren.push(children[i]);
+                                break;
+                            }
+                        } else {
+                            // Apply custom filter
+                            if (this._filterableColumns[filterColumn](extractDataFrom(data, filterColumn).toString(), filter)) {
+                                matchedChildren.push(children[i]);
+                                break;
+                            }
                         }
                     }
                 }
@@ -437,12 +474,12 @@ export class Table extends React.Component {
 
         // Determine if we render the filter box
         let filtering = false;
-        if (
-            this.props.filterable &&
-                Array.isArray(this.props.filterable) &&
-                    this.props.filterable.length > 0 &&
-                        !this.props.hideFilterInput
-        ) {
+        let renderForColumnFiltering =  this.props.filterableColumns &&
+                                        Array.isArray(this.props.filterableColumns) &&
+                                        this.props.filterableColumns.length > 0 &&
+                                        !this.props.hideFilterInput
+        let renderForRowFiltering = this.props.filterRows && !this.props.hideFilterInput
+        if (renderForColumnFiltering || renderForRowFiltering) {
             filtering = true;
         }
 
