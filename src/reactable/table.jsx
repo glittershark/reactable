@@ -423,6 +423,10 @@ export class Table extends React.Component {
                     }
                 }
 
+                if (this.props.onRowClick) {
+                   props.onClick = this.props.onRowClick.bind(null, data);
+                 }
+
                 return (
                     <Tr columns={columns} key={i} data={data} {...props} />
                 );

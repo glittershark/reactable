@@ -26,7 +26,8 @@ const internalProps = {
     pageButtonLimit: true,
     childNode: true,
     data: true,
-    children: true
+    children: true,
+    onRowClick: true
 };
 
 export function filterPropsFrom(baseProps) {
@@ -40,4 +41,3 @@ export function filterPropsFrom(baseProps) {
 
     return props;
 }
-

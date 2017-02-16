@@ -44,7 +44,8 @@ window.ReactDOM["default"] = window.ReactDOM;
         pageButtonLimit: true,
         childNode: true,
         data: true,
-        children: true
+        children: true,
+        onRowClick: true
     };
 
     function filterPropsFrom(baseProps) {
@@ -1453,6 +1454,10 @@ window.ReactDOM["default"] = window.ReactDOM;
                                     })();
                                 }
                             }
+                        }
+
+                        if (this.props.onRowClick) {
+                            props.onClick = this.props.onRowClick.bind(null, data);
                         }
 
                         return _react['default'].createElement(_tr.Tr, _extends({ columns: columns, key: i, data: data }, props));
