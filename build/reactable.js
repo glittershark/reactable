@@ -466,6 +466,9 @@ window.ReactDOM["default"] = window.ReactDOM;
                 // handleClick aliases onClick event
                 mergedProps.onClick = this.props.handleClick;
 
+                // remove property to avoid unknown prop warning
+                delete mergedProps.handleClick;
+
                 var stringifiedChildProps;
 
                 if (typeof this.props.data === 'undefined') {
