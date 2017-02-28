@@ -1264,6 +1264,11 @@ window.ReactDOM["default"] = window.ReactDOM;
                 };
             }
         }, {
+            key: 'getCurrentFilter',
+            value: function getCurrentFilter(propFilter) {
+                return this.state.filter !== undefined && propFilter === '' ? this.state.filter : propFilter;
+            }
+        }, {
             key: 'updateCurrentSort',
             value: function updateCurrentSort(sortBy) {
                 if (sortBy !== false && sortBy.column !== this.state.currentSort.column && sortBy.direction !== this.state.currentSort.direction) {
@@ -1286,13 +1291,20 @@ window.ReactDOM["default"] = window.ReactDOM;
                 this.filterBy(this.props.filterBy);
             }
         }, {
+            key: 'getCurrentFilter',
+            value: function getCurrentFilter(propFilter) {
+                return this.state.filter !== undefined && propFilter === '' ? this.state.filter : propFilter;
+            }
+        }, {
             key: 'componentWillReceiveProps',
             value: function componentWillReceiveProps(nextProps) {
                 this.initialize(nextProps);
                 this.updateCurrentPage(nextProps.currentPage);
                 this.updateCurrentSort(nextProps.sortBy);
                 this.sortByCurrentSort();
-                this.filterBy(nextProps.filterBy);
+
+                var filter = this.getCurrentFilter(nextProps.filterBy);
+                this.filterBy(filter);
             }
         }, {
             key: 'applyFilter',
