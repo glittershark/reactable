@@ -230,6 +230,12 @@ export class Table extends React.Component {
         };
     }
 
+    getCurrentFilter(propFilter) {
+        return (this.state.filter !== undefined && propFilter === '') ?
+            this.state.filter :
+            propFilter;
+    }
+
     updateCurrentSort(sortBy) {
         if (sortBy !== false &&
             sortBy.column !== this.state.currentSort.column &&
@@ -251,12 +257,20 @@ export class Table extends React.Component {
         this.filterBy(this.props.filterBy);
     }
 
+    getCurrentFilter(propFilter) {
+        return (this.state.filter !== undefined && propFilter === '') ?
+            this.state.filter :
+            propFilter;
+    }
+
     componentWillReceiveProps(nextProps) {
         this.initialize(nextProps);
         this.updateCurrentPage(nextProps.currentPage)
         this.updateCurrentSort(nextProps.sortBy);
         this.sortByCurrentSort();
-        this.filterBy(nextProps.filterBy);
+
+        let filter = this.getCurrentFilter(nextProps.filterBy);
+        this.filterBy(filter);
     }
 
     applyFilter(filter, children) {
@@ -323,9 +337,9 @@ export class Table extends React.Component {
             } else {
                 // Reverse columns if we're doing a reverse sort
                 if (currentSort.direction === 1) {
-                    return this._sortable[currentSort.column](keyA, keyB);
+                    return this._sortable[currentSort.column](keyA, keyB, a, b);
                 } else {
-                    return this._sortable[currentSort.column](keyB, keyA);
+                    return this._sortable[currentSort.column](keyB, keyA, b, a);
                 }
             }
         }.bind(this));

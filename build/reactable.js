@@ -1264,6 +1264,11 @@ window.ReactDOM["default"] = window.ReactDOM;
                 };
             }
         }, {
+            key: 'getCurrentFilter',
+            value: function getCurrentFilter(propFilter) {
+                return this.state.filter !== undefined && propFilter === '' ? this.state.filter : propFilter;
+            }
+        }, {
             key: 'updateCurrentSort',
             value: function updateCurrentSort(sortBy) {
                 if (sortBy !== false && sortBy.column !== this.state.currentSort.column && sortBy.direction !== this.state.currentSort.direction) {
@@ -1286,13 +1291,20 @@ window.ReactDOM["default"] = window.ReactDOM;
                 this.filterBy(this.props.filterBy);
             }
         }, {
+            key: 'getCurrentFilter',
+            value: function getCurrentFilter(propFilter) {
+                return this.state.filter !== undefined && propFilter === '' ? this.state.filter : propFilter;
+            }
+        }, {
             key: 'componentWillReceiveProps',
             value: function componentWillReceiveProps(nextProps) {
                 this.initialize(nextProps);
                 this.updateCurrentPage(nextProps.currentPage);
                 this.updateCurrentSort(nextProps.sortBy);
                 this.sortByCurrentSort();
-                this.filterBy(nextProps.filterBy);
+
+                var filter = this.getCurrentFilter(nextProps.filterBy);
+                this.filterBy(filter);
             }
         }, {
             key: 'applyFilter',
@@ -1358,9 +1370,9 @@ window.ReactDOM["default"] = window.ReactDOM;
                     } else {
                         // Reverse columns if we're doing a reverse sort
                         if (currentSort.direction === 1) {
-                            return this._sortable[currentSort.column](keyA, keyB);
+                            return this._sortable[currentSort.column](keyA, keyB, a, b);
                         } else {
-                            return this._sortable[currentSort.column](keyB, keyA);
+                            return this._sortable[currentSort.column](keyB, keyA, b, a);
                         }
                     }
                 }).bind(this));
