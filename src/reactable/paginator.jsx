@@ -22,32 +22,31 @@ export class Paginator extends React.Component {
 
     renderPrevious() {
         if(this.props.currentPage > 0) {
-            return <a className='reactable-previous-page'
+            return <li className="page-item"><a className='reactable-previous-page page-link'
                       href={pageHref(this.props.currentPage - 1)}
                       onClick={this.handlePrevious.bind(this)}>
-                        {this.props.previousPageLabel || 'Previous'}
-                   </a>
+                        {this.props.previousPageLabel || 'Anterior'}
+                   </a></li>
         }
     }
 
     renderNext() {
         if(this.props.currentPage < this.props.numPages - 1) {
-            return <a className='reactable-next-page'
+            return <li className="page-item"><a className='reactable-next-page page-link'
                       href={pageHref(this.props.currentPage + 1)}
                       onClick={this.handleNext.bind(this)}>
-                      {this.props.nextPageLabel || 'Next'}
-                   </a>
+                      {this.props.nextPageLabel || 'Siguiente'}
+                   </a></li>
         }
     }
 
     renderPageButton(className, pageNum) {
-
-        return <a className={className}
-                  key={pageNum}
+        let _className = className + " page-link";
+        return <li key={pageNum} className="page-item"><a className={_className}
                   href={pageHref(pageNum)}
                   onClick={this.handlePageButton.bind(this, pageNum)}>
                   {pageNum + 1}
-              </a>
+              </a></li>
     }
 
     render() {
@@ -96,13 +95,14 @@ export class Paginator extends React.Component {
             <tbody className="reactable-pagination">
                 <tr>
                     <td colSpan={this.props.colSpan}>
+                        <ul className="pagination">
                         {this.renderPrevious()}
                         {pageButtons}
                         {this.renderNext()}
+                        </ul>
                     </td>
                 </tr>
             </tbody>
         );
     }
 };
-
