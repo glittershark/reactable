@@ -527,7 +527,6 @@ Called every time the page changes.
 
 This handler will be passed a number representing the current page, zero based.
 
-
 ## Custom CSS
 
 #### Add sort icon (required Font Awesome 4)
@@ -542,7 +541,7 @@ This handler will be passed a number representing the current page, zero based.
   content: "\f0dc";
   position: absolute;
   top: 17px;
-  right: 15px;
+  right: 15px;
   color: #2196F3;
 }
 .reactable-header-sort-asc::before{
