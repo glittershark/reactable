@@ -35,6 +35,7 @@ this the faster we can get to 1.0!
   - [Filtering](#filtering)
   - [Empty Data Sets](#empty-data-sets)
   - [Events](#events)
+  - [Custom CSS](#custom-css)
 
 ## Installation
 
@@ -525,3 +526,47 @@ filtering.
 Called every time the page changes.
 
 This handler will be passed a number representing the current page, zero based.
+
+
+## Custom CSS
+
+#### Add sort icon (required Font Awesome 4)
+```css
+.reactable-header-sortable{
+  position:relative;
+  padding-right: 40px;
+} 
+
+.reactable-header-sortable::before{
+  font: normal normal normal 14px/1 FontAwesome;
+  content: "\f0dc";
+  position: absolute;
+  top: 17px;
+  right: 15px;
+  color: #2196F3;
+}
+.reactable-header-sort-asc::before{
+  content: "\f0de";
+  color: #2196F3;
+}
+.reactable-header-sort-desc::before{
+  content: "\f0dd";
+  color: #2196F3;
+}
+```
+
+#### Add search icon in filterer input (required Font Awesome 4)
+```css
+.reactable-filterer td{position:relative;}
+.reactable-filterer td::before{
+  font: normal normal normal 14px/1 FontAwesome;
+  content: "\f002";
+  position: absolute;
+  top: 23px;
+  left: 24px;
+  color: #2196F3;
+}
+.reactable-filterer td input{
+  padding-left: 35px;
+}
+```
