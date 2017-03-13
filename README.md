@@ -529,13 +529,13 @@ This handler will be passed a number representing the current page, zero based.
 
 ## Custom CSS
 
-#### Add sort icon (required Font Awesome 4)
+### Add sort icon (required Font Awesome 4)
+
 ```css
 .reactable-header-sortable{
   position:relative;
   padding-right: 40px;
-} 
-
+}
 .reactable-header-sortable::before{
   font: normal normal normal 14px/1 FontAwesome;
   content: "\f0dc";
@@ -554,9 +554,12 @@ This handler will be passed a number representing the current page, zero based.
 }
 ```
 
-#### Add search icon in filterer input (required Font Awesome 4)
+### Add search icon in filterer input (required Font Awesome 4)
+
 ```css
-.reactable-filterer td{position:relative;}
+.reactable-filterer td{
+  position:relative;
+}
 .reactable-filterer td::before{
   font: normal normal normal 14px/1 FontAwesome;
   content: "\f002";
