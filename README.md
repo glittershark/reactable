@@ -186,7 +186,7 @@ ReactDOM.render(
           </Th>
         </Thead>
         <Tr>
-            <Td column="name" data="Griffin Smith">
+            <Td column="name" value="Griffin Smith">
                 <b>Griffin Smith</b>
             </Td>
             <Td column="age">18</Td>
