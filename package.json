@@ -18,7 +18,7 @@
     "build": "./node_modules/grunt-cli/bin/grunt build"
   },
   "peerDependencies": {
-    "react": "* || ^0.14.0"
+    "react": "* || ^15.4.2"
   },
   "devDependencies": {
     "grunt": "^0.4.4",
@@ -38,7 +38,8 @@
     "load-grunt-tasks": "^3.2.0",
     "markdownlint": "0.0.7",
     "mocha": "^1.18.2",
-    "react": "^0.14.0"
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
   },
   "keywords": [
     "react-component",
