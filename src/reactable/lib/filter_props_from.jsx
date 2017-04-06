@@ -3,7 +3,9 @@ const internalProps = {
     column: true,
     columns: true,
     sortable: true,
-    filterable: true,
+    filterableColumns: true,
+    filterRows: true,
+    filterRowFunction: true,
     filtering: true,
     onFilter: true,
     filterPlaceholder: true,
@@ -40,4 +42,3 @@ export function filterPropsFrom(baseProps) {
 
     return props;
 }
-
