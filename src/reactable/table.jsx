@@ -233,11 +233,8 @@ export class Table extends React.Component {
     }
 
     updateCurrentSort(sortBy) {
-        if (sortBy !== false &&
-            sortBy.column !== this.state.currentSort.column &&
-                sortBy.direction !== this.state.currentSort.direction) {
-
-            this.setState({ currentSort: this.getCurrentSort(sortBy) });
+        if (sortBy !== false) {
+            this.state.currentSort = this.getCurrentSort(sortBy);
         }
     }
 
