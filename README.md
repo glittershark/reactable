@@ -59,7 +59,7 @@ the `window` object.
 
 Reactable also exposes a set of CommonJS modules for piece-by-piece use with
 Node, Webpack, Browserify, etc. These modules are located in the [`lib` folder
-at the root of this repositiory][lib-folder].
+at the root of this repository][lib-folder].
 
 Keep in mind that Reactable depends on the latest version of React (0.14), which
 can be downloaded [here][download]
