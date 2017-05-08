@@ -73,7 +73,7 @@ can be downloaded [here][download]
 The simplest example:
 
 ```jsx
-var Table = Reactable.Table;
+var Table = Reactable.Table; // or using ES6 modules: import {Table} from 'reactable'
 ReactDOM.render(
     <Table className="table" data={[
         { Name: 'Griffin Smith', Age: 18 },
