@@ -464,7 +464,9 @@ window.ReactDOM["default"] = window.ReactDOM;
                     }
                 }
                 // handleClick aliases onClick event
-                mergedProps.onClick = this.props.handleClick;
+                if (mergedProps.onClick === undefined) {
+                    mergedProps.onClick = this.props.handleClick;
+                }
 
                 var stringifiedChildProps;
 
