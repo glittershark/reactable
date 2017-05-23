@@ -1,18 +1,18 @@
 {
-  "name": "reactable",
+  "name": "reactable-copy",
   "version": "0.14.1",
   "description": "Fast, flexible, simple data tables in React",
   "main": "./lib/reactable.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/glittershark/reactable.git"
+    "url": "https://github.com/mattishii/reactable.git"
   },
   "bugs": {
-    "url": "https://github.com/glittershark/reactable/issues"
+    "url": "https://github.com/mattishii/reactable/issues"
   },
   "author": "Griffin Smith",
   "license": "MIT",
-  "homepage": "https://github.com/glittershark/reactable",
+  "homepage": "https://github.com/mattishii/reactable",
   "scripts": {
     "test": "./node_modules/grunt-cli/bin/grunt ci",
     "build": "grunt build"
