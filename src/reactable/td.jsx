@@ -9,7 +9,8 @@ export class Td extends React.Component {
       if(!isReactComponent(object) && stringable(object) && typeof(object) !== 'undefined') {
         return object.toString()
       }
-      return null;
+	  //handles warning
+      return "";
     }
 
     render() {
