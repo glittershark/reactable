@@ -2421,6 +2421,60 @@ describe('Reactable', function() {
                 });
             });
         });
+
+
+        context('with custom filter and complex contents', function() {
+            before(function() {
+                this.component = ReactDOM.render(
+                    <Reactable.Table className="table" id="table"
+                        filterable={[
+                            {
+                                column: 'State',
+                                filterFunction: function(contents, filter) {
+                                    return (
+                                        typeof(contents) !== 'undefined' && typeof(filter) !== 'undefined' &&
+                                        contents.props.value.toLowerCase().indexOf(filter) > -1
+                                    );
+                                },
+                            }
+                        ]}
+                        filterPlaceholder="Filter Results"
+                        columns={['State', 'Description', 'Tag']}>
+                        <Reactable.Tr>
+                            <Reactable.Td column='State'><div value="NY">New York</div></Reactable.Td>
+                            <Reactable.Td column='Description'>this is some text</Reactable.Td>
+                            <Reactable.Td column='Tag'>new</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column='State'><div value="NM">New Mexico</div></Reactable.Td>
+                            <Reactable.Td column='Description'>lorem ipsum</Reactable.Td>
+                            <Reactable.Td column='Tag'>old x</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column='State'><div value="CO">Colorado</div></Reactable.Td>
+                            <Reactable.Td column='Description'>lol</Reactable.Td>
+                            <Reactable.Td column='Tag'>renewed x</Reactable.Td>
+                        </Reactable.Tr>
+                        <Reactable.Tr>
+                            <Reactable.Td column='State'><div value="AK">Alaska</div></Reactable.Td>
+                            <Reactable.Td column='Description'>bacon</Reactable.Td>
+                            <Reactable.Td column='Tag'>new</Reactable.Td>
+                        </Reactable.Tr>
+                    </Reactable.Table>,
+                    ReactableTestUtils.testNode()
+                );
+
+                this.component.filterBy('AK');
+            });
+
+            after(ReactableTestUtils.resetTestEnvironment);
+
+            it('filters based on a prop specified in the custom filter', function() {
+                ReactableTestUtils.expectRowText(0, ['Alaska', 'bacon', 'new']);
+            });
+        });
+
+
     });
 
     describe('directly passing a data array with non-string data', function() {

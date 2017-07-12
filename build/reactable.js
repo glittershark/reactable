@@ -1314,7 +1314,11 @@ window.ReactDOM["default"] = window.ReactDOM;
                                 }
                             } else {
                                 // Apply custom filter
-                                if (this._filterable[filterColumn]((0, _libExtract_data_from.extractDataFrom)(data, filterColumn).toString(), filter)) {
+                                var rawData = (0, _libExtract_data_from.extractDataFrom)(data, filterColumn);
+                                if (rawData.toString() !== '[object Object]') {
+                                    rawData = rawData.toString();
+                                }
+                                if (this._filterable[filterColumn](rawData, filter)) {
                                     matchedChildren.push(children[i]);
                                     break;
                                 }
