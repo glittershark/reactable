@@ -2,6 +2,7 @@ import React from 'react';
 import { Td } from './td';
 import { toArray } from './lib/to_array';
 import { filterPropsFrom } from './lib/filter_props_from';
+import DOM from 'react-dom-factories';
 
 export class Tr extends React.Component {
     render() {
@@ -37,10 +38,9 @@ export class Tr extends React.Component {
         // Manually transfer props
         var props = filterPropsFrom(this.props);
 
-        return React.DOM.tr(props, children);
+        return DOM.tr(props, children);
     }
 };
 
 Tr.childNode = Td;
 Tr.dataType = 'object';
-
