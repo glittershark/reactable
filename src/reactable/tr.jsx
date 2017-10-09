@@ -37,7 +37,7 @@ export class Tr extends React.Component {
         // Manually transfer props
         var props = filterPropsFrom(this.props);
 
-        return React.DOM.tr(props, children);
+        return React.createElement('tr', props, children);        
     }
 };
 
