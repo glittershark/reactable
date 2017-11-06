@@ -1,6 +1,6 @@
 {
   "name": "reactable-copy",
-  "version": "0.14.3",
+  "version": "0.14.4",
   "description": "Fast, flexible, simple data tables in React",
   "main": "./lib/reactable.js",
   "repository": {
@@ -38,7 +38,7 @@
     "load-grunt-tasks": "^3.2.0",
     "markdownlint": "0.0.7",
     "mocha": "^1.18.2",
-    "react": "^15.6.1"
+    "react": "^16.0.0"
   },
   "keywords": [
     "react-component",
@@ -47,7 +47,7 @@
     "data-tables"
   ],
   "dependencies": {
-    "react-dom": "^15.6.1",
+    "react-dom": "^16.0.0",
     "react-dom-factories": "^1.0.0"
   }
 }
