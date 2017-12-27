@@ -736,7 +736,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                     children = children.concat(trs);
                 }
 
-                return _react['default'].DOM.tr(props, children);
+                return _react['default'].createElement("tr", props, children);
             }
         }]);
 

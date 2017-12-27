@@ -745,7 +745,7 @@ describe('Reactable', function() {
 
         describe('filtering with colSpan', function () {
             before(function () {
-                this.component = React.render(
+                this.component = ReactDOM.render(
                     React.createElement(Reactable.Table, {filterable: ['Name'], className: "table", id: "table"},
                         React.createElement(Reactable.Tr, {data: {Name: 'Griffin Smith', Age: '18'}}),
                         React.createElement(Reactable.Tr, {data: {Age: '23', Name: 'Lee Salminen'}}),

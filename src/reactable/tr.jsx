@@ -122,7 +122,7 @@ export class Tr extends React.Component {
             children = children.concat(trs);
         }
 
-        return React.DOM.tr(props, children);
+        return React.createElement("tr", props, children);
     }
 }
 
