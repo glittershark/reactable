@@ -566,7 +566,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                 // Manually transfer props
                 var props = (0, _libFilter_props_from.filterPropsFrom)(this.props);
 
-                return _react['default'].DOM.tr(props, children);
+                return _react['default'].createElement('tr', props, children);
             }
         }]);
 
@@ -1358,9 +1358,9 @@ window.ReactDOM["default"] = window.ReactDOM;
                     } else {
                         // Reverse columns if we're doing a reverse sort
                         if (currentSort.direction === 1) {
-                            return this._sortable[currentSort.column](keyA, keyB);
+                            return this._sortable[currentSort.column](keyA, keyB, currentSort.direction);
                         } else {
-                            return this._sortable[currentSort.column](keyB, keyA);
+                            return this._sortable[currentSort.column](keyB, keyA, currentSort.direction);
                         }
                     }
                 }).bind(this));
