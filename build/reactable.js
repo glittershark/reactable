@@ -566,7 +566,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                 // Manually transfer props
                 var props = (0, _libFilter_props_from.filterPropsFrom)(this.props);
 
-                return _react['default'].DOM.tr(props, children);
+                return _react['default'].createElement('tr', props, children);
             }
         }]);
 
