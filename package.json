@@ -1,6 +1,6 @@
 {
-  "name": "reactable",
-  "version": "0.14.1",
+  "name": "@secondmeasure/reactable",
+  "version": "0.14.3-alpha.1",
   "description": "Fast, flexible, simple data tables in React",
   "main": "./lib/reactable.js",
   "repository": {
