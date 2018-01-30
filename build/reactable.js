@@ -896,7 +896,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                             onKeyDown: this.handleKeyDownTh.bind(this, column),
                             role: thRole,
                             tabIndex: '0' }),
-                        column.label
+                        column.content || column.label
                     ));
                 }
 
@@ -933,7 +933,8 @@ window.ReactDOM["default"] = window.ReactDOM;
 
                         // use the content as the label & key
                         if (typeof th.props.children !== 'undefined') {
-                            column.label = th.props.children;
+                            column.label = th.props.label || th.props.children;
+                            column.content = th.props.children || th.props.label;
                             column.key = column.label;
                         }
 
