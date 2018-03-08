@@ -1,6 +1,6 @@
 {
   "name": "reactable-arc",
-  "version": "0.14.1",
+  "version": "0.14.3",
   "description": "Fast, flexible, simple data tables in React",
   "main": "./lib/reactable.js",
   "repository": {

@@ -52,7 +52,7 @@ export class Table extends React.Component {
         }.bind(this));
     }
 
-    parseChildData(props) {
+    parseChildData(props, moduleHot) {
         let data = [], tfoot;
 
         // Transform any children back to a data array
@@ -62,65 +62,130 @@ export class Table extends React.Component {
                     return;
                 }
                 
-                const displayName = child.type.displayName ? child.type.displayName : null; 
+                if(moduleHot) {
+                    const displayName = child.type.displayName ? child.type.displayName : null; 
 
-                switch (displayName) {
-                    case Thead:
-                    break;
-                    case Tfoot.name:
-                        if (typeof(tfoot) !== 'undefined') {
-                            console.warn ('You can only have one <Tfoot>, but more than one was specified.' +
-                                          'Ignoring all but the last one');
-                        }
-                        tfoot = child;
-                    break;
-                    case Tr.name:
-                        let childData = child.props.data || {};
-
-                        React.Children.forEach(child.props.children, function(descendant) {
-                            // TODO
-                            /* if (descendant.type.ConvenienceConstructor === Td) { */
-                            if (
-                                typeof(descendant) !== 'object' ||
-                                descendant == null
-                            ) {
-                                return;
-                            } else if (typeof(descendant.props.column) !== 'undefined') {
-                                let value;
-
-                                if (typeof(descendant.props.data) !== 'undefined') {
-                                    value = descendant.props.data;
-                                } else if (typeof(descendant.props.children) !== 'undefined') {
-                                    value = descendant.props.children;
-                                } else {
-                                    console.warn('exports.Td specified without ' +
-                                                 'a `data` property or children, ' +
-                                                 'ignoring');
-                                    return;
-                                }
-
-                                childData[descendant.props.column] = {
-                                    value: value,
-                                    props: filterPropsFrom(descendant.props),
-                                    __reactableMeta: true
-                                };
-                            } else {
-                                console.warn('exports.Td specified without a ' +
-                                             '`column` property, ignoring');
+                    switch (displayName) {
+                        case Thead:
+                        break;
+                        case Tfoot.name:
+                            if (typeof(tfoot) !== 'undefined') {
+                                console.warn ('You can only have one <Tfoot>, but more than one was specified.' +
+                                              'Ignoring all but the last one');
                             }
-                        });
-
-                        data.push({
-                            data: childData,
-                            props: filterPropsFrom(child.props),
-                            __reactableMeta: true
-                        });
-                    break;
-
-                    default:
-                        console.warn ('The only possible children of <Table> are <Thead>, <Tr>, ' +
-                                      'or one <Tfoot>.');
+                            tfoot = child;
+                        break;
+                        case Tr.name:
+                            let childData = child.props.data || {};
+    
+                            React.Children.forEach(child.props.children, function(descendant) {
+                                // TODO
+                                /* if (descendant.type.ConvenienceConstructor === Td) { */
+                                if (
+                                    typeof(descendant) !== 'object' ||
+                                    descendant == null
+                                ) {
+                                    return;
+                                } else if (typeof(descendant.props.column) !== 'undefined') {
+                                    let value;
+    
+                                    if (typeof(descendant.props.data) !== 'undefined') {
+                                        value = descendant.props.data;
+                                    } else if (typeof(descendant.props.children) !== 'undefined') {
+                                        value = descendant.props.children;
+                                    } else {
+                                        console.warn('exports.Td specified without ' +
+                                                     'a `data` property or children, ' +
+                                                     'ignoring');
+                                        return;
+                                    }
+    
+                                    childData[descendant.props.column] = {
+                                        value: value,
+                                        props: filterPropsFrom(descendant.props),
+                                        __reactableMeta: true
+                                    };
+                                } else {
+                                    console.warn('exports.Td specified without a ' +
+                                                 '`column` property, ignoring');
+                                }
+                            });
+    
+                            data.push({
+                                data: childData,
+                                props: filterPropsFrom(child.props),
+                                __reactableMeta: true
+                            });
+                        break;
+    
+                        default:
+                            console.warn ('The only possible children of <Table> are <Thead>, <Tr>, ' +
+                                          'or one <Tfoot>.');
+                    }
+                } else {
+                    switch (child.type) {
+                        case Thead:
+                        break;
+                        case Tfoot:
+                            if (typeof(tfoot) !== 'undefined') {
+                                console.warn ('You can only have one <Tfoot>, but more than one was specified.' +
+                                              'Ignoring all but the last one');
+                            }
+                            tfoot = child;
+                        break;
+                        case Tr:
+                            let childData = child.props.data || {};
+    
+                            React.Children.forEach(child.props.children, function(descendant) {
+                                // TODO
+                                /* if (descendant.type.ConvenienceConstructor === Td) { */
+                                if (
+                                    typeof(descendant) !== 'object' ||
+                                    descendant == null
+                                ) {
+                                    return;
+                                } else if (typeof(descendant.props.column) !== 'undefined') {
+                                    let value;
+    
+                                    if (typeof(descendant.props.data) !== 'undefined') {
+                                        value = descendant.props.data;
+                                    } else if (typeof(descendant.props.children) !== 'undefined') {
+                                        value = descendant.props.children;
+                                    } else {
+                                        console.warn('exports.Td specified without ' +
+                                                     'a `data` property or children, ' +
+                                                     'ignoring');
+                                        return;
+                                    }
+    
+                                    childData[descendant.props.column] = {
+                                        value: value,
+                                        props: filterPropsFrom(descendant.props),
+                                        __reactableMeta: true
+                                    };
+                                } else {
+                                    console.warn('exports.Td specified without a ' +
+                                                 '`column` property, ignoring');
+                                }
+                            });
+    
+                            data.push({
+                                data: childData,
+                                props: filterPropsFrom(child.props),
+                                __reactableMeta: true
+                            });
+                        break;
+    
+                        default:
+                            console.warn ('The only possible children of <Table> are <Thead>, <Tr>, ' +
+                                          'or one <Tfoot>.');
+                    }
+                }.bind(this));
                 }
+              
+
+
+
             }.bind(this));
         }
 
@@ -129,7 +194,16 @@ export class Table extends React.Component {
 
     initialize(props) {
         this.data = props.data || [];
-        let { data, tfoot } = this.parseChildData(props);
+
+        let parseChildData = this.parseChildData(props);
+        
+
+        if(typeof module !== 'undefined' && module.hot) {
+            parseChildData =  this.parseChildData(props, true);
+        }
+
+
+        let { data, tfoot } = parseChildData;
 
         this.data = this.data.concat(data);
         this.tfoot = tfoot;
