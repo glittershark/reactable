@@ -1089,7 +1089,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                 // Transform any children back to a data array
                 if (typeof props.children !== 'undefined') {
                     _react['default'].Children.forEach(props.children, (function (child) {
-                        if (typeof child === 'undefined' || child === null) {
+                        if (typeof child === 'undefined' || child === null || !child) {
                             return;
                         }
 
@@ -1204,12 +1204,8 @@ window.ReactDOM["default"] = window.ReactDOM;
             key: 'initialize',
             value: function initialize(props) {
                 this.data = props.data || [];
-
-                var parseChildData = this.parseChildData(props);
-
-                if (typeof module !== 'undefined' && module.hot) {
-                    parseChildData = this.parseChildData(props, true);
-                }
+                var hasModuleHot = typeof module !== 'undefined' && module.hot;
+                var parseChildData = parseChildData = this.parseChildData(props, hasModuleHot);
 
                 var _parseChildData = parseChildData;
                 var data = _parseChildData.data;
