@@ -1,6 +1,6 @@
 {
   "name": "reactable-arc",
-  "version": "0.14.3",
+  "version": "0.14.41",
   "description": "Fast, flexible, simple data tables in React",
   "main": "./lib/reactable.js",
   "repository": {
@@ -15,7 +15,8 @@
   "homepage": "https://github.com/thabti/reactable",
   "scripts": {
     "test": "./node_modules/grunt-cli/bin/grunt ci",
-    "build": "./node_modules/grunt-cli/bin/grunt build"
+    "build": "./node_modules/grunt-cli/bin/grunt build",
+    "prepublish": "npm run build"
   },
   "peerDependencies": {
     "react": "* || ^0.14.0"

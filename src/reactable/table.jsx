@@ -180,28 +180,17 @@ export class Table extends React.Component {
                             console.warn ('The only possible children of <Table> are <Thead>, <Tr>, ' +
                                           'or one <Tfoot>.');
                     }
-                }.bind(this));
                 }
-              
+                }.bind(this));
 
-
-
-            }.bind(this));
-        }
-
+            }
         return { data, tfoot };
     }
 
     initialize(props) {
         this.data = props.data || [];
-
-        let parseChildData = this.parseChildData(props);
-        
-
-        if(typeof module !== 'undefined' && module.hot) {
-            parseChildData =  this.parseChildData(props, true);
-        }
-
+        const hasModuleHot = typeof module !== 'undefined' && module.hot;
+        let parseChildData = parseChildData =  this.parseChildData(props, hasModuleHot);
 
         let { data, tfoot } = parseChildData;
 

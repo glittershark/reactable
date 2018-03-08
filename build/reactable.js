@@ -1082,7 +1082,7 @@ window.ReactDOM["default"] = window.ReactDOM;
             }
         }, {
             key: 'parseChildData',
-            value: function parseChildData(props) {
+            value: function parseChildData(props, moduleHot) {
                 var data = [],
                     tfoot = undefined;
 
@@ -1093,60 +1093,111 @@ window.ReactDOM["default"] = window.ReactDOM;
                             return;
                         }
 
-                        var displayName = child.type.displayName ? child.type.displayName : null;
+                        if (moduleHot) {
+                            var displayName = child.type.displayName ? child.type.displayName : null;
 
-                        switch (displayName) {
-                            case _thead.Thead:
-                                break;
-                            case _tfoot.Tfoot.name:
-                                if (typeof tfoot !== 'undefined') {
-                                    console.warn('You can only have one <Tfoot>, but more than one was specified.' + 'Ignoring all but the last one');
-                                }
-                                tfoot = child;
-                                break;
-                            case _tr.Tr.name:
-                                var childData = child.props.data || {};
-
-                                _react['default'].Children.forEach(child.props.children, function (descendant) {
-                                    // TODO
-                                    /* if (descendant.type.ConvenienceConstructor === Td) { */
-                                    if (typeof descendant !== 'object' || descendant == null) {
-                                        return;
-                                    } else if (typeof descendant.props.column !== 'undefined') {
-                                        var value = undefined;
-
-                                        if (typeof descendant.props.data !== 'undefined') {
-                                            value = descendant.props.data;
-                                        } else if (typeof descendant.props.children !== 'undefined') {
-                                            value = descendant.props.children;
-                                        } else {
-                                            console.warn('exports.Td specified without ' + 'a `data` property or children, ' + 'ignoring');
-                                            return;
-                                        }
-
-                                        childData[descendant.props.column] = {
-                                            value: value,
-                                            props: (0, _libFilter_props_from.filterPropsFrom)(descendant.props),
-                                            __reactableMeta: true
-                                        };
-                                    } else {
-                                        console.warn('exports.Td specified without a ' + '`column` property, ignoring');
+                            switch (displayName) {
+                                case _thead.Thead:
+                                    break;
+                                case _tfoot.Tfoot.name:
+                                    if (typeof tfoot !== 'undefined') {
+                                        console.warn('You can only have one <Tfoot>, but more than one was specified.' + 'Ignoring all but the last one');
                                     }
-                                });
+                                    tfoot = child;
+                                    break;
+                                case _tr.Tr.name:
+                                    var childData = child.props.data || {};
 
-                                data.push({
-                                    data: childData,
-                                    props: (0, _libFilter_props_from.filterPropsFrom)(child.props),
-                                    __reactableMeta: true
-                                });
-                                break;
+                                    _react['default'].Children.forEach(child.props.children, function (descendant) {
+                                        // TODO
+                                        /* if (descendant.type.ConvenienceConstructor === Td) { */
+                                        if (typeof descendant !== 'object' || descendant == null) {
+                                            return;
+                                        } else if (typeof descendant.props.column !== 'undefined') {
+                                            var value = undefined;
 
-                            default:
-                                console.warn('The only possible children of <Table> are <Thead>, <Tr>, ' + 'or one <Tfoot>.');
+                                            if (typeof descendant.props.data !== 'undefined') {
+                                                value = descendant.props.data;
+                                            } else if (typeof descendant.props.children !== 'undefined') {
+                                                value = descendant.props.children;
+                                            } else {
+                                                console.warn('exports.Td specified without ' + 'a `data` property or children, ' + 'ignoring');
+                                                return;
+                                            }
+
+                                            childData[descendant.props.column] = {
+                                                value: value,
+                                                props: (0, _libFilter_props_from.filterPropsFrom)(descendant.props),
+                                                __reactableMeta: true
+                                            };
+                                        } else {
+                                            console.warn('exports.Td specified without a ' + '`column` property, ignoring');
+                                        }
+                                    });
+
+                                    data.push({
+                                        data: childData,
+                                        props: (0, _libFilter_props_from.filterPropsFrom)(child.props),
+                                        __reactableMeta: true
+                                    });
+                                    break;
+
+                                default:
+                                    console.warn('The only possible children of <Table> are <Thead>, <Tr>, ' + 'or one <Tfoot>.');
+                            }
+                        } else {
+                            switch (child.type) {
+                                case _thead.Thead:
+                                    break;
+                                case _tfoot.Tfoot:
+                                    if (typeof tfoot !== 'undefined') {
+                                        console.warn('You can only have one <Tfoot>, but more than one was specified.' + 'Ignoring all but the last one');
+                                    }
+                                    tfoot = child;
+                                    break;
+                                case _tr.Tr:
+                                    var childData = child.props.data || {};
+
+                                    _react['default'].Children.forEach(child.props.children, function (descendant) {
+                                        // TODO
+                                        /* if (descendant.type.ConvenienceConstructor === Td) { */
+                                        if (typeof descendant !== 'object' || descendant == null) {
+                                            return;
+                                        } else if (typeof descendant.props.column !== 'undefined') {
+                                            var value = undefined;
+
+                                            if (typeof descendant.props.data !== 'undefined') {
+                                                value = descendant.props.data;
+                                            } else if (typeof descendant.props.children !== 'undefined') {
+                                                value = descendant.props.children;
+                                            } else {
+                                                console.warn('exports.Td specified without ' + 'a `data` property or children, ' + 'ignoring');
+                                                return;
+                                            }
+
+                                            childData[descendant.props.column] = {
+                                                value: value,
+                                                props: (0, _libFilter_props_from.filterPropsFrom)(descendant.props),
+                                                __reactableMeta: true
+                                            };
+                                        } else {
+                                            console.warn('exports.Td specified without a ' + '`column` property, ignoring');
+                                        }
+                                    });
+
+                                    data.push({
+                                        data: childData,
+                                        props: (0, _libFilter_props_from.filterPropsFrom)(child.props),
+                                        __reactableMeta: true
+                                    });
+                                    break;
+
+                                default:
+                                    console.warn('The only possible children of <Table> are <Thead>, <Tr>, ' + 'or one <Tfoot>.');
+                            }
                         }
                     }).bind(this));
                 }
-
                 return { data: data, tfoot: tfoot };
             }
         }, {
@@ -1154,8 +1205,13 @@ window.ReactDOM["default"] = window.ReactDOM;
             value: function initialize(props) {
                 this.data = props.data || [];
 
-                var _parseChildData = this.parseChildData(props);
+                var parseChildData = this.parseChildData(props);
 
+                if (typeof module !== 'undefined' && module.hot) {
+                    parseChildData = this.parseChildData(props, true);
+                }
+
+                var _parseChildData = parseChildData;
                 var data = _parseChildData.data;
                 var tfoot = _parseChildData.tfoot;
 
@@ -1592,36 +1648,6 @@ window.ReactDOM["default"] = window.ReactDOM;
             return x;
         }) || [];
     };
-
-    // Array.prototype.find polyfill - see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
-    if (!Array.prototype.find) {
-        Object.defineProperty(Array.prototype, 'find', {
-            enumerable: false,
-            configurable: true,
-            writable: true,
-            value: function value(predicate) {
-                if (this === null) {
-                    throw new TypeError('Array.prototype.find called on null or undefined');
-                }
-                if (typeof predicate !== 'function') {
-                    throw new TypeError('predicate must be a function');
-                }
-                var list = Object(this);
-                var length = list.length >>> 0;
-                var thisArg = arguments[1];
-                var value;
-                for (var i = 0; i < length; i++) {
-                    if (i in list) {
-                        value = list[i];
-                        if (predicate.call(thisArg, value, i, list)) {
-                            return value;
-                        }
-                    }
-                }
-                return undefined;
-            }
-        });
-    }
 
     var Reactable = { Table: _reactableTable.Table, Tr: _reactableTr.Tr, Td: _reactableTd.Td, Th: _reactableTh.Th, Tfoot: _reactableTfoot.Tfoot, Thead: _reactableThead.Thead, Sort: _reactableSort.Sort, unsafe: _reactableUnsafe.unsafe };
 
