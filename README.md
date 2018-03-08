@@ -1,3 +1,7 @@
+# Reactable-arc
+
+> This is a `reactable` fork to enable react-hot-loader to work. I will extend it further to support React-16.
+
 # Reactable
 
 [![Build Status](https://travis-ci.org/glittershark/reactable.svg?branch=master)](https://travis-ci.org/glittershark/reactable)
@@ -38,16 +42,11 @@ this the faster we can get to 1.0!
 
 ## Installation
 
-### Using Bower
-
-```sh
-bower install [--save] reactable
-```
 
 ### Using NPM
 
 ```sh
-npm install [--save] reactable
+npm install [--save] reactable-arc
 ```
 
 Or, you can just download the raw file

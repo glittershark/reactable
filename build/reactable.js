@@ -566,7 +566,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                 // Manually transfer props
                 var props = (0, _libFilter_props_from.filterPropsFrom)(this.props);
 
-                return _react['default'].DOM.tr(props, children);
+                return _react['default'].createElement('tr', props, children);
             }
         }]);
 
@@ -1093,16 +1093,18 @@ window.ReactDOM["default"] = window.ReactDOM;
                             return;
                         }
 
-                        switch (child.type) {
+                        var displayName = child.type.displayName ? child.type.displayName : null;
+
+                        switch (displayName) {
                             case _thead.Thead:
                                 break;
-                            case _tfoot.Tfoot:
+                            case _tfoot.Tfoot.name:
                                 if (typeof tfoot !== 'undefined') {
                                     console.warn('You can only have one <Tfoot>, but more than one was specified.' + 'Ignoring all but the last one');
                                 }
                                 tfoot = child;
                                 break;
-                            case _tr.Tr:
+                            case _tr.Tr.name:
                                 var childData = child.props.data || {};
 
                                 _react['default'].Children.forEach(child.props.children, function (descendant) {
