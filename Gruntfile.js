@@ -113,7 +113,8 @@ module.exports = function(grunt) {
             umdHack: {
                 files: [{
                     prepend: 'window.React["default"] = window.React;\n' +
-                             'window.ReactDOM["default"] = window.ReactDOM;\n',
+                             'window.ReactDOM["default"] = window.ReactDOM;\n' +
+                             'window.PropTypes["default"] = window.PropTypes;\n',
                     input: 'build/reactable.js',
                     output: 'build/reactable.js'
                 }]

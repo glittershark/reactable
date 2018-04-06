@@ -1,4 +1,3 @@
-var ReactTestUtils = React.addons.TestUtils;
 var expect = chai.expect;
 import Monitored from "./Monitored.jsx";
 
@@ -1462,10 +1461,13 @@ describe('Reactable', function() {
         describe('updating the currentPage via a prop passed to the table', function() {
             before(function() {
 
-                var ParentComponent = React.createClass({
-                    getInitialState: function() {
-                        return {currentPage: 4}
-                    },
+                class ParentComponent extends React.Component {
+                    constructor(props) {
+                        super(props);
+                        this.state = {
+                            currentPage: 4
+                        }
+                    }
 
                     render () {
                         return (
@@ -1482,8 +1484,9 @@ describe('Reactable', function() {
                             ]} itemsPerPage={2} currentPage={this.state.currentPage} />
                         );
                     }
-                })
-                this.component = ReactDOM.render(React.createElement(ParentComponent), ReactableTestUtils.testNode());
+                }
+
+                this.component = ReactDOM.render(<ParentComponent/>, ReactableTestUtils.testNode());
             });
 
             after(ReactableTestUtils.resetTestEnvironment);
@@ -1766,9 +1769,10 @@ describe('Reactable', function() {
             let parent;
 
             before(function () {
-                var TestParent = React.createFactory(React.createClass({
-                    getInitialState: function() {
-                        return ({
+                class TestParent extends React.Component {
+                    constructor(props) {
+                        super(props);
+                        this.state = {
                             data: [
                                 {Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
                                 {Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
@@ -1776,10 +1780,10 @@ describe('Reactable', function() {
                             ],
                             sortable: ['Name', 'Age', 'Position'],
                             defaultSort: 'Position'
-                        });
-                    },
+                        };
+                    }
 
-                    render: function() {
+                    render() {
                         return (
                             <Reactable.Table
                                 className="table"
@@ -1790,9 +1794,9 @@ describe('Reactable', function() {
                             />
                         )
                     }
-                }));
+                }
 
-                parent = ReactDOM.render(TestParent(), ReactableTestUtils.testNode());
+                parent = ReactDOM.render(<TestParent />, ReactableTestUtils.testNode());
             });
 
             after(ReactableTestUtils.resetTestEnvironment);
@@ -2337,7 +2341,7 @@ describe('Reactable', function() {
                 var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
 
                 $filter.val('lee');
-                React.addons.TestUtils.Simulate.keyUp($filter[0]);
+                ReactTestUtils.Simulate.keyUp($filter[0]);
 
                 ReactableTestUtils.expectRowText(0, ['Lee SomeoneElse', '18']);
                 ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23']);
@@ -2347,7 +2351,7 @@ describe('Reactable', function() {
                 var textToSearch = 'lee'
 
                 $filter.val(textToSearch);
-                React.addons.TestUtils.Simulate.keyUp($filter[0]);
+                ReactTestUtils.Simulate.keyUp($filter[0]);
 
                 expect(filterBy).to.equal(textToSearch);
             });
@@ -2394,7 +2398,7 @@ describe('Reactable', function() {
                     var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
 
                     $filter.val('new');
-                    React.addons.TestUtils.Simulate.keyUp($filter[0]);
+                    ReactTestUtils.Simulate.keyUp($filter[0]);
 
                     ReactableTestUtils.expectRowText(0, ['New York', 'this is some text', 'new']);
                     ReactableTestUtils.expectRowText(1, ['New Mexico', 'lorem ipsum', 'old']);
@@ -2426,19 +2430,22 @@ describe('Reactable', function() {
                 before(function() {
                     ReactableTestUtils.resetTestEnvironment();
 
-                    var ParentComponent = React.createClass({
-                        getInitialState: function() {
-                            return {customFilterText: 'new'}
-                        },
+                    class ParentComponent extends React.Component {
+                        constructor(props) {
+                            super(props);
+                            this.state = {
+                                customFilterText: 'new'
+                            }
+                        }
 
                         handleChange(event) {
                             this.setState({customFilterText: event.target.value});
-                        },
+                        }
 
-                        render: function() {
+                        render() {
                             return (
                                 <div>
-                                    <input type="text" ref="customFilterInput" id="customFilterInput" value={this.state.customFilterText} onChange={this.handleChange}/>
+                                    <input type="text" ref="customFilterInput" id="customFilterInput" value={this.state.customFilterText} onChange={this.handleChange.bind(this)}/>
                                     <Reactable.Table className="table" id="table"
                                                      filterable={['State', 'Tag']}
                                                      filterPlaceholder="Filter Results"
@@ -2470,9 +2477,9 @@ describe('Reactable', function() {
                                 </div>
                             );
                         }
-                    })
+                    }
 
-                    this.component = ReactDOM.render(React.createElement(ParentComponent), ReactableTestUtils.testNode());
+                    this.component = ReactDOM.render(<ParentComponent/>, ReactableTestUtils.testNode());
                 });
 
                 it('filters case insensitive on specified columns', function() {
@@ -2546,14 +2553,14 @@ describe('Reactable', function() {
             afterEach(function() {
                 var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
                 $filter.val('');
-                React.addons.TestUtils.Simulate.keyUp($filter[0]);
+                ReactTestUtils.Simulate.keyUp($filter[0]);
             });
 
             it('updates the pagination links', function() {
                 var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
 
                 $filter.val('colorado');
-                React.addons.TestUtils.Simulate.keyUp($filter[0]);
+                ReactTestUtils.Simulate.keyUp($filter[0]);
 
                 var pageButtons = $('#table tbody.reactable-pagination a.reactable-page-button');
                 expect(pageButtons.length).to.equal(1);
@@ -2565,11 +2572,11 @@ describe('Reactable', function() {
                 var $pageButtons = $('#table tbody.reactable-pagination a.reactable-page-button');
 
                 // Go to the last page
-                React.addons.TestUtils.Simulate.click($pageButtons[1])
+                ReactTestUtils.Simulate.click($pageButtons[1])
 
                 // Then filter so that that page doesn't exist anymore
                 $filter.val('colorado');
-                React.addons.TestUtils.Simulate.keyUp($filter[0]);
+                ReactTestUtils.Simulate.keyUp($filter[0]);
 
                 ReactableTestUtils.expectRowText(0, [
                     'Colorado',
@@ -2634,7 +2641,7 @@ describe('Reactable', function() {
                     var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
 
                     $filter.val('l');
-                    React.addons.TestUtils.Simulate.keyUp($filter[0]);
+                    ReactTestUtils.Simulate.keyUp($filter[0]);
 
                     ReactableTestUtils.expectRowText(0, ['New Mexico', 'lorem ipsum', 'old x']);
                     ReactableTestUtils.expectRowText(1, ['Colorado', 'lol', 'renewed x']);
@@ -2668,19 +2675,20 @@ describe('Reactable', function() {
                 before(function() {
                     ReactableTestUtils.resetTestEnvironment();
 
-                    var ParentComponent = React.createClass({
-                        getInitialState: function() {
-                            return {customFilterText: 'l'}
-                        },
+                    class ParentComponent extends React.Component {
+                        constructor(props) {
+                            super(props);
+                            this.state = {customFilterText: 'l'};
+                        }
 
                         handleChange(event) {
                             this.setState({customFilterText: event.target.value});
-                        },
+                        }
 
-                        render: function() {
+                        render() {
                             return (
                                 <div>
-                                    <input type="text" ref="customFilterInput" id="customFilterInput" value={this.state.customFilterText} onChange={this.handleChange}/>
+                                    <input type="text" ref="customFilterInput" id="customFilterInput" value={this.state.customFilterText} onChange={this.handleChange.bind(this)}/>
                                     <Reactable.Table className="table" id="table"
                                                      filterable={[
                                                          {
@@ -2722,9 +2730,9 @@ describe('Reactable', function() {
                                 </div>
                             );
                         }
-                    });
+                    }
 
-                    this.component = ReactDOM.render(React.createElement(ParentComponent), ReactableTestUtils.testNode());
+                    this.component = ReactDOM.render(<ParentComponent/>, ReactableTestUtils.testNode());
                 });
 
                 it('filters using the custom filter on specified columns', function() {
@@ -2906,7 +2914,7 @@ describe('Reactable', function() {
         context('when initialized without <Tr>s', () => {
             before(function() {
                 this.component = ReactDOM.render(
-                    <Reactable.Table className="table" id="table" columns={['State', 'Description', 'Tag']} noDataText="No matching records found."></Reactable.Table>,
+                    <Reactable.Table className="table" id="table" columns={['State', 'Description', 'Tag']} noDataText="No matching records found."/>,
                     ReactableTestUtils.testNode()
                 );
             });
@@ -3032,7 +3040,7 @@ describe('Reactable', function() {
 
         before(function () {
             //create a wrapper component so we can update its state and trigger componentWillReceiveProps in the table
-            var TestParent = React.createFactory(React.createClass({
+            class TestParent extends React.Component {
                 render() {
                     return (<Reactable.Table className="table" id="table" ref="table">
                         <Reactable.Tr>
@@ -3042,9 +3050,9 @@ describe('Reactable', function() {
                         </Reactable.Tr>
                     </Reactable.Table>);
                 }
-            }));
+            }
 
-            parent = ReactDOM.render(TestParent(), ReactableTestUtils.testNode());
+            parent = ReactDOM.render(<TestParent/>, ReactableTestUtils.testNode());
         });
 
         after(ReactableTestUtils.resetTestEnvironment);

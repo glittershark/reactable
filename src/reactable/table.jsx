@@ -9,7 +9,7 @@ import { Th } from './th';
 import { Tr } from './tr';
 import { Tfoot } from './tfoot';
 import { Paginator } from './paginator';
-
+import PropTypes from "prop-types";
 export class Table extends React.Component {
     constructor(props) {
         super(props);
@@ -789,12 +789,12 @@ Table.defaultProps = {
 };
 
 Table.propTypes = {
-    sortBy: React.PropTypes.bool,
-    itemsPerPage: React.PropTypes.number,               // number of items to display per page
-    filterable: React.PropTypes.array,                  // columns to look at when applying the filter specified by filterBy
-    filterBy: React.PropTypes.string,                   // text to filter the results by (see filterable)
-    hideFilterInput: React.PropTypes.bool,              // Whether the default input field for the search/filter should be hidden or not
-    hideTableHeader: React.PropTypes.bool,              // Whether the table header should be hidden or not
-    noDataText: React.PropTypes.string,                 // Text to be displayed in the event there is no data to show
-    noDataComponent: React.PropTypes.func               // function called to provide a component to display in the event there is no data to show (supercedes noDataText)
+    sortBy: PropTypes.bool,
+    itemsPerPage: PropTypes.number,               // number of items to display per page
+    filterable: PropTypes.array,                  // columns to look at when applying the filter specified by filterBy
+    filterBy: PropTypes.string,                   // text to filter the results by (see filterable)
+    hideFilterInput: PropTypes.bool,              // Whether the default input field for the search/filter should be hidden or not
+    hideTableHeader: PropTypes.bool,              // Whether the table header should be hidden or not
+    noDataText: PropTypes.string,                 // Text to be displayed in the event there is no data to show
+    noDataComponent: PropTypes.func               // function called to provide a component to display in the event there is no data to show (supercedes noDataText)
 };

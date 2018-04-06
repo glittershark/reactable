@@ -1,5 +1,6 @@
 window.React["default"] = window.React;
 window.ReactDOM["default"] = window.ReactDOM;
+window.PropTypes["default"] = window.PropTypes;
 (function (global, factory) {
     if (typeof define === "function" && define.amd) {
         define(["exports"], factory);
@@ -1176,17 +1177,17 @@ window.ReactDOM["default"] = window.ReactDOM;
 
 (function (global, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['exports', 'react', './lib/filter_props_from', './lib/extract_data_from', './lib/determine_row_span', './lib/extend', './unsafe', './thead', './th', './tr', './tfoot', './paginator'], factory);
+        define(['exports', 'react', './lib/filter_props_from', './lib/extract_data_from', './lib/determine_row_span', './lib/extend', './unsafe', './thead', './th', './tr', './tfoot', './paginator', 'prop-types'], factory);
     } else if (typeof exports !== 'undefined') {
-        factory(exports, require('react'), require('./lib/filter_props_from'), require('./lib/extract_data_from'), require('./lib/determine_row_span'), require('./lib/extend'), require('./unsafe'), require('./thead'), require('./th'), require('./tr'), require('./tfoot'), require('./paginator'));
+        factory(exports, require('react'), require('./lib/filter_props_from'), require('./lib/extract_data_from'), require('./lib/determine_row_span'), require('./lib/extend'), require('./unsafe'), require('./thead'), require('./th'), require('./tr'), require('./tfoot'), require('./paginator'), require('prop-types'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.React, global.filter_props_from, global.extract_data_from, global.determine_row_span, global.extend, global.unsafe, global.thead, global.th, global.tr, global.tfoot, global.paginator);
+        factory(mod.exports, global.React, global.filter_props_from, global.extract_data_from, global.determine_row_span, global.extend, global.unsafe, global.thead, global.th, global.tr, global.tfoot, global.paginator, global.PropTypes);
         global.table = mod.exports;
     }
-})(this, function (exports, _react, _libFilter_props_from, _libExtract_data_from, _libDetermine_row_span, _libExtend, _unsafe, _thead, _th, _tr, _tfoot, _paginator) {
+})(this, function (exports, _react, _libFilter_props_from, _libExtract_data_from, _libDetermine_row_span, _libExtend, _unsafe, _thead, _th, _tr, _tfoot, _paginator, _propTypes) {
     'use strict';
 
     var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -1999,14 +2000,14 @@ window.ReactDOM["default"] = window.ReactDOM;
     };
 
     Table.propTypes = {
-        sortBy: _react['default'].PropTypes.bool,
-        itemsPerPage: _react['default'].PropTypes.number, // number of items to display per page
-        filterable: _react['default'].PropTypes.array, // columns to look at when applying the filter specified by filterBy
-        filterBy: _react['default'].PropTypes.string, // text to filter the results by (see filterable)
-        hideFilterInput: _react['default'].PropTypes.bool, // Whether the default input field for the search/filter should be hidden or not
-        hideTableHeader: _react['default'].PropTypes.bool, // Whether the table header should be hidden or not
-        noDataText: _react['default'].PropTypes.string, // Text to be displayed in the event there is no data to show
-        noDataComponent: _react['default'].PropTypes.func // function called to provide a component to display in the event there is no data to show (supercedes noDataText)
+        sortBy: _propTypes['default'].bool,
+        itemsPerPage: _propTypes['default'].number, // number of items to display per page
+        filterable: _propTypes['default'].array, // columns to look at when applying the filter specified by filterBy
+        filterBy: _propTypes['default'].string, // text to filter the results by (see filterable)
+        hideFilterInput: _propTypes['default'].bool, // Whether the default input field for the search/filter should be hidden or not
+        hideTableHeader: _propTypes['default'].bool, // Whether the table header should be hidden or not
+        noDataText: _propTypes['default'].string, // Text to be displayed in the event there is no data to show
+        noDataComponent: _propTypes['default'].func // function called to provide a component to display in the event there is no data to show (supercedes noDataText)
     };
 });
 
