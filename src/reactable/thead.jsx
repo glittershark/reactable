@@ -15,7 +15,8 @@ export class Thead extends React.Component {
 
                 // use the content as the label & key
                 if (typeof th.props.children !== 'undefined') {
-                    column.label = th.props.children;
+                    column.label = th.props.label || th.props.children;
+                    column.content = th.props.children || th.props.label;
                     column.key = column.label;
                 }
 
@@ -95,7 +96,7 @@ export class Thead extends React.Component {
                     onKeyDown={this.handleKeyDownTh.bind(this, column)}
                     role={thRole}
                     tabIndex="0">
-                    {column.label}
+                    {column.content || column.label}
                 </Th>
             );
         }

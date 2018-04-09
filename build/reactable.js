@@ -1,5 +1,6 @@
 window.React["default"] = window.React;
 window.ReactDOM["default"] = window.ReactDOM;
+window.PropTypes["default"] = window.PropTypes;
 (function (global, factory) {
     if (typeof define === "function" && define.amd) {
         define(["exports"], factory);
@@ -140,6 +141,91 @@ window.ReactDOM["default"] = window.ReactDOM;
 
         return (0, _stringable.stringable)(value) ? value : '';
     }
+});
+
+(function (global, factory) {
+    if (typeof define === 'function' && define.amd) {
+        define(['exports'], factory);
+    } else if (typeof exports !== 'undefined') {
+        factory(exports);
+    } else {
+        var mod = {
+            exports: {}
+        };
+        factory(mod.exports);
+        global.determine_row_span = mod.exports;
+    }
+})(this, function (exports) {
+    'use strict';
+
+    exports.determineRowSpan = determineRowSpan;
+
+    function determineRowSpan(row, colName) {
+
+        var rowSpan = 1;
+
+        if (typeof row !== 'undefined' && row != null) {
+            var tdData = null;
+
+            if (typeof row.props !== 'undefined' && row.props !== null && row.props.data !== null) {
+                tdData = row.props.data;
+            } else if (typeof row[colName] !== 'undefined') {
+                tdData = row;
+            }
+
+            if (typeof tdData !== 'undefined' && tdData !== null) {
+                var props = tdData[colName].props;
+                if (typeof props !== 'undefined' && typeof props.rowSpan !== 'undefined') {
+                    rowSpan = parseInt(props.rowSpan);
+                }
+            }
+        }
+
+        return rowSpan;
+    }
+});
+
+(function (global, factory) {
+    if (typeof define === "function" && define.amd) {
+        define(["exports"], factory);
+    } else if (typeof exports !== "undefined") {
+        factory(exports);
+    } else {
+        var mod = {
+            exports: {}
+        };
+        factory(mod.exports);
+        global.extend = mod.exports;
+    }
+})(this, function (exports) {
+    /**
+     * Merge defaults with user options
+     * @private
+     * @param {Object} defaults Default settings
+     * @param {Object} options User options
+     * @returns {Object} Merged values of defaults and options
+     */
+    "use strict";
+
+    exports.extend = extend;
+
+    function extend(defaults, options) {
+        var extended = {};
+        var prop;
+        for (prop in defaults) {
+            if (Object.prototype.hasOwnProperty.call(defaults, prop)) {
+                extended[prop] = defaults[prop];
+            }
+        }
+        for (prop in options) {
+            if (Object.prototype.hasOwnProperty.call(options, prop)) {
+                extended[prop] = options[prop];
+            }
+        }
+        return extended;
+    }
+
+    ;
 });
 
 (function (global, factory) {
@@ -466,6 +552,9 @@ window.ReactDOM["default"] = window.ReactDOM;
                 // handleClick aliases onClick event
                 mergedProps.onClick = this.props.handleClick;
 
+                // remove property to avoid unknown prop warning
+                delete mergedProps.handleClick;
+
                 var stringifiedChildProps;
 
                 if (typeof this.props.data === 'undefined') {
@@ -494,20 +583,18 @@ window.ReactDOM["default"] = window.ReactDOM;
 
 (function (global, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['exports', 'react', './td', './lib/to_array', './lib/filter_props_from'], factory);
+        define(['exports', 'react', './td', './lib/to_array', './lib/filter_props_from', './lib/extend'], factory);
     } else if (typeof exports !== 'undefined') {
-        factory(exports, require('react'), require('./td'), require('./lib/to_array'), require('./lib/filter_props_from'));
+        factory(exports, require('react'), require('./td'), require('./lib/to_array'), require('./lib/filter_props_from'), require('./lib/extend'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.React, global.td, global.to_array, global.filter_props_from);
+        factory(mod.exports, global.React, global.td, global.to_array, global.filter_props_from, global.extend);
         global.tr = mod.exports;
     }
-})(this, function (exports, _react, _td, _libTo_array, _libFilter_props_from) {
+})(this, function (exports, _react, _td, _libTo_array, _libFilter_props_from, _libExtend) {
     'use strict';
-
-    var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -529,44 +616,128 @@ window.ReactDOM["default"] = window.ReactDOM;
         }
 
         _createClass(Tr, [{
+            key: 'isRowSpanSkip',
+
+            /**
+             * Determines whether a row should skip the creation of a <Td> based on the rowSpan prop
+             * @param state the state of the column
+             * @param data the data
+             * @param k the column key
+             * @returns {boolean}
+             */
+            value: function isRowSpanSkip(state, data, k) {
+                var rowSpanSkip = false;
+
+                // if we have already noted this <Td> has a row span, we will use the stored state to make
+                //  a determination whether we render or skip
+                if (typeof state.rowSpanDebt !== 'undefined' && state.rowSpanDebt > 0) {
+                    //anything greater than 0, we skip render and decrement
+                    rowSpanSkip = true;
+                    state.rowSpanDebt--;
+                }
+
+                if (typeof data[k] !== 'undefined' && data[k] != null) {
+                    var props = data[k].props;
+
+                    // check if this column will be spanning multiple rows
+                    if (typeof props !== 'undefined' && typeof props.rowSpan !== 'undefined') {
+                        if (isNaN(props.rowSpan)) {
+                            console.warn("rowSpan for column " + k + " is not a valid integer: " + props.rowSpan);
+                            return false;
+                        }
+
+                        if (!rowSpanSkip) {
+                            // restart the rowSpanCount for this column: subtract 1 as all rows will have rowSpan of at least 1
+                            state.rowSpanDebt = props.rowSpan - 1;
+                        }
+                    }
+                }
+                return rowSpanSkip;
+            }
+
+            /**
+             * Build all <Td> elements to be displayed in this <Tr>
+             * @returns {Array}
+             */
+        }, {
+            key: 'buildRows',
+            value: function buildRows(renderState) {
+                var columns = this.props.columns;
+                var tds = [];
+
+                var columnsToSkip = 0;
+                // iterate through all columns and create a <Td> for each one
+                for (var idx = 0; idx < columns.length; idx++) {
+                    var _columns$idx = columns[idx];
+                    var _columns$idx$props = _columns$idx.props;
+                    var props = _columns$idx$props === undefined ? {} : _columns$idx$props;
+
+                    var column = _objectWithoutProperties(_columns$idx, ['props']);
+
+                    var state = renderState[column.key];
+                    if (typeof state === 'undefined') {
+                        state = {};
+                        renderState[column.key] = state;
+                    }
+
+                    var skip = this.isRowSpanSkip(state, this.props.data, column.key);
+                    if (skip) {
+                        continue; // skip render of <Td>
+                    }
+
+                    if (columnsToSkip > 0) {
+                        columnsToSkip--;
+                        continue;
+                    }
+
+                    if (this.props.data.hasOwnProperty(column.key)) {
+                        var value = this.props.data[column.key];
+                        var componentType = _td.Td;
+
+                        if (typeof value !== 'undefined' && value !== null && value.__reactableMeta === true) {
+                            // merge the props
+                            props = (0, _libExtend.extend)(props, value.props);
+                            componentType = value.component || componentType;
+                            value = value.value;
+                        }
+
+                        var colSpan = props.colSpan || 1;
+
+                        // we will use 1 column (ourself), no need to skip that
+                        columnsToSkip = colSpan - 1;
+
+                        props.column = column;
+                        props.key = column.key;
+                        props.children = value;
+                        tds.push(_react['default'].createElement(componentType, props));
+                    } else {
+                        tds.push(_react['default'].createElement(_td.Td, { column: column, key: column.key }));
+                    }
+                }
+                return tds;
+            }
+        }, {
             key: 'render',
             value: function render() {
                 var children = (0, _libTo_array.toArray)(_react['default'].Children.children(this.props.children));
+
+                // Manually transfer props
+
+                var _filterPropsFrom = (0, _libFilter_props_from.filterPropsFrom)(this.props);
+
+                var renderState = _filterPropsFrom.renderState;
+
+                var props = _objectWithoutProperties(_filterPropsFrom, ['renderState']);
 
                 if (this.props.data && this.props.columns && typeof this.props.columns.map === 'function') {
                     if (typeof children.concat === 'undefined') {
                         console.log(children);
                     }
-
-                    children = children.concat(this.props.columns.map((function (_ref, i) {
-                        var _ref$props = _ref.props;
-                        var props = _ref$props === undefined ? {} : _ref$props;
-
-                        var column = _objectWithoutProperties(_ref, ['props']);
-
-                        if (this.props.data.hasOwnProperty(column.key)) {
-                            var value = this.props.data[column.key];
-
-                            if (typeof value !== 'undefined' && value !== null && value.__reactableMeta === true) {
-                                props = value.props;
-                                value = value.value;
-                            }
-
-                            return _react['default'].createElement(
-                                _td.Td,
-                                _extends({ column: column, key: column.key }, props),
-                                value
-                            );
-                        } else {
-                            return _react['default'].createElement(_td.Td, { column: column, key: column.key });
-                        }
-                    }).bind(this)));
+                    var trs = this.buildRows.call(this, renderState);
+                    children = children.concat(trs);
                 }
 
-                // Manually transfer props
-                var props = (0, _libFilter_props_from.filterPropsFrom)(this.props);
-
-                return _react['default'].DOM.tr(props, children);
+                return _react['default'].createElement("tr", props, children);
             }
         }]);
 
@@ -574,7 +745,6 @@ window.ReactDOM["default"] = window.ReactDOM;
     })(_react['default'].Component);
 
     exports.Tr = Tr;
-    ;
 
     Tr.childNode = _td.Td;
     Tr.dataType = 'object';
@@ -727,7 +897,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                             onKeyDown: this.handleKeyDownTh.bind(this, column),
                             role: thRole,
                             tabIndex: '0' }),
-                        column.label
+                        column.content || column.label
                     ));
                 }
 
@@ -764,7 +934,8 @@ window.ReactDOM["default"] = window.ReactDOM;
 
                         // use the content as the label & key
                         if (typeof th.props.children !== 'undefined') {
-                            column.label = th.props.children;
+                            column.label = th.props.label || th.props.children;
+                            column.content = th.props.children || th.props.label;
                             column.key = column.label;
                         }
 
@@ -1006,17 +1177,17 @@ window.ReactDOM["default"] = window.ReactDOM;
 
 (function (global, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['exports', 'react', './lib/filter_props_from', './lib/extract_data_from', './unsafe', './thead', './th', './tr', './tfoot', './paginator'], factory);
+        define(['exports', 'react', './lib/filter_props_from', './lib/extract_data_from', './lib/determine_row_span', './lib/extend', './unsafe', './thead', './th', './tr', './tfoot', './paginator', 'prop-types'], factory);
     } else if (typeof exports !== 'undefined') {
-        factory(exports, require('react'), require('./lib/filter_props_from'), require('./lib/extract_data_from'), require('./unsafe'), require('./thead'), require('./th'), require('./tr'), require('./tfoot'), require('./paginator'));
+        factory(exports, require('react'), require('./lib/filter_props_from'), require('./lib/extract_data_from'), require('./lib/determine_row_span'), require('./lib/extend'), require('./unsafe'), require('./thead'), require('./th'), require('./tr'), require('./tfoot'), require('./paginator'), require('prop-types'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.React, global.filter_props_from, global.extract_data_from, global.unsafe, global.thead, global.th, global.tr, global.tfoot, global.paginator);
+        factory(mod.exports, global.React, global.filter_props_from, global.extract_data_from, global.determine_row_span, global.extend, global.unsafe, global.thead, global.th, global.tr, global.tfoot, global.paginator, global.PropTypes);
         global.table = mod.exports;
     }
-})(this, function (exports, _react, _libFilter_props_from, _libExtract_data_from, _unsafe, _thead, _th, _tr, _tfoot, _paginator) {
+})(this, function (exports, _react, _libFilter_props_from, _libExtract_data_from, _libDetermine_row_span, _libExtend, _unsafe, _thead, _th, _tr, _tfoot, _paginator, _propTypes) {
     'use strict';
 
     var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -1024,6 +1195,8 @@ window.ReactDOM["default"] = window.ReactDOM;
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+    function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
@@ -1051,6 +1224,10 @@ window.ReactDOM["default"] = window.ReactDOM;
                 var sortingColumn = props.sortBy || props.defaultSort;
                 this.state.currentSort = this.getCurrentSort(sortingColumn);
             }
+
+            // used for generating a key for a <Tr> that will change <Td> counts -- avoids jitters in the update
+            this.cloneIndex = 0;
+            this.renderNoDataComponent = this.renderNoDataComponent.bind(this);
         }
 
         _createClass(Table, [{
@@ -1118,12 +1295,17 @@ window.ReactDOM["default"] = window.ReactDOM;
                                         } else if (typeof descendant.props.children !== 'undefined') {
                                             value = descendant.props.children;
                                         } else {
-                                            console.warn('exports.Td specified without ' + 'a `data` property or children, ' + 'ignoring');
+                                            var warning = 'exports.Td specified without ' + 'a `data` property or children, ignoring';
+                                            if (typeof descendant.props.column !== 'undefined') {
+                                                warning += '. See definition for column \'' + descendant.props.column + '\'.';
+                                            }
+                                            console.warn(warning);
                                             return;
                                         }
 
                                         childData[descendant.props.column] = {
                                             value: value,
+                                            component: descendant.type,
                                             props: (0, _libFilter_props_from.filterPropsFrom)(descendant.props),
                                             __reactableMeta: true
                                         };
@@ -1297,37 +1479,174 @@ window.ReactDOM["default"] = window.ReactDOM;
         }, {
             key: 'applyFilter',
             value: function applyFilter(filter, children) {
+                var _this = this;
+
                 // Helper function to apply filter text to a list of table rows
                 filter = filter.toLowerCase();
-                var matchedChildren = [];
 
-                for (var i = 0; i < children.length; i++) {
-                    var data = children[i].props.data;
+                /**
+                 * We face two problems when trying to filter with rowSpan:
+                 *  1) what happens when the row that specifies the <Td> with the row span is filtered out?
+                 *       move the rowSpan definition to the next visible row and adjust the rowSpan value to exclude
+                 *                 all the filtered out rows (e.g. if we have a rowSpan=5 and the 1st and 5th row are filtered
+                 *                 out, the rowSpan property & value shifts to row 2 and rowSpan now becomes 3)
+                 *
+                 *  2) what happens when the row/cell that specifies the rowSpan matches the text:
+                 *       immediately include all the subsequent rows the that the <Td> spans in the result list.
+                 *
+                 */
 
-                    for (var filterColumn in this._filterable) {
+                var matchedChildren = {}; // row index => the matched data
+
+                // houses the rowSpan definition for each row/columnName combo (e.g. [0]['Name'] provides the rowSpan definition
+                //  for the item at row 0 in the 'Name' column
+                var rowSpanReferences = {};
+
+                // the current rowSpan definition for each column, columnName => rowSpan definition
+                var currentRowSpanState = {};
+
+                var _loop = function (i) {
+                    var child = children[i];
+                    var data = child.props.data;
+
+                    // look at each column in this row and see if there are rowSpan properties
+                    Object.keys(data).forEach(function (k) {
+                        if (typeof k !== 'undefined' && typeof data[k] !== 'undefined') {
+                            var state = currentRowSpanState[k];
+
+                            // check if we've exhausted our specified number of rows for this column
+                            if (typeof state !== 'undefined') {
+                                var rowSpanEnd = state.startsAt + state.rowSpan - 1;
+                                if (i >= rowSpanEnd) {
+                                    delete currentRowSpanState[k];
+                                }
+                            }
+
+                            var rowSpan = (0, _libDetermine_row_span.determineRowSpan)(child, k);
+                            // we don't want to waste our time with single rows, only keep a state if we have >1
+                            if (rowSpan > 1) {
+                                state = {
+                                    rowSpan: rowSpan,
+                                    startsAt: i,
+                                    component: child,
+                                    columnName: k
+                                };
+                                currentRowSpanState[k] = state;
+
+                                // store the reference to the rowSpanDefinition for all columns it's relevant to
+                                var rowSpanEnd = i + rowSpan;
+                                for (var idx = i; idx < rowSpanEnd && idx < children.length; idx++) {
+                                    if (typeof rowSpanReferences[idx] === 'undefined') {
+                                        rowSpanReferences[idx] = {};
+                                    }
+                                    rowSpanReferences[idx][k] = state;
+                                }
+                            }
+                        }
+                    });
+
+                    // 2) look through all 'filterable' columns for this row and see if we can find the filterBy text
+                    for (var filterColumn in _this._filterable) {
                         if (typeof data[filterColumn] !== 'undefined') {
                             // Default filter
-                            if (typeof this._filterable[filterColumn] === 'undefined' || this._filterable[filterColumn] === 'default') {
+                            if (typeof _this._filterable[filterColumn] === 'undefined' || _this._filterable[filterColumn] === 'default') {
+
                                 if ((0, _libExtract_data_from.extractDataFrom)(data, filterColumn).toString().toLowerCase().indexOf(filter) > -1) {
-                                    matchedChildren.push(children[i]);
+
+                                    // upon a filter text match, we include the cell that matched and all the rows that
+                                    //  the cell spans
+                                    var rowSpan = (0, _libDetermine_row_span.determineRowSpan)(child, filterColumn);
+                                    var rowSpanEnd = i + rowSpan;
+
+                                    for (idx = i; idx < rowSpanEnd && idx < children.length; idx++) {
+                                        otherChild = children[idx];
+
+                                        matchedChildren[idx] = otherChild;
+
+                                        // we no longer need to handle rowSpan for the other rows
+                                        if (typeof rowSpanReferences[idx] !== 'undefined') {
+                                            delete rowSpanReferences[idx][filterColumn];
+                                        }
+                                    }
+
+                                    // we've rendered all the rows this cell spans, we no longer need to maintain state
+                                    delete currentRowSpanState[filterColumn];
+
                                     break;
                                 }
                             } else {
                                 // Apply custom filter
-                                if (this._filterable[filterColumn]((0, _libExtract_data_from.extractDataFrom)(data, filterColumn).toString(), filter)) {
-                                    matchedChildren.push(children[i]);
+                                if (_this._filterable[filterColumn]((0, _libExtract_data_from.extractDataFrom)(data, filterColumn).toString(), filter)) {
+                                    matchedChildren[i] = child;
                                     break;
                                 }
                             }
                         }
                     }
+                };
+
+                for (var i = 0; i < children.length; i++) {
+                    var idx;
+                    var otherChild;
+
+                    _loop(i);
                 }
 
-                return matchedChildren;
+                // Now that we know which results will be displayed, we can calculate a rowSpan that will encompass
+                //  only the visible rows.
+                // Iterate through the matched children and check if there are rowSpan modifications they need to make. Hint: we
+                //  stored all row/col combos needing a modification in rowSpanReferences
+                var resultingChildren = Object.keys(matchedChildren).map((function (rowIndex) {
+                    var definitions = rowSpanReferences[rowIndex];
+                    if (typeof definitions !== 'undefined') {
+
+                        // the child we will clone and give a new <Td>
+                        var child = matchedChildren[rowIndex];
+
+                        // we'll be recreating this <Tr> with a rowSpan property carried over from the <Tr> with the rowSpan
+                        var newData = (0, _libExtend.extend)({}, child.props.data);
+                        var newProps = (0, _libExtend.extend)({}, child.props);
+                        newProps.data = newData;
+
+                        Object.keys(definitions).forEach(function (columnName) {
+                            var definition = definitions[columnName];
+                            // the tr with the rowSpan property
+                            var tr = definition.component;
+
+                            // this child was a part of a rowSpan
+                            var rowSpanEnd = definition.startsAt + definition.rowSpan;
+                            var remainingRowSpan = rowSpanEnd - rowIndex;
+
+                            // if the rows that we're supposed to span did not match the filter text, we need to reduce the remainingRowSpan
+                            for (var idx = rowIndex; idx < rowSpanEnd; idx++) {
+                                if (typeof matchedChildren[idx] === 'undefined') {
+                                    remainingRowSpan--;
+                                }
+                            }
+
+                            // clone the data for the column to avoid altering the original props (e.g. don't want to change the rowSpan on original Td)
+                            newProps.data[columnName] = (0, _libExtend.extend)({}, tr.props.data[columnName]);
+                            newProps.data[columnName].props = (0, _libExtend.extend)({}, newProps.data[columnName].props);
+                            newProps.data[columnName].props.rowSpan = remainingRowSpan;
+                        });
+
+                        // new key to avoid jitters, we want a brand new component
+                        newProps.key = "cloned-" + _this.cloneIndex++;
+                        newProps.renderState = child.props.renderState;
+
+                        return _react['default'].cloneElement(child, newProps);
+                    } else {
+                        return matchedChildren[rowIndex];
+                    }
+                }).bind(this));
+
+                return resultingChildren;
             }
         }, {
             key: 'sortByCurrentSort',
             value: function sortByCurrentSort() {
+                var _this2 = this;
+
                 // Apply a sort function according to the current sort in the state.
                 // This allows us to perform a default sort even on a non sortable column.
                 var currentSort = this.state.currentSort;
@@ -1336,34 +1655,129 @@ window.ReactDOM["default"] = window.ReactDOM;
                     return;
                 }
 
-                this.data.sort((function (a, b) {
-                    var keyA = (0, _libExtract_data_from.extractDataFrom)(a, currentSort.column);
-                    keyA = (0, _unsafe.isUnsafe)(keyA) ? keyA.toString() : keyA || '';
-                    var keyB = (0, _libExtract_data_from.extractDataFrom)(b, currentSort.column);
-                    keyB = (0, _unsafe.isUnsafe)(keyB) ? keyB.toString() : keyB || '';
+                // we'll be splitting each set of data into buckets, then sorting them. A 'set' is defined as rows sharing a
+                //  <Td> with a rowSpan
+                var singles = []; // rows without any rowSpans
+                var buckets = {};
+                var bucketIndex = 0;
 
-                    // Default sort
-                    if (typeof this._sortable[currentSort.column] === 'undefined' || this._sortable[currentSort.column] === 'default') {
+                // helps us keep track of where we are in the last rowSpan we saw
+                var currentRowSpan = null;
 
-                        // Reverse direction if we're doing a reverse sort
-                        if (keyA < keyB) {
-                            return -1 * currentSort.direction;
-                        }
+                for (var idx = 0; idx < this.data.length; idx++) {
+                    var obj = this.data[idx];
 
-                        if (keyA > keyB) {
-                            return 1 * currentSort.direction;
-                        }
-
-                        return 0;
-                    } else {
-                        // Reverse columns if we're doing a reverse sort
-                        if (currentSort.direction === 1) {
-                            return this._sortable[currentSort.column](keyA, keyB);
-                        } else {
-                            return this._sortable[currentSort.column](keyB, keyA);
+                    // check if rowSpan is completed
+                    if (currentRowSpan != null) {
+                        var rowSpanEnd = currentRowSpan.startsAt + currentRowSpan.rowSpan;
+                        if (rowSpanEnd <= idx) {
+                            bucketIndex++;
+                            currentRowSpan = null;
                         }
                     }
-                }).bind(this));
+
+                    // make sure the bucket is defined
+                    if (typeof buckets[bucketIndex] === 'undefined') {
+                        buckets[bucketIndex] = [];
+                    }
+
+                    if (typeof obj.data !== 'undefined') {
+                        // find the column with the next biggest rowSpan
+                        var rowSpanOfSortColumn = (0, _libDetermine_row_span.determineRowSpan)(obj.data, currentSort.column);
+
+                        if (rowSpanOfSortColumn !== 1) {
+                            // not supported
+                            console.warn("Cannot sort by column '" + currentSort.column + "', sorting by columns that have cells with rowSpan is currently not supported. See https://github.com/glittershark/reactable/issues/84");
+                            return;
+                        }
+
+                        for (var col in obj.data) {
+
+                            if (col === currentSort.column) {
+                                // ignore the sort column
+                                continue;
+                            }
+
+                            var rowSpanCurrentCol = (0, _libDetermine_row_span.determineRowSpan)(obj.data, col);
+
+                            // if the rowSpan we found is less than the current debt but greater than the rowSpan of our column,
+                            //      we will use that number
+                            if (rowSpanCurrentCol > rowSpanOfSortColumn && (currentRowSpan == null || currentRowSpan.rowSpan > rowSpanCurrentCol)) {
+                                currentRowSpan = {
+                                    startsAt: idx,
+                                    rowSpan: rowSpanCurrentCol
+                                };
+                            }
+                        }
+                    }
+
+                    if (currentRowSpan == null) {
+                        singles.push(obj);
+                    } else {
+                        buckets[bucketIndex].push(obj);
+                    }
+                }
+
+                // run a sort on each bucket
+                buckets = Object.keys(buckets).map(function (dataSet) {
+                    return buckets[dataSet].sort(_this2.sortFunction.bind(_this2));
+                });
+                buckets.push(singles.sort(this.sortFunction.bind(this)));
+
+                // flatten
+                this.data = buckets.reduce(function (a, current) {
+                    // look for row spans and put the definition of the <Td> on the top row after sort
+                    if (current.length > 0) {
+                        for (var idx = 0; idx < current.length; idx++) {
+                            var obj = current[idx];
+
+                            for (var col in obj.data) {
+                                var rowSpan = (0, _libDetermine_row_span.determineRowSpan)(obj.data, col);
+                                var currentPosition = idx % rowSpan;
+                                var newRowSpanIdx = idx - currentPosition;
+
+                                if (idx !== newRowSpanIdx) {
+                                    // need to push the rowSpan property & values to the top row
+                                    current[newRowSpanIdx].data[col] = (0, _libExtend.extend)({}, obj.data[col]);
+                                    delete obj.data[col];
+                                }
+                            }
+                        }
+                    }
+                    return a.concat(current);
+                }, []);
+            }
+        }, {
+            key: 'sortFunction',
+            value: function sortFunction(a, b) {
+                var currentSort = this.state.currentSort;
+
+                var keyA = (0, _libExtract_data_from.extractDataFrom)(a, currentSort.column);
+                keyA = (0, _unsafe.isUnsafe)(keyA) ? keyA.toString() : keyA || '';
+                var keyB = (0, _libExtract_data_from.extractDataFrom)(b, currentSort.column);
+                keyB = (0, _unsafe.isUnsafe)(keyB) ? keyB.toString() : keyB || '';
+
+                // Default sort
+                if (typeof this._sortable[currentSort.column] === 'undefined' || this._sortable[currentSort.column] === 'default') {
+
+                    // Reverse direction if we're doing a reverse sort
+                    if (keyA < keyB) {
+                        return -1 * currentSort.direction;
+                    }
+
+                    if (keyA > keyB) {
+                        return 1 * currentSort.direction;
+                    }
+
+                    return 0;
+                } else {
+                    // Reverse columns if we're doing a reverse sort
+                    if (currentSort.direction === 1) {
+                        return this._sortable[currentSort.column](keyA, keyB);
+                    } else {
+                        return this._sortable[currentSort.column](keyB, keyA);
+                    }
+                }
             }
         }, {
             key: 'onSort',
@@ -1391,9 +1805,29 @@ window.ReactDOM["default"] = window.ReactDOM;
                 }
             }
         }, {
+            key: 'renderNoDataComponent',
+            value: function renderNoDataComponent(columns) {
+                var noDataFunc = this.props.noDataComponent;
+                if (typeof noDataFunc === 'function') {
+                    return noDataFunc(columns);
+                } else if (this.props.noDataText) {
+                    return _react['default'].createElement(
+                        'tr',
+                        { className: 'reactable-no-data' },
+                        _react['default'].createElement(
+                            'td',
+                            { colSpan: columns.length },
+                            this.props.noDataText
+                        )
+                    );
+                } else {
+                    return null;
+                }
+            }
+        }, {
             key: 'render',
             value: function render() {
-                var _this = this;
+                var _this3 = this;
 
                 var children = [];
                 var columns = undefined;
@@ -1423,6 +1857,7 @@ window.ReactDOM["default"] = window.ReactDOM;
 
                 // Build up table rows
                 if (this.data && typeof this.data.map === 'function') {
+                    var renderState = {};
                     // Build up the columns array
                     children = children.concat(this.data.map((function (rawData, i) {
                         var data = rawData;
@@ -1455,7 +1890,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                             }
                         }
 
-                        return _react['default'].createElement(_tr.Tr, _extends({ columns: columns, key: i, data: data }, props));
+                        return _react['default'].createElement(_tr.Tr, _extends({ columns: columns, key: i, data: data }, props, { renderState: renderState }));
                     }).bind(this)));
                 }
 
@@ -1498,26 +1933,21 @@ window.ReactDOM["default"] = window.ReactDOM;
                 }
 
                 // Manually transfer props
-                var props = (0, _libFilter_props_from.filterPropsFrom)(this.props);
 
-                var noDataText = this.props.noDataText ? _react['default'].createElement(
-                    'tr',
-                    { className: 'reactable-no-data' },
-                    _react['default'].createElement(
-                        'td',
-                        { colSpan: columns.length },
-                        this.props.noDataText
-                    )
-                ) : null;
+                var _filterPropsFrom = (0, _libFilter_props_from.filterPropsFrom)(this.props);
+
+                var noDataComponent = _filterPropsFrom.noDataComponent;
+
+                var props = _objectWithoutProperties(_filterPropsFrom, ['noDataComponent']);
 
                 var tableHeader = null;
                 if (columns && columns.length > 0 && showHeaders) {
                     tableHeader = _react['default'].createElement(_thead.Thead, { columns: columns,
                         filtering: filtering,
                         onFilter: function (filter) {
-                            _this.setState({ filter: filter });
-                            if (_this.props.onFilter) {
-                                _this.props.onFilter(filter);
+                            _this3.setState({ filter: filter });
+                            if (_this3.props.onFilter) {
+                                _this3.props.onFilter(filter);
                             }
                         },
                         filterPlaceholder: this.props.filterPlaceholder,
@@ -1535,16 +1965,16 @@ window.ReactDOM["default"] = window.ReactDOM;
                     _react['default'].createElement(
                         'tbody',
                         { className: 'reactable-data', key: 'tbody' },
-                        currentChildren.length > 0 ? currentChildren : noDataText
+                        currentChildren.length > 0 ? currentChildren : this.renderNoDataComponent(columns)
                     ),
                     pagination === true ? _react['default'].createElement(_paginator.Paginator, { colSpan: columns.length,
                         pageButtonLimit: pageButtonLimit,
                         numPages: numPages,
                         currentPage: currentPage,
                         onPageChange: function (page) {
-                            _this.setState({ currentPage: page });
-                            if (_this.props.onPageChange) {
-                                _this.props.onPageChange(page);
+                            _this3.setState({ currentPage: page });
+                            if (_this3.props.onPageChange) {
+                                _this3.props.onPageChange(page);
                             }
                         },
                         previousPageLabel: this.props.previousPageLabel,
@@ -1567,6 +1997,17 @@ window.ReactDOM["default"] = window.ReactDOM;
         itemsPerPage: 0,
         filterBy: '',
         hideFilterInput: false
+    };
+
+    Table.propTypes = {
+        sortBy: _propTypes['default'].bool,
+        itemsPerPage: _propTypes['default'].number, // number of items to display per page
+        filterable: _propTypes['default'].array, // columns to look at when applying the filter specified by filterBy
+        filterBy: _propTypes['default'].string, // text to filter the results by (see filterable)
+        hideFilterInput: _propTypes['default'].bool, // Whether the default input field for the search/filter should be hidden or not
+        hideTableHeader: _propTypes['default'].bool, // Whether the table header should be hidden or not
+        noDataText: _propTypes['default'].string, // Text to be displayed in the event there is no data to show
+        noDataComponent: _propTypes['default'].func // function called to provide a component to display in the event there is no data to show (supercedes noDataText)
     };
 });
 

@@ -34,6 +34,8 @@ module.exports = function(grunt) {
                     'tmp/reactable/lib/to_array.js': 'src/reactable/lib/to_array.jsx',
                     'tmp/reactable/lib/filter_props_from.js': 'src/reactable/lib/filter_props_from.jsx',
                     'tmp/reactable/lib/extract_data_from.js': 'src/reactable/lib/extract_data_from.jsx',
+                    'tmp/reactable/lib/determine_row_span.js': 'src/reactable/lib/determine_row_span.jsx',
+                    'tmp/reactable/lib/extend.js': 'src/reactable/lib/extend.jsx',
                     'tmp/reactable/lib/is_react_component.js': 'src/reactable/lib/is_react_component.jsx',
                     'tmp/reactable/lib/stringable.js': 'src/reactable/lib/stringable.jsx',
                     'tmp/reactable/filterer.js': 'src/reactable/filterer.jsx',
@@ -49,7 +51,8 @@ module.exports = function(grunt) {
 
                     'tmp/reactable.js': 'src/reactable.jsx',
 
-                    'build/tests/reactable_test.js': 'tests/reactable_test.jsx'
+                    'build/tests/reactable_test.js': 'tests/reactable_test.jsx',
+                    'build/tests/Monitored.js': 'tests/Monitored.jsx'
                 },
                 options: { modules: 'umdStrict' }
             },
@@ -58,6 +61,8 @@ module.exports = function(grunt) {
                     'lib/reactable/lib/to_array.js': 'src/reactable/lib/to_array.jsx',
                     'lib/reactable/lib/filter_props_from.js': 'src/reactable/lib/filter_props_from.jsx',
                     'lib/reactable/lib/extract_data_from.js': 'src/reactable/lib/extract_data_from.jsx',
+                    'lib/reactable/lib/determine_row_span.js': 'src/reactable/lib/determine_row_span.jsx',
+                    'lib/reactable/lib/extend.js': 'src/reactable/lib/extend.jsx',
                     'lib/reactable/lib/is_react_component.js': 'src/reactable/lib/is_react_component.jsx',
                     'lib/reactable/lib/stringable.js': 'src/reactable/lib/stringable.jsx',
                     'lib/reactable/filterer.js': 'src/reactable/filterer.jsx',
@@ -73,7 +78,8 @@ module.exports = function(grunt) {
 
                     'lib/reactable.js': 'src/reactable.jsx',
 
-                    'build/tests/reactable_test.js': 'tests/reactable_test.jsx'
+                    'build/tests/reactable_test.js': 'tests/reactable_test.jsx',
+                    'build/tests/Monitored.js': 'tests/Monitored.jsx'
                 },
                 options: { modules: 'common' }
             }
@@ -85,6 +91,8 @@ module.exports = function(grunt) {
                     'tmp/reactable/lib/to_array.js',
                     'tmp/reactable/lib/stringable.js',
                     'tmp/reactable/lib/extract_data_from.js',
+                    'tmp/reactable/lib/determine_row_span.js',
+                    'tmp/reactable/lib/extend.js',
                     'tmp/reactable/lib/is_react_component.js',
                     'tmp/reactable/unsafe.js',
                     'tmp/reactable/filterer.js',
@@ -105,7 +113,8 @@ module.exports = function(grunt) {
             umdHack: {
                 files: [{
                     prepend: 'window.React["default"] = window.React;\n' +
-                             'window.ReactDOM["default"] = window.ReactDOM;\n',
+                             'window.ReactDOM["default"] = window.ReactDOM;\n' +
+                             'window.PropTypes["default"] = window.PropTypes;\n',
                     input: 'build/reactable.js',
                     output: 'build/reactable.js'
                 }]
