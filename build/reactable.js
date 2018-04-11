@@ -30,6 +30,7 @@ window.ReactDOM["default"] = window.ReactDOM;
         sort: true,
         sortBy: true,
         sortableColumns: true,
+        onClickColumn: true,
         onSort: true,
         defaultSort: true,
         defaultSortDescending: true,
@@ -458,7 +459,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                 var mergedProps = (0, _libFilter_props_from.filterPropsFrom)(this.props);
                 if (typeof this.props.column === 'object') {
                     for (var key in this.props.column) {
-                        if (key !== 'key' && key !== 'name') {
+                        if (key !== 'key' && key !== 'name' && key !== 'onClickColumn') {
                             mergedProps[key] = this.props.column[key];
                         }
                     }
@@ -566,7 +567,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                 // Manually transfer props
                 var props = (0, _libFilter_props_from.filterPropsFrom)(this.props);
 
-                return _react['default'].DOM.tr(props, children);
+                return _react['default'].createElement('tr', props, children);
             }
         }]);
 
@@ -677,6 +678,10 @@ window.ReactDOM["default"] = window.ReactDOM;
             key: 'handleClickTh',
             value: function handleClickTh(column) {
                 this.props.onSort(column.key);
+
+                if (column.onClickColumn) {
+                    column.onClickColumn(column.key);
+                }
             }
         }, {
             key: 'handleKeyDownTh',
@@ -776,6 +781,10 @@ window.ReactDOM["default"] = window.ReactDOM;
                             if (typeof column.label === 'undefined') {
                                 column.label = column.key;
                             }
+                        }
+
+                        if (typeof th.props.onClickColumn !== 'undefined') {
+                            column.onClickColumn = th.props.onClickColumn;
                         }
                     }
 

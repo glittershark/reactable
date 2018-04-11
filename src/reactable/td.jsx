@@ -17,7 +17,7 @@ export class Td extends React.Component {
         var mergedProps = filterPropsFrom(this.props);
         if (typeof(this.props.column) === 'object') {
             for (var key in this.props.column) {
-                if (key !== 'key' && key !== 'name') {
+                if (key !== 'key' && key !== 'name' && key !== 'onClickColumn') {
                     mergedProps[key] = this.props.column[key];
                 }
             }

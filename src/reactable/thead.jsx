@@ -28,6 +28,10 @@ export class Thead extends React.Component {
                         column.label = column.key;
                     }
                 }
+                
+                if (typeof th.props.onClickColumn !== 'undefined') {
+                    column.onClickColumn = th.props.onClickColumn;
+                }
             }
 
             if (typeof column.key === 'undefined') {
@@ -44,6 +48,10 @@ export class Thead extends React.Component {
 
     handleClickTh(column) {
         this.props.onSort(column.key);
+
+        if (column.onClickColumn) {
+            column.onClickColumn(column.key);
+        }
     }
 
     handleKeyDownTh(column, event) {
