@@ -1,21 +1,22 @@
 {
-  "name": "reactable",
-  "version": "0.14.1",
+  "name": "reactable-arc",
+  "version": "0.15.0",
   "description": "Fast, flexible, simple data tables in React",
   "main": "./lib/reactable.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/glittershark/reactable.git"
+    "url": "https://github.com/thabti/reactable.git"
   },
   "bugs": {
-    "url": "https://github.com/glittershark/reactable/issues"
+    "url": "https://github.com/thabti/reactable/issues"
   },
   "author": "Griffin Smith",
   "license": "MIT",
-  "homepage": "https://github.com/glittershark/reactable",
+  "homepage": "https://github.com/thabti/reactable",
   "scripts": {
     "test": "./node_modules/grunt-cli/bin/grunt ci",
-    "build": "./node_modules/grunt-cli/bin/grunt build"
+    "build": "./node_modules/grunt-cli/bin/grunt build",
+    "prepublish": "npm run build"
   },
   "peerDependencies": {
     "react": "* || ^0.14.0"
