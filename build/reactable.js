@@ -1097,7 +1097,7 @@ window.ReactDOM["default"] = window.ReactDOM;
                             var displayName = child.type.displayName ? child.type.displayName : null;
 
                             switch (displayName) {
-                                case _thead.Thead:
+                                case _thead.Thead.name:
                                     break;
                                 case _tfoot.Tfoot.name:
                                     if (typeof tfoot !== 'undefined') {

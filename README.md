@@ -1,5 +1,9 @@
 # Reactable-arc
 
+```
+ > npm install reactable-arc@0.15.0
+```
+
 > This is a `reactable` fork to enable react-hot-loader to work. I will extend it further to support React-16.
 
 # Reactable
@@ -42,7 +46,6 @@ this the faster we can get to 1.0!
 
 ## Installation
 
-
 ### Using NPM
 
 ```sh
@@ -74,12 +77,15 @@ The simplest example:
 ```jsx
 var Table = Reactable.Table;
 ReactDOM.render(
-    <Table className="table" data={[
-        { Name: 'Griffin Smith', Age: 18 },
-        { Age: 23,  Name: 'Lee Salminen' },
-        { Age: 28, Position: 'Developer' },
-    ]} />,
-    document.getElementById('table')
+  <Table
+    className="table"
+    data={[
+      { Name: "Griffin Smith", Age: 18 },
+      { Age: 23, Name: "Lee Salminen" },
+      { Age: 28, Position: "Developer" }
+    ]}
+  />,
+  document.getElementById("table")
 );
 ```
 
@@ -99,17 +105,22 @@ and is useful if you want to specify per-row attributes such as classes, like so
 
 ```jsx
 var Table = Reactable.Table,
-    Tr = Reactable.Tr;
+  Tr = Reactable.Tr;
 
 ReactDOM.render(
-    <Table className="table" data={[
-        { name: 'Row one', content: 'These are regular data rows' },
-        { name: 'Row two', content: 'They work like above' },
-    ]} >
-        <Tr className="special-row"
-            data={{ name: 'Other Row' , content: 'This is a different row' }} />
-    </Table>,
-    document.getElementById('table')
+  <Table
+    className="table"
+    data={[
+      { name: "Row one", content: "These are regular data rows" },
+      { name: "Row two", content: "They work like above" }
+    ]}
+  >
+    <Tr
+      className="special-row"
+      data={{ name: "Other Row", content: "This is a different row" }}
+    />
+  </Table>,
+  document.getElementById("table")
 );
 ```
 
@@ -125,27 +136,27 @@ Example:
 
 ```jsx
 var Table = Reactable.Table,
-    Tr = Reactable.Tr,
-    Td = Reactable.Td;
+  Tr = Reactable.Tr,
+  Td = Reactable.Td;
 
 ReactDOM.render(
-    <Table className="table" id="table">
-        <Tr>
-            <Td column="Name" data="Griffin Smith">
-                <b>Griffin Smith</b>
-            </Td>
-            <Td column="Age">18</Td>
-        </Tr>
-        <Tr>
-            <Td column="Name">Lee Salminen</Td>
-            <Td column="Age">23</Td>
-        </Tr>
-        <Tr>
-            <Td column="Position">Developer</Td>
-            <Td column="Age">28</Td>
-        </Tr>
-    </Table>,
-    document.getElementById('table')
+  <Table className="table" id="table">
+    <Tr>
+      <Td column="Name" data="Griffin Smith">
+        <b>Griffin Smith</b>
+      </Td>
+      <Td column="Age">18</Td>
+    </Tr>
+    <Tr>
+      <Td column="Name">Lee Salminen</Td>
+      <Td column="Age">23</Td>
+    </Tr>
+    <Tr>
+      <Td column="Position">Developer</Td>
+      <Td column="Age">28</Td>
+    </Tr>
+  </Table>,
+  document.getElementById("table")
 );
 ```
 
@@ -169,37 +180,37 @@ objects, you can either:
 
 ```jsx
 var Table = Reactable.Table,
-    Thead = Reactable.Thead,
-    Th = Reactable.Th,
-    Tr = Reactable.Tr,
-    Td = Reactable.Td;
+  Thead = Reactable.Thead,
+  Th = Reactable.Th,
+  Tr = Reactable.Tr,
+  Td = Reactable.Td;
 
 ReactDOM.render(
-    <Table className="table" id="table">
-        <Thead>
-          <Th column="name">
-            <strong className="name-header">First Name, Last Name</strong>
-          </Th>
-          <Th column="age">
-            <em className="age-header">Age, years</em>
-          </Th>
-        </Thead>
-        <Tr>
-            <Td column="name" data="Griffin Smith">
-                <b>Griffin Smith</b>
-            </Td>
-            <Td column="age">18</Td>
-        </Tr>
-        <Tr>
-            <Td column="name">Lee Salminen</Td>
-            <Td column="age">23</Td>
-        </Tr>
-        <Tr>
-            <Td column="position">Developer</Td>
-            <Td column="age">28</Td>
-        </Tr>
-    </Table>,
-    document.getElementById('table')
+  <Table className="table" id="table">
+    <Thead>
+      <Th column="name">
+        <strong className="name-header">First Name, Last Name</strong>
+      </Th>
+      <Th column="age">
+        <em className="age-header">Age, years</em>
+      </Th>
+    </Thead>
+    <Tr>
+      <Td column="name" data="Griffin Smith">
+        <b>Griffin Smith</b>
+      </Td>
+      <Td column="age">18</Td>
+    </Tr>
+    <Tr>
+      <Td column="name">Lee Salminen</Td>
+      <Td column="age">23</Td>
+    </Tr>
+    <Tr>
+      <Td column="position">Developer</Td>
+      <Td column="age">28</Td>
+    </Tr>
+  </Table>,
+  document.getElementById("table")
 );
 ```
 
@@ -221,20 +232,28 @@ so:
 
 ```jsx
 var Table = Reactable.Table,
-    unsafe = Reactable.unsafe;
+  unsafe = Reactable.unsafe;
 
 ReactDOM.render(
-    <Table className="table" id="table" data={[
-        {
-            'Name': unsafe('<b>Griffin Smith</b>'),
-            'Github': unsafe('<a href="https://github.com/glittershark"><img src="https://d2k1ftgv7pobq7.cloudfront.net/images/services/8cab38550d1f23032facde191031d024/github.png"></a>')
-        },
-        {
-            'Name': unsafe('<b>Ian Zhang</b>'),
-            'Github': unsafe('<a href="https://github.com/lofiinterstate"><img src="https://d2k1ftgv7pobq7.cloudfront.net/images/services/8cab38550d1f23032facde191031d024/github.png"></a>')
-        },
-    ]}/>,
-    document.getElementById('table')
+  <Table
+    className="table"
+    id="table"
+    data={[
+      {
+        Name: unsafe("<b>Griffin Smith</b>"),
+        Github: unsafe(
+          '<a href="https://github.com/glittershark"><img src="https://d2k1ftgv7pobq7.cloudfront.net/images/services/8cab38550d1f23032facde191031d024/github.png"></a>'
+        )
+      },
+      {
+        Name: unsafe("<b>Ian Zhang</b>"),
+        Github: unsafe(
+          '<a href="https://github.com/lofiinterstate"><img src="https://d2k1ftgv7pobq7.cloudfront.net/images/services/8cab38550d1f23032facde191031d024/github.png"></a>'
+        )
+      }
+    ]}
+  />,
+  document.getElementById("table")
 );
 ```
 
@@ -248,16 +267,21 @@ customize the number of page buttons in the pagination, which defaults to 10.
 For example:
 
 ```jsx
-<Table className="table" data={[
-    { Name: 'Griffin Smith', Age: '18' },
-    { Age: '23',  Name: 'Lee Salminen' },
-    { Age: '28', Position: 'Developer' },
-    { Name: 'Griffin Smith', Age: '18' },
-    { Age: '30',  Name: 'Test Person' },
-    { Name: 'Another Test', Age: '26', Position: 'Developer' },
-    { Name: 'Third Test', Age: '19', Position: 'Salesperson' },
-    { Age: '23',  Name: 'End of this Page', Position: 'CEO' },
-]} itemsPerPage={4} pageButtonLimit={5} />
+<Table
+  className="table"
+  data={[
+    { Name: "Griffin Smith", Age: "18" },
+    { Age: "23", Name: "Lee Salminen" },
+    { Age: "28", Position: "Developer" },
+    { Name: "Griffin Smith", Age: "18" },
+    { Age: "30", Name: "Test Person" },
+    { Name: "Another Test", Age: "26", Position: "Developer" },
+    { Name: "Third Test", Age: "19", Position: "Salesperson" },
+    { Age: "23", Name: "End of this Page", Position: "CEO" }
+  ]}
+  itemsPerPage={4}
+  pageButtonLimit={5}
+/>
 ```
 
 You can also change the default text on the buttons by including the
@@ -276,7 +300,7 @@ We've pre-built some sort functions for you.
   capitalization (e.g. Joe Smith === joe smith)
 - `Date` will sort dates using JavaScript's native Date parser (e.g. 4/20/2014
   12:05 PM)
-- `Currency` will sort USD format (e.g. $1,000.00)
+- `Currency` will sort USD format (e.g. \$1,000.00)
 - `Numeric` will parse integer-like strings as integers (e.g. "1")
 - `NumericInteger` will parse integer strings (use `Numeric` if you might have floats)
 
@@ -292,7 +316,7 @@ object:
 
 You can also specify a default sort by passing in either a column name by
 itself, or an object with a column and a `direction` paramenter of either `asc`
-or `desc`.  If no direction is specified, the default sort will be ascending.
+or `desc`. If no direction is specified, the default sort will be ascending.
 Example:
 
 ```jsx
@@ -303,26 +327,30 @@ Example:
 Combined example:
 
 ```jsx
-<Table className="table" id="table" data={[
-    { Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
-    { Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
-    { Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
-]}
-sortable={[
+<Table
+  className="table"
+  id="table"
+  data={[
+    { Name: "Lee Salminen", Age: "23", Position: "Programmer" },
+    { Name: "Griffin Smith", Age: "18", Position: "Engineer" },
+    { Name: "Ian Zhang", Age: "28", Position: "Developer" }
+  ]}
+  sortable={[
     {
-        column: 'Name',
-        sortFunction: function(a, b){
-            // Sort by last name
-            var nameA = a.split(' ');
-            var nameB = b.split(' ');
+      column: "Name",
+      sortFunction: function(a, b) {
+        // Sort by last name
+        var nameA = a.split(" ");
+        var nameB = b.split(" ");
 
-            return nameA[1].localeCompare(nameB[1]);
-        }
+        return nameA[1].localeCompare(nameB[1]);
+      }
     },
-    'Age',
-    'Position'
-]}
-defaultSort={{column: 'Age', direction: 'desc'}}/>
+    "Age",
+    "Position"
+  ]}
+  defaultSort={{ column: "Age", direction: "desc" }}
+/>
 ```
 
 In case you are constructing your table without the data attribute, and the
@@ -335,22 +363,22 @@ handling (filter or sort).
 
 ```jsx
 var Table = Reactable.Table,
-    Tr = Reactable.Tr,
-    Td = Reactable.Td;
+  Tr = Reactable.Tr,
+  Td = Reactable.Td;
 
 ReactDOM.render(
-    <Table className="table" id="table" sortable={true}>
-        <Tr>
-            <Td column="Name" value="Griffin Smith">
-                <div>
-                   <span>Some Text or Icon</span>
-                   <b>Griffin Smith</b>
-                </div>
-            </Td>
-            <Td column="Age">18</Td>
-        </Tr>
-    </Table>,
-    document.getElementById('table')
+  <Table className="table" id="table" sortable={true}>
+    <Tr>
+      <Td column="Name" value="Griffin Smith">
+        <div>
+          <span>Some Text or Icon</span>
+          <b>Griffin Smith</b>
+        </div>
+      </Td>
+      <Td column="Age">18</Td>
+    </Tr>
+  </Table>,
+  document.getElementById("table")
 );
 ```
 
@@ -375,21 +403,28 @@ defaultSortDescending
 ### Filtering
 
 You can do simple case-insensitive filtering by specifying a filterable property
-on the table.  This property should contain a list of columns which the filter
-is performed on.  If the filterable property is provided, then an input box with
+on the table. This property should contain a list of columns which the filter
+is performed on. If the filterable property is provided, then an input box with
 class reactable-filter-input will be prepended to the thead of the table.
 
 Example:
 
 ```jsx
-<Table className="table" id="table" data={[
-    {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
-    {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
-    {'State': 'Colorado',
-     'Description': 'new description that shouldn\'t match filter',
-     'Tag': 'old'},
-    {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
-]} filterable={['State', 'Tag']} />
+<Table
+  className="table"
+  id="table"
+  data={[
+    { State: "New York", Description: "this is some text", Tag: "new" },
+    { State: "New Mexico", Description: "lorem ipsum", Tag: "old" },
+    {
+      State: "Colorado",
+      Description: "new description that shouldn't match filter",
+      Tag: "old"
+    },
+    { State: "Alaska", Description: "bacon", Tag: "renewed" }
+  ]}
+  filterable={["State", "Tag"]}
+/>
 ```
 
 There is also a `filterBy()` function on the component itself which takes a
@@ -397,18 +432,25 @@ single string and applies that as the filtered value. It can be used like so:
 
 ```jsx
 var table = ReactDOM.render(
-  <Table className="table" id="table" data={[
-      {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
-      {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
-      {'State': 'Colorado',
-       'Description': 'new description that shouldn\'t match filter',
-       'Tag': 'old'},
-      {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
-  ]} filterable={['State', 'Tag']} />,
-  document.getElementById('table')
+  <Table
+    className="table"
+    id="table"
+    data={[
+      { State: "New York", Description: "this is some text", Tag: "new" },
+      { State: "New Mexico", Description: "lorem ipsum", Tag: "old" },
+      {
+        State: "Colorado",
+        Description: "new description that shouldn't match filter",
+        Tag: "old"
+      },
+      { State: "Alaska", Description: "bacon", Tag: "renewed" }
+    ]}
+    filterable={["State", "Tag"]}
+  />,
+  document.getElementById("table")
 );
 
-table.filterBy('new');
+table.filterBy("new");
 ```
 
 You can also pass in a `filterBy` prop to control the filtering outside of the
@@ -416,16 +458,23 @@ You can also pass in a `filterBy` prop to control the filtering outside of the
 
 ```jsx
 var table = ReactDOM.render(
-  <Table className="table" id="table" data={[
-      {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
-      {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
-      {'State': 'Colorado',
-       'Description': 'new description that shouldn\'t match filter',
-       'Tag': 'old'},
-      {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
-  ]} filterable={['State', 'Tag']}
-  filterBy="new" />,
-  document.getElementById('table')
+  <Table
+    className="table"
+    id="table"
+    data={[
+      { State: "New York", Description: "this is some text", Tag: "new" },
+      { State: "New Mexico", Description: "lorem ipsum", Tag: "old" },
+      {
+        State: "Colorado",
+        Description: "new description that shouldn't match filter",
+        Tag: "old"
+      },
+      { State: "Alaska", Description: "bacon", Tag: "renewed" }
+    ]}
+    filterable={["State", "Tag"]}
+    filterBy="new"
+  />,
+  document.getElementById("table")
 );
 ```
 
@@ -434,17 +483,24 @@ hide the build-in filter input field with the `hideFilterInput` prop:
 
 ```jsx
 var table = ReactDOM.render(
-  <Table className="table" id="table" data={[
-      {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
-      {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
-      {'State': 'Colorado',
-       'Description': 'new description that shouldn\'t match filter',
-       'Tag': 'old'},
-      {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
-  ]} filterable={['State', 'Tag']}
-  filterBy="new"
-  hideFilterInput />,
-  document.getElementById('table')
+  <Table
+    className="table"
+    id="table"
+    data={[
+      { State: "New York", Description: "this is some text", Tag: "new" },
+      { State: "New Mexico", Description: "lorem ipsum", Tag: "old" },
+      {
+        State: "Colorado",
+        Description: "new description that shouldn't match filter",
+        Tag: "old"
+      },
+      { State: "Alaska", Description: "bacon", Tag: "renewed" }
+    ]}
+    filterable={["State", "Tag"]}
+    filterBy="new"
+    hideFilterInput
+  />,
+  document.getElementById("table")
 );
 ```
 
@@ -454,24 +510,30 @@ outside of Reactable.
 You can also provide your own custom filtering functions:
 
 ```jsx
-<Table className="table" id="table" data={[
-    {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
-    {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
-    {'State': 'Colorado',
-     'Description': 'new description that shouldn\'t match filter',
-     'Tag': 'old'},
-    {'State': 'Alaska', 'Description': 'bacon', 'Tag': 'renewed'},
-]}
-filterable={[
+<Table
+  className="table"
+  id="table"
+  data={[
+    { State: "New York", Description: "this is some text", Tag: "new" },
+    { State: "New Mexico", Description: "lorem ipsum", Tag: "old" },
     {
-        column: 'State',
-        filterFunction: function(contents, filter) {
-            // case-sensitive filtering
-            return (contents.indexOf(filter) > -1);
-        }
+      State: "Colorado",
+      Description: "new description that shouldn't match filter",
+      Tag: "old"
     },
-    'Tag'
-]} />
+    { State: "Alaska", Description: "bacon", Tag: "renewed" }
+  ]}
+  filterable={[
+    {
+      column: "State",
+      filterFunction: function(contents, filter) {
+        // case-sensitive filtering
+        return contents.indexOf(filter) > -1;
+      }
+    },
+    "Tag"
+  ]}
+/>
 ```
 
 Your filter function must return a boolean. Refraining from specifying a custom
@@ -487,9 +549,11 @@ for the optional `noDataText` prop:
 var table = ReactDOM.render(
   <Table
     className="table"
-    id="table" data={[]}
-    noDataText="No matching records found." />,
-  document.getElementById('table')
+    id="table"
+    data={[]}
+    noDataText="No matching records found."
+  />,
+  document.getElementById("table")
 );
 ```
 
