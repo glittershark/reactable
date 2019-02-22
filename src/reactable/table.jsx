@@ -66,7 +66,7 @@ export class Table extends React.Component {
                     const displayName = child.type.displayName ? child.type.displayName : null; 
 
                     switch (displayName) {
-                        case Thead:
+                        case Thead.name:
                         break;
                         case Tfoot.name:
                             if (typeof(tfoot) !== 'undefined') {
